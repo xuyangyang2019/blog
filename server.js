@@ -1,42 +1,46 @@
 const fs = require("fs")
+// const path = require("path")
+
 const Koa = require("koa")
-const path = require("path")
-const koaStatic = require("koa-static")
 const app = new Koa()
 
-const resolve = (file) => path.resolve(__dirname, file)
+// 第 1 步：创建一个 Vue 实例
+const Vue = require("vue")
+// const createApp = require("./src/app")
 
-// 开放dist目录
-app.use(koaStatic(resolve("./dist")))
-
-// 第 2 步：获得一个createBundleRenderer
-const { createBundleRenderer } = require("vue-server-renderer")
-const bundle = require("./dist/vue-ssr-server-bundle.json")
-const clientManifest = require("./dist/vue-ssr-client-manifest.json")
-
-const renderer = createBundleRenderer(bundle, {
-  runInNewContext: false,
-  template: fs.readFileSync(resolve("./src/index.temp.html"), "utf-8"),
-  clientManifest: clientManifest
+// 第 2 步：创建一个 renderer
+const template = fs.readFileSync("./src/index.temp.html", "utf-8")
+const renderer = require("vue-server-renderer").createRenderer({
+  template: template
 })
-
-function renderToString(context) {
-  return new Promise((resolve, reject) => {
-    renderer.renderToString(context, (err, html) => {
-      err ? reject(err) : resolve(html)
-    })
-  })
+const context = {
+  title: "vue ssr",
+  meta: `
+    <meta name="keyword" content="vue,ssr">
+    <meta name="description" content="vue srr demo">
+  `
 }
 
 // 第 3 步：添加一个中间件来处理所有请求
 app.use(async (ctx, next) => {
-  const context = {
-    title: "ssr test",
-    url: ctx.url
-  }
-  // 将 context 数据渲染为 HTML
-  const html = await renderToString(context)
-  ctx.body = html
+  const vm = new Vue({
+    data: {
+      title: "ssr example",
+      url: ctx.url
+    },
+    template: `<div>访问的 URL 是： {{ url }}</div>`
+  })
+  // const data = { url: ctx.url }
+  // const vm = createApp(data)
+
+  // 将 Vue 实例渲染为 HTML
+  renderer.renderToString(vm, context, (err, html) => {
+    if (err) {
+      ctx.res.status(500).end("Internal Server Error")
+      return
+    }
+    ctx.body = html
+  })
 })
 
 const port = 3000

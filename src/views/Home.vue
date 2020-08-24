@@ -1,7 +1,5 @@
 <template>
-  <div class="home">
-    <div>Home</div>
-  </div>
+  <div class="home">{{ msg }}</div>
 </template>
 
 <script>
@@ -10,23 +8,15 @@ import { mapGetters } from "vuex"
 export default {
   data() {
     return {
-      user: "", // 用户名
-      password: "", // 密码
-      err: { user: "", password: "", validate: "" }, // 错误信息
-      btnInfo: { text: "登录", disabled: false } // 登录按钮的状态
+      msg: "Hello Word!"
     }
   },
   computed: {
-    // ...mapState(["toPath"])
     ...mapGetters({
       toPath: "toPath"
     })
   },
   methods: {
-    // ...mapActions(["admin/Login"]),
-    // ...mapActions({
-    //   login: "admin/Login"
-    // }),
     // 表单验证
     validate: function(toPath) {
       let payload = {
@@ -72,9 +62,9 @@ export default {
 <style lang="scss" scoped>
 .home {
   border: solid red 1px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
   height: 100%;
   // overflow: hidden;
   // background: url("/img/login-bg.jpeg") 0 0 no-repeat;
