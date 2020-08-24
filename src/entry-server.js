@@ -1,4 +1,5 @@
-import { createApp } from "./main"
+// entry-server.js
+import { createApp } from "./app"
 
 export default (context) => {
   // 因为有可能会是异步路由钩子函数或组件，所以我们将返回一个 Promise，
@@ -15,10 +16,9 @@ export default (context) => {
       const matchedComponents = router.getMatchedComponents()
       // 匹配不到的路由，执行 reject 函数，并返回 404
       if (!matchedComponents.length) {
-        return reject({
-          code: 404
-        })
+        return reject({ code: 404 })
       }
+
       // Promise 应该 resolve 应用程序实例，以便它可以渲染
       resolve(app)
     }, reject)
