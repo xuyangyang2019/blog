@@ -78,7 +78,7 @@ export default {
         // 修改按钮显示的文字 不能再次点击
         this.btnInfo = { text: "登录中...", disabled: true }
         // admin 登陆
-        this.$api.admin.login(payload).then(data => {
+        this.$api.admin.login(payload).then((data) => {
           this.btnInfo = { text: "登录", disabled: false }
           if (data.code === 200) {
             localStorage.setItem("userName", data.name)
