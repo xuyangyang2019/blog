@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "dev": "nodemon ./server.js",
     "build:client": "vue-cli-service build",
     "build:server": "cross-env WEBPACK_TARGET=node vue-cli-service build --mode server",
     "build:win": "npm run build:server && move dist\\vue-ssr-server-bundle.json bundle && npm run build:client && move bundle dist\\vue-ssr-server-bundle.json"
@@ -39,6 +40,7 @@
     "lint-staged": "^10.2.11",
     "lodash.merge": "^4.6.2",
     "node-sass": "^4.12.0",
+    "nodemon": "^2.0.4",
     "prettier": "^1.18.2",
     "sass-loader": "^8.0.0",
     "vue-server-renderer": "^2.6.12",
