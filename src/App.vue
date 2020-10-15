@@ -60,12 +60,12 @@
 </template>
 
 <script>
-import tab from "./components/tab/Tab"
+import tab from "@/components/base/Tab"
 import about from "@/components/base/About"
 import hot from "@/components/base/Hot"
 import gateWay from "@/components/base/GateWay"
 import fileOnPlace from "@/components/base/FileOnPlace"
-import foot from "./components/base/Foot"
+import foot from "@/components/base/Foot"
 
 import { mapState, mapMutations } from "vuex"
 
@@ -221,10 +221,12 @@ export default {
 </script>
 
 <style lang="scss">
-* {
-  margin: 0;
-  padding: 0;
-}
+@import "./styles/reset.scss";
+@import "./styles/normalize.scss";
+// @import "./styles/common.scss";
+// @import "./styles/qqface.scss";
+// @import "~@/assets/iconfont/iconfont.css";
+// @import "~@/assets/font-awesome/css/font-awesome.css";
 
 a {
   -webkit-tap-highlight-color: transparent;
