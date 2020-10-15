@@ -1,9 +1,9 @@
 <template>
   <div class="tab" ref="tab" :class="{ 'tab-bg': tabBg }">
-    <nav class="navbar">
+    <nav class="nav-bar">
       <div class="nav-header">
         <div class="logo">
-          <img src="/img/logo.png" alt="" />
+          <img src="../../../public/img/logo.png" alt="" />
         </div>
         <button class="navbar-toggle" @click="navShow" :class="{ 'toggle-click': show }">
           <div class="line"></div>
@@ -11,6 +11,7 @@
           <div class="line"></div>
         </button>
       </div>
+
       <div class="nav-body" :class="{ heightZero: show }">
         <ul class="nav-list">
           <li v-for="(item, index) in tabs">
@@ -24,6 +25,7 @@
             </router-link>
           </li>
         </ul>
+        <!-- 搜索 -->
         <div class="search">
           <input type="text" placeholder="请输入关键词" v-model="searchKey" @keyup.enter="search" />
           <span class="icon-search search-article" @click="search"></span>
@@ -32,11 +34,13 @@
     </nav>
   </div>
 </template>
+
 <script>
 import { mapState, mapMutations } from "vuex"
 // import { getElementTop } from "@/utils/getElementTop"
 // import { getScrollTop } from "@/utils/getScrollTop"
 // import { requestAnimation }   from "@/utils/requestAnimation"
+
 export default {
   data() {
     return {
@@ -46,17 +50,22 @@ export default {
       scrollFlag: 0,
       routeName: "",
       intervalId: "",
-      tabs: [{ name: "home", render: "首页", icon: "icon-home" }, { name: "article", render: "文章", icon: "icon-book" }, { name: "msgboard", render: "留言", icon: "icon-messages" }, { name: "life", render: "生活", icon: "icon-images" }]
+      tabs: [
+        { name: "home", render: "首页", icon: "icon-home" },
+        { name: "article", render: "文章", icon: "icon-book" },
+        { name: "msgboard", render: "留言", icon: "icon-messages" },
+        { name: "life", render: "生活", icon: "icon-images" }
+      ]
     }
   },
   mounted() {
     // requestAnimation()
   },
   computed: {
-    ...mapState(["tabBg", "anchorScroll"])
+    // ...mapState(["tabBg", "anchorScroll"])
   },
   methods: {
-    ...mapMutations(["changeRtActive"]),
+    // ...mapMutations(["changeRtActive"]),
     navShow() {
       this.show = !this.show;
     },
@@ -100,6 +109,7 @@ export default {
   }
 }
 </script>
+
 <style lang = "scss">
 .tab {
   position: fixed;
@@ -115,7 +125,60 @@ export default {
   li {
     list-style: none;
   }
+
+  .nav-header:after,
+  .nav-bar:after,
+  .nav-body:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+  }
+
+  .nav-bar {
+    border: solid red 1px;
+    .nav-header {
+      .logo {
+        float: left;
+        height: 46px;
+        padding-top: 4px;
+        img {
+          width: 45px;
+          height: 45px;
+        }
+      }
+
+      .navbar-toggle {
+        outline: none;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0);
+        margin: 8px 15px 7px 0;
+        padding: 9px 10px;
+        border: 1px solid #333;
+        float: right;
+        border-radius: 4px;
+        transition: all ease 0.5s;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        .line {
+          height: 2px;
+          width: 22px;
+          background: #fff;
+          margin-top: 3px;
+          border-radius: 1px;
+        }
+      }
+      .toggle-click {
+        background: #1a1a1a;
+      }
+    }
+    .nav-body {
+      height: 50px;
+    }
+  }
 }
+
 .tab .router-link-active {
   color: orange;
 }
@@ -129,40 +192,7 @@ export default {
     height: 0 !important;
   }
 }
-.nav-body {
-  height: 50px;
-}
-.logo {
-  float: left;
-  height: 46px;
-  padding-top: 4px;
-  img {
-    width: 45px;
-    height: 45px;
-  }
-}
-.navbar-toggle {
-  outline: none;
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0);
-  margin: 8px 15px 7px 0;
-  padding: 9px 10px;
-  border: 1px solid #333;
-  float: right;
-  border-radius: 4px;
-  transition: all ease 0.5s;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  .line {
-    height: 2px;
-    width: 22px;
-    background: #fff;
-    margin-top: 3px;
-    border-radius: 1px;
-  }
-}
-.toggle-click {
-  background: #1a1a1a;
-}
+
 .search {
   position: relative;
   input {
@@ -191,16 +221,6 @@ export default {
   cursor: pointer;
 }
 
-.nav-header:after,
-.navbar:after,
-.nav-body:after {
-  clear: both;
-  content: ".";
-  display: block;
-  height: 0;
-  line-height: 0;
-  visibility: hidden;
-}
 @media screen and(max-width: 767px) {
   .logo {
     padding-left: 20px;
@@ -280,11 +300,13 @@ export default {
     display: block;
   }
 }
+
 @media screen and (min-width: 768px) {
-  .navbar {
+  .nav-bar {
     margin-left: auto;
     margin-right: auto;
   }
+
   .nav-list {
     float: left;
     margin-left: 1px;
@@ -335,6 +357,7 @@ export default {
       }
     }
   }
+
   .nav-header {
     float: left;
   }
