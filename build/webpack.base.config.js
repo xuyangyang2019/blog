@@ -82,14 +82,22 @@ module.exports = function () {
           ]
         },
         {
-          test: /\.scss$/,
-          use: [isProd ? ExtractCssChunks.loader : 'vue-style-loader', 'css-loader', 'postcss-loader',
-          {
-            loader: 'sass-loader',
-            options: isProd ? {} : { sourceMap: 'inline' }
-          }
-          ]
+          test: /\.sass$/,
+          use: ['vue-style-loader', 'css-loader', 'sass-loader?indentedSyntax']
         },
+        {
+          test: /\.scss$/,
+          use: ['vue-style-loader', 'css-loader', 'sass-loader']
+        },
+        // {
+        //   test: /\.scss$/,
+        //   use: [isProd ? ExtractCssChunks.loader : 'vue-style-loader', 'css-loader', 'postcss-loader',
+        //   {
+        //     loader: 'sass-loader',
+        //     options: isProd ? {} : { sourceMap: 'inline' }
+        //   }
+        //   ]
+        // },
         {
           test: /\.json$/,
           use: 'json-loader',
