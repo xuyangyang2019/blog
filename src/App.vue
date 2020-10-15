@@ -221,12 +221,17 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./styles/reset.scss";
-@import "./styles/normalize.scss";
+// @import "./styles/reset.scss";
+// @import "./styles/normalize.scss";
 // @import "./styles/common.scss";
 // @import "./styles/qqface.scss";
 // @import "~@/assets/iconfont/iconfont.css";
 // @import "~@/assets/font-awesome/css/font-awesome.css";
+
+* {
+  margin: 0;
+  padding: 0;
+}
 
 a {
   -webkit-tap-highlight-color: transparent;
