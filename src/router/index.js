@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Bar from '../components/Bar.vue'
+
+import Home from '../views/Home.vue'
 
 Vue.use(Router)
 
@@ -8,15 +9,16 @@ function createRouter() {
     const routes = [
         {
             path: '/',
-            redirect:'/bar'
+            redirect: '/home'
         },
         {
-            path: '/bar',
-            component: Bar
+            path: '/home',
+            name: 'home',
+            component: Home
         },
         {
             path: '/foo',
-            component: () =>import(/* webpackChunkName: "foo" */ '../components/Foo.vue') // 异步路由
+            component: () => import(/* webpackChunkName: "foo" */ '../components/Foo.vue') // 异步路由
         }
     ]
 
