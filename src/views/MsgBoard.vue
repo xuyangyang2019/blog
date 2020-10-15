@@ -26,7 +26,7 @@
     </div>
     <div class="emoji-box" v-show="emojiShow">
       <span @click="exitEmoji" class="emoji-exit">x</span>
-      <emoji @select="selectEmoji"></emoji>
+      <!-- <emoji @select="selectEmoji"></emoji> -->
     </div>
     <div class="leavemsg">
       <h2>所有留言：</h2>
@@ -43,7 +43,7 @@
               <pre><div class="board-content-s" v-html="item.content"></div></pre>
               <div class="board-content-details">
                 <span class="icon-clock"></span>
-                <span class="board-content-details-time">{{ item.date | reviseTime}}</span>
+                <span class="board-content-details-time">{{ item.date | reviseTime }}</span>
               </div>
             </div>
           </div>
@@ -60,9 +60,9 @@
                   <pre><div class="board-content-s" v-html="rep.content"></div></pre>
                   <div class="board-content-details">
                     <span class="icon-clock"></span>
-                    <span class="board-content-details-time">{{ rep.date | reviseTime}}</span>
+                    <span class="board-content-details-time">{{ rep.date | reviseTime }}</span>
                     <a href="#anchor-msgBoard" class="board-details-reply">
-                      <span @click="reply(item._id,rep.name)">回复</span>
+                      <span @click="reply(item._id, rep.name)">回复</span>
                     </a>
                   </div>
                 </div>
@@ -79,7 +79,7 @@
       <page v-if="pageArr.length > 1"></page>
     </transition>
     <!-- 第三方登录 -->
-    <login></login>
+    <!-- <login></login> -->
     <transition name="mask" v-show="dialogErr.show">
       <div class="mask" v-show="dialogErr.show" @click="dialogErr.show = false">
         <transition name="dialog">
@@ -95,17 +95,20 @@
     </transition>
   </div>
 </template>
+
 <script>
 import { mapState, mapMutations, mapActions } from "vuex"
-import emoji from "@/components/base/emoji"
-import emojiData from "@/assets/js/emoji-data"
-import page from "@/components/base/page"
-import login from "@/components/userLogin/userLogin"
+
+// import emoji from "@/components/base/emoji"
+// import emojiData from "@/assets/js/emoji-data"
+import page from "@/components/base/Page"
+// import login from "@/components/userLogin/userLogin"
+
 export default {
   components: {
-    emoji,
     page,
-    login
+    // emoji,
+    // login
   },
   data() {
     return {
@@ -117,29 +120,29 @@ export default {
       replyInfo: { _id: "", firstLevel: true, aite: "" }
     }
   },
-  metaInfo() {
-    return {
-      title: "留言 -mapblog小站",
-      meta: [{ vmid: "description", name: "description", content: "留言 -mapblog小站" }]
-    }
-  },
-  asyncData({ store, route }) {
-    return Promise.all([
-      store.dispatch("getLeaveWords", {
-        page: 1,
-        cache: false
-      }),
-      store.dispatch("getMsgCount", {
-        cache: false
-      })
-    ])
-  },
+  // metaInfo() {
+  //   return {
+  //     title: "留言 -mapblog小站",
+  //     meta: [{ vmid: "description", name: "description", content: "留言 -mapblog小站" }]
+  //   }
+  // },
+  // asyncData({ store, route }) {
+  //   return Promise.all([
+  //     store.dispatch("getLeaveWords", {
+  //       page: 1,
+  //       cache: false
+  //     }),
+  //     store.dispatch("getMsgCount", {
+  //       cache: false
+  //     })
+  //   ])
+  // },
   computed: {
-    ...mapState(["msgBoardArr", "userInfo", "pageArr"])
+    // ...mapState(["msgBoardArr", "userInfo", "pageArr"])
   },
   methods: {
-    ...mapActions(["getLeaveWords", "saveLeaveWords", "addLeaveWords", "getMsgCount"]),
-    ...mapMutations(["set_user", "handleMask", "addLocalWords"]),
+    // ...mapActions(["getLeaveWords", "saveLeaveWords", "addLeaveWords", "getMsgCount"]),
+    // ...mapMutations(["set_user", "handleMask", "addLocalWords"]),
     loginOut: function () {
       this.set_user({ name: "", imgUrl: "", email: "" })
       this.removeLocal()
@@ -262,7 +265,8 @@ export default {
   }
 }
 </script>
-<style lang = "less" scoped >
+
+<style lang = "scss" scoped >
 .msgboard {
   /*background: #F7EDED;*/
   background: #faf7f7;
@@ -317,7 +321,7 @@ h2 {
   margin-top: 2px;
 }
 .emoji-exit {
-  float: right;
+  /* float: right; */
   margin-right: 25px;
   margin-top: 15px;
   color: red;
