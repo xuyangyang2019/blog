@@ -1,31 +1,32 @@
 <template>
   <div class="tab" ref="tab" :class="{ 'tab-bg': tabBg }">
-    <nav class="nav-bar">
+    <nav class="navbar">
       <div class="nav-header">
         <div class="logo">
           <img src="../../../public/img/logo.png" alt="" />
         </div>
+        <!-- 小屏幕下的导航按钮 -->
         <button class="navbar-toggle" @click="navShow" :class="{ 'toggle-click': show }">
           <div class="line"></div>
           <div class="line"></div>
           <div class="line"></div>
         </button>
       </div>
-
       <div class="nav-body" :class="{ heightZero: show }">
         <ul class="nav-list">
           <li v-for="(item, index) in tabs">
             <router-link :to="{ name: item.name }" tag="div">
               <span class="bg-box" @click.stop="goAnchor(item.name, index)">
                 <span class="span-box">
+                  <!-- 导航的图标 -->
                   <span :class="item.icon" class="icon-rt"></span>
+                  <!-- 导航的名称 -->
                   <span class="r-t">{{ item.render }}</span>
                 </span>
               </span>
             </router-link>
           </li>
         </ul>
-        <!-- 搜索 -->
         <div class="search">
           <input type="text" placeholder="请输入关键词" v-model="searchKey" @keyup.enter="search" />
           <span class="icon-search search-article" @click="search"></span>
@@ -36,20 +37,21 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex"
+import { mapState, mapMutations, mapGetters } from "vuex"
 // import { getElementTop } from "@/utils/getElementTop"
 // import { getScrollTop } from "@/utils/getScrollTop"
-// import { requestAnimation }   from "@/utils/requestAnimation"
+// import { requestAnimation } from "@/utils/requestAnimation"
 
 export default {
   data() {
     return {
-      show: false,
-      fixed: false,
+      show: false, // 展示导航栏
+      // fixed: false, 
       searchKey: "",
-      scrollFlag: 0,
+      // scrollFlag: 0,
       routeName: "",
       intervalId: "",
+      // 导航列表
       tabs: [
         { name: "home", render: "首页", icon: "icon-home" },
         { name: "article", render: "文章", icon: "icon-book" },
@@ -63,13 +65,18 @@ export default {
   },
   computed: {
     // ...mapState(["tabBg", "anchorScroll"])
+    ...mapGetters({
+      tabBg: 'tabBg',
+      anchorScroll: 'anchorScroll'
+    })
   },
   methods: {
-    // ...mapMutations(["changeRtActive"]),
+    // 显示或隐藏 navs
     navShow() {
       this.show = !this.show;
     },
-    search: function () {
+    // 搜索
+    search() {
       if (!this.searchKey.length) {
         return
       } else {
@@ -77,34 +84,37 @@ export default {
         this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
       }
     },
+    // 回调函数
     callback: function () {
-      let movepx = Math.ceil((this.anchorScroll.move / 250) * (1000 / 60)),
-        that = this,
-        scrollTop = getScrollTop()
-      if (scrollTop < this.anchorScroll.top) {
-        document.documentElement.scrollTop = Math.min(scrollTop + movepx, this.anchorScroll.top)
-        document.body.scrollTop = Math.min(scrollTop + movepx, this.anchorScroll.top)
-        //当页面不够长使container滚动不到页面顶端时，清除定时器(适合container上方有其他元素时)
-        if (getScrollTop() === scrollTop) {
-          this.$router.push({ name: this.routeName })
-          window.cancelAnimationFrame(that.intervalId)
-        } else {
-          window.requestAnimationFrame(that.callback)
-        }
-      } else if (scrollTop > this.anchorScroll.top) {
-        document.documentElement.scrollTop = Math.max(scrollTop - movepx, this.anchorScroll.top)
-        document.body.scrollTop = Math.max(scrollTop - movepx, this.anchorScroll.top)
-        window.requestAnimationFrame(that.callback)
-      } else {
-        window.cancelAnimationFrame(that.intervalId)
-        this.$router.push({ name: this.routeName })
-      }
+      // let movepx = Math.ceil((this.anchorScroll.move / 250) * (1000 / 60))
+      // let that = this
+      // let scrollTop = getScrollTop()
+      // if (scrollTop < this.anchorScroll.top) {
+      //   document.documentElement.scrollTop = Math.min(scrollTop + movepx, this.anchorScroll.top)
+      //   document.body.scrollTop = Math.min(scrollTop + movepx, this.anchorScroll.top)
+      //   //当页面不够长使container滚动不到页面顶端时，清除定时器(适合container上方有其他元素时)
+      //   if (getScrollTop() === scrollTop) {
+      //     this.$router.push({ name: this.routeName })
+      //     window.cancelAnimationFrame(that.intervalId)
+      //   } else {
+      //     window.requestAnimationFrame(that.callback)
+      //   }
+      // } else if (scrollTop > this.anchorScroll.top) {
+      //   document.documentElement.scrollTop = Math.max(scrollTop - movepx, this.anchorScroll.top)
+      //   document.body.scrollTop = Math.max(scrollTop - movepx, this.anchorScroll.top)
+      //   window.requestAnimationFrame(that.callback)
+      // } else {
+      //   window.cancelAnimationFrame(that.intervalId)
+      //   this.$router.push({ name: this.routeName })
+      // }
     },
-    //锚点动态跳转
-    goAnchor: function (route, index) {
+    // 锚点动态跳转
+    goAnchor(route, index) {
+      console.log(route, index)
       this.show = !this.show
-      this.routeName = route
-      this.intervalId = window.requestAnimationFrame(this.callback)
+      this.$router.push({ name: route })
+      // this.routeName = route
+      // this.intervalId = window.requestAnimationFrame(this.callback)
     }
   }
 }
@@ -125,60 +135,7 @@ export default {
   li {
     list-style: none;
   }
-
-  .nav-header:after,
-  .nav-bar:after,
-  .nav-body:after {
-    clear: both;
-    content: ".";
-    display: block;
-    height: 0;
-    line-height: 0;
-    visibility: hidden;
-  }
-
-  .nav-bar {
-    border: solid red 1px;
-    .nav-header {
-      .logo {
-        float: left;
-        height: 46px;
-        padding-top: 4px;
-        img {
-          width: 45px;
-          height: 45px;
-        }
-      }
-
-      .navbar-toggle {
-        outline: none;
-        cursor: pointer;
-        background: rgba(0, 0, 0, 0);
-        margin: 8px 15px 7px 0;
-        padding: 9px 10px;
-        border: 1px solid #333;
-        float: right;
-        border-radius: 4px;
-        transition: all ease 0.5s;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        .line {
-          height: 2px;
-          width: 22px;
-          background: #fff;
-          margin-top: 3px;
-          border-radius: 1px;
-        }
-      }
-      .toggle-click {
-        background: #1a1a1a;
-      }
-    }
-    .nav-body {
-      height: 50px;
-    }
-  }
 }
-
 .tab .router-link-active {
   color: orange;
 }
@@ -192,7 +149,40 @@ export default {
     height: 0 !important;
   }
 }
-
+.nav-body {
+  height: 50px;
+}
+.logo {
+  float: left;
+  height: 46px;
+  padding-top: 4px;
+  img {
+    width: 45px;
+    height: 45px;
+  }
+}
+.navbar-toggle {
+  outline: none;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0);
+  margin: 8px 15px 7px 0;
+  padding: 9px 10px;
+  border: 1px solid #333;
+  float: right;
+  border-radius: 4px;
+  transition: all ease 0.5s;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  .line {
+    height: 2px;
+    width: 22px;
+    background: #fff;
+    margin-top: 3px;
+    border-radius: 1px;
+  }
+}
+.toggle-click {
+  background: #1a1a1a;
+}
 .search {
   position: relative;
   input {
@@ -221,6 +211,16 @@ export default {
   cursor: pointer;
 }
 
+.nav-header:after,
+.navbar:after,
+.nav-body:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  line-height: 0;
+  visibility: hidden;
+}
 @media screen and(max-width: 767px) {
   .logo {
     padding-left: 20px;
@@ -300,13 +300,11 @@ export default {
     display: block;
   }
 }
-
 @media screen and (min-width: 768px) {
-  .nav-bar {
+  .navbar {
     margin-left: auto;
     margin-right: auto;
   }
-
   .nav-list {
     float: left;
     margin-left: 1px;
@@ -357,7 +355,6 @@ export default {
       }
     }
   }
-
   .nav-header {
     float: left;
   }
