@@ -16,7 +16,13 @@ const fetchBar = function () {
 function createStore() {
     const store = new Vuex.Store({
         state: {
-            bar: ''
+            bar: '',
+            tabBg: false, // tab页是否有background
+            anchorScroll: { top: 0, move: 0 }, // 记录scroll位置
+        },
+        getters: {
+            tabBg: state => state.tabBg,
+            anchorScroll: state => state.tabBg
         },
         actions: {
             fetchBar({ commit }) {
