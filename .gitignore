@@ -1,22 +1,12 @@
 .DS_Store
-node_modules
-/dist
-/admin-dist
-# local env files
-.env.local
-.env.*.local
+node_modules/
+npm-debug.log
 
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.bak
+dist/
+.vscode/
+admin.lock
+server/config/secret.js
+server/config/mpapp.js
+yarn-error.log
+uploads/
+*.log
