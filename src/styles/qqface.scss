@@ -1,0 +1,27 @@
+.qq-face-map {
+  width: 29px;
+  height: 25px;
+  background-image: url(~@/../public/expression/qqface.png);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.emoji-map {
+  width: 25px;
+  height: 25px;
+  background-image: url(~@/../public/expression/emoji2.png);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@for $i from 0 through 104 {
+  .qq-face-map-#{$i} {
+    background-position: -29px * ($i%15) -29px * floor($i/15);
+  }
+}
+
+@for $i from 0 through 176 {
+  .emoji-#{$i} {
+    background-position: -28.8px * ($i%15) -29px * floor($i/15);
+  }
+}
