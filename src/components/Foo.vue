@@ -8,7 +8,7 @@
 
 <script>
 // 在这里导入模块，而不是在 `store/index.js` 中
-import fooStoreModule from '../store/modules/foo'
+import fooStoreModule from '../store/lazy-modules/foo'
 
 export default {
   // 惰性注册模块
