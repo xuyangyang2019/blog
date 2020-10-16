@@ -2,32 +2,36 @@
   <div class="hot">
     <h2 class="hot-header">推荐</h2>
     <div class="hot-content">
-      <ul>
-        <li v-for="(item, index) in articles.hot">
+      <ul v-if="hotArticles.length > 0">
+        <li v-for="(item, index) in hotArticles">
           <div class="hot-item">
-            <span>{{ index + 1 }}. </span><a href="jacascript: void(0)" :title="item.title" @click="jumpHot(item)">{{ item.title }}</a>
+            <span>{{ index + 1 }}. </span>
+            <a href="jacascript: void(0)" :title="item.title" @click="jumpHot(item)">
+              {{ item.title }}
+            </a>
           </div>
         </li>
-        <li v-if="articles.hot.length === 0">木有文章</li>
       </ul>
+      <div v-else>没有文章</div>
     </div>
   </div>
 </template>
+
 <script>
-import { mapState, mapActions, mapMutations } from "vuex"
+import { mapGetters } from "vuex"
+
 export default {
-  data() {
-    return {
-      articles: {
-        hot: []
-      }
+  computed: {
+    ...mapGetters({
+      articles: 'articles'
+    }),
+    // 热门文章
+    hotArticles() {
+      return this.articles.hot || []
     }
   },
-  computed: {
-    // ...mapState(["articles"])
-  },
   methods: {
-    ...mapActions(["getHot"]),
+    // 跳转到文章
     jumpHot: function (item) {
       if (item.tag[0] === "life") {
         this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
@@ -37,7 +41,8 @@ export default {
     }
   },
   mounted() {
-    // this.getHot()
+    // 页面加载完成后 获取推荐的文章
+    this.$store.dispatch('GetHot')
   }
 }
 </script>
@@ -46,12 +51,14 @@ export default {
 .hot {
   background: #faf7f7;
 }
+
 .hot-header {
   text-align: center;
   padding: 15px;
   color: #eee;
   background: #2e3033;
 }
+
 .hot-content {
   li {
     font-size: 14px;
@@ -69,6 +76,7 @@ export default {
     text-decoration: underline;
   }
 }
+
 .hot-item {
   overflow: hidden;
   text-overflow: ellipsis; //超出部分显示省略号
