@@ -2,24 +2,19 @@
   <div class="life-module">
     <loading v-if="code === 404"></loading>
     <h3 v-if="articles.life.length == 0 && code === 200" class="none-article">还没有此类文章，敬请期待···</h3>
-    <article-list :articleList="articles.life"></article-list>
+    <!-- <article-list :articleList="articles.life"></article-list> -->
   </div>
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex"
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex"
 
-import articleList from "@/components/article/ArticleList"
+// import articleList from "@/components/article/ArticleList"
 import loading from "@/components/base/Loading"
 
 export default {
-  data() {
-    return {
-      code: 200
-    }
-  },
   components: {
-    articleList,
+    // articleList,
     loading
   },
   //   metaInfo() {
@@ -51,11 +46,14 @@ export default {
   //     next()
   //   },
   computed: {
-    // ...mapState(["articles", "code"])
+    ...mapGetters({
+      code: 'code',
+      articles: 'articles',
+    })
   },
   methods: {
-    ...mapMutations(["clear"]),
-    ...mapActions(["getArticles", "getArticlesCount"])
+    // ...mapMutations(["clear"]),
+    // ...mapActions(["getArticles", "getArticlesCount"])
   }
 }
 </script>

@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex"
+import { mapMutations, mapActions, mapGetters } from "vuex"
 
 // import emoji from "@/components/base/emoji"
 // import emojiData from "@/assets/js/emoji-data"
@@ -138,7 +138,11 @@ export default {
   //   ])
   // },
   computed: {
-    // ...mapState(["msgBoardArr", "userInfo", "pageArr"])
+    ...mapGetters({
+      msgBoardArr: 'msgBoardArr',
+      userInfo: 'userInfo',
+      pageArr: 'pageArr',
+    })
   },
   methods: {
     // ...mapActions(["getLeaveWords", "saveLeaveWords", "addLeaveWords", "getMsgCount"]),
