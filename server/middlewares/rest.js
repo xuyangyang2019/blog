@@ -4,7 +4,6 @@ module.exports = {
         this.message = message || ''
     },
     restify: (pathPrefix) => {
-        console.log('restify')
         // REST API前缀，默认为/api/:
         pathPrefix = pathPrefix || '/api/'
         return async (ctx, next) => {
