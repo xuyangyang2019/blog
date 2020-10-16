@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from "vuex"
+import { mapActions, mapMutations, mapState } from "vuex"
 
 // import articleList from "@/components/article/ArticleList"
 import loading from "@/components/base/Loading"
@@ -46,7 +46,7 @@ export default {
   //     next()
   //   },
   computed: {
-    ...mapGetters({
+    ...mapState({
       code: 'code',
       articles: 'articles',
     })

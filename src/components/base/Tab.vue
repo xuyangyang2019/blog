@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from "vuex"
+import { mapState, mapMutations } from "vuex"
 
 // import { getScrollTop } from "@/utils/getScrollTop"
 // import { requestAnimation } from "@/utils/requestAnimation"
@@ -64,8 +64,7 @@ export default {
     // requestAnimation()
   },
   computed: {
-    // ...mapState(["tabBg", "anchorScroll"])
-    ...mapGetters({
+    ...mapState({
       tabBg: 'tabBg',
       anchorScroll: 'anchorScroll'
     })

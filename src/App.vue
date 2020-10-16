@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapGetters } from "vuex"
+import { mapState, mapMutations } from "vuex"
 
 import tab from "@/components/base/Tab"
 import about from "@/components/base/About"
@@ -102,7 +102,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
+    ...mapState({
       currentTitle: 'currentTitle'
     })
   },

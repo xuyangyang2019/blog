@@ -41,14 +41,7 @@ const state = {
 
 // getters
 const getters = {
-    tabBg: state => state.tabBg,
-    anchorScroll: state => state.tabBg,
-    currentTitle: state => state.currentTitle,
-    articles: state => state.articles,
-    code: state => state.code,
-    msgBoardArr: state => state.msgBoardArr,
-    userInfo: state => state.userInfo,
-    pageArr: state => state.pageArr,
+    // tabBg: state => state.tabBg,
 }
 
 // actions

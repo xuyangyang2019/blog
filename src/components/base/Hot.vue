@@ -1,13 +1,14 @@
 <template>
   <div class="hot">
-    <h2 class="hot-header">推荐</h2>
+    <h2 class="hot-header" @click="getHotArticles">推荐</h2>
     <div class="hot-content">
       <ul v-if="hotArticles.length > 0">
         <li v-for="(item, index) in hotArticles">
           <div class="hot-item">
             <span>{{ index + 1 }}. </span>
             <a href="jacascript: void(0)" :title="item.title" @click="jumpHot(item)">
-              {{ item.title }}
+              {{ item }}
+              <!-- {{ item.title }} -->
             </a>
           </div>
         </li>
@@ -18,11 +19,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex"
+import { mapState } from "vuex"
 
 export default {
   computed: {
-    ...mapGetters({
+    ...mapState({
       articles: 'articles'
     }),
     // 热门文章
@@ -38,6 +39,10 @@ export default {
       } else {
         this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
       }
+    },
+    getHotArticles() {
+      console.log('获取热门文章')
+      this.$store.dispatch('GetHot')
     }
   },
   mounted() {
