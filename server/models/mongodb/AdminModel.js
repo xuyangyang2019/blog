@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('../../db/mongodb/db')
 
 module.exports = db.defineModel('Admin', {
     username: String,
