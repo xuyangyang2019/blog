@@ -38,7 +38,7 @@
 
 <script>
 import { mapState, mapMutations, mapGetters } from "vuex"
-// import { getElementTop } from "@/utils/getElementTop"
+
 // import { getScrollTop } from "@/utils/getScrollTop"
 // import { requestAnimation } from "@/utils/requestAnimation"
 
@@ -46,10 +46,10 @@ export default {
   data() {
     return {
       show: false, // 展示导航栏
+      searchKey: "", // 搜索的关键词
       // fixed: false, 
-      searchKey: "",
       // scrollFlag: 0,
-      routeName: "",
+      routeName: "", // 路由name
       intervalId: "",
       // 导航列表
       tabs: [
@@ -77,12 +77,13 @@ export default {
     },
     // 搜索
     search() {
-      if (!this.searchKey.length) {
-        return
-      } else {
-        this.active = -1
-        this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
-      }
+      console.log('搜索待实现实现')
+      // if (!this.searchKey.length) {
+      //   return
+      // } else {
+      //   this.active = -1
+      //   this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
+      // }
     },
     // 回调函数
     callback: function () {
@@ -92,7 +93,7 @@ export default {
       // if (scrollTop < this.anchorScroll.top) {
       //   document.documentElement.scrollTop = Math.min(scrollTop + movepx, this.anchorScroll.top)
       //   document.body.scrollTop = Math.min(scrollTop + movepx, this.anchorScroll.top)
-      //   //当页面不够长使container滚动不到页面顶端时，清除定时器(适合container上方有其他元素时)
+      //   // 当页面不够长使container滚动不到页面顶端时，清除定时器(适合container上方有其他元素时)
       //   if (getScrollTop() === scrollTop) {
       //     this.$router.push({ name: this.routeName })
       //     window.cancelAnimationFrame(that.intervalId)
