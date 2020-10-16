@@ -16,6 +16,8 @@ const bodyParser = require('koa-bodyparser')
 const jsonp = require('koa-jsonp')
 // rest中间件
 const rest = require('./middlewares/rest')
+// koa 路由中间件
+const Router = require('koa-router')
 // 缓存
 const LRU = require('lru-cache')
 // ssr
@@ -203,35 +205,80 @@ const renderData = (ctx, renderer) => {
         })
     })
 }
-backendApp.context.renderData = renderData
 
-backendApp.use(async (ctx, next) => {
-    if (!renderer) {
-        ctx.type = 'html'
-        return ctx.body = 'waiting for compilation... refresh in a moment.'
-    }
-    // if (Object.keys(proxyConfig).findIndex(vl => ctx.url.startsWith(vl)) > -1) {
-    //     return next()
-    // }
-    let html, status
-    try {
-        status = 200
-        html = await renderData(ctx, renderer)
-    } catch (e) {
-        console.log('\ne', e)
-        if (e.code === 404) {
-            status = 404
-            html = '404 | Not Found'
-        } else {
-            status = 500
-            html = '500 | Internal Server Error'
-        }
-    }
-    ctx.type = 'html'
-    ctx.status = status ? status : ctx.status
-    ctx.body = html
+// 实例化路由
+const router = new Router()
+
+router.get('/api/getHot', async (ctx, next) => {
+    // ctx.body = await userService.getAllUser()
+    ctx.body = ['article1', 'article2']
 })
 
+//前端请求
+router.get(["/", "/home", "/article", "/article/:articleList", "/article/:articleList/:id", "/life",
+    "/life/:id", "/msgBoard", "/search/:searchKey", "/timeLine/:time", "/login_qq"], async (ctx, next) => {
+        // const context = {
+        //     title: 'mapBlog',
+        //     url: req.url
+        // }
+        if (!renderer) {
+            ctx.type = 'html'
+            return ctx.body = 'waiting for compilation... refresh in a moment.'
+        }
+        // if (Object.keys(proxyConfig).findIndex(vl => ctx.url.startsWith(vl)) > -1) {
+        //     return next()
+        // }
+        let html, status
+        try {
+            status = 200
+            html = await renderData(ctx, renderer)
+        } catch (e) {
+            console.log('\ne', e)
+            if (e.code === 404) {
+                status = 404
+                html = '404 | Not Found'
+            } else {
+                status = 500
+                html = '500 | Internal Server Error'
+            }
+        }
+        ctx.type = 'html'
+        ctx.status = status ? status : ctx.status
+        ctx.body = html
+        // renderer.renderToString(context, (err, html) => {
+        //     const { title, meta } = context.meta.inject()
+        //     if (err) {
+        //         res.status(500).end('Internal Server Error')
+        //         return
+        //     }
+        //     html = html.replace(/<title.*?<\/title>/g, title.text())
+        //     html = html.replace(/<meta\s+.*?name="description".*?>/g, meta.text())
+        //     res.end(html)
+        // })
+    })
+
+//后端请求
+router.get(["/admin", "/admin/*", "/login"], async (ctx, next) => {
+    ctx.response.body = '<h5>admin</h5>';
+    // fs.readFile('../admin/dist/admin.html', 'utf-8', function (err, data) {
+    //     if (err) {
+    //         console.log(err);
+    //     } else {
+    //         // console.log(data);
+    //         res.end(data)
+    //     }
+    // });
+    // res.render("admin.html",{title: "登录"})
+})
+
+router.get('*', function (ctx, next) {
+    // res.render('404.html', {
+    //     title: 'No Found'
+    // })
+    ctx.response.body = '<h5>Index</h5>';
+})
+
+backendApp.use(router.routes())
 
 // 错误处理
 backendApp.on('error', (err) => {

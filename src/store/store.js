@@ -47,11 +47,15 @@ const getters = {
 // actions
 const actions = {
     // 获取推荐的文章
-    GetHot({ state }) {
-        return api.get("/api/getHot", {}).then((data) => {
-            state.articles.hot = data
-            return data
+    GetHot({ commit }) {
+        api.get("/api/getHot", {}).then((data) => {
+            console.log(data)
+            commit('SET_HOT', data)
         })
+        // return api.get("/api/getHot", {}).then((data) => {
+        //     // state.articles.hot = data
+        //     // return data
+        // })
     },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
@@ -67,6 +71,9 @@ const mutations = {
     // 'SET_BAR'(state, data) {
     //     state.bar = data
     // }
+    SET_HOT(state, data) {
+        state.articles.hot = data
+    }
 }
 
 Vue.use(Vuex)
