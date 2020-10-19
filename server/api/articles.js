@@ -1,7 +1,9 @@
-const express = require('express')
-const router = express.Router()
-const db = require("../db/db")
+const router = require('koa-router')()
+// mongodb
+const db = require("../db/mongodb/db")
 
+// const express = require('express')
+// const router = express.Router()
 // const getIp = require("../utils/getIp")
 // const api = require("../http/server-api")
 // const localTime = require("../utils/reviseTime")
@@ -266,18 +268,18 @@ const db = require("../db/db")
 // })
 
 // 推荐文章
-router.get("/api/getHot", (req, res) => {
-	db.article.find(
+router.get("/api/getHot", async (ctx, next) => {
+	let hot = await db.article.find(
 		{ publish: true },
 		{ title: 1, articleId: 1, tag: 1 },
 		{ sort: { pv: -1 } },
 		(err, doc) => {
 			if (err) {
-				res.status(500).end()
-			} else {
-				res.json(doc)
+				console.log(err)
 			}
 		}).limit(5)
+	console.log(hot)
+	ctx.body = hot
 })
 
 module.exports = router

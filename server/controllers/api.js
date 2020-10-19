@@ -1,19 +1,35 @@
 // const APIError = require('../middlewares/rest').APIError;
-const userService = require('../services/userService')
-// const adminService = require('../services/adminService')
 
+// mysql
+// const userService = require('../services/userService')
+
+// mongodb
+const db = require("../db/mongodb/db")
+// const adminService = require('../services/adminService')
 
 module.exports = {
     // 获取
-    'GET /api/users': async (ctx, next) => {
-        ctx.body = await userService.getAllUser()
+    // 'GET /api/users': async (ctx, next) => {
+    //     ctx.body = await userService.getAllUser()
+    // },
+    // 获取推荐文章
+    'GET /api/getHot': async (ctx, next) => {
+        let hot = await db.article.find(
+            { publish: true },
+            { title: 1, articleId: 1, tag: 1 },
+            { sort: { pv: -1 } },
+            (err, doc) => {
+                if (err) {
+                    console.log(err)
+                }
+            }).limit(5)
+        ctx.body = hot
     },
     // 'GET /api/admins': async (ctx, next) => {
     //     await adminService.getList(ctx)
     //     // adminModel.find({}, {}, (err, docs) => {
     //     //     console.log(docs)
     //     // })
-    //     // ctx.body = 'admins'
     // },
     // // 获取
     // 'GET /api/todos': async (ctx, next) => {
