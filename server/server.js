@@ -158,8 +158,13 @@ backendApp.use(jsonp())
  * 遍历每个mapping 自动添加router router.get(path, mapping[url])
  */
 // 扫描注册Controller，并添加router:
-// const router = require('./middlewares/controller')(__dirname + '/controllers');
-// backendApp.use(router.routes()).use(router.allowedMethods())
+const routerApi = require('./middlewares/controller')(__dirname + '/controllers');
+backendApp.use(routerApi.routes()).use(routerApi.allowedMethods())
+
+// api
+// const route = require("./api")
+// route(backendApp)
+
 
 function createRenderer(bundle, options) {
     return createBundleRenderer(bundle, Object.assign(options, {
@@ -208,11 +213,6 @@ const renderData = (ctx, renderer) => {
 
 // 实例化路由
 const router = new Router()
-
-router.get('/api/getHot', async (ctx, next) => {
-    // ctx.body = await userService.getAllUser()
-    ctx.body = ['article1', 'article2']
-})
 
 //前端请求
 router.get(["/", "/home", "/article", "/article/:articleList", "/article/:articleList/:id", "/life",
