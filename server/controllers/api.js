@@ -25,6 +25,36 @@ module.exports = {
             }).limit(5)
         ctx.body = hot
     },
+    // 获取标签
+    'GET /api/tags': async (ctx, next) => {
+        let publish = ctx.query.publish === "false" ? false : true
+        let tagArr = []
+        tagArr = await db.article.find({ publish: publish }).distinct("tag", (err, doc) => {
+            if (err) {
+                res.status(500).end()
+            } else {
+                // tag的文章数量 有问题先不管
+                // async.map(doc, (item, callback) => {
+                //     console.log(item)
+                //     console.log(callback)
+                //     db.article.count({ publish: true, tag: item }, (err, num) => {
+                //         if (err) {
+                //             console.log(err)
+                //         } else {
+                //             callback(null, { tag: item, num: num })
+                //         }
+                //     })
+                // }, (err, results) => {
+                //     if (err) {
+                //         console.log(err)
+                //     } else {
+                //         res.json(results)
+                //     }
+                // })
+            }
+        })
+        ctx.body = tagArr
+    },
     // 'GET /api/admins': async (ctx, next) => {
     //     await adminService.getList(ctx)
     //     // adminModel.find({}, {}, (err, docs) => {
