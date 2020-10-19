@@ -7,8 +7,7 @@
           <div class="hot-item">
             <span>{{ index + 1 }}. </span>
             <a href="jacascript: void(0)" :title="item.title" @click="jumpHot(item)">
-              {{ item }}
-              <!-- {{ item.title }} -->
+              {{ item.title }}
             </a>
           </div>
         </li>
@@ -34,11 +33,12 @@ export default {
   methods: {
     // 跳转到文章
     jumpHot: function (item) {
-      if (item.tag[0] === "life") {
-        this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
-      } else {
-        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
-      }
+      console.log(item)
+      // if (item.tag[0] === "life") {
+      //   this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
+      // } else {
+      //   this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
+      // }
     },
     getHotArticles() {
       console.log('获取热门文章')
