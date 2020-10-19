@@ -1,85 +1,147 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
-// bluebird实现了将异步回调写法转变为链式写法，并且扩展出了catch、finally、bind等api
-const Promise = require('bluebird')
+const md5 = require("js-md5")
+const mongoose = require("mongoose")
 
-// 配置文件
-// const config = require('../config')
+const localTime = require("../../utils/reviseTime")
 
-// 生成唯一标识符
-// const uuid = require('node-uuid')
+mongoose.Promise = global.Promise
 
-// /**
-//  * 生成唯一标识符
-//  */
-// function generateId() {
-//     return uuid.v1() // 基于时间戳生成
-//     // return uuid.v4(); // 随机生成
-// }
+// 请自行更改用户名和密码
+mongoose.connection.openUri("mongodb://xuyy:1234509876@localhost:27017")
 
-// 连接数据库 mongod 服务器端  mongo客户端
-// 数据库的名称可以是不存在 创建一个zf数据库
-const DB_URL = 'mongodb://localhost:27017/test' /** * 连接 */
-// var db = mongoose.connect('mongodb://user:pass@localhost:port/database')
-mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
-
-/** * 连接成功 */
-db.on('connected', function () {
-    console.log('Mongoose connection open to ' + DB_URL)
+const userSchema = new mongoose.Schema({
+    user: "string",
+    password: "string",
+    lastLogin: "string",
+    salt: "string"
 })
 
-/** * 连接异常 */
-db.on('error', function (err) {
-    console.log('Mongoose connection error: ' + err)
+const vistorsSchema = new mongoose.Schema({
+    name: "string",
+    imgUrl: "string",
+    email: "string",
+    githubID: "number"
 })
 
-/** * 连接断开 */
-db.on('disconnected', function () {
-    console.log('Mongoose connection disconnected')
+const articleSchema = new mongoose.Schema({
+    articleId: "number",
+    original: "boolean",
+    title: "string",
+    abstract: "string",
+    content: "string",
+    publish: "boolean",
+    tag: "array",
+    commentNum: "number",
+    likeNum: "number",
+    pv: "number",
+    date: "date"
 })
 
-// 类型
-// const ID_TYPE = Sequelize.STRING(50)
+const commentSchema = new mongoose.Schema({
+    name: "string",
+    imgUrl: "string",
+    email: "string",
+    content: "string",
+    reply: [
+        {
+            name: "string",
+            imgUrl: "string",
+            email: "string",
+            aite: "string",
+            content: "string",
+            like: "number",
+            date: "date"
+        }
+    ], // 记得加上日期格式
+    like: "number",
+    articleId: "number",
+    title: "string",
+    date: "date"
+})
 
-function defineModel(name, attributes, plugin = '') {
-    console.log('defineModel')
-    // 通用的参数
-    attributes.creat_date = {
-        type: String
-    }
-    attributes.update_date = {
-        type: String
-    }
-    attributes.is_delete = {
-        type: Number
-    }
-    attributes.timestamp = {
-        type: Number
-    }
-    // 定义一个schema, 描述此集合里有哪些字段，字段是什么类型
-    const schema = new Schema(attributes)
-    if (plugin) {
-        schema.plugin(require(plugin))
-    }
-    // 创建模型，可以用它来操作数据库中的集合，指的是整体
-    const model = mongoose.model(name, schema)
-    Promise.promisifyAll(model)
-    Promise.promisifyAll(model.prototype)
-    return model
+const msgBoardSchema = new mongoose.Schema({
+    name: "string",
+    imgUrl: "string",
+    email: "string",
+    content: "string",
+    date: "date",
+    reply: [
+        {
+            name: "string",
+            aite: "string",
+            imgUrl: "string",
+            content: "string",
+            date: "date"
+        }
+    ]
+})
+
+const newMsgSchema = new mongoose.Schema({
+    type: "string",
+    name: "string",
+    say: "string",
+    title: "string",
+    content: "string",
+    ip: "string",
+    date: "date"
+})
+
+const counterSchema = new mongoose.Schema({
+    _id: "string",
+    seq: "number"
+})
+
+// 实现自增序列
+articleSchema.pre("save", function (next) {
+    let _this = this
+    db.counter.find({}, (err, doc) => {
+        if (err) {
+            res.status(500).end()
+        } else {
+            if (!doc.length) {
+                new db.counter({ _id: 'entityId', seq: 1 }).save()
+                next()
+            } else {
+                db.counter.findByIdAndUpdate({ _id: 'entityId' }, { $inc: { seq: 1 } }, function (error, counter) {
+                    if (error) {
+                        return next(error)
+                    } else {
+                        _this.articleId = counter.seq
+                        next()
+                    }
+                })
+            }
+        }
+    })
+})
+
+const db = {
+    user: mongoose.model("user", userSchema),
+    article: mongoose.model("article", articleSchema),
+    comment: mongoose.model("comment", commentSchema),
+    msgBoard: mongoose.model("msgBoard", msgBoardSchema),
+    vistor: mongoose.model("vistor", vistorsSchema),
+    newMsg: mongoose.model("new", newMsgSchema),
+    counter: mongoose.model("counter", counterSchema)
 }
 
-const exp = {
-    defineModel
+const initDbUser = () => {
+    db.user.find({}, (err, doc) => {
+        if (err) {
+            console.log(err)
+        } else {
+            if (!doc.length) {
+                let salt = Math.ceil(Math.random() * 10000),
+                    currTime = localTime(Date.now())
+                new db.user({ user: "admin", password: md5("12345" + salt), salt: salt, lastLogin: currTime }).save()
+            } else {
+                console.log("Userinit has done")
+            }
+        }
+    })
 }
 
-// 基本属性类型有字符串、日期型、数值型、布尔型、null、数组、内嵌文档等
-const TYPES = ['String', 'Number', 'Boolean', 'Array', 'Buffer', 'Date', 'ObjectId', 'Mixed']
-for (const type of TYPES) {
-    exp[type] = Schema.Types[type]
-}
+mongoose.connection.once("open", () => {
+    initDbUser()
+})
 
-// exp.ID = ID_TYPE // 主键的数据类型
-// exp.generateId = generateId // 主键
-
-module.exports = exp
+module.exports = db
