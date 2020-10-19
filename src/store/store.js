@@ -37,6 +37,7 @@ const state = {
     msgBoardArr: [], // 留言信息
     userInfo: { name: "", imgUrl: "", email: "" }, // 用户信息
     pageArr: [], // 分页
+    tags: [], // 标签
 }
 
 // getters
@@ -57,6 +58,16 @@ const actions = {
         //     // return data
         // })
     },
+    //获取技术文章的tag生成导航
+    GetTagsClass({ commit }, payload) {
+        api.get("/api/tags", { publish: payload.publish }).then((data) => {
+            commit("SetTags", data)
+        })
+        // return api.get("/api/tags", { publish: payload.publish }).then((data) => {
+        //     state.tags = data
+        //     return data
+        // })
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
@@ -73,6 +84,9 @@ const mutations = {
     // }
     SET_HOT(state, data) {
         state.articles.hot = data
+    },
+    SetTags(state, data) {
+        state.tags = data
     }
 }
 
