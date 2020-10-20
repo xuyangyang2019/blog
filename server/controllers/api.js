@@ -79,6 +79,66 @@ module.exports = {
         // console.log('getTime', timeArr)
         ctx.body = timeArr
     },
+    // 获取文章数量
+    'GET /api/getCount': async (ctx, next) => {
+        let publish = ctx.query.publish === "false" ? false : true
+        let num = 0
+        // 首页请求
+        if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
+            num = await db.article.count({ publish: publish }, (err, num) => { })
+        }
+        // 通过文章标签请求
+        if (ctx.query.tag) {
+            let tag = ctx.query.tag
+            num = await db.article.count({ publish: publish, tag: tag }, (err, num) => { })
+        }
+        // 前台后台时间范围请求
+        if (ctx.query.start) {
+            let start = new Date(parseInt(ctx.query.start))
+            let end = new Date(parseInt(ctx.query.end))
+            num = await db.article.count({ publish: ctx.query.publish, date: { "$gte": start, "$lte": end } }, (err, num) => {
+                // if (err) {
+                //     res.status(500).end()
+                // } else {
+                //     res.json(num)
+                // }
+            })
+        }
+        // 前台后台关键词搜索请求
+        if (ctx.query.key) {
+            num = await db.article.count({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } }, (err, num) => {
+                // if (err) {
+                //     res.status(500).end()
+                // } else {
+                //     res.json(num)
+                // }
+            })
+        }
+        console.log(num)
+        ctx.body = num
+    },
+    // 抓取文章列表
+    'GET /api/getArticles': async (ctx, next) => {
+        let params = {}
+        let limit = 8
+        let skip = ctx.query.page * limit - limit
+        if (!ctx.query.tag) {  // 抓取首页文章
+            params = {
+                publish: ctx.query.publish
+            }
+        } else {
+            params = {
+                publish: ctx.query.publish,
+                tag: ctx.query.tag
+            }
+        }
+        let articles = await db.article
+            .find(params, { content: 0 }, (err, doc) => { })
+            .sort({ "_id": -1 })
+            .skip(skip)
+            .limit(limit)
+        ctx.body = articles
+    },
     // 'GET /api/admins': async (ctx, next) => {
     //     await adminService.getList(ctx)
     //     // adminModel.find({}, {}, (err, docs) => {
