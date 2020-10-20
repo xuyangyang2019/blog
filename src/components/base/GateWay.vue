@@ -4,8 +4,10 @@
     <div class="gateway-content">
       <ul>
         <li v-for="item in tags">
-          <!-- <a href="javascript: void(0)" @click="jumpGate(item.tag)" ref="tag">{{ item.tag | changeLife }}</a> -->
-          <a href="javascript: void(0)" @click="jumpGate(item.tag)" ref="tag">{{ item }}</a>
+          <a href="javascript: void(0)" @click="jumpGate(item.tag)" ref="tag">
+            <span>{{ item.tag | changeLife }}</span>
+            <span v-if="item.num" v-text="' ' + item.num + '篇'"></span>
+          </a>
         </li>
       </ul>
     </div>
