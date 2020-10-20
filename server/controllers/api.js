@@ -29,30 +29,25 @@ module.exports = {
     'GET /api/tags': async (ctx, next) => {
         let publish = ctx.query.publish === "false" ? false : true
         let tagArr = []
-        tagArr = await db.article.find({ publish: publish }).distinct("tag", (err, doc) => {
-            if (err) {
-                res.status(500).end()
-            } else {
-                // tag的文章数量 有问题先不管
-                // async.map(doc, (item, callback) => {
-                //     console.log(item)
-                //     console.log(callback)
-                //     db.article.count({ publish: true, tag: item }, (err, num) => {
-                //         if (err) {
-                //             console.log(err)
-                //         } else {
-                //             callback(null, { tag: item, num: num })
-                //         }
-                //     })
-                // }, (err, results) => {
-                //     if (err) {
-                //         console.log(err)
-                //     } else {
-                //         res.json(results)
-                //     }
-                // })
+        // 所有的标签
+        // tagArr = await db.article.find({ publish: publish }).distinct("tag", (err, doc) => { })
+        // 所有的文章
+        let docs = await db.article.find({ publish: publish }, { tag: 1, _id: 0 })
+        let tagMap = {}
+        // 计算标签的文章数
+        docs.forEach((doc, index, arr) => {
+            for (const tag of doc.tag) {
+                tagMap[tag] = tagMap[tag] ? tagMap[tag] + 1 : 1
             }
         })
+        for (const key in tagMap) {
+            if (tagMap.hasOwnProperty(key)) {
+                tagArr.push({
+                    tag: key,
+                    num: tagMap[key]
+                })
+            }
+        }
         ctx.body = tagArr
     },
     // 获取时间轴
@@ -81,7 +76,7 @@ module.exports = {
                 })
             }
         }
-        console.log('getTime', timeArr)
+        // console.log('getTime', timeArr)
         ctx.body = timeArr
     },
     // 'GET /api/admins': async (ctx, next) => {
