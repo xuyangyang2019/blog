@@ -1,6 +1,6 @@
 <template>
   <div class="timeLine">
-    <h1 class="timeLine-header">时间轴</h1>
+    <h1 class="timeLine-header" @click="getTime">时间轴</h1>
     <div class="timeLine-content">
       <ul>
         <li v-for="item in timeLine">
@@ -14,41 +14,40 @@
 <script>
 import { mapState, mapActions } from "vuex"
 export default {
-  data() {
-    return {
-      timeLine: []
-    }
-  },
   computed: {
-    // ...mapState(["timeLine"])
+    ...mapState({
+      timeLine: 'timeLine'
+    })
   },
   methods: {
-    ...mapActions(["getTime"]),
-    jumpTime: function (time) {
-      let year = time.match(/\d+/g)[0],
-        month = parseInt(time.match(/\d+/g)[1]),
-        endDay,
-        date
-      if (month === 2) {
-        endDay = 28
-      } else if (month === 1 || month == 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
-        endDay = 31
-      } else {
-        endDay = 30
-      }
-      for (let i = 0; i < 9; i++) {
-        if (month === i) {
-          month = "0" + month
-        }
-      }
-      date = year + "-" + month + "-" + "01" + "to" + year + "-" + month + "-" + endDay
-      this.$router.push({ name: "timeLine", params: { time: date } })
+    ...mapActions({
+      getTime: 'GetTime'
+    }),
+    // 跳转到时间轴
+    jumpTime(time) {
+      console.log(time)
+      // let year = time.match(/\d+/g)[0],
+      //   month = parseInt(time.match(/\d+/g)[1]),
+      //   endDay,
+      //   date
+      // if (month === 2) {
+      //   endDay = 28
+      // } else if (month === 1 || month == 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
+      //   endDay = 31
+      // } else {
+      //   endDay = 30
+      // }
+      // for (let i = 0; i < 9; i++) {
+      //   if (month === i) {
+      //     month = "0" + month
+      //   }
+      // }
+      // date = year + "-" + month + "-" + "01" + "to" + year + "-" + month + "-" + endDay
+      // this.$router.push({ name: "timeLine", params: { time: date } })
     }
   },
   mounted() {
-    // this.getTime({
-    // 	publish: true
-    // })
+    this.getTime({ publish: true })
   }
 }
 </script>
