@@ -38,6 +38,7 @@ const state = {
     userInfo: { name: "", imgUrl: "", email: "" }, // 用户信息
     pageArr: [], // 分页
     tags: [], // 标签
+    timeLine: [], // 时间轴
 }
 
 // getters
@@ -50,7 +51,6 @@ const actions = {
     // 获取推荐的文章
     GetHot({ commit }) {
         api.get("/api/getHot", {}).then((data) => {
-            console.log(data)
             commit('SET_HOT', data)
         })
         // return api.get("/api/getHot", {}).then((data) => {
@@ -66,6 +66,16 @@ const actions = {
         // return api.get("/api/tags", { publish: payload.publish }).then((data) => {
         //     state.tags = data
         //     return data
+        // })
+    },
+    // 获取时间轴
+    GetTime({ commit }, payload) {
+        api.get("/api/getTime", payload).then((data) => {
+            commit('SET_TIME_LINE', data)
+        })
+        // return api.get("/api/getTime",payload).then((data) =>{
+        // 	state.timeLine = data
+        // 	return data
         // })
     },
     // fetchBar({ commit }) {
@@ -87,6 +97,9 @@ const mutations = {
     },
     SetTags(state, data) {
         state.tags = data
+    },
+    SET_TIME_LINE(state, data) {
+        state.timeLine = data
     }
 }
 
