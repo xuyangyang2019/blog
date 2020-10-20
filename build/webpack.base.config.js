@@ -18,6 +18,8 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 // 区分大小写的路径
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
 
 // 开发环境
 const isProd = process.env.NODE_ENV === 'production'
@@ -108,7 +110,7 @@ module.exports = function () {
           use: [{
             loader: 'url-loader',
             options: {
-              limit: 1,
+              limit: 8192,
               name: 'assets/images/[name].[hash:8].[ext]',
             },
           }],
@@ -147,7 +149,14 @@ module.exports = function () {
       new vueLoaderPlugin(),
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1
-      })
+      }),
+      new CopyWebpackPlugin([
+        {
+          from: path.resolve(__dirname, '../public/404.html'),
+          to: path.resolve(__dirname, '../dist'),
+          ignore: ['.*']
+        },
+      ])
     ],
   }
   if (isProd) {
