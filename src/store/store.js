@@ -78,6 +78,55 @@ const actions = {
         // 	return data
         // })
     },
+    // 获取文章
+    GetArticles({ commit }, payload) {
+        let params = {}
+        if (!payload.tag) {
+            params = {
+                publish: payload.publish,
+                page: payload.page,
+                cache: true
+            }
+        } else {
+            params = payload
+        }
+        console.log(params)
+        api.get("/api/getArticles", params).then((data) => {
+            console.log(data)
+            if (!payload.tag) {
+                commit("SET_ARTICLES_ALL", data)
+            } else if (payload.tag === "life") {
+                commit("SET_ARTICLES_LIFE", data)
+            } else {
+                commit("SET_ARTICLES_TECH", data)
+            }
+            commit("PRODUCT_BG", data)
+            // return data
+        })
+        // return api.get("/api/getArticles", params).then((data) => {
+        //     if (!payload.tag) {
+        //         state.articles.all = data
+        //     } else if (payload.tag === "life") {
+        //         state.articles.life = data
+        //     } else {
+        //         state.articles.technical = data
+        //     }
+        //     commit("productBg", data)
+        //     return data
+        // })
+    },
+    // 获取对应模块的文章总数，为分页按钮个数提供支持
+    GetArticlesCount({ commit }, payload) {
+        api.get("/api/getCount", payload).then((data) => {
+            commit("SET_PAGE_ARR", data)
+            commit("CHANGE_CODE", 200)
+            // return data
+        })
+        // return api.get("/api/getCount", payload).then((data) => {
+        //     commit("SET_PAGE_ARR", data)
+        //     return data
+        // })
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
@@ -100,7 +149,52 @@ const mutations = {
     },
     SET_TIME_LINE(state, data) {
         state.timeLine = data
-    }
+    },
+    CLEAR_PAGE(state) {
+        state.pageArr = []
+    },
+    CHANGE_CODE(state, code) {
+        console.log('CHANGE_CODE', code)
+        state.code = code
+    },
+    SET_PAGE_ARR(state, data) {
+        let pageNum = Math.ceil(data / 8)
+        let arr = []
+        for (let i = 1; i < pageNum + 1; i++) {
+            arr.push(i)
+        }
+        state.pageArr = arr
+    },
+    SET_ARTICLES_ALL(state, data) {
+        console.log('SET_ARTICLES_ALL', data)
+        state.articles.all = data
+    },
+    SET_ARTICLES_LIFE(state, data) {
+        state.articles.life = data
+    },
+    SET_ARTICLES_TECH(state, data) {
+        state.articles.technical = data
+    },
+    PRODUCT_BG(state, data) {
+        state.tagBg = []
+        let pattern = /^[\u4e00-\u9fa5]+$/
+        data.forEach((item, index, arr) => {
+            console.log(item)
+            if (item.tag[0] === "服务器" || item.tag[0] === "apache" || item.tag[0] === "tomcat") {
+                state.tagBg.push("webserver")
+            } else if (item.tag[0] === "云服务器") {
+                state.tagBg.push("cloundserver")
+            } else if (item.tag[0] === "安全") {
+                state.tagBg.push("safe")
+            } else if (item.tag[0] === "响应式") {
+                state.tagBg.push("response")
+            } else if (pattern.test(item.tag[0])) {
+                state.tagBg.push("")
+            } else {
+                state.tagBg.push(item.tag[0])
+            }
+        })
+    },
 }
 
 Vue.use(Vuex)
