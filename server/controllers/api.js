@@ -114,7 +114,6 @@ module.exports = {
                 // }
             })
         }
-        console.log(num)
         ctx.body = num
     },
     // 抓取文章列表
@@ -140,7 +139,7 @@ module.exports = {
         ctx.body = articles
     },
     // 'GET /api/admins': async (ctx, next) => {
-    //     await adminService.getList(ctx)
+    //     await adminService.getList(ctx)console
     //     // adminModel.find({}, {}, (err, docs) => {
     //     //     console.log(docs)
     //     // })
