@@ -232,6 +232,9 @@ export default {
 // @import "~@/assets/iconfont/iconfont.css";
 // @import "~@/assets/font-awesome/css/font-awesome.css";
 
+// @import "./assets/css/prism.css";
+@import "./assets/icomoon/style.css";
+
 * {
   margin: 0;
   padding: 0;
