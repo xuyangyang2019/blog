@@ -3,7 +3,7 @@
     <nav class="navbar">
       <div class="nav-header">
         <div class="logo">
-          <img src="../../../public/img/logo.png" alt="" />
+          <img src="/img/logo.png" alt="" />
         </div>
         <!-- 小屏幕下的导航按钮 -->
         <button class="navbar-toggle" @click="navShow" :class="{ 'toggle-click': show }">

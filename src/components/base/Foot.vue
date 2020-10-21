@@ -1,7 +1,7 @@
 <template>
   <div class="foot">
     <div class="police">
-      <img src="../../../public/img/beian.png" />
+      <img src="/img/beian.png" />
       <p>鲁公网安备 37012502000331号</p>
     </div>
     <div class="copyright">

@@ -13,7 +13,7 @@
         @touchstart.stop="touchStart($event)"
         @touchend.stop="touchEnd($event)"
       >
-        <img :data-src="item.url" alt="" src="../../../public/img/pic-loading.gif" ref="img" />
+        <img :data-src="item.url" alt="" src="/img/pic-loading.gif" ref="img" />
         <div class="img-shadow">
           <div class="wellknown">
             <div>{{ item.word }}</div>
@@ -24,6 +24,7 @@
       </li>
       <!-- </transition-group> -->
     </ul>
+
     <div class="circle">
       <div v-for="(item, _index) in bannerData">
         <span
@@ -43,33 +44,33 @@
 export default {
   data() {
     return {
-	  currentIndex: 0,
-	  hasRequired:[],
+      currentIndex: 0, // 当前的banner
       startPos: { x: "", y: "", date: "" },
       move: { x: "", y: "" },
+      // banner信息
       bannerData: [
         {
-          url: '/dist/assets/images/one.fa5cc4b8.jpeg',
+          url: '/img/banner/one.jpeg',
           word: "Success is not final, failure is not fatal. It is the courage to continue that counts.",
           person: "Winston Churchill"
         },
         {
-          url: "/dist/assets/images/two.70b4eac7.jpeg",
+          url: "/img/banner/two.jpeg",
           word: "生命中最伟大的光辉不在于永不坠落，而是坠落后总能再度升起。我欣赏这种有弹性的生命状态，快乐地经历风雨，笑对人生。",
           person: "曼德拉"
         },
         {
-          url: "/dist/assets/images/three.c20ad675.jpeg",
+          url: "/img/banner/three.jpeg",
           word: "时间是一只藏在黑暗中的温柔的手，在你一出神一恍惚之间，物走星移。",
           person: "龙应台"
         },
         {
-          url: "/dist/assets/images/four.086235c8.jpeg",
+          url: "/img/banner/four.jpeg",
           word: "一个人可以被毁灭，但不能被打败。",
           person: "海明威"
         },
         {
-          url: "/dist/assets/images/five.36cd0c7e.jpeg",
+          url: "/img/banner/five.jpeg",
           word: "我要纵身跳入时代的奔走，我要纵身跳入时代的年轮：苦痛，欢乐，失败，成功，我都不问，男儿的事业原本要昼夜不停。",
           person: "歌德"
         }
@@ -81,7 +82,7 @@ export default {
     lazyLoad() {
       this.$refs.img.forEach((item, index, arr) => {
         if (index === this.currentIndex) {
-          // 清除定时器，防止图片还没加载完成就轮播到下一张
+          // 清]除定时器，防止图片还没加载完成就轮播到下一张
           clearInterval(this.timer)
           let img = new Image()
           img.src = item.dataset.src
@@ -109,9 +110,11 @@ export default {
       this.currentIndex = index
       this.lazyLoad()
     },
+    // 开始滑动
     startSlider() {
       this.lazyLoad()
     },
+    // 停止滑动
     stopSlider() {
       clearInterval(this.timer)
     },
