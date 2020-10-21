@@ -33,20 +33,20 @@
       </li>
     </ul>
     <!-- 分页 -->
-    <!-- <transition name = "fade" mode = "out-in">	 -->
-    <!-- <page v-if = "pageArr.length > 1" ></page> -->
-    <!-- </transition> -->
+    <transition name="fade" mode="out-in">
+      <page v-if="pageArr.length > 1"></page>
+    </transition>
   </div>
 </template>
 
 <script> 	
 import { mapActions, mapState, mapMutations } from "vuex"
 
-// import page from "@/components/base/Page"
+import page from "@/components/base/Page"
 
 export default {
   components: {
-    // page
+    page
   },
   props: {
     articleList: {
