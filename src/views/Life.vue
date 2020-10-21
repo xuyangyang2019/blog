@@ -2,49 +2,37 @@
   <div class="life-module">
     <loading v-if="code === 404"></loading>
     <h3 v-if="articles.life.length == 0 && code === 200" class="none-article">还没有此类文章，敬请期待···</h3>
-    <!-- <article-list :articleList="articles.life"></article-list> -->
+    <article-list :articleList="articles.life"></article-list>
   </div>
 </template>
 
 <script>
 import { mapActions, mapMutations, mapState } from "vuex"
 
-// import articleList from "@/components/article/ArticleList"
 import loading from "@/components/base/Loading"
+import articleList from "@/components/article/ArticleList"
 
 export default {
+  asyncData({ store, route }) {
+    return Promise.all([
+      store.dispatch("GetArticles", {
+        publish: true,
+        page: 1,
+        tag: "life",
+        cache: true
+      }),
+      store.dispatch("GetArticlesCount", {
+        publish: true,
+        page: 1,
+        tag: "life",
+        cache: true
+      })
+    ])
+  },
   components: {
-    // articleList,
+    articleList,
     loading
   },
-  //   metaInfo() {
-  //     return {
-  //       title: "生活文章 -mapblog小站",
-  //       meta: [{ vmid: "description", name: "description", content: "生活文章 -mapblog小站" }]
-  //     }
-  //   },
-  //   asyncData({ store, route }) {
-  //     return Promise.all([
-  //       store.dispatch("getArticles", {
-  //         publish: true,
-  //         page: 1,
-  //         tag: "life",
-  //         cache: true
-  //       }),
-  //       store.dispatch("getArticlesCount", {
-  //         publish: true,
-  //         page: 1,
-  //         tag: "life",
-  //         cache: true
-  //       })
-  //     ]).then(() => {
-  //       store.commit("changeCode", 200)
-  //     })
-  //   },
-  //   beforeRouteLeave(to, from, next) {
-  //     this.clear()
-  //     next()
-  //   },
   computed: {
     ...mapState({
       code: 'code',
@@ -52,9 +40,20 @@ export default {
     })
   },
   methods: {
-    // ...mapMutations(["clear"]),
-    // ...mapActions(["getArticles", "getArticlesCount"])
-  }
+    ...mapMutations({
+      clear: 'CLEAR_PAGE'
+    })
+  },
+  //   metaInfo() {
+  //     return {
+  //       title: "生活文章 -mapblog小站",
+  //       meta: [{ vmid: "description", name: "description", content: "生活文章 -mapblog小站" }]
+  //     }
+  //   },
+  beforeRouteLeave(to, from, next) {
+    this.clear()
+    next()
+  },
 }
 </script>
 
