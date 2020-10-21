@@ -3,6 +3,7 @@
     <h3 v-if="!tags.length" class="none-article">暂时没有文章，敬请期待...</h3>
     <div class="article-root" v-if="tags.length">
       <div class="articles-sum">文章总数：{{ articles.sum }} 篇</div>
+      <!-- 列表展示 -->
       <div class="stage-list" v-show="!rotate">
         <ul>
           <li v-for="(item, index) in tags">
@@ -13,6 +14,7 @@
           </li>
         </ul>
       </div>
+      <!-- 滚筒展示 -->
       <div class="stage" v-show="rotate">
         <ul class="rotate" @click="leftSlider" ref="container">
           <li v-for="(item, index) in tags" ref="degItem">
@@ -24,6 +26,7 @@
         <div class="left-move" @click="leftSlider"></div>
         <div class="right-move" @click="rightSlider"></div>
       </div>
+
       <div class="change-stage" v-show="hiddenChange">
         <button v-show="show3D" @click="changeStage('rotate')" :class="{ 'active-bg': rotate }">3D模式</button>
         <button @click="changeStage('list')" :class="{ 'active-bg': !rotate }">列表模式</button>
@@ -34,7 +37,7 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from "vuex"
-// import { getBrowserInfo } from "@/utils/getBrowserInfo.js"
+import { getBrowserInfo } from "@/utils/getBrowserInfo.js"
 
 export default {
   data() {
@@ -44,34 +47,16 @@ export default {
       rotate: true,
       hiddenChange: true,
       show3D: true,
-      tags: []
     }
   },
-  metaInfo() {
-    return {
-      title: "技术文章 -mapblog小站",
-      meta: [{ vmid: "description", name: "description", content: "技术文章 -mapblog小站" }]
-    }
-  },
-  mounted() {
-    // this.regBrowser()
-    // this.getArticlesCount({publish: true})
-    // if(this.tags.length){ //从别的路由跳转到当前路由，若不加条件，当前路由刷新，基于tags的
-    // 	let that = this  //this.$refs会报错，因为tags还没取到
-    // 	this.initRotate()
-    // 	// 窗口大小改变重新计算锚点距离
-    //  	window.addEventListener("resize",that.addEvent)
-    //  	//最多8个标签时显示3D旋转，否则显示列表模式
-    //  	if(this.tags.length < 9&&this.tags.length>1){
-    // 		this.rotate = true
-    // 	}else{
-    // 		this.rotate = false
-    // 		this.show3D = false
-    // 	}
-    // }
-  },
+  // metaInfo() {
+  //   return {
+  //     title: "技术文章 -mapblog小站",
+  //     meta: [{ vmid: "description", name: "description", content: "技术文章 -mapblog小站" }]
+  //   }
+  // },
   watch: {
-    tags: function () {
+    tags() {
       if (this.tags.length) {
         let that = this
         this.initRotate()
@@ -86,10 +71,16 @@ export default {
     }
   },
   computed: {
-    // ...mapState(["tags","articles"])
+    ...mapState({
+      tags: 'tags',
+      articles: 'articles'
+    })
   },
   methods: {
-    // ...mapActions(["getTagsclass","getArticlesCount"]),
+    ...mapActions({
+      getArticlesCount: 'GetArticlesCount'
+    }),
+    // 切换展示方式
     changeStage(type) {
       if (type === "rotate") {
         this.rotate = true
@@ -97,26 +88,30 @@ export default {
         this.rotate = false
       }
     },
-    rightSlider: function () {
+    // 右滑
+    rightSlider() {
       this.currentIndex++
       ["mozTransform,webkitTransform", "msTransform", "oTransform", "transform"].forEach((item, index, arr) => {
         this.$refs.container.style[item] = "rotateY(" + this.reg * this.currentIndex + "deg)"
       })
     },
-    leftSlider: function () {
+    // 左滑
+    leftSlider() {
       this.currentIndex--
       ["mozTransform,webkitTransform", "msTransform", "oTransform", "transform"].forEach((item, index, arr) => {
         this.$refs.container.style[item] = "rotateY(" + this.reg * this.currentIndex + "deg)"
       })
     },
-    jumpArticle: function (item) {
+    // 打开文章
+    jumpArticle(item) {
       if (item === "life") {
         this.$router.push({ name: "life" })
       } else {
         this.$router.push({ name: "techincal", params: { articleList: item } })
       }
     },
-    initRotate: function () {
+    // 初始化
+    initRotate() {
       this.$nextTick(() => {
         let dom = this.$refs.degItem,
           container = this.$refs.container,
@@ -133,13 +128,14 @@ export default {
         })
       })
     },
-    addEvent: function () {
+    // 添加事件
+    addEvent() {
       let that = this
       //窗口大小改变重新计算锚点距离	
       this.debounce(that.initRotate, 350)
     },
-    //函数去抖，防止scroll和resize频繁触发
-    debounce: function (func, delay) {
+    // 函数去抖，防止scroll和resize频繁触发
+    debounce(func, delay) {
       var context = this
       var args = arguments
       if (this.timer) {
@@ -149,13 +145,14 @@ export default {
         func.apply(context, args)
       }, delay)
     },
-    regBrowser: function () {
-      let info = getBrowserInfo()[0],
-        brow_reg = /[a-zA-Z]+/gi,
-        ver_reg = /\d+\.\d+/g,
-        name = info.match(brow_reg)[0],
-        ver = info.match(ver_reg)[0],
-        warning = "您的浏览器版本过低，将无法查看3D模式"
+    // 检查浏览器是否至此3D模式
+    regBrowser() {
+      let info = getBrowserInfo()[0]
+      let brow_reg = /[a-zA-Z]+/gi
+      let ver_reg = /\d+\.\d+/g
+      let name = info.match(brow_reg)[0]
+      let ver = info.match(ver_reg)[0]
+      let warning = "您的浏览器版本过低，将无法查看3D模式"
       if (name === "chrome" && ver < 49) {
         this.rotate = false
         this.hiddenChange = false
@@ -183,9 +180,27 @@ export default {
       }
     }
   },
+  mounted() {
+    this.regBrowser()
+    this.getArticlesCount({ publish: true })
+    // 从别的路由跳转到当前路由，若不加条件，当前路由刷新，基于tags的
+    if (this.tags.length) {
+      let that = this  // this.$refs会报错，因为tags还没取到
+      this.initRotate()
+      // 窗口大小改变重新计算锚点距离
+      window.addEventListener("resize", that.addEvent)
+      // 最多8个标签时显示3D旋转，否则显示列表模式
+      if (this.tags.length < 9 && this.tags.length > 1) {
+        this.rotate = true
+      } else {
+        this.rotate = false
+        this.show3D = false
+      }
+    }
+  },
   beforeDestroy() {
-    // window.removeEventListener("resize",this.addEvent)
-  }
+    window.removeEventListener("resize", this.addEvent)
+  },
 }
 </script>
 
@@ -270,7 +285,7 @@ export default {
 }
 .left-move {
   cursor: pointer;
-  background: url("/img/bigmove.png") 0 0 no-repeat;
+  background: url("../../public/img/bigmove.png") 0 0 no-repeat;
   position: absolute;
   width: 60px;
   height: 60px;
@@ -280,7 +295,7 @@ export default {
 }
 .right-move {
   cursor: pointer;
-  background: url("/img/bigmove.png") -60px 0 no-repeat;
+  background: url("../../public/img/bigmove.png") -60px 0 no-repeat;
   position: absolute;
   top: 50%;
   right: 20px;
