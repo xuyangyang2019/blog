@@ -27,6 +27,7 @@
     "moment": "^2.29.1",
     "mongoose": "^5.10.9",
     "open": "^7.3.0",
+    "prismjs": "^1.22.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vue-server-renderer": "^2.5.17",
