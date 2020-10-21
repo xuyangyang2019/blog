@@ -90,9 +90,7 @@ const actions = {
         } else {
             params = payload
         }
-        console.log(params)
         api.get("/api/getArticles", params).then((data) => {
-            console.log(data)
             if (!payload.tag) {
                 commit("SET_ARTICLES_ALL", data)
             } else if (payload.tag === "life") {
@@ -118,6 +116,7 @@ const actions = {
     // 获取对应模块的文章总数，为分页按钮个数提供支持
     GetArticlesCount({ commit }, payload) {
         api.get("/api/getCount", payload).then((data) => {
+            commit("SET_ARTICLES_SUM", data)
             commit("SET_PAGE_ARR", data)
             commit("CHANGE_CODE", 200)
             // return data
@@ -154,7 +153,6 @@ const mutations = {
         state.pageArr = []
     },
     CHANGE_CODE(state, code) {
-        console.log('CHANGE_CODE', code)
         state.code = code
     },
     SET_PAGE_ARR(state, data) {
@@ -165,8 +163,10 @@ const mutations = {
         }
         state.pageArr = arr
     },
+    SET_ARTICLES_SUM(state, data) {
+        state.articles.sum = data
+    },
     SET_ARTICLES_ALL(state, data) {
-        console.log('SET_ARTICLES_ALL', data)
         state.articles.all = data
     },
     SET_ARTICLES_LIFE(state, data) {
@@ -179,7 +179,6 @@ const mutations = {
         state.tagBg = []
         let pattern = /^[\u4e00-\u9fa5]+$/
         data.forEach((item, index, arr) => {
-            console.log(item)
             if (item.tag[0] === "服务器" || item.tag[0] === "apache" || item.tag[0] === "tomcat") {
                 state.tagBg.push("webserver")
             } else if (item.tag[0] === "云服务器") {
