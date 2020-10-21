@@ -4,6 +4,14 @@ import createRouter from './router'
 import createStore from './store/store.js'
 import { sync } from 'vuex-router-sync'
 
+import filters from './filters'
+// 全局过滤器
+Object.keys(filters).forEach(filterName => {
+  Vue.filter(filterName, filters[filterName])
+})
+
+
+
 // 匹配要渲染的视图后，再获取数据
 // Vue.mixin({
 //     beforeMount() {
