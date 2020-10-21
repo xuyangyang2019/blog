@@ -8,6 +8,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapMutations } from "vuex"
+// import Prism from 'prismjs'
 
 import banner from "@/components/home/Banner"
 import loading from "@/components/base/Loading"
@@ -48,7 +49,6 @@ export default {
     }),
     ...mapMutations({
       clear: 'CLEAR_PAGE',
-      // changeCode: 'CHANGE_CODE'
     })
   },
   metaInfo() {

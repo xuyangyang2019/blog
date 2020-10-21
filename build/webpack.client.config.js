@@ -15,6 +15,8 @@ const isProd = process.env.NODE_ENV === 'production'
 const config = merge(baseConfig, {
   entry: {
     app: path.join(process.cwd(), 'src/entry-client.js'),
+    // vendors: ['axios', "@/assets/js/prism.js"],
+    // vues: ['vue', 'vuex', 'vue-router']
   },
   // 重要信息：这将 webpack 运行时分离到一个引导 chunk 中，
   // 以便可以在之后正确注入异步 chunk。
