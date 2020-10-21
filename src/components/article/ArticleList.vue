@@ -1,17 +1,20 @@
 <template>
-  <div class="articleList">
+  <div class="article-list">
+    <!-- 文章列表 -->
     <ul>
       <li v-for="(item, index) in articleList" class="article-item">
+        <!-- title -->
         <h2 class="article-title">
           <a href="javascript: void(0)" @click="jump(item)"> {{ item.title }} </a>
         </h2>
+        <!-- tag -->
         <div class="article-msg">
           <span class="icon-tag-stroke"></span>
           <span class="article-msg-tag">
             <span v-for="tag in item.tag"> {{ tag | changeLife }} </span>
           </span>
           <span class="icon-clock"></span>
-          <!-- <span class="article-msg-time">{{ item.date | reviseTime }}</span> -->
+          <span class="article-msg-time">{{ item.date | reviseTime }}</span>
         </div>
         <div class="article-review">
           <div :class="'default tag-bg-img ' + tagBg[index]"></div>
@@ -29,6 +32,7 @@
         </div>
       </li>
     </ul>
+    <!-- 分页 -->
     <!-- <transition name = "fade" mode = "out-in">	 -->
     <!-- <page v-if = "pageArr.length > 1" ></page> -->
     <!-- </transition> -->
@@ -53,7 +57,7 @@ export default {
     }
   },
   filters: {
-    changeLife: function (value) {
+    changeLife(value) {
       if (value == "life") {
         return "生活"
       } else {
@@ -90,7 +94,7 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
-.articleList {
+.article-list {
   font-size: 14px;
   line-height: 20px;
   color: #404040;
