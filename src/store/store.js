@@ -39,6 +39,7 @@ const state = {
     pageArr: [], // 分页
     tags: [], // 标签
     timeLine: [], // 时间轴
+    maskShow: false, // 展示登陆框
 }
 
 // getters
@@ -126,6 +127,14 @@ const actions = {
         //     return data
         // })
     },
+    // 查询用户名是否存在
+    SearchUser({ commit }, payload) {
+        return api.get("/api/searchUser", payload)
+    },
+    // 保存用户
+    SaveUser({ commit }, payload) {
+        return api.post("/api/saveDesignUser", payload)
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
@@ -193,6 +202,25 @@ const mutations = {
                 state.tagBg.push(item.tag[0])
             }
         })
+    },
+    SET_USER(state, info) {
+        console.log('SET_USER', info)
+        state.userInfo = info
+    },
+    HANDLE_MASK(state, bool) {
+        state.maskShow = bool
+    },
+    ADD_LOCAL_WORDS(state, info) {
+        if (info.type === 1) {
+            state.msgBoardArr.unshift(info.add)
+        } else {
+            state.msgBoardArr.forEach((item, index, arr) => {
+                if (item._id === info._id) {
+                    state.msgBoardArr.splice(index, 1, info.add)
+                    return
+                }
+            })
+        }
     },
 }
 
