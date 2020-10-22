@@ -24,10 +24,12 @@
         <input ref="pubButton" type="button" value="留言" @click="postLeaveW" />
       </div>
     </div>
+
     <div class="emoji-box" v-show="emojiShow">
       <span @click="exitEmoji" class="emoji-exit">x</span>
-      <!-- <emoji @select="selectEmoji"></emoji> -->
+      <emoji @select="selectEmoji"></emoji>
     </div>
+
     <div class="leavemsg">
       <h2>所有留言：</h2>
       <ul>
@@ -75,11 +77,14 @@
         </li>
       </ul>
     </div>
+
     <transition name="fade">
       <page v-if="pageArr.length > 1"></page>
     </transition>
+
     <!-- 第三方登录 -->
     <!-- <login></login> -->
+
     <transition name="mask" v-show="dialogErr.show">
       <div class="mask" v-show="dialogErr.show" @click="dialogErr.show = false">
         <transition name="dialog">
@@ -99,15 +104,26 @@
 <script>
 import { mapMutations, mapActions, mapState } from "vuex"
 
-// import emoji from "@/components/base/emoji"
-// import emojiData from "@/assets/js/emoji-data"
 import page from "@/components/base/Page"
+import emoji from "@/components/base/Emoji"
+// import emojiData from "@/assets/js/emoji-data"
 // import login from "@/components/userLogin/userLogin"
 
 export default {
+  // asyncData({ store, route }) {
+  //   return Promise.all([
+  //     store.dispatch("getLeaveWords", {
+  //       page: 1,
+  //       cache: false
+  //     }),
+  //     store.dispatch("getMsgCount", {
+  //       cache: false
+  //     })
+  //   ])
+  // },
   components: {
     page,
-    // emoji,
+    emoji,
     // login
   },
   data() {
@@ -126,17 +142,7 @@ export default {
   //     meta: [{ vmid: "description", name: "description", content: "留言 -mapblog小站" }]
   //   }
   // },
-  // asyncData({ store, route }) {
-  //   return Promise.all([
-  //     store.dispatch("getLeaveWords", {
-  //       page: 1,
-  //       cache: false
-  //     }),
-  //     store.dispatch("getMsgCount", {
-  //       cache: false
-  //     })
-  //   ])
-  // },
+
   computed: {
     ...mapState({
       msgBoardArr: 'msgBoardArr',
