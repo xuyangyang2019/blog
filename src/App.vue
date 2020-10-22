@@ -234,6 +234,7 @@ export default {
 
 // @import "./assets/css/prism.css";
 @import "./assets/icomoon/style.css";
+@import "./assets/css/emoji-sprite.css";
 
 * {
   margin: 0;
