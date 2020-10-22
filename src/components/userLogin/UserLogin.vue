@@ -189,7 +189,6 @@ export default {
       // 如果本地的数据库有信息 就读取
       if (localStorage.getItem("map_blog_userInfo")) {
         let info = JSON.parse(localStorage.getItem("map_blog_userInfo"))
-        console.log('getLocal', info)
         this.set_user({
           name: info.name,
           imgUrl: info.imgUrl,

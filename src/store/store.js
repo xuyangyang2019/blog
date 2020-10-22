@@ -204,7 +204,6 @@ const mutations = {
         })
     },
     SET_USER(state, info) {
-        console.log('SET_USER', info)
         state.userInfo = info
     },
     HANDLE_MASK(state, bool) {

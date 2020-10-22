@@ -113,8 +113,7 @@ import { mapMutations, mapActions, mapState } from "vuex"
 
 import page from "@/components/base/Page"
 import emoji from "@/components/base/Emoji"
-// import login from "@/components/userLogin/UserLogin"
-import login from "../components/userLogin/UserLogin"
+import login from "@/components/userLogin/UserLogin"
 
 // import emojiData from "@/assets/js/emoji-data"
 
@@ -176,24 +175,29 @@ export default {
         this.handleMask(true)
       }
     },
-    loginOut: function () {
+    // 退出登陆
+    loginOut() {
+      // vuex 用户信息重置
       this.set_user({ name: "", imgUrl: "", email: "" })
-      this.removeLocal()
-      let pattern = /githubId/
-      let gitCookie = document.cookie.split(";").filter((item, index, arr) => {
-        return pattern.test(item)
-      })
+      // 删除本地保存的用户信息 
+      localStorage.removeItem("map_blog_userInfo")
+      // 获取cookie
+      // let pattern = /githubId/
+      // let gitCookie = document.cookie.split(";").filter((item, index, arr) => {
+      //   return pattern.test(item)
+      // })
       //清除github登陆的cookie信息
-      if (gitCookie.length) {
-        //设置cookie的过期时间为一分钟前，让浏览器自动将其删除
-        let gitId = gitCookie[0].replace(/(^\s*)|(\s*$)/, "")
-        let exp = new Date(Date.now() - 60 * 1000)//设置为一分钟前
-        document.cookie = gitId + ";expires=" + exp.toUTCString() + ";path=/"
+      // if (gitCookie.length) {
+      //   //设置cookie的过期时间为一分钟前，让浏览器自动将其删除
+      //   let gitId = gitCookie[0].replace(/(^\s*)|(\s*$)/, "")
+      //   let exp = new Date(Date.now() - 60 * 1000)//设置为一分钟前
+      //   document.cookie = gitId + ";expires=" + exp.toUTCString() + ";path=/"
 
-      } else {
-        QC.Login.signOut()
-      }
+      // } else {
+      //   QC.Login.signOut()
+      // }
     },
+    // 留言
     postLeaveW: function () {
       if (this.validatePub()) {
         return
@@ -202,6 +206,7 @@ export default {
         that = this,
         ui = this.userInfo
       this.$refs.pubButton.value = "发表中..."
+
       if (this.replyInfo.firstLevel) {
         this.saveLeaveWords({
           name: ui.name,
@@ -236,14 +241,16 @@ export default {
         })
       }
     },
-    reply: function (_id, name) {
+    // 回复
+    reply(_id, name) {
       this.replyInfo = {
         _id: _id,
         firstLevel: false,
         aite: name
       }
     },
-    validatePub: function () {
+    // 留言验证
+    validatePub() {
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.handleMask(true)
         return true
@@ -257,9 +264,10 @@ export default {
         return true
       }
     },
-    productContent: function () {
-      let emojiObject = {},
-        finStr = this.sayWords
+    // 留言内容 
+    productContent() {
+      let emojiObject = {}
+      let finStr = this.sayWords
       finStr = finStr.replace(new RegExp("<", "g"), "&lt")
       finStr = finStr.replace(new RegExp(">", "g"), "&gt")
       Object.values(emojiData).forEach((item, index, arr) => {
@@ -283,16 +291,8 @@ export default {
     },
     // 选中emoji
     selectEmoji(emojiCode) {
-      console.log(emojiCode)
       this.sayWords += emojiCode
       this.emojiShow = false
-    },
-    exitMask: function () {
-      this.handleMask(false)
-      this.clearErr()
-    },
-    removeLocal: function () {
-      localStorage.removeItem("map_blog_userInfo")
     },
   }
 }
