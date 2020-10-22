@@ -11,6 +11,15 @@ module.exports = {
 		} else {
 			ctx.body = { exist: "no" }
 		}
+	},
+	// 保存新的用户
+	'POST /saveDesignUser': async (ctx, next) => {
+		let document = await db.vistor.create(ctx.request.body)
+		if (document._id) {
+			ctx.body = { code: 200 }
+		} else {
+			ctx.body = { code: 500 }
+		}
 	}
 }
 
@@ -79,4 +88,3 @@ module.exports = {
 // })
 
 // module.exports = router
-
