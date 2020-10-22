@@ -3,24 +3,31 @@
     <div id="anchor-msgBoard"></div>
     <h2>我要留言：</h2>
     <div class="say-box">
+      <!-- @ -->
       <div v-show="replyInfo.aite.length">
         <strong>回复：@</strong>
         <span>{{ replyInfo.aite }}</span>
         <span @click="replyInfo.aite = ''" class="exit-aite" :title="'取消回复' + replyInfo.aite">x</span>
       </div>
+      <!-- 文本域 -->
       <textarea v-model="sayWords" @focus="showLogin" placeholder="这小地盘儿交给你啦 *^_^*"></textarea>
+      <!-- 提交 -->
       <div class="icon-submit-box">
         <div class="icon-userInfo-box">
+          <!-- emoji按钮 -->
           <div @click="emojiToggle" class="emoji-icon">
             <img src="/img/emoji/grinning.png" height="20px" width="20px" alt />
           </div>
+          <!-- | -->
           <span class="fence"></span>
+          <!-- 退出 -->
           <div class="reviewer-info" v-show="!!userInfo.name">
             <img :src="userInfo.imgUrl" alt width="20px" height="20px" />
             <span>{{ userInfo.name }}</span>
             <a href="javascript: void(0)" @click="loginOut">退出</a>
           </div>
         </div>
+        <!-- 提交留言 -->
         <input ref="pubButton" type="button" value="留言" @click="postLeaveW" />
       </div>
     </div>
@@ -83,7 +90,7 @@
     </transition>
 
     <!-- 第三方登录 -->
-    <!-- <login></login> -->
+    <login></login>
 
     <transition name="mask" v-show="dialogErr.show">
       <div class="mask" v-show="dialogErr.show" @click="dialogErr.show = false">
@@ -106,8 +113,10 @@ import { mapMutations, mapActions, mapState } from "vuex"
 
 import page from "@/components/base/Page"
 import emoji from "@/components/base/Emoji"
+// import login from "@/components/userLogin/UserLogin"
+import login from "../components/userLogin/UserLogin"
+
 // import emojiData from "@/assets/js/emoji-data"
-// import login from "@/components/userLogin/userLogin"
 
 export default {
   // asyncData({ store, route }) {
@@ -124,13 +133,13 @@ export default {
   components: {
     page,
     emoji,
-    // login
+    login
   },
   data() {
     return {
-      sayWords: "",
+      sayWords: "", // 想留的言
       content: "",
-      emojiShow: false,
+      emojiShow: false, // 展示emoji框
       hasLiked: [],
       dialogErr: { show: false, info: "" },
       replyInfo: { _id: "", firstLevel: true, aite: "" }
@@ -142,17 +151,31 @@ export default {
   //     meta: [{ vmid: "description", name: "description", content: "留言 -mapblog小站" }]
   //   }
   // },
-
   computed: {
     ...mapState({
-      msgBoardArr: 'msgBoardArr',
-      userInfo: 'userInfo',
-      pageArr: 'pageArr',
+      msgBoardArr: 'msgBoardArr', // 留言
+      userInfo: 'userInfo', // 用户信息
+      pageArr: 'pageArr', // 分页
     })
   },
   methods: {
     // ...mapActions(["getLeaveWords", "saveLeaveWords", "addLeaveWords", "getMsgCount"]),
-    // ...mapMutations(["set_user", "handleMask", "addLocalWords"]),
+    ...mapActions({
+
+    }),
+    ...mapMutations({
+      set_user: 'SET_USER',
+      handleMask: 'HANDLE_MASK',
+      addLocalWords: 'ADD_LOCAL_WORDS'
+    }),
+    // 展示登陆框
+    showLogin() {
+      console.log('展示登陆框')
+      console.log(this.userInfo)
+      if (!this.userInfo.name && !this.userInfo.imgUrl) {
+        this.handleMask(true)
+      }
+    },
     loginOut: function () {
       this.set_user({ name: "", imgUrl: "", email: "" })
       this.removeLocal()
@@ -170,10 +193,6 @@ export default {
       } else {
         QC.Login.signOut()
       }
-    },
-    selectEmoji: function (emojiCode) {
-      this.sayWords += emojiCode
-      this.emojiShow = false
     },
     postLeaveW: function () {
       if (this.validatePub()) {
@@ -254,10 +273,18 @@ export default {
       })
       return finStr
     },
-    emojiToggle: function () {
+    // 展示|隐藏 emoji
+    emojiToggle() {
       this.emojiShow = !this.emojiShow
     },
+    // 退出emoji
     exitEmoji: function () {
+      this.emojiShow = false
+    },
+    // 选中emoji
+    selectEmoji(emojiCode) {
+      console.log(emojiCode)
+      this.sayWords += emojiCode
       this.emojiShow = false
     },
     exitMask: function () {
@@ -267,11 +294,6 @@ export default {
     removeLocal: function () {
       localStorage.removeItem("map_blog_userInfo")
     },
-    showLogin: function () {
-      if (!this.userInfo.name && !this.userInfo.imgUrl) {
-        this.handleMask(true)
-      }
-    }
   }
 }
 </script>
@@ -325,18 +347,23 @@ h2 {
   border-radius: 5px;
 }
 .emoji-box {
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
+  width: 400px;
   z-index: 500;
   margin-left: 10px;
   margin-top: 2px;
-}
-.emoji-exit {
-  /* float: right; */
+  .emoji-exit {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    /* float: right;
   margin-right: 25px;
-  margin-top: 15px;
-  color: red;
-  display: inline-block;
-  cursor: pointer;
+  margin-top: 15px; */
+    color: red;
+    cursor: pointer;
+    display: inline-block;
+  }
 }
 .icon-submit-box {
   width: 100%;
