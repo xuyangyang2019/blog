@@ -84,6 +84,7 @@ backendApp.use(KoaCompress)
 
 // **************第二个middleware处理静态文件********************************
 backendApp.use(Koa_Static(resolve('dist'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+backendApp.use(Koa_Static(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
 
 // 原生实现
 // 生产环境下，静态文件是由部署在最前面的反向代理服务器（如Nginx）处理的，Node程序不需要处理静态文件。
