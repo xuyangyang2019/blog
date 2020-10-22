@@ -156,11 +156,11 @@ module.exports = function () {
           to: path.resolve(__dirname, '../dist'),
           ignore: ['.*']
         },
-        {
-          from: path.resolve(__dirname, '../public/img'),
-          to: path.resolve(__dirname, '../dist/img'),
-          ignore: ['.*']
-        },
+        // {
+        //   from: path.resolve(__dirname, '../public/img'),
+        //   to: path.resolve(__dirname, '../dist/img'),
+        //   ignore: ['.*']
+        // },
       ])
     ],
   }
