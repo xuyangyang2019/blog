@@ -1,11 +1,18 @@
 <template>
   <div class="emoji">
+    <!-- 分类 -->
     <ul class="emoji-controller">
       <li v-for="(pannel, index) in pannels" @click="changeActive(index)" :class="{ active: index === activeIndex }">{{ pannel }}</li>
     </ul>
+    <!-- emoji 列表 -->
     <ul class="emoji-container">
-      <li v-for="(emojiGroup, index) in emojis" style="padding: 0" :key="index" v-if="index === activeIndex">
+      <!-- <li v-for="(emojiGroup, index) in emojis" style="padding: 0" :key="index" v-if="index === activeIndex">
         <a href="javascript:;" v-for="(emoji, index) in emojiGroup" :key="index" @click="selectItem(emoji)">
+          <span class="emoji-item" :title="emoji" :class="'sprite-' + getPureName(emoji)"></span>
+        </a>
+      </li> -->
+      <li style="padding: 0">
+        <a href="javascript:;" v-for="(emoji, index) in emojis[activeIndex]" :key="index" @click="selectItem(emoji)">
           <span class="emoji-item" :title="emoji" :class="'sprite-' + getPureName(emoji)"></span>
         </a>
       </li>
@@ -20,27 +27,31 @@ export default {
   name: 'Emoji',
   data() {
     return {
-      emojiData: data,
+      emojiData: data, // emoji数据name:png
       pannels: ['表情', '自然', '物品', '地点', '符号'],
-      activeIndex: 0
+      activeIndex: 0 // 当前pannel
     }
   },
   methods: {
+    // 改变emoji类别
     changeActive(index) {
       this.activeIndex = index
     },
+    // emoji的英文名
     getPureName(name) {
       return name.replace(/:/g, '')
     },
+    // 选中表情
     selectItem(emoji) {
-      console.log("子元素触发")
+      // console.log("子元素触发")
       this.$emit('select', emoji)
     }
   },
   computed: {
+    // 返回所有emoji的键值组成的数组
     emojis() {
       return this.pannels.map(item => {
-        return Object.keys(this.emojiData[item]) // 返回所有emoji的键值组成的数组
+        return Object.keys(this.emojiData[item])
       })
     }
   }
