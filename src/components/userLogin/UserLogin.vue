@@ -96,6 +96,8 @@ export default {
       //     }
       //   }, 500)
     },
+
+    // qq信息
     // qq_user_info() {
     //   let that = this
     //   QC.Login({
@@ -112,30 +114,35 @@ export default {
     //     console.log("退出成功")
     //   })
     // },
+
     // 注册
     register() {
       this.validateReg()
-      let that = this
       // 如果没有错误信息
       if (!this.userInfoErr.name && !this.userInfoErr.email) {
         // 查询用户是否存在
         this.searchUser({ name: this.designName }).then((data) => {
           console.log(data)
-          //   if (data.exist === "yes") {
-          //     that.userInfoErr.name = "该用户名已存在，换一个试试？"
-          //   } else {
-          //     that.saveUser({
-          //       name: that.designName,
-          //       email: that.designEmail
-          //     }).then((data) => {
-          //       if (data.code === 200) {
-          //         that.set_user({ name: that.designName, imgUrl: "/img/defaultUser.jpg", email: that.designEmail })
-          //         that.clearErr()
-          //         that.handleMask(false)
-          //         that.setLocal()
-          //       }
-          //     })
-          //   }
+          if (data.exist === "yes") {
+            this.userInfoErr.name = "该用户名已存在，换一个试试？"
+          } else {
+            this.saveUser({
+              name: this.designName,
+              email: this.designEmail
+            }).then((data) => {
+              console.log(data)
+              if (data.code === 200) {
+                let userInfo = {
+                  name: this.designName,
+                  imgUrl: "/img/defaultUser.jpg",
+                  email: this.designEmail
+                }
+                this.set_user(userInfo)
+                this.setLocal(userInfo)
+                this.exitMask()
+              }
+            })
+          }
         })
       }
     },
@@ -182,6 +189,7 @@ export default {
       // 如果本地的数据库有信息 就读取
       if (localStorage.getItem("map_blog_userInfo")) {
         let info = JSON.parse(localStorage.getItem("map_blog_userInfo"))
+        console.log('getLocal', info)
         this.set_user({
           name: info.name,
           imgUrl: info.imgUrl,
@@ -190,14 +198,14 @@ export default {
       }
     },
     // 设置本地的信息
-    setLocal() {
-      let info = this.userInfo
-      let s_info = JSON.stringify({ name: info.name, imgUrl: info.imgUrl, email: info.email })
-      localStorage.setItem("map_blog_userInfo", s_info)
+    setLocal(info) {
+      // let info = this.userInfo
+      // let s_info = JSON.stringify({ name: info.name, imgUrl: info.imgUrl, email: info.email })
+      localStorage.setItem("map_blog_userInfo", JSON.stringify(info))
     }
   },
   mounted() {
-    this.getLocal
+    this.getLocal()
     // if (!localStorage.getItem("map_blog_userInfo")) {
     //   this.qq_user_info()
     // } else {
