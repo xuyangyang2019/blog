@@ -1,7 +1,3 @@
-// const express = require('express');
-// const router = express.Router();
-// const db = require("../db/db")
-const router = require('koa-router')()
 // mongodb
 const db = require("../db/mongodb/db")
 

@@ -1,4 +1,3 @@
-const router = require('koa-router')()
 // mongodb
 const db = require("../db/mongodb/db")
 // const api = require("../http/server-api")
