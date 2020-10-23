@@ -155,9 +155,11 @@ const actions = {
         //     return data
         // })
     },
+    // 回复留言
     AddLeaveWords({ commit }, payload) {
         return api.patch("/api/addReply", payload)
     },
+    // 添加留言
     SaveLeaveWords({ commit }, payload) {
         return api.post("/api/saveLeaveW", payload)
     },
@@ -235,6 +237,7 @@ const mutations = {
     HANDLE_MASK(state, bool) {
         state.maskShow = bool
     },
+    // 修改本地的留言
     ADD_LOCAL_WORDS(state, info) {
         if (info.type === 1) {
             state.msgBoardArr.unshift(info.add)
