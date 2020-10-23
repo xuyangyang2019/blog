@@ -114,21 +114,20 @@ import { mapMutations, mapActions, mapState } from "vuex"
 import page from "@/components/base/Page"
 import emoji from "@/components/base/Emoji"
 import login from "@/components/userLogin/UserLogin"
-
-// import emojiData from "@/assets/js/emoji-data"
+import emojiData from "@/assets/js/emoji-data"
 
 export default {
-  // asyncData({ store, route }) {
-  //   return Promise.all([
-  //     store.dispatch("getLeaveWords", {
-  //       page: 1,
-  //       cache: false
-  //     }),
-  //     store.dispatch("getMsgCount", {
-  //       cache: false
-  //     })
-  //   ])
-  // },
+  asyncData({ store, route }) {
+    return Promise.all([
+      store.dispatch("GetLeaveWords", {
+        page: 1,
+        cache: false
+      }),
+      store.dispatch("GetMsgCount", {
+        cache: false
+      })
+    ])
+  },
   components: {
     page,
     emoji,
@@ -158,9 +157,9 @@ export default {
     })
   },
   methods: {
-    // ...mapActions(["getLeaveWords", "saveLeaveWords", "addLeaveWords", "getMsgCount"]),
     ...mapActions({
-
+      addLeaveWords: 'AddLeaveWords',
+      saveLeaveWords: 'SaveLeaveWords',
     }),
     ...mapMutations({
       set_user: 'SET_USER',
@@ -198,15 +197,12 @@ export default {
       // }
     },
     // 留言
-    postLeaveW: function () {
-      if (this.validatePub()) {
-        return
-      }
-      let content = this.productContent(),
-        that = this,
-        ui = this.userInfo
+    postLeaveW() {
+      console.log('postW')
+      if (!this.validatePub()) return
+      let content = this.productContent()
+      let ui = this.userInfo
       this.$refs.pubButton.value = "发表中..."
-
       if (this.replyInfo.firstLevel) {
         this.saveLeaveWords({
           name: ui.name,
@@ -217,9 +213,9 @@ export default {
         }).then((data) => {
           if (data._id) {
             setTimeout(() => {
-              that.$refs.pubButton.value = "留言"
-              that.sayWords = ""
-              that.addLocalWords({ add: data, type: 1 })
+              this.$refs.pubButton.value = "留言"
+              this.sayWords = ""
+              this.addLocalWords({ add: data, type: 1 })
             }, 200)
           }
         })
@@ -251,32 +247,39 @@ export default {
     },
     // 留言验证
     validatePub() {
+      // 如果没有登陆
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.handleMask(true)
-        return true
+        return false
       }
       if (!this.sayWords.length) {
         this.dialogErr = { show: true, info: "内容不能为空" }
-        return true
+        return false
       }
       if (this.sayWords.length > 300) {
         this.dialogErr = { show: true, info: "内容过长，请不要超过300个字符" }
-        return true
+        return false
       }
+      return true
     },
-    // 留言内容 
+    // 留言内容emoji转图片 
     productContent() {
       let emojiObject = {}
       let finStr = this.sayWords
       finStr = finStr.replace(new RegExp("<", "g"), "&lt")
       finStr = finStr.replace(new RegExp(">", "g"), "&gt")
+      // 把所有的emoji放到一个数组,之后遍历json数组，将所有的json整合到一个json
       Object.values(emojiData).forEach((item, index, arr) => {
         emojiObject = Object.assign(emojiObject, item)
       })
+      // 所有key的集合，
       Object.keys(emojiObject).forEach((item) => {
+        // 基本路径
         let path = "/img/emoji/"
+        // 图片
         let value = emojiObject[item]
         let imgURL = `<span style = "display: inline-block;vertical-align: middle"><img src=${path}${value} alt="" width = "16px" height = "16px" /></span>`
+        // content中的emoji替换为img
         finStr = finStr.replace(new RegExp(item, "g"), imgURL)
       })
       return finStr
