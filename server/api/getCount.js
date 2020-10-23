@@ -38,5 +38,11 @@ module.exports = {
 			})
 		}
 		ctx.body = num
-	}
+	},
+	// 获取留言数量
+	'GET /getMsgCount': async (ctx, next) => {
+		let num = await db.msgBoard.count({}, (err, num) => { })
+		ctx.body = num
+	},
+
 }
