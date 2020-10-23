@@ -135,6 +135,32 @@ const actions = {
     SaveUser({ commit }, payload) {
         return api.post("/api/saveDesignUser", payload)
     },
+    // 获取留言
+    GetLeaveWords({ commit }, payload) {
+        api.get("/api/getMsgBoard", payload).then((data) => {
+            commit('SET_MSG_BOARD_ARR', data)
+        })
+        // return api.get("/api/getMsgBoard", payload).then((data) => {
+        //     state.msgBoardArr = data
+        //     return data
+        // })
+    },
+    // 获取留言数量
+    GetMsgCount({ commit }, payload) {
+        api.get("/api/getMsgCount", payload).then((data) => {
+            commit("SET_PAGE_ARR", data)
+        })
+        // return api.get("/api/getMsgCount", payload).then((data) => {
+        //     commit("pageArray", data)
+        //     return data
+        // })
+    },
+    AddLeaveWords({ commit }, payload) {
+        return api.patch("/api/addReply", payload)
+    },
+    SaveLeaveWords({ commit }, payload) {
+        return api.post("/api/saveLeaveW", payload)
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
@@ -220,6 +246,9 @@ const mutations = {
                 }
             })
         }
+    },
+    SET_MSG_BOARD_ARR(state, data) {
+        state.msgBoardArr = data
     },
 }
 
