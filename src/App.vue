@@ -49,9 +49,9 @@
 
     <!-- 动画效果 -->
     <transition name="fade">
-      <!-- <div class="rocket" v-show="showBackTop">
+      <div class="rocket" v-show="showBackTop">
         <a href="javascript: void(0)" @click="backTop"></a>
-      </div> -->
+      </div>
     </transition>
 
     <!-- 背景 -->
@@ -69,8 +69,8 @@ import gateWay from "@/components/base/GateWay"
 import fileOnPlace from "@/components/base/FileOnPlace"
 import foot from "@/components/base/Foot"
 
-// import { getScrollTop } from "@/utils/getScrollTop"
-// import { getElementTop } from "@/utils/getElementTop"
+import { getScrollTop } from "@/utils/getScrollTop"
+import { getElementTop } from "@/utils/getElementTop"
 
 
 export default {
@@ -78,7 +78,7 @@ export default {
     return {
       location: [],
       timer: "",
-      showBackTop: true,
+      showBackTop: true, // 展示回到top的按钮
     }
   },
   components: {
@@ -107,24 +107,45 @@ export default {
     })
   },
   methods: {
-    ...mapMutations(["addTabBg", "positionTop"]),
-    // 监听滚动事件
+    ...mapMutations({
+      addTabBg: 'AddTabBg',
+      positionTop: 'PositionTop',
+    }),
+    // 监听滚动和窗口
     scrollCotainer() {
-      window.addEventListener("scroll", this.scroll_resize)
+      // 监听滚动
+      window.addEventListener("scroll", this.scrollResize)
       // 改变窗口大小后对导航栏状态重新进行确认
-      window.addEventListener("resize", this.scroll_resize)
+      window.addEventListener("resize", this.scrollResize)
     },
-    scroll_resize: function () {
+    // 重新获取scrollTop
+    scrollResize: function () {
       this.debounce(this.getTop, 500)
     },
-    getAT() {
-      let top = getScrollTop() - getElementTop(this.$refs.container)
-      this.positionTop(top)
+    //函数去抖，防止scroll和resize频繁触发
+    debounce: function (func, delay) {
+      let context = this
+      let args = arguments
+      // 如果有定时器 先清除
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
+      // 设置timer
+      this.timer = setTimeout(function () {
+        func.apply(context, args)
+      }, delay)
     },
+    // getAT() {
+    //   let top = getScrollTop() - getElementTop(this.$refs.container)
+    //   this.positionTop(top)
+    // },
+    // 
     getTop() {
-      //计算document需要滚动的距离
+      console.log('getTop')
+      // 计算document需要滚动的距离
       let tabOffsetTop = getElementTop(this.$refs.container) - 50
       let move = Math.abs(getScrollTop() - tabOffsetTop)
+      // 如果往下滚动了 就显示回到top的按钮
       if (getScrollTop() > 0) {
         this.showBackTop = true
       } else {
@@ -135,19 +156,9 @@ export default {
       } else {
         this.addTabBg(false)
       }
-      //计算路由改变需要滚动的距离
-      this.positionTop({ top: tabOffsetTop, move: move })
-    },
-    //函数去抖，防止scroll和resize频繁触发
-    debounce: function (func, delay) {
-      let context = this
-      let args = arguments
-      if (this.timer) {
-        clearTimeout(this.timer)
-      }
-      this.timer = setTimeout(function () {
-        func.apply(context, args)
-      }, delay)
+
+      // // 计算路由改变需要滚动的距离
+      // this.positionTop({ top: tabOffsetTop, move: move })
     },
     // 跳转路由
     back(item) {
@@ -215,10 +226,10 @@ export default {
   // },
   mounted() {
     this.currentLocation(this.$route)
-    // this.scrollCotainer()
+    this.scrollCotainer()
     // 页面重载计算锚点距离并判断tab的背景样式
     // this.positionTop(getElementTop(this.$refs.container) - 50)
-    // this.getTop()
+    this.getTop()
   },
 
 }
