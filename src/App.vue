@@ -69,7 +69,9 @@ import gateWay from "@/components/base/GateWay"
 import fileOnPlace from "@/components/base/FileOnPlace"
 import foot from "@/components/base/Foot"
 
+// html的scrollTop
 import { getScrollTop } from "@/utils/getScrollTop"
+// 获取指定元素到html的距离
 import { getElementTop } from "@/utils/getElementTop"
 
 
@@ -135,10 +137,6 @@ export default {
         func.apply(context, args)
       }, delay)
     },
-    // getAT() {
-    //   let top = getScrollTop() - getElementTop(this.$refs.container)
-    //   this.positionTop(top)
-    // },
     // 
     getTop() {
       console.log('getTop')
@@ -151,12 +149,12 @@ export default {
       } else {
         this.showBackTop = false
       }
+      // 如果下滑了 就把tab的背景设为透明
       if (getScrollTop() > tabOffsetTop) {
         this.addTabBg(true)
       } else {
         this.addTabBg(false)
       }
-
       // // 计算路由改变需要滚动的距离
       // this.positionTop({ top: tabOffsetTop, move: move })
     },
