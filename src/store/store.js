@@ -253,6 +253,14 @@ const mutations = {
     SET_MSG_BOARD_ARR(state, data) {
         state.msgBoardArr = data
     },
+    // 添加背景
+    AddTabBg(state, bool) {
+        state.tabBg = bool
+    },
+    // 设置top的参数
+    PositionTop(state, payload) {
+        state.anchorScroll = { top: payload.top, move: payload.move }
+    },
 }
 
 Vue.use(Vuex)
