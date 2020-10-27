@@ -122,6 +122,8 @@ export default {
     // 锚点动态跳转
     goAnchor(route, index) {
       this.show = !this.show
+      // 重复的路由不处理
+      if (this.routeName === route) return
       this.routeName = route
       this.intervalId = window.requestAnimationFrame(this.callback)
     }
