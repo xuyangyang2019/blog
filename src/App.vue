@@ -156,8 +156,8 @@ export default {
       // 计算路由改变需要滚动的距离
       // let tabOffsetTop = getElementTop(this.$refs.container) - 50
       // let move = Math.abs(getScrollTop() - tabOffsetTop)
-      this.positionTop({ top: htmlTop, move: 0 })
-
+      // this.positionTop({ top: tabOffsetTop, move: move })
+      this.positionTop({ top: 0, move: htmlTop })
     },
     // 跳转路由
     back(item) {
