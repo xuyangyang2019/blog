@@ -7,7 +7,7 @@
         <!-- 标签 -->
         <tab></tab>
         <!-- 主要内容 -->
-        <div class="container" ref="container">
+        <div class="container">
           <section class="section">
             <!-- 文章 -->
             <div class="content">
@@ -70,9 +70,9 @@ import fileOnPlace from "@/components/base/FileOnPlace"
 import foot from "@/components/base/Foot"
 
 // html的scrollTop
-import { getScrollTop } from "@/utils/getScrollTop"
+// import { getScrollTop } from "@/utils/getScrollTop"
 // 获取指定元素到html的距离
-import { getElementTop } from "@/utils/getElementTop"
+// import { getElementTop } from "@/utils/getElementTop"
 
 
 export default {
@@ -121,7 +121,7 @@ export default {
       window.addEventListener("resize", this.scrollResize)
     },
     // 重新获取scrollTop
-    scrollResize: function () {
+    scrollResize() {
       this.debounce(this.getTop, 500)
     },
     //函数去抖，防止scroll和resize频繁触发
@@ -139,24 +139,25 @@ export default {
     },
     // 
     getTop() {
-      console.log('getTop')
-      // 计算document需要滚动的距离
-      let tabOffsetTop = getElementTop(this.$refs.container) - 50
-      let move = Math.abs(getScrollTop() - tabOffsetTop)
+      // html的scrollTop
+      let htmlTop = document.documentElement ? document.documentElement.scrollTop : 0
       // 如果往下滚动了 就显示回到top的按钮
-      if (getScrollTop() > 0) {
+      if (htmlTop > 0) {
         this.showBackTop = true
       } else {
         this.showBackTop = false
       }
-      // 如果下滑了 就把tab的背景设为透明
-      if (getScrollTop() > tabOffsetTop) {
+      // 如果导航栏遮挡了 container的内容 就把tab的背景设为透明
+      if (htmlTop > 50) {
         this.addTabBg(true)
       } else {
         this.addTabBg(false)
       }
-      // // 计算路由改变需要滚动的距离
-      // this.positionTop({ top: tabOffsetTop, move: move })
+      // 计算路由改变需要滚动的距离
+      // let tabOffsetTop = getElementTop(this.$refs.container) - 50
+      // let move = Math.abs(getScrollTop() - tabOffsetTop)
+      this.positionTop({ top: htmlTop, move: 0 })
+
     },
     // 跳转路由
     back(item) {
@@ -200,7 +201,6 @@ export default {
           break
         case "lifeShow":
           this.location = [{ pathName: "life", showName: "生活" }, { pathName: "lifeShow", showName: this.currentTitle, params: { id: route.params.id } }]
-          console.log(this.currentTitle)
           break
         case "msgboard":
           this.location = [{ pathName: "msgboard", showName: "留言板" }]
@@ -226,7 +226,6 @@ export default {
     this.currentLocation(this.$route)
     this.scrollCotainer()
     // 页面重载计算锚点距离并判断tab的背景样式
-    // this.positionTop(getElementTop(this.$refs.container) - 50)
     this.getTop()
   },
 
@@ -262,6 +261,7 @@ body {
 #app {
   margin: 50px 0 0 0;
   height: 100%;
+  overflow: hidden;
 }
 
 .main {
