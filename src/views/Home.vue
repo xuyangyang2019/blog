@@ -15,6 +15,11 @@ import loading from "@/components/base/Loading"
 import articleList from "@/components/article/ArticleList"
 
 export default {
+  head() {
+    return {
+      'title': '首页-XYY小站',
+    }
+  },
   asyncData({ store, route }) {
     return Promise.all([
       store.dispatch("GetArticles", {
@@ -26,9 +31,6 @@ export default {
         cache: true,
         publish: true
       })
-      // .then(() => {
-      //   store.commit("CHANGE_CODE", 200)
-      // })
     ])
   },
   components: {
