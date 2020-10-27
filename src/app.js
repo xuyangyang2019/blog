@@ -10,7 +10,9 @@ Object.keys(filters).forEach(filterName => {
   Vue.filter(filterName, filters[filterName])
 })
 
-
+// 全局引入 Mixin
+import headMixin from './mixins/head-mixin'
+Vue.mixin(headMixin)
 
 // 匹配要渲染的视图后，再获取数据
 // Vue.mixin({
