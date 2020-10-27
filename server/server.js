@@ -196,10 +196,14 @@ if (isProd) {
         }
     })
 }
+
 const renderData = (ctx, renderer) => {
     const context = {
         url: ctx.url,
-        title: 'Vue Koa2 SSR',
+        title: '首页', // 默认title
+        author: 'Xyy', // 默认author
+        keywords: 'xyy', // 默认keywords
+        description: 'xyy的blog', //默认description 
         cookies: ctx.request.headers.cookie
     }
     return new Promise((resolve, reject) => {
