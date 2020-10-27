@@ -17,9 +17,18 @@ import articleList from "@/components/article/ArticleList"
 export default {
   head() {
     return {
-      'title': '首页-XYY小站',
+      title: '首页-XYY小站',
+      author: 'xuyy',
+      keywords: 'koa2 webpack vue-ssr vuex vue-router axios',
+      description: '欢迎来到我的小站！',
     }
   },
+  // metaInfo() {
+  //   return {
+  //     title: "首页 -mapblog小站",
+  //     meta: [{ vmid: "description", name: "description", content: "首页 -mapblog小站" }]
+  //   }
+  // },
   asyncData({ store, route }) {
     return Promise.all([
       store.dispatch("GetArticles", {
@@ -52,12 +61,6 @@ export default {
     ...mapMutations({
       clear: 'CLEAR_PAGE',
     })
-  },
-  metaInfo() {
-    return {
-      title: "首页 -mapblog小站",
-      meta: [{ vmid: "description", name: "description", content: "首页 -mapblog小站" }]
-    }
   },
   beforeRouteLeave(to, from, next) {
     this.clear()

@@ -117,6 +117,17 @@ import login from "@/components/userLogin/UserLogin"
 import emojiData from "@/assets/js/emoji-data"
 
 export default {
+  head() {
+    return {
+      title: '留言 -XYY小站',
+    }
+  },
+  // metaInfo() {
+  //   return {
+  //     title: "留言 -mapblog小站",
+  //     meta: [{ vmid: "description", name: "description", content: "留言 -mapblog小站" }]
+  //   }
+  // },
   asyncData({ store, route }) {
     return Promise.all([
       store.dispatch("GetLeaveWords", {
@@ -143,12 +154,6 @@ export default {
       replyInfo: { _id: "", firstLevel: true, aite: "" }
     }
   },
-  // metaInfo() {
-  //   return {
-  //     title: "留言 -mapblog小站",
-  //     meta: [{ vmid: "description", name: "description", content: "留言 -mapblog小站" }]
-  //   }
-  // },
   computed: {
     ...mapState({
       msgBoardArr: 'msgBoardArr', // 留言

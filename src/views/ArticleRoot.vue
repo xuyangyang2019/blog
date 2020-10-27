@@ -40,6 +40,17 @@ import { mapActions, mapState, mapMutations } from "vuex"
 import { getBrowserInfo } from "@/utils/getBrowserInfo.js"
 
 export default {
+  head() {
+    return {
+      title: '技术文章 -XYY小站',
+    }
+  },
+  // metaInfo() {
+  //   return {
+  //     title: "技术文章 -mapblog小站",
+  //     meta: [{ vmid: "description", name: "description", content: "技术文章 -mapblog小站" }]
+  //   }
+  // },
   data() {
     return {
       currentIndex: 0,
@@ -49,12 +60,6 @@ export default {
       show3D: true,
     }
   },
-  // metaInfo() {
-  //   return {
-  //     title: "技术文章 -mapblog小站",
-  //     meta: [{ vmid: "description", name: "description", content: "技术文章 -mapblog小站" }]
-  //   }
-  // },
   watch: {
     tags() {
       if (this.tags.length) {

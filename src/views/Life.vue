@@ -13,6 +13,17 @@ import loading from "@/components/base/Loading"
 import articleList from "@/components/article/ArticleList"
 
 export default {
+   head() {
+    return {
+      title: '生活文章 -XYY小站',
+    }
+  },
+  //   metaInfo() {
+  //     return {
+  //       title: "生活文章 -mapblog小站",
+  //       meta: [{ vmid: "description", name: "description", content: "生活文章 -mapblog小站" }]
+  //     }
+  //   },
   asyncData({ store, route }) {
     return Promise.all([
       store.dispatch("GetArticles", {
@@ -44,12 +55,6 @@ export default {
       clear: 'CLEAR_PAGE'
     })
   },
-  //   metaInfo() {
-  //     return {
-  //       title: "生活文章 -mapblog小站",
-  //       meta: [{ vmid: "description", name: "description", content: "生活文章 -mapblog小站" }]
-  //     }
-  //   },
   beforeRouteLeave(to, from, next) {
     this.clear()
     next()
