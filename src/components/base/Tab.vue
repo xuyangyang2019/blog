@@ -1,5 +1,5 @@
 <template>
-  <div class="tab" ref="tab" :class="{ 'tab-bg': tabBg }">
+  <div id="tab" class="tab" ref="tab" :class="{ 'tab-bg': tabBg }">
     <nav class="navbar">
       <div class="nav-header">
         <div class="logo">
@@ -17,6 +17,7 @@
           <li v-for="(item, index) in tabs">
             <router-link :to="{ name: item.name }" tag="div">
               <span class="bg-box" @click.stop="goAnchor(item.name, index)">
+                <!-- <span class="bg-box"> -->
                 <span class="span-box">
                   <!-- 导航的图标 -->
                   <span :class="item.icon" class="icon-rt"></span>
@@ -40,7 +41,8 @@
 import { mapState, mapMutations } from "vuex"
 
 // import { getScrollTop } from "@/utils/getScrollTop"
-// import { requestAnimation } from "@/utils/requestAnimation"
+// js动画 解决css3无法实现的动画
+import { requestAnimation } from "@/utils/requestAnimation"
 
 export default {
   data() {
@@ -61,7 +63,7 @@ export default {
     }
   },
   mounted() {
-    // requestAnimation()
+    requestAnimation()
   },
   computed: {
     ...mapState({
@@ -84,37 +86,44 @@ export default {
       //   this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
       // }
     },
-    // 回调函数
-    callback: function () {
-      // let movepx = Math.ceil((this.anchorScroll.move / 250) * (1000 / 60))
-      // let that = this
-      // let scrollTop = getScrollTop()
-      // if (scrollTop < this.anchorScroll.top) {
-      //   document.documentElement.scrollTop = Math.min(scrollTop + movepx, this.anchorScroll.top)
-      //   document.body.scrollTop = Math.min(scrollTop + movepx, this.anchorScroll.top)
-      //   // 当页面不够长使container滚动不到页面顶端时，清除定时器(适合container上方有其他元素时)
-      //   if (getScrollTop() === scrollTop) {
-      //     this.$router.push({ name: this.routeName })
-      //     window.cancelAnimationFrame(that.intervalId)
-      //   } else {
-      //     window.requestAnimationFrame(that.callback)
-      //   }
-      // } else if (scrollTop > this.anchorScroll.top) {
-      //   document.documentElement.scrollTop = Math.max(scrollTop - movepx, this.anchorScroll.top)
-      //   document.body.scrollTop = Math.max(scrollTop - movepx, this.anchorScroll.top)
-      //   window.requestAnimationFrame(that.callback)
-      // } else {
-      //   window.cancelAnimationFrame(that.intervalId)
-      //   this.$router.push({ name: this.routeName })
-      // }
+    // 平缓滑动到top
+    callback() {
+      // html的scrollTop
+      let htmlTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop
+      // 每次移动的px
+      let movepx = Math.ceil((this.anchorScroll.move / 250) * (1000 / 60))
+      // 要到的基准点
+      let bsetTop = this.anchorScroll.top
+      if (htmlTop < bsetTop) {
+        if (document.documentElement) {
+          document.documentElement.scrollTop = Math.min(htmlTop + movepx, bsetTop)
+        } else {
+          document.body.scrollTop = Math.min(scrollTop + movepx, bsetTop)
+        }
+        // 当页面不够长使container滚动不到页面顶端时，清除定时器(适合container上方有其他元素时)
+        if (getScrollTop() === scrollTop) {
+          this.$router.push({ name: this.routeName })
+          window.cancelAnimationFrame(this.intervalId)
+        } else {
+          window.requestAnimationFrame(this.callback)
+        }
+      } else if (htmlTop > bsetTop) {
+        if (document.documentElement) {
+          document.documentElement.scrollTop = Math.max(htmlTop - movepx, bsetTop)
+        } else {
+          document.body.scrollTop = Math.max(scrollTop - movepx, bsetTop)
+        }
+        window.requestAnimationFrame(this.callback)
+      } else {
+        window.cancelAnimationFrame(this.intervalId)
+        this.$router.push({ name: this.routeName })
+      }
     },
     // 锚点动态跳转
     goAnchor(route, index) {
-      console.log(route, index)
       this.show = !this.show
-      this.$router.push({ name: route })
-      // this.routeName = route
-      // this.intervalId = window.requestAnimationFrame(this.callback)
+      this.routeName = route
+      this.intervalId = window.requestAnimationFrame(this.callback)
     }
   }
 }
