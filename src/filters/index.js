@@ -17,9 +17,17 @@ const reviseTime = value => {
     return finTime
 }
 
+const changeLife = (value) => {
+    if (value == "life") {
+        return "生活"
+    } else {
+        return value
+    }
+}
 
 
 
 export default {
-    reviseTime
+    reviseTime,
+    changeLife
 }
