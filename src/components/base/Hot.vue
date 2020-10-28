@@ -1,6 +1,6 @@
 <template>
   <div class="hot">
-    <h2 class="hot-header" @click="getHotArticles">推荐</h2>
+    <h2 class="hot-header">推荐</h2>
     <div class="hot-content">
       <ul v-if="hotArticles.length > 0">
         <li v-for="(item, index) in hotArticles">
@@ -32,17 +32,13 @@ export default {
   },
   methods: {
     // 跳转到文章
-    jumpHot: function (item) {
-      console.log(item)
-      // if (item.tag[0] === "life") {
-      //   this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
-      // } else {
-      //   this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
-      // }
-    },
-    getHotArticles() {
-      console.log('获取热门文章')
-      this.$store.dispatch('GetHot')
+    jumpHot(item) {
+      // console.log('跳转到文章', item)
+      if (item.tag[0] === "life") {
+        this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
+      } else {
+        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
+      }
     }
   },
   mounted() {
