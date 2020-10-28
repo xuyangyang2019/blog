@@ -3,17 +3,22 @@
     <!-- 文章详情 -->
     <div class="article-show-content">
       <div v-for="item in articles.only" class="article-body">
+        <!-- 文章标题 -->
         <h2 class="article-title">{{ item.title }}</h2>
+        <!-- 文章详情 -->
         <div class="article-details">
+          <!-- 标签 -->
           <div class="article-details-tag">
             <span class="icon-tag-stroke i-p"></span>
             <span class="each-tag" v-for="tag in item.tag">{{ tag | changeLife }}</span>
           </div>
           <div class="article-details-other">
+            <!-- 发布时间 -->
             <div class="time">
               <span class="icon-clock i-p"></span>
               <span>{{ item.date | reviseTime }} 发表</span>
             </div>
+            <!-- 阅读数|评论数|点赞数 -->
             <div class="pv-c-l">
               <span class="icon-eye i-p"></span>
               <span>{{ item.pv }} 次阅读 </span>
@@ -25,17 +30,24 @@
           </div>
         </div>
         <hr />
-        <div v-html="item.content" class="article-body">{{ item.content }}</div>
+        <!-- 文章内容 -->
+        <!-- <div v-html="item.content" class="article-body">{{ item.content }}</div> -->
+        <div class="article-body" v-html="item.content"></div>
+
+        <!-- 点赞 -->
         <div class="article-like" :class="{ 'article-like-after': lovedArr.indexOf(item._id) !== -1 }" @click="love(item.articleId, item._id)">
           <span class="love-text">{{ love_t }}</span>
         </div>
+
+        <!-- 文章出处 -->
         <div class="article-warning" v-if="item.original">
           <h6>本文为作者原创文章，转载请注明出处：</h6>
           <i
-            ><a href="javascript: void(0)">http://www.mapblog.cn{{ fullPath }}</a></i
+            ><a href="javascript: void(0)">http://www.xyy.ink{{ fullPath }}</a></i
           >
         </div>
         <div class="article-line"></div>
+
         <h4>分享：</h4>
         <div class="share">
           <a href="javascript: void(0)" @click="share('QQ', 'http://connect.qq.com/widget/shareqq/index.html')" class="design-bg-qq"></a>
@@ -48,11 +60,14 @@
           <a href="javascript: void(0)" @click="qrcode" class="design-bg-weixin"></a>
           <a href="javascript: void(0)" @click="share('douban', 'http://shuo.douban.com/!service/share')" class="design-bg-douban"></a>
         </div>
+
         <div class="otherArticle"></div>
+
         <div class="qrcode-box" v-show="qrShow">
           <span>微信扫一扫分享到朋友圈</span><span class="exit-qrcode" @click="exitQrcode">X</span>
           <div id="qrcode"></div>
         </div>
+
         <div class="pre-next">
           <div class="pre" v-if="articles.pre_next.pre.length">
             <h6>上一篇：</h6>
@@ -163,29 +178,31 @@ export default {
     // 点赞
     love(aid, _id) {
       if (this.lovedArr.indexOf(_id) === -1) {
-        this.LoveArticle({
-          articleId: aid,
-          num: 1,
-          title: document.title
-        }).then((data) => {
-          if (data.code === 200) {
-            this.lovedArr.push(_id)
-            localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
-          }
-        })
-
+        console.log('点赞')
+        console.log(aid, _id)
+        // this.LoveArticle({
+        //   articleId: aid,
+        //   num: 1,
+        //   title: document.title
+        // }).then((data) => {
+        //   if (data.code === 200) {
+        //     this.lovedArr.push(_id)
+        //     localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
+        //   }
+        // })
       } else {
-        this.LoveArticle({
-          articleId: aid,
-          num: -1,
-          title: document.title
-        }).then((data) => {
-          if (data.code === 200) {
-            this.lovedArr.splice(this.lovedArr.indexOf(_id), 1)
-            localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
-          }
-
-        })
+        console.log('取消点赞')
+        console.log(aid, _id)
+        // this.LoveArticle({
+        //   articleId: aid,
+        //   num: -1,
+        //   title: document.title
+        // }).then((data) => {
+        //   if (data.code === 200) {
+        //     this.lovedArr.splice(this.lovedArr.indexOf(_id), 1)
+        //     localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
+        //   }
+        // })
       }
     },
     // 跳转页面
