@@ -3,13 +3,9 @@
     <h2 class="hot-header">推荐</h2>
     <div class="hot-content">
       <ul v-if="hotArticles.length > 0">
-        <li v-for="(item, index) in hotArticles">
-          <div class="hot-item">
-            <span>{{ index + 1 }}. </span>
-            <a href="jacascript: void(0)" :title="item.title" @click="jumpHot(item)">
-              {{ item.title }}
-            </a>
-          </div>
+        <li class="hot-item" v-for="(item, index) in hotArticles">
+          <span>{{ index + 1 }}. </span>
+          <span class="article-title" :title="item.title" @click="jumpHot(item)" v-text="item.title"></span>
         </li>
       </ul>
       <div v-else>没有文章</div>
@@ -33,7 +29,6 @@ export default {
   methods: {
     // 跳转到文章
     jumpHot(item) {
-      // console.log('跳转到文章', item)
       if (item.tag[0] === "life") {
         this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
       } else {
@@ -51,36 +46,29 @@ export default {
 <style lang="scss" scoped>
 .hot {
   background: #faf7f7;
-}
 
-.hot-header {
-  text-align: center;
-  padding: 15px;
-  color: #eee;
-  background: #2e3033;
-}
-
-.hot-content {
-  li {
-    font-size: 14px;
-    list-style: none;
-    color: #16a085;
-    border-bottom: 1px solid #ddd;
-    margin-left: 15px;
+  .hot-header {
+    text-align: center;
+    padding: 15px;
+    color: #eee;
+    background: #2e3033;
   }
-  a {
-    display: inline-block;
-    padding: 10px;
-    color: #16a085;
+  
+  .hot-content {
+    .hot-item {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+      color: #16a085;
+      border-bottom: 1px solid #ddd;
+      margin-left: 15px;
+      padding: 10px;
+      cursor: pointer;
+      .article-title:hover {
+        border-bottom: solid 1px black;
+      }
+    }
   }
-  a:hover {
-    text-decoration: underline;
-  }
-}
-
-.hot-item {
-  overflow: hidden;
-  text-overflow: ellipsis; //超出部分显示省略号
-  white-space: nowrap;
 }
 </style>
