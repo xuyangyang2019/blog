@@ -114,6 +114,48 @@ const actions = {
         //     return data
         // })
     },
+    // 精准获取文章
+    GetArticle({ commit }, payload) {
+        console.log('精准获取文章', payload)
+        // life目录下路由参数只有ID，无tag参数
+        // if (payload.tag === undefined) {
+        //     tag = "life"
+        // } else {
+        //     tag = payload.tag
+        // }
+        let tag = payload.tag === undefined ? 'life' : payload.tag
+        api.get("/api/onlyArticle", {
+            publish: payload.publish,
+            tag: tag,
+            articleId: payload.articleId,
+            cache: true
+        }).then((data) => {
+            console.log(data)
+            // 页面title
+            commit("CHANGE_TITLE", data[0].title)
+            // 文章
+            commit("SET_ONLY_ARTICLES", data)
+            // if (data.length) {
+            //     return api.get("/api/preAndNext", { date: data[0].date, cache: true }).then((data1) => {
+            //         state.articles.pre_next = data1
+            //     })
+            // }
+        })
+        // return api.get("/api/onlyArticle", {
+        //     publish: payload.publish,
+        //     tag: tag,
+        //     articleId: payload.articleId,
+        //     cache: true
+        // }).then((data) => {
+        //     console.log(data)
+        //     state.articles.only = data
+        //     if (data.length) {
+        //         return api.get("/api/preAndNext", { date: data[0].date, cache: true }).then((data1) => {
+        //             state.articles.pre_next = data1
+        //         })
+        //     }
+        // })
+    },
     // 获取对应模块的文章总数，为分页按钮个数提供支持
     GetArticlesCount({ commit }, payload) {
         api.get("/api/getCount", payload).then((data) => {
@@ -260,6 +302,12 @@ const mutations = {
     // 设置top的参数
     PositionTop(state, payload) {
         state.anchorScroll = { top: payload.top, move: payload.move }
+    },
+    CHANGE_TITLE(state, title) {
+        state.currentTitle = title
+    },
+    SET_ONLY_ARTICLES(state, onlyArticles) {
+        state.articles.only = onlyArticles
     },
 }
 
