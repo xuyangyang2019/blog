@@ -5,6 +5,17 @@ import Home from '../views/Home.vue'
 
 Vue.use(Router)
 
+// 修改路由push方法,阻止重复点击报错
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
+// 修改路由replace方法,阻止重复点击报错
+const originalReplace = Router.prototype.replace;
+Router.prototype.replace = function replace(location) {
+    return originalReplace.call(this, location).catch(err => err);
+}
+
 function createRouter() {
     const routes = [
         // {
