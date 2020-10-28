@@ -6,6 +6,7 @@
     <article-list :articleList="articles.all"></article-list>
   </div>
 </template>
+
 <script>
 import { mapActions, mapState, mapMutations } from "vuex"
 // import Prism from 'prismjs'

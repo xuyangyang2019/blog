@@ -40,8 +40,7 @@
 </template>
 
 <script> 	
-import { mapActions, mapState, mapMutations } from "vuex"
-
+import { mapState, mapMutations } from "vuex"
 import page from "@/components/base/Page"
 
 export default {
@@ -56,24 +55,18 @@ export default {
       type: Array
     }
   },
-  filters: {
-    changeLife(value) {
-      if (value == "life") {
-        return "生活"
-      } else {
-        return value
-      }
-    }
-  },
-  mounted() {
-    // Prism.highlightAll()
-  },
   computed: {
-    ...mapState(["pageArr", "tagBg"])
+    ...mapState({
+      pageArr: 'pageArr',
+      tagBg: 'tagBg'
+    })
   },
   methods: {
-    ...mapMutations(["changeTitle"]),
-    jump: function (item) {
+    ...mapMutations({
+      changeTitle: 'CHANGE_TITLE'
+    }),
+    // 跳转到文章
+    jump(item) {
       this.changeTitle(item.title)
       if (item.tag[0] === "life") {
         this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
@@ -81,7 +74,7 @@ export default {
         this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
       }
     }
-  }
+  },
 }
 </script>
 

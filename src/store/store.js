@@ -116,7 +116,6 @@ const actions = {
     },
     // 精准获取文章
     GetArticle({ commit }, payload) {
-        console.log('精准获取文章', payload)
         // life目录下路由参数只有ID，无tag参数
         // if (payload.tag === undefined) {
         //     tag = "life"
@@ -130,7 +129,6 @@ const actions = {
             articleId: payload.articleId,
             cache: true
         }).then((data) => {
-            console.log(data)
             // 页面title
             commit("CHANGE_TITLE", data[0].title)
             // 文章
