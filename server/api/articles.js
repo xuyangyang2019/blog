@@ -1,8 +1,8 @@
 // mongodb
 const db = require("../db/mongodb/db")
-
-// const getIp = require("../utils/getIp")
 // const api = require("../http/server-api")
+// const getIp = require("../utils/getIp")
+
 // const localTime = require("../utils/reviseTime")
 // const confirmToken = require("../middleware/confirmToken")
 
@@ -77,11 +77,12 @@ module.exports = {
                     }
                 })
             // 查询ip 并提醒后台
-            // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx) }).then((data) => {
-            //     new db.newMsg({
-            //         type: "pv",
-            //         content: data.data.city + "网友 在" + localTime(Date.now()) + "浏览了你的文章--" + doc[0].title
-            //     }).save()
+            // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx.request) }).then((res) => {
+            //     console.log(res)
+            //     // new db.newMsg({
+            //     //     type: "pv",
+            //     //     content: data.data.city + "网友 在" + localTime(Date.now()) + "浏览了你的文章--" + doc[0].title
+            //     // }).save()
             // })
         }
     },
