@@ -42,4 +42,47 @@ module.exports = {
             .limit(limit)
         ctx.body = articles
     },
+    // 抓取单一文章
+    'GET /onlyArticle': async (ctx, next) => {
+        let params = {}
+        if (ctx.query.tag === undefined) {
+            params = {
+                publish: ctx.query.publish,
+                tag: "life",
+                articleId: ctx.query.articleId
+            }
+        } else {
+            params = {
+                publish: ctx.query.publish,
+                tag: ctx.query.tag,
+                articleId: ctx.query.articleId
+            }
+        }
+        let doc = await db.article.find(params, (err, doc) => {
+            if (err) {
+                console.log(err)
+            }
+        })
+        if (doc.length === 0) {
+            ctx.body = [{ title: "您访问的路径不存在" }]
+        } else {
+            ctx.body = doc
+            // 更新文章的点击数
+            db.article.update(
+                { "articleId": ctx.query.articleId },
+                { $inc: { "pv": 1 } },
+                (err, doc) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                })
+            // 查询ip 并提醒后台
+            // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx) }).then((data) => {
+            //     new db.newMsg({
+            //         type: "pv",
+            //         content: data.data.city + "网友 在" + localTime(Date.now()) + "浏览了你的文章--" + doc[0].title
+            //     }).save()
+            // })
+        }
+    },
 }
