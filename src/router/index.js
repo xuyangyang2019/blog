@@ -32,11 +32,12 @@ function createRouter() {
         //     name: "techincal",
         //     component: techincal
         // },
-        // {
-        //     path: "/article/:articleList/:id",
-        //     name: "articleShow",
-        //     component: articleShow
-        // },
+        {
+            path: "/article/:articleList/:id",
+            name: "articleShow",
+            component: () => import(/* webpackChunkName: "life" */ '../components/article/ArticleShow.vue') // 异步路由
+
+        },
         {
             path: "/life",
             name: "life",
