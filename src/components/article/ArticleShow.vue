@@ -77,16 +77,17 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex"
 
+import Prism from 'prismjs'
+
 // import comment from "@/components/comment/comment"
 
 export default {
-  //   metaInfo() {
-  //     const title = this.articles.only[0].title
-  //     return {
-  //       title: title + " -mapblog小站",
-  //       meta: [{ vmid: "description", name: "description", content: title + " -mapblog小站" }]
-  //     }
-  //   },
+  head() {
+    return {
+      title: 'title',
+      description: 'description',
+    }
+  },
   asyncData({ store, route }) {
     return store.dispatch("GetArticle", {
       publish: true,
@@ -94,9 +95,6 @@ export default {
       articleId: route.params.id,
       cache: true
     })
-    // .then(() => {
-    //   store.commit("ChangeTitle", store.state.articles.only[0].title)
-    // })
   },
   components: {
     // comment
@@ -110,37 +108,41 @@ export default {
     }
   },
   computed: {
-    ...mapState(["articles"]),
-    love_t: function () {
+    ...mapState({
+      articles: 'articles'
+    }),
+    // 是否点赞
+    love_t() {
       if (this.lovedArr.indexOf(this.articles.only[0]._id) !== -1) {
         return "已赞"
       } else {
         return "赞"
       }
     },
-    ifCatch: function () {
+    // 获取文章成功
+    ifCatch() {
       return this.articles.only
     }
   },
   watch: {
-    //推荐文章的引起路由变化重新进行抓取
+    // 推荐文章的引起路由变化重新进行抓取
     $route() {
       //二级评论进行锚点跳转
-      let r = this.$route
-      if (r.fullPath.indexOf("#anchor-comment") === -1) {
-        this.getArticle({
-          publish: true,
-          tag: r.params.articleList,
-          articleId: r.params.id
-        }).then(() => {
-          this.changeTitle(this.articles.only[0].title)
-          this.$nextTick(function () {
-            Prism.highlightAll()
-          })
-        })
-      }
+      // let r = this.$route
+      // if (r.fullPath.indexOf("#anchor-comment") === -1) {
+      //   this.GetArticle({
+      //     publish: true,
+      //     tag: r.params.articleList,
+      //     articleId: r.params.id
+      //   }).then(() => {
+      //     this.CHANGE_TITLE(this.articles.only[0].title)
+      //     this.$nextTick(function () {
+      //       Prism.highlightAll()
+      //     })
+      //   })
+      // }
     },
-    //抓取数据延时较高时，确保抓取到数据之后进行一次代码样式的渲染
+    // 抓取数据延时较高时，确保抓取到数据之后进行一次代码样式的渲染
     ifCatch() {
       this.$nextTick(function () {
         Prism.highlightAll()
@@ -148,19 +150,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["getArticle", "loveArticle"]),
-    ...mapMutations(["changeTitle"]),
+    ...mapActions(["GetArticle", "LoveArticle"]),
+    ...mapMutations(["CHANGE_TITLE"]),
     // 点击回复按钮会在地址栏加上锚点，故刷新时去除，第三方分享链接亦如此
-    getOriginUrl: function () {
+    getOriginUrl() {
       if (this.$route.fullPath.indexOf("#anchor-comment") > -1) {
         this.fullPath = this.$route.fullPath.substring(0, this.$route.fullPath.indexOf("#"))
       } else {
         this.fullPath = this.$route.fullPath
       }
     },
-    love: function (aid, _id) {
+    // 点赞
+    love(aid, _id) {
       if (this.lovedArr.indexOf(_id) === -1) {
-        this.loveArticle({
+        this.LoveArticle({
           articleId: aid,
           num: 1,
           title: document.title
@@ -172,7 +175,7 @@ export default {
         })
 
       } else {
-        this.loveArticle({
+        this.LoveArticle({
           articleId: aid,
           num: -1,
           title: document.title
@@ -185,14 +188,16 @@ export default {
         })
       }
     },
-    jumpPn: function (item) {
+    // 跳转页面
+    jumpPn(item) {
       if (item.tag[0] === "life") {
         this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
       } else {
         this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
       }
     },
-    share: function (type, url) {
+    // 分享
+    share(type, url) {
       let title = document.title + " 这是一个积累web知识的个人博客",
         el = document.createElement("a"),
         _href,
@@ -223,8 +228,8 @@ export default {
       el.href = _href
       el.click()
     },
-    //微信二维码生成器
-    qrcode: function () {
+    // 微信二维码生成器
+    qrcode() {
       if (this.qrShow === false) {
         this.qrShow = true
         let _url = window.location.href
@@ -238,20 +243,22 @@ export default {
         })
       }
     },
-    //关闭微信二维码
-    exitQrcode: function () {
+    // 关闭微信二维码
+    exitQrcode() {
       this.qrShow = false
       document.getElementById("qrcode").innerHTML = ''
     }
   },
   mounted() {
-    // if (localStorage.getItem("articleLoved")) {
-    //   this.lovedArr = JSON.parse(localStorage.getItem("articleLoved"))
-    // }
-    // this.$nextTick(function () {
-    //   Prism.highlightAll()
-    // })
-    // this.getOriginUrl()
+    // 读取本地的点赞数据
+    if (localStorage.getItem("articleLoved")) {
+      this.lovedArr = JSON.parse(localStorage.getItem("articleLoved"))
+    }
+    // 代码高亮
+    this.$nextTick(function () {
+      Prism.highlightAll()
+    })
+    this.getOriginUrl()
   },
 }
 </script> 
