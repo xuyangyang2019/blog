@@ -13,7 +13,7 @@ import loading from "@/components/base/Loading"
 import articleList from "@/components/article/ArticleList"
 
 export default {
-   head() {
+  head() {
     return {
       title: '生活文章 -XYY小站',
     }
@@ -38,7 +38,9 @@ export default {
         tag: "life",
         cache: true
       })
-    ])
+    ]).then(() => {
+      store.commit("CHANGE_CODE", 200)
+    })
   },
   components: {
     articleList,

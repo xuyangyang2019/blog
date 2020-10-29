@@ -128,8 +128,8 @@ const actions = {
             commit("CHANGE_TITLE", data[0].title)
             // 文章
             commit("SET_ONLY_ARTICLES", data)
+            // 查询上篇文章|下篇文章
             if (data.length) {
-                // 查询上篇文章|下篇文章
                 api.get("/api/preAndNext", { date: data[0].date, cache: true }).then((data1) => {
                     commit('SET_PRE_NEXT', data1)
                 })
@@ -141,7 +141,6 @@ const actions = {
         api.get("/api/getCount", payload).then((data) => {
             commit("SET_ARTICLES_SUM", data)
             commit("SET_PAGE_ARR", data)
-            commit("CHANGE_CODE", 200)
             // return data
         })
         // return api.get("/api/getCount", payload).then((data) => {

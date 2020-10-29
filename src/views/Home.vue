@@ -41,7 +41,9 @@ export default {
         cache: true,
         publish: true
       })
-    ])
+    ]).then(() => {
+      store.commit("CHANGE_CODE", 200)
+    })
   },
   components: {
     banner,
