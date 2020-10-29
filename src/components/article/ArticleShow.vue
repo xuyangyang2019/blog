@@ -145,7 +145,7 @@ export default {
       //二级评论进行锚点跳转
       // let r = this.$route
       // if (r.fullPath.indexOf("#anchor-comment") === -1) {
-      //   this.GetArticle({
+      //   this.getArticle({
       //     publish: true,
       //     tag: r.params.articleList,
       //     articleId: r.params.id
@@ -165,7 +165,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["GetArticle", "LoveArticle"]),
+    ...mapActions({
+      getArticle: 'GetArticle',
+      loveArticle: 'LoveArticle'
+    }),
     ...mapMutations(["CHANGE_TITLE"]),
     // 点击回复按钮会在地址栏加上锚点，故刷新时去除，第三方分享链接亦如此
     getOriginUrl() {
@@ -175,35 +178,36 @@ export default {
         this.fullPath = this.$route.fullPath
       }
     },
-    // 点赞
+    // 点赞|取消点赞
     love(aid, _id) {
+      // 如果登陆，继续操作
+      // ...待实现
       if (this.lovedArr.indexOf(_id) === -1) {
-        console.log('点赞')
-        console.log(aid, _id)
-        // this.LoveArticle({
-        //   articleId: aid,
-        //   num: 1,
-        //   title: document.title
-        // }).then((data) => {
-        //   if (data.code === 200) {
-        //     this.lovedArr.push(_id)
-        //     localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
-        //   }
-        // })
+        this.loveArticle({
+          articleId: aid,
+          num: 1,
+          title: document.title
+        }).then((data) => {
+          if (data.code === 200) {
+            // 更新并保存点赞的状态
+            this.lovedArr.push(_id)
+            localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
+          }
+        })
       } else {
-        console.log('取消点赞')
-        console.log(aid, _id)
-        // this.LoveArticle({
-        //   articleId: aid,
-        //   num: -1,
-        //   title: document.title
-        // }).then((data) => {
-        //   if (data.code === 200) {
-        //     this.lovedArr.splice(this.lovedArr.indexOf(_id), 1)
-        //     localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
-        //   }
-        // })
+        this.loveArticle({
+          articleId: aid,
+          num: -1,
+          title: document.title
+        }).then((data) => {
+          if (data.code === 200) {
+            this.lovedArr.splice(this.lovedArr.indexOf(_id), 1)
+            localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
+          }
+        })
       }
+      // 未登陆先登陆
+      // ... 待实现
     },
     // 跳转页面
     jumpPn(item) {
