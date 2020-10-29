@@ -35,7 +35,11 @@
         <div class="article-body" v-html="item.content"></div>
 
         <!-- 点赞 -->
-        <div class="article-like" :class="{ 'article-like-after': lovedArr.indexOf(item._id) !== -1 }" @click="love(item.articleId, item._id)">
+        <div
+          class="article-like"
+          :class="{ 'article-like-after': lovedArr.indexOf(item._id) !== -1 }"
+          @click="love(item.articleId, item._id)"
+        >
           <span class="love-text">{{ love_t }}</span>
         </div>
 
@@ -48,24 +52,46 @@
         </div>
         <div class="article-line"></div>
 
+        <!-- 分享栏 -->
         <h4>分享：</h4>
         <div class="share">
-          <a href="javascript: void(0)" @click="share('QQ', 'http://connect.qq.com/widget/shareqq/index.html')" class="design-bg-qq"></a>
+          <!--分享到qq  -->
+          <a
+            href="javascript: void(0)"
+            @click="share('QQ', 'http://connect.qq.com/widget/shareqq/index.html')"
+            class="design-bg-qq"
+          ></a>
+          <!-- 分享到qq空间 -->
           <a
             href="javascript: void(0)"
             @click="share('qzone', 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey')"
             class="design-bg-qzone"
           ></a>
-          <a href="javascript: void(0)" @click="share('sina', 'http://v.t.sina.com.cn/share/share.php')" class="design-bg-sina"></a>
-          <a href="javascript: void(0)" @click="qrcode" class="design-bg-weixin"></a>
-          <a href="javascript: void(0)" @click="share('douban', 'http://shuo.douban.com/!service/share')" class="design-bg-douban"></a>
+          <!-- 分享到新浪微博 -->
+          <a
+            href="javascript: void(0)"
+            @click="share('sina', 'http://v.t.sina.com.cn/share/share.php')"
+            class="design-bg-sina"
+          ></a>
+          <!-- 分享到微信 -->
+          <a href="javascript: void(0)" @click="showQRCode" class="design-bg-weixin"></a>
+          <!-- 分享到豆瓣 -->
+          <a
+            href="javascript: void(0)"
+            @click="share('douban', 'http://shuo.douban.com/!service/share')"
+            class="design-bg-douban"
+          ></a>
         </div>
 
         <div class="otherArticle"></div>
 
+        <!-- vue-qr 生成二维码 -->
         <div class="qrcode-box" v-show="qrShow">
-          <span>微信扫一扫分享到朋友圈</span><span class="exit-qrcode" @click="exitQrcode">X</span>
-          <div id="qrcode"></div>
+          <p>
+            <span>微信扫一扫分享到朋友圈</span>
+            <span class="exit-qrcode" @click="qrShow = false">X</span>
+          </p>
+          <vue-qr v-show="qrShow" backgroundColor="#ccc" :logoSrc="qrLogo" :text="qrText" :size="200"> </vue-qr>
         </div>
 
         <div class="pre-next">
@@ -93,6 +119,7 @@
 import { mapState, mapMutations, mapActions } from "vuex"
 
 import Prism from 'prismjs'
+import VueQr from 'vue-qr'
 
 // import comment from "@/components/comment/comment"
 
@@ -112,14 +139,17 @@ export default {
     })
   },
   components: {
+    VueQr
     // comment
   },
   data() {
     return {
-      qrShow: false,
-      loveText: "赞",
-      lovedArr: [],
-      fullPath: ""
+      qrShow: false, // 显示二维码与否
+      loveText: "赞", // 点赞文字
+      lovedArr: [], // 电站的id集合
+      fullPath: "", // 完整的path
+      qrLogo: require("../../../public/img/defaultUser.jpg"), // 二维码的log
+      qrText: '', // 二维码的地址
     }
   },
   computed: {
@@ -249,25 +279,10 @@ export default {
       el.href = _href
       el.click()
     },
-    // 微信二维码生成器
-    qrcode() {
-      if (this.qrShow === false) {
-        this.qrShow = true
-        let _url = window.location.href
-        new QRCode(document.getElementById("qrcode"), {
-          text: _url,
-          width: 160,
-          height: 160,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        })
-      }
-    },
-    // 关闭微信二维码
-    exitQrcode() {
-      this.qrShow = false
-      document.getElementById("qrcode").innerHTML = ''
+    // 展示二维码
+    showQRCode() {
+      this.qrShow = !this.qrShow
+      this.qrText = window.location.href
     }
   },
   mounted() {
@@ -414,25 +429,23 @@ export default {
 .qrcode-box {
   position: fixed;
   z-index: 2000;
-  padding: 0 15px 15px 15px;
-  border-radius: 15px;
+  p {
+    padding: 0 10px;
+    font-size: 14px;
+    background: #ccc;
+  }
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
-  background: #ccc;
 }
-.qrcode-box span:nth-child(1) {
-  font-size: 12px;
-}
-#qrcode img {
-  margin: 0 auto;
-}
+
 .exit-qrcode {
   float: right;
   margin-right: 2px;
   cursor: pointer;
 }
+
 .article-warning {
   h6 {
     line-height: 1.2;
