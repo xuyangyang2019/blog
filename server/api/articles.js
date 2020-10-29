@@ -104,4 +104,33 @@ module.exports = {
             .limit(1)
         ctx.body = { pre: doc1, next: doc2 }
     },
+    // 更新文章的喜欢字段
+    'PATCH /loveArticle': async (ctx, next) => {
+        // ctx.request.body
+        let result = await db.article.update(
+            { articleId: ctx.request.body.articleId },
+            { $inc: { likeNum: ctx.request.body.num } },
+            (err, doc) => { })
+        if (result.ok) {
+            ctx.body = { code: 200 }
+            // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx) }).then((data) => {
+            //     // 将点赞加入到新消息
+            //     if (ctx.body.num === "1") {
+            //         new db.newMsg({
+            //             ip: getIp(ctx),
+            //             type: "like",
+            //             title: ctx.body.title,
+            //             content: data.data.city + "网友 在" + localTime(Date.now()) + "赞了你的文章--" + ctx.body.title
+            //         }).save()
+            //     } else {
+            //         //取消赞则将新消息移除
+            //         db.newMsg.remove({ type: "like", ip: getIp(ctx), title: ctx.body.title }, (err) => {
+            //             if (err) {
+            //                 res.status(500).end()
+            //             }
+            //         })
+            //     }
+            // })
+        }
+    },
 }
