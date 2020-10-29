@@ -177,6 +177,10 @@ const actions = {
     SaveLeaveWords({ commit }, payload) {
         return api.post("/api/saveLeaveW", payload)
     },
+    // 点赞|取消点赞
+    LoveArticle({ commit }, payload) {
+        return api.patch("/api/loveArticle", payload)
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
