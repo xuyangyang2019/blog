@@ -38,15 +38,15 @@ function createRouter() {
             component: () => import(/* webpackChunkName: "article" */ '../views/ArticleRoot.vue') // 异步路由
         },
         // article的子路由
-        // {
-        //     path: "/article/:articleList",
-        //     name: "techincal",
-        //     component: techincal
-        // },
+        {
+            path: "/article/:articleList",
+            name: "techincal",
+            component: () => import(/* webpackChunkName: "article" */ '../components/article/Techincal.vue')
+        },
         {
             path: "/article/:articleList/:id",
             name: "articleShow",
-            component: () => import(/* webpackChunkName: "life" */ '../components/article/ArticleShow.vue') // 异步路由
+            component: () => import(/* webpackChunkName: "article" */ '../components/article/ArticleShow.vue') // 异步路由
 
         },
         {
