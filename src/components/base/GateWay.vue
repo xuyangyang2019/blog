@@ -57,12 +57,11 @@ export default {
     },
     // 跳转到标签
     jumpGate(item) {
-      console.log(itme)
-      // if (item === "life") {
-      //   this.$router.push({ name: "life" })
-      // } else {
-      //   this.$router.push({ name: "techincal", params: { articleList: item } })
-      // }
+      if (item === "life") {
+        this.$router.push({ name: "life" })
+      } else {
+        this.$router.push({ name: "techincal", params: { articleList: item } })
+      }
     }
   },
   mounted() {
