@@ -125,9 +125,16 @@ import VueQr from 'vue-qr'
 
 export default {
   head() {
+    console.log('计算title meta')
+    console.log(this.$store.state.currentTitle)
+    // let articles = this.$store.state.articles
+    // console.log(articles)
+    // return {
+    // title: articles.only[0].title,
+    // description: articles.only[0].abstract,
+    // }
     return {
-      title: 'title',
-      description: 'description',
+      title: this.$store.state.currentTitle,
     }
   },
   asyncData({ store, route }) {
@@ -154,7 +161,8 @@ export default {
   },
   computed: {
     ...mapState({
-      articles: 'articles'
+      articles: 'articles',
+      currentTitle: 'currentTitle'
     }),
     // 是否点赞
     love_t() {
@@ -180,7 +188,7 @@ export default {
       //     tag: r.params.articleList,
       //     articleId: r.params.id
       //   }).then(() => {
-      //     this.CHANGE_TITLE(this.articles.only[0].title)
+      //     this.changeTitle(this.articles.only[0].title)
       //     this.$nextTick(function () {
       //       Prism.highlightAll()
       //     })
@@ -199,7 +207,9 @@ export default {
       getArticle: 'GetArticle',
       loveArticle: 'LoveArticle'
     }),
-    ...mapMutations(["CHANGE_TITLE"]),
+    ...mapMutations({
+      changeTitle: 'CHANGE_TITLE'
+    }),
     // 点击回复按钮会在地址栏加上锚点，故刷新时去除，第三方分享链接亦如此
     getOriginUrl() {
       if (this.$route.fullPath.indexOf("#anchor-comment") > -1) {
@@ -295,6 +305,7 @@ export default {
       Prism.highlightAll()
     })
     this.getOriginUrl()
+    console.log(this.currentTitle)
   },
 }
 </script> 
