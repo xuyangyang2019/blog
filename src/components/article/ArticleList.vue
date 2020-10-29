@@ -7,26 +7,32 @@
         <h2 class="article-title">
           <a href="javascript: void(0)" @click="jump(item)"> {{ item.title }} </a>
         </h2>
-        <!-- tag -->
         <div class="article-msg">
+          <!-- 标签 -->
           <span class="icon-tag-stroke"></span>
           <span class="article-msg-tag">
             <span v-for="tag in item.tag"> {{ tag | changeLife }} </span>
           </span>
+          <!-- 时间 -->
           <span class="icon-clock"></span>
           <span class="article-msg-time">{{ item.date | reviseTime }}</span>
         </div>
         <div class="article-review">
+          <!-- 图片 -->
           <div :class="'default tag-bg-img ' + tagBg[index]"></div>
+          <!-- 摘要 -->
           <div class="article-abstract">
             <h4>{{ item.abstract }}</h4>
           </div>
         </div>
         <div class="view-msg">
+          <!-- 浏览量 -->
           <span class="icon-eye"></span>
           <span class="pv">{{ item.pv }}</span>
+          <!-- 品论数 -->
           <span class="icon-commenting-o"></span>
           <span class="comments-num">{{ item.commentNum }}</span>
+          <!-- 点赞数 -->
           <span class="icon-like"></span>
           <span class="like-num">{{ item.likeNum }}</span>
         </div>

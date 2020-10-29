@@ -92,6 +92,7 @@ export default {
     foot
   },
   watch: {
+    // route改变
     $route() {
       if (this.$route.name === "home") {
         this.location = []
@@ -99,7 +100,7 @@ export default {
       this.currentLocation(this.$route)
     },
     // 当articleShow组件的标题变化时，刷新当前位置的文章标题，防止当前文章显示上一篇文章的标题
-    currentTitle() {
+    currentTitle(val) {
       this.currentLocation(this.$route)
     }
   },
@@ -124,7 +125,7 @@ export default {
     scrollResize() {
       this.debounce(this.getTop, 500)
     },
-    //函数去抖，防止scroll和resize频繁触发
+    // 函数去抖，防止scroll和resize频繁触发
     debounce: function (func, delay) {
       let context = this
       let args = arguments
@@ -137,7 +138,7 @@ export default {
         func.apply(context, args)
       }, delay)
     },
-    // 
+    // 获取基准点
     getTop() {
       // html的scrollTop
       let htmlTop = document.documentElement ? document.documentElement.scrollTop : 0
@@ -190,17 +191,38 @@ export default {
           break
         case "techincal":
           let tag = route.params.articleList
-          this.location = [{ pathName: "article", showName: "技术文章" }, { pathName: "techincal", showName: tag, params: { tag: tag } }]
+          this.location = [
+            { pathName: "article", showName: "技术文章" },
+            { pathName: "techincal", showName: tag, params: { tag: tag } }
+          ]
           break
         case "articleShow":
           let _tag = route.params.articleList
-          this.location = [{ pathName: "article", showName: "技术文章" }, { pathName: "techincal", showName: _tag, params: { tag: _tag } }, { pathName: "articleShow", showName: this.currentTitle, params: { tag: _tag, id: route.params.id } }]
+          this.location = [
+            {
+              pathName: "article",
+              showName: "技术文章"
+            },
+            {
+              pathName: "techincal",
+              showName: _tag,
+              params: { tag: _tag }
+            },
+            {
+              pathName: "articleShow",
+              showName: this.currentTitle,
+              params: { tag: _tag, id: route.params.id }
+            }
+          ]
           break
         case "life":
           this.location = [{ pathName: "life", showName: "生活" }]
           break
         case "lifeShow":
-          this.location = [{ pathName: "life", showName: "生活" }, { pathName: "lifeShow", showName: this.currentTitle, params: { id: route.params.id } }]
+          this.location = [
+            { pathName: "life", showName: "生活" },
+            { pathName: "lifeShow", showName: this.currentTitle, params: { id: route.params.id } }
+          ]
           break
         case "msgboard":
           this.location = [{ pathName: "msgboard", showName: "留言板" }]
@@ -210,20 +232,16 @@ export default {
           break
         case "timeLine":
           this.location = [{ pathName: "timeLine", showName: "时间轴" }]
+        default:
+          // home页面没有面包屑导航
+          break
       }
     }
   },
-  // beforeCreate() {
-  //   console.log('App.vue beforeCreate')
-  // },
-  // created() {
-  //   console.log('App.vue created')
-  // },
-  // beforeMount() {
-  //   console.log('App.vue beforeMount')
-  // },
   mounted() {
+    // 计算当前的面包屑导航
     this.currentLocation(this.$route)
+    // 监听页面大小和scroll事件
     this.scrollCotainer()
     // 页面重载计算锚点距离并判断tab的背景样式
     this.getTop()

@@ -40,12 +40,12 @@ function addMapping(router, mapping) {
  * @param {*} controllers_dir js文件夹
  */
 function addControllers(router) {
-  console.log('addControllers')
+  // console.log('addControllers')
   // 先导入fs模块，然后用readdirSync列出文件
   // 这里可以用sync是因为启动时只运行一次，不存在性能问题:
   // var files = fs.readdirSync(__dirname + `/${controllers_dir}`)
   let controllers_path = path.resolve(__dirname, '../api')
-  console.log(controllers_path)
+  // console.log(controllers_path)
   var files = fs.readdirSync(controllers_path)
   // 过滤出.js文件:
   var js_files = files.filter((f) => {
@@ -54,7 +54,7 @@ function addControllers(router) {
 
   // 处理每个js文件:
   for (var f of js_files) {
-    console.log(`process controller: ${f}...`)
+    // console.log(`process controller: ${f}...`)
     // 导入js文件
     let mapping = require(`${controllers_path}/` + f)
     addMapping(router, mapping)
