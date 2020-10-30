@@ -40,6 +40,7 @@ const state = {
     tags: [], // 标签
     timeLine: [], // 时间轴
     maskShow: false, // 展示登陆框
+    comments: [], // 文章评论
 }
 
 // getters
@@ -187,6 +188,14 @@ const actions = {
             commit("PRODUCT_BG", data)
         })
     },
+    // 获取文章评论
+    GetComments({ commit }, payload) {
+        api.get("/api/getComments", payload).then((data) => {
+            console.log(data)
+            commit('SET_COMMENTS', data)
+            //   return data
+        })
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
@@ -296,6 +305,9 @@ const mutations = {
     },
     SET_PRE_NEXT(state, pn) {
         state.articles.pre_next = pn
+    },
+    SET_COMMENTS(state, data) {
+        state.comments = data
     }
 }
 
