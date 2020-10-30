@@ -29,6 +29,7 @@ export default {
   methods: {
     // 跳转到文章
     jumpHot(item) {
+      this.$store.commit('CHANGE_TITLE', item.title)
       if (item.tag[0] === "life") {
         this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
       } else {
@@ -53,7 +54,7 @@ export default {
     color: #eee;
     background: #2e3033;
   }
-  
+
   .hot-content {
     .hot-item {
       overflow: hidden;
