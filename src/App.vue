@@ -102,6 +102,7 @@ export default {
     // 当articleShow组件的标题变化时，刷新当前位置的文章标题，防止当前文章显示上一篇文章的标题
     currentTitle(val) {
       this.currentLocation(this.$route)
+      this.backTop()
     }
   },
   computed: {
