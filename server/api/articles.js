@@ -133,4 +133,33 @@ module.exports = {
             // })
         }
     },
+    // 前台搜索文章
+    'GET /search': async (ctx, next) => {
+        let limit = 8
+        let skip = ctx.query.page * limit - limit
+        if (ctx.query.according === "key") {
+            let docs = await db.article
+                .find(
+                    { publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } },
+                    { content: 0 },
+                    (err, doc) => { })
+                .sort({ "_id": -1 })
+                .skip(skip)
+                .limit(limit)
+            ctx.body = docs
+        } else {
+            //前台时间轴根据时间范围搜索
+            let start = new Date(parseInt(ctx.query.start))
+            let end = new Date(parseInt(ctx.query.end))
+            let articles_time = await db.article
+                .find(
+                    { publish: ctx.query.publish, date: { "$gte": start, "$lte": end } },
+                    { content: 0 },
+                    (err, doc) => { })
+                .sort({ "_id": -1 })
+                .skip(skip)
+                .limit(limit)
+            ctx.body = articles_time
+        }
+    }
 }
