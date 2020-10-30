@@ -111,7 +111,7 @@
       </div>
     </div>
     <!-- 评论组件 -->
-    <!-- <comment></comment> -->
+    <comment></comment>
   </div>
 </template>
 
@@ -121,7 +121,7 @@ import { mapState, mapMutations, mapActions } from "vuex"
 import Prism from 'prismjs'
 import VueQr from 'vue-qr'
 import headMixin from '@/mixins/head-mixin'
-// import comment from "@/components/comment/comment"
+import comment from "@/components/article/Comment"
 
 export default {
   head() {
@@ -140,8 +140,8 @@ export default {
   name: 'ArticleShow',
   mixins: [headMixin],
   components: {
-    VueQr
-    // comment
+    VueQr,
+    comment
   },
   data() {
     return {
