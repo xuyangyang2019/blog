@@ -12,9 +12,9 @@ import articleList from "@/components/article/ArticleList"
 import loading from "@/components/base/Loading"
 
 export default {
-  getHead() {
+  head() {
     return {
-      title: "时间轴 -mapblog小站"
+      title: "时间轴"
     }
   },
   components: {
@@ -40,7 +40,7 @@ export default {
       clear: 'CLEAR_PAGE'
     }),
     time_arts() {
-	  let timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
+      let timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
       // utc时间0点起
       let startTime = new Date(Date.parse(timeArr[0])).getTime()
       // utc时间24点
