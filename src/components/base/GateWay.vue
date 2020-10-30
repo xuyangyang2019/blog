@@ -23,15 +23,6 @@ export default {
       color: ["#FF9933", "#663300", "#CC6600", "#99CC33", "#CC6699", "#009966", "#999999", "#336666", "#9BBFEA", "#CCCC00"]
     }
   },
-  filters: {
-    changeLife: function (value) {
-      if (value == "life") {
-        return "生活"
-      } else {
-        return value
-      }
-    }
-  },
   computed: {
     ...mapState({
       tags: 'tags'
@@ -57,6 +48,7 @@ export default {
     },
     // 跳转到标签
     jumpGate(item) {
+      this.$store.commit('CHANGE_TITLE', item)
       if (item === "life") {
         this.$router.push({ name: "life" })
       } else {
@@ -66,13 +58,6 @@ export default {
   },
   mounted() {
     this.getTagsClass({ publish: true })
-    // this.getTagsClass({ publish: true }).then((data) => {
-    //   //没有标签则不要初始化，否则会出错
-    //   console.log(data)
-    //   if (data.length) {
-    //     this.initBackground()
-    //   }
-    // })
   }
 }
 </script>

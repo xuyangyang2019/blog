@@ -74,7 +74,6 @@ import foot from "@/components/base/Foot"
 // 获取指定元素到html的距离
 // import { getElementTop } from "@/utils/getElementTop"
 
-
 export default {
   data() {
     return {
@@ -99,10 +98,18 @@ export default {
       }
       this.currentLocation(this.$route)
     },
-    // 当articleShow组件的标题变化时，刷新当前位置的文章标题，防止当前文章显示上一篇文章的标题
+    // 当articleShow组件的标题变化时，
     currentTitle(val) {
+      // 刷新当前位置的文章标题，防止当前文章显示上一篇文章的标题
       this.currentLocation(this.$route)
+      // 返回顶部
       this.backTop()
+      // 修改title
+      if (val) document.title = `${val} -xyy的小站`
+      // 修改meta
+      // if (head.author) document.querySelector('meta[name="author"]').setAttribute('content', `${head.author}`)
+      // if (head.keywords) document.querySelector('meta[name="keywords"]').setAttribute('content', head.keywords)
+      // if (head.description) document.querySelector('meta[name="description"]').setAttribute('content', head.description)
     }
   },
   computed: {

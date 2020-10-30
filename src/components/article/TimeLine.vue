@@ -10,6 +10,8 @@ import { mapActions, mapState, mapMutations } from "vuex"
 
 import articleList from "@/components/article/ArticleList"
 import loading from "@/components/base/Loading"
+import headMixin from '@/mixins/head-mixin'
+
 
 export default {
   head() {
@@ -17,6 +19,8 @@ export default {
       title: "时间轴"
     }
   },
+  name: 'TimeLine',
+  mixins: [headMixin],
   components: {
     articleList,
     loading

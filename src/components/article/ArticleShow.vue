@@ -120,7 +120,7 @@ import { mapState, mapMutations, mapActions } from "vuex"
 
 import Prism from 'prismjs'
 import VueQr from 'vue-qr'
-
+import headMixin from '@/mixins/head-mixin'
 // import comment from "@/components/comment/comment"
 
 export default {
@@ -137,6 +137,8 @@ export default {
       cache: true
     })
   },
+  name: 'ArticleShow',
+  mixins: [headMixin],
   components: {
     VueQr
     // comment
@@ -170,32 +172,12 @@ export default {
     }
   },
   watch: {
-    // 推荐文章的引起路由变化重新进行抓取
-    $route() {
-      //二级评论进行锚点跳转
-      // let r = this.$route
-      // if (r.fullPath.indexOf("#anchor-comment") === -1) {
-      //   this.getArticle({
-      //     publish: true,
-      //     tag: r.params.articleList,
-      //     articleId: r.params.id
-      //   }).then(() => {
-      //     this.changeTitle(this.articles.only[0].title)
-      //     this.$nextTick(function () {
-      //       Prism.highlightAll()
-      //     })
-      //   })
-      // }
-    },
     // 抓取数据延时较高时，确保抓取到数据之后进行一次代码样式的渲染
     ifCatch() {
       this.$nextTick(function () {
         Prism.highlightAll()
       })
     },
-    currentTitle(val) {
-      document.title = val
-    }
   },
   methods: {
     ...mapActions({
