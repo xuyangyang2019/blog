@@ -4,7 +4,8 @@
     <div class="timeLine-content">
       <ul>
         <li v-for="item in timeLine">
-          <a href="jacascript: void(0)" @click="jumpTime(item.time)"> {{ item.time }}({{ item.num }})</a>
+          <!-- <a href="jacascript: void(0)" @click="jumpTime(item.time)"> {{ item.time }}({{ item.num }})</a> -->
+          <a :href="jumpTime(item.time)"> {{ item.time }}({{ item.num }})</a>
         </li>
       </ul>
     </div>
@@ -25,25 +26,25 @@ export default {
     }),
     // 跳转到时间轴
     jumpTime(time) {
-      console.log(time)
-      // let year = time.match(/\d+/g)[0],
-      //   month = parseInt(time.match(/\d+/g)[1]),
-      //   endDay,
-      //   date
-      // if (month === 2) {
-      //   endDay = 28
-      // } else if (month === 1 || month == 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
-      //   endDay = 31
-      // } else {
-      //   endDay = 30
-      // }
-      // for (let i = 0; i < 9; i++) {
-      //   if (month === i) {
-      //     month = "0" + month
-      //   }
-      // }
-      // date = year + "-" + month + "-" + "01" + "to" + year + "-" + month + "-" + endDay
+      let year = time.match(/\d+/g)[0]
+      let month = parseInt(time.match(/\d+/g)[1])
+      let endDay = 31
+      let date = new Date().getTime()
+      if (month === 2) {
+        endDay = 28
+      } else if (month === 1 || month == 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
+        endDay = 31
+      } else {
+        endDay = 30
+      }
+      for (let i = 0; i < 9; i++) {
+        if (month === i) {
+          month = "0" + month
+        }
+      }
+      date = year + "-" + month + "-" + "01" + "to" + year + "-" + month + "-" + endDay
       // this.$router.push({ name: "timeLine", params: { time: date } })
+      return date
     }
   },
   mounted() {
