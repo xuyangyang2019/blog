@@ -5,7 +5,7 @@
       <ul>
         <li v-for="item in timeLine">
           <!-- <a href="jacascript: void(0)" @click="jumpTime(item.time)"> {{ item.time }}({{ item.num }})</a> -->
-          <a :href="jumpTime(item.time)"> {{ item.time }}({{ item.num }})</a>
+          <a :href="jumpTime(item.time)" target="_blank"> {{ item.time }}({{ item.num }})</a>
         </li>
       </ul>
     </div>
@@ -44,7 +44,7 @@ export default {
       }
       date = year + "-" + month + "-" + "01" + "to" + year + "-" + month + "-" + endDay
       // this.$router.push({ name: "timeLine", params: { time: date } })
-      return date
+      return '/timeline/' + date
     }
   },
   mounted() {
