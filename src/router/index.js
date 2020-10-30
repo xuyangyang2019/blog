@@ -38,17 +38,20 @@ function createRouter() {
             component: () => import(/* webpackChunkName: "article" */ '../views/ArticleRoot.vue') // 异步路由
         },
         // article的子路由
+        // 标签
         {
             path: "/article/:articleList",
             name: "techincal",
             component: () => import(/* webpackChunkName: "article" */ '../components/article/Techincal.vue')
         },
+        // 具体的文章
         {
             path: "/article/:articleList/:id",
             name: "articleShow",
             component: () => import(/* webpackChunkName: "article" */ '../components/article/ArticleShow.vue') // 异步路由
 
         },
+        // 生活
         {
             path: "/life",
             name: "life",
@@ -59,21 +62,24 @@ function createRouter() {
         //     name: "lifeShow",
         //     component: articleShow
         // },
+        // 留言
         {
             path: "/msgboard",
             name: "msgboard",
             component: () => import(/* webpackChunkName: "msgboard" */ '../views/MsgBoard.vue') // 异步路由
         },
+        // 搜索
         // {
         //     path: "/search/:searchKey",
         //     name: "search",
         //     component: search
         // },
-        // {
-        //     path: "/timeLine/:time",
-        //     name: "timeLine",
-        //     component: timeLine
-        // },
+        // 时间轴
+        {
+            path: "/timeLine/:time",
+            name: "timeLine",
+            component: () => import(/* webpackChunkName: "article" */ '../components/article/TimeLine.vue')
+        },
         // {
         //     path: "/login_github",
         //     name: "loginGithub",
