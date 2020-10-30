@@ -9,11 +9,12 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from "vuex"
-// import Prism from 'prismjs'
 
 import banner from "@/components/home/Banner"
 import loading from "@/components/base/Loading"
 import articleList from "@/components/article/ArticleList"
+import headMixin from '@/mixins/head-mixin'
+
 
 export default {
   head() {
@@ -24,12 +25,6 @@ export default {
       description: '欢迎来到我的小站！',
     }
   },
-  // metaInfo() {
-  //   return {
-  //     title: "首页 -mapblog小站",
-  //     meta: [{ vmid: "description", name: "description", content: "首页 -mapblog小站" }]
-  //   }
-  // },
   asyncData({ store, route }) {
     return Promise.all([
       store.dispatch("GetArticles", {
@@ -45,6 +40,8 @@ export default {
       store.commit("CHANGE_CODE", 200)
     })
   },
+  name: 'Home',
+  mixins: [headMixin],
   components: {
     banner,
     loading,

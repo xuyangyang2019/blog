@@ -115,6 +115,8 @@ import page from "@/components/base/Page"
 import emoji from "@/components/base/Emoji"
 import login from "@/components/userLogin/UserLogin"
 import emojiData from "@/assets/js/emoji-data"
+import headMixin from '@/mixins/head-mixin'
+
 
 export default {
   head() {
@@ -122,12 +124,6 @@ export default {
       title: '留言',
     }
   },
-  // metaInfo() {
-  //   return {
-  //     title: "留言 -mapblog小站",
-  //     meta: [{ vmid: "description", name: "description", content: "留言 -mapblog小站" }]
-  //   }
-  // },
   asyncData({ store, route }) {
     return Promise.all([
       store.dispatch("GetLeaveWords", {
@@ -139,6 +135,8 @@ export default {
       })
     ])
   },
+  name: 'MsgBoard',
+  mixins: [headMixin],
   components: {
     page,
     emoji,

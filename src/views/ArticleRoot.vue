@@ -19,7 +19,9 @@
         <ul class="rotate" @click="leftSlider" ref="container">
           <li v-for="(item, index) in tags" ref="degItem">
             <div class="deg-item-mask">
-              <a href="javascript: void(0)" @click.stop="jumpArticle(item.tag)"> {{ index + 1 }}.{{ item.tag }} （{{ item.num }} 篇） </a>
+              <a href="javascript: void(0)" @click.stop="jumpArticle(item.tag)">
+                {{ index + 1 }}.{{ item.tag }} （{{ item.num }} 篇）
+              </a>
             </div>
           </li>
         </ul>
@@ -38,6 +40,8 @@
 <script>
 import { mapActions, mapState, mapMutations } from "vuex"
 import { getBrowserInfo } from "@/utils/getBrowserInfo.js"
+import headMixin from '@/mixins/head-mixin'
+
 
 export default {
   head() {
@@ -45,12 +49,6 @@ export default {
       title: '技术文章',
     }
   },
-  // metaInfo() {
-  //   return {
-  //     title: "技术文章 -mapblog小站",
-  //     meta: [{ vmid: "description", name: "description", content: "技术文章 -mapblog小站" }]
-  //   }
-  // },
   data() {
     return {
       currentIndex: 0,
@@ -60,6 +58,8 @@ export default {
       show3D: true,
     }
   },
+  name: 'ArticleRoot',
+  mixins: [headMixin],
   watch: {
     tags() {
       if (this.tags.length) {
