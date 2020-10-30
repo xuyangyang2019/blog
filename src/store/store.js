@@ -180,6 +180,13 @@ const actions = {
     LoveArticle({ commit }, payload) {
         return api.patch("/api/loveArticle", payload)
     },
+    // 查询时间轴的文章
+    TimeArticles({ commit, state }, payload) {
+        api.get("/api/search", payload).then((data) => {
+            commit('SET_ARTICLES_TIME', data)
+            commit("PRODUCT_BG", data)
+        })
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
@@ -283,6 +290,9 @@ const mutations = {
     },
     SET_ONLY_ARTICLES(state, onlyArticles) {
         state.articles.only = onlyArticles
+    },
+    SET_ARTICLES_TIME(state, timeArticles) {
+        state.articles.time = timeArticles
     },
     SET_PRE_NEXT(state, pn) {
         state.articles.pre_next = pn
