@@ -125,16 +125,8 @@ import VueQr from 'vue-qr'
 
 export default {
   head() {
-    console.log('计算title meta')
-    console.log(this.$store.state.currentTitle)
-    // let articles = this.$store.state.articles
-    // console.log(articles)
-    // return {
-    // title: articles.only[0].title,
-    // description: articles.only[0].abstract,
-    // }
     return {
-      title: this.$store.state.currentTitle,
+      title: this.currentTitle,
     }
   },
   asyncData({ store, route }) {
@@ -200,6 +192,9 @@ export default {
       this.$nextTick(function () {
         Prism.highlightAll()
       })
+    },
+    currentTitle(val) {
+      document.title = val
     }
   },
   methods: {
@@ -305,7 +300,6 @@ export default {
       Prism.highlightAll()
     })
     this.getOriginUrl()
-    console.log(this.currentTitle)
   },
 }
 </script> 
