@@ -15,7 +15,7 @@ import articleList from "@/components/article/ArticleList"
 export default {
   head() {
     return {
-      title: '生活文章 -XYY小站',
+      title: '生活文章',
     }
   },
   //   metaInfo() {

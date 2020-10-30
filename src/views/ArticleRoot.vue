@@ -42,7 +42,7 @@ import { getBrowserInfo } from "@/utils/getBrowserInfo.js"
 export default {
   head() {
     return {
-      title: '技术文章 -XYY小站',
+      title: '技术文章',
     }
   },
   // metaInfo() {

@@ -119,7 +119,7 @@ import emojiData from "@/assets/js/emoji-data"
 export default {
   head() {
     return {
-      title: '留言 -XYY小站',
+      title: '留言',
     }
   },
   // metaInfo() {

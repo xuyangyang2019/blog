@@ -18,7 +18,7 @@ import articleList from "@/components/article/ArticleList"
 export default {
   head() {
     return {
-      title: '首页-XYY小站',
+      title: '首页',
       author: 'xuyy',
       keywords: 'koa2 webpack vue-ssr vuex vue-router axios',
       description: '欢迎来到我的小站！',
