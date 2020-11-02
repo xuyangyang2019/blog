@@ -191,10 +191,13 @@ const actions = {
     // 获取文章评论
     GetComments({ commit }, payload) {
         api.get("/api/getComments", payload).then((data) => {
-            console.log(data)
             commit('SET_COMMENTS', data)
             //   return data
         })
+    },
+    // 发表评论
+    PostComment({ commit }, payload) {
+        return api.post("/api/saveComment", payload)
     },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
@@ -303,13 +306,28 @@ const mutations = {
     SET_ARTICLES_TIME(state, timeArticles) {
         state.articles.time = timeArticles
     },
+    // 设置上|下页
     SET_PRE_NEXT(state, pn) {
         state.articles.pre_next = pn
     },
+    // 设置评论
     SET_COMMENTS(state, data) {
         state.comments = data
-    }
+    },
+    ADD_LOCAL_COMMENTS(state, info) {
+        if (info.type === 1) {
+            state.comments.unshift(info.add)
+        } else {
+            state.comments.forEach((item, index, arr) => {
+                if (item._id === info._id) {
+                    state.comments.splice(index, 1, info.add)
+                    return
+                }
+            })
+        }
+    },
 }
+
 
 Vue.use(Vuex)
 function createStore() {
