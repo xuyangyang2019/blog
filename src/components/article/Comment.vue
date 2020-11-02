@@ -3,11 +3,14 @@
     <div id="anchor-comment"></div>
     <h2>说点什么：</h2>
     <div class="say-box">
+      <!-- 回复某人的评论 -->
       <div v-show="aite.length">
         <strong>回复：@</strong><span>{{ aite }}</span>
         <span @click="aite = ''" class="exit-aite" :title="'取消回复' + aite">x</span>
       </div>
+      <!-- 文本域 -->
       <textarea v-model="sayWords" @focus="showLogin" placeholder="这小地盘儿交给你啦 *^_^*"></textarea>
+      <!-- 退出 -->
       <div class="icon-submit-box">
         <div class="icon-userInfo-box">
           <div @click="emojiToggle" class="emoji-icon">
@@ -20,13 +23,18 @@
             <a href="javascript: void(0)" @click="loginOut">退出</a>
           </div>
         </div>
+        <!-- 评论 -->
         <input ref="pubButton" type="button" value="发表评论" @click="publishComment" />
       </div>
     </div>
+
+    <!-- emoji表情 -->
     <div class="emoji-box" v-show="emojiShow">
       <span @click="exitEmoji" class="emoji-exit">x</span>
       <emoji @select="selectEmoji"></emoji>
     </div>
+
+    <!-- 所有的评论 -->
     <div class="all-comments">
       <h2>文章评论：</h2>
       <ul>
@@ -39,7 +47,9 @@
             <pre><div class = "rev-c" v-html = "item.content"></div></pre>
             <div class="rev-details">
               <span class="icon-clock"></span>
-              <span class="rev-details-time"> {{ item.date | reviseTime }} </span>
+              <span class="rev-details-time">
+                {{ item.date | reviseTime }}
+              </span>
               <a href="#anchor-comment" class="rev-details-reply"
                 ><span @click="rep(item._id, item.name)"> 回复 </span></a
               >
@@ -63,7 +73,9 @@
                 <pre><div class = "ans-c" v-html = "reply.content"></div></pre>
                 <div class="ans-details">
                   <span class="icon-clock"></span>
-                  <span class="ans-details-time"> {{ reply.date | reviseTime }} </span>
+                  <span class="ans-details-time">
+                    {{ reply.date | reviseTime }}
+                  </span>
                   <a href="#anchor-comment" class="ans-details-reply"
                     ><span @click="rep(item._id, reply.name)"> 回复 </span></a
                   >
@@ -86,7 +98,11 @@
         </li>
       </ul>
     </div>
+
+    <!-- 登陆框 -->
     <login></login>
+
+    <!-- 错误提示框 -->
     <transition name="mask" v-show="dialogErr.show">
       <div class="mask" v-show="dialogErr.show" @click="dialogErr.show = false">
         <transition name="dialog">
@@ -103,6 +119,7 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex"
+
 import emoji from "@/components/base/Emoji"
 import emojiData from "@/assets/js/emoji-data"
 import login from "@/components/userLogin/UserLogin"
@@ -146,42 +163,52 @@ export default {
   methods: {
     ...mapActions({
       getComments: 'GetComments',
-      postComment: 'postComment',
+      postComment: 'PostComment',
       addComment: 'addComment',
       addLike: 'addLike',
     }),
     ...mapMutations({
-      set_user: 'set_user',
-      handleMask: 'handleMask',
-      addLocalComments: 'addLocalComments',
+      set_user: 'SET_USER',
+      handleMask: 'HANDLE_MASK',
+      addLocalComments: 'ADD_LOCAL_COMMENTS',
       addLocalCommentsLike: 'addLocalCommentsLike',
     }),
     // 退出登陆
-    loginOut: function () {
+    loginOut() {
+      // 重置用户信息
       this.set_user({ name: "", imgUrl: "", email: "" })
-      this.removeLocal()
+      // this.removeLocal()
+      localStorage.removeItem("map_blog_userInfo")
+      // 处理第三方登陆信息
       let pattern = /githubId/
       let gitCookie = document.cookie.split(";").filter((item, index, arr) => {
         return pattern.test(item)
       })
-      //清除github登陆的cookie信息
-      if (gitCookie.length) {
-        //设置cookie的过期时间为一分钟前，让浏览器自动将其删除
-        let gitId = gitCookie[0].replace(/(^\s*)|(\s*$)/, "")
-        let exp = new Date(Date.now() - 60 * 1000)//设置为一分钟前
-        document.cookie = gitId + ";expires=" + exp.toUTCString() + ";path=/"
-
-      } else {
-        QC.Login.signOut()
+      // // 清除github登陆的cookie信息
+      // if (gitCookie.length) {
+      //   // 设置cookie的过期时间为一分钟前，让浏览器自动将其删除
+      //   let gitId = gitCookie[0].replace(/(^\s*)|(\s*$)/, "")
+      //   let exp = new Date(Date.now() - 60 * 1000)//设置为一分钟前
+      //   document.cookie = gitId + ";expires=" + exp.toUTCString() + ";path=/"
+      // } else {
+      //   // 退出qq登陆
+      //   QC.Login.signOut()
+      // }
+    },
+    // 展示登陆框
+    showLogin() {
+      if (!this.userInfo.name && !this.userInfo.imgUrl) {
+        this.handleMask(true)
       }
     },
-    // 选择emeoji
-    selectEmoji: function (emojiCode) {
+    // 选emoji
+    selectEmoji(emojiCode) {
       this.sayWords += emojiCode
       this.emojiShow = false
     },
-    // 发布评论
+    // 发表评论
     publishComment: function (index) {
+      // 表单验证
       if (this.validatePub()) {
         return
       }
@@ -201,6 +228,7 @@ export default {
           title: this.articles.only[0].title,
           date: Date.now()
         }).then((data) => {
+          console.log(data)
           if (data._id) {
             setTimeout(() => {
               that.$refs.pubButton.value = "发表评论"
@@ -239,23 +267,26 @@ export default {
     },
     // 表单验证
     validatePub: function () {
+      // 有用户信息
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.handleMask(true)
         return true
       }
+      // 非空
       if (!this.sayWords.length) {
         this.dialogErr = { show: true, info: "内容不能为空" }
         return true
       }
+      // 不能多于500字
       if (this.sayWords.length > 500) {
         this.dialogErr = { show: true, info: "内容过长，请不要超过500个字符" }
         return true
       }
     },
-    // 
-    productContent: function () {
-      let emojiObject = {},
-        finStr = this.sayWords
+    // emoji替换为img
+    productContent() {
+      let emojiObject = {}
+      let finStr = this.sayWords
       finStr = finStr.replace(new RegExp("<", "g"), "&lt")
       finStr = finStr.replace(new RegExp(">", "g"), "&gt")
       Object.values(emojiData).forEach((item, index, arr) => {
@@ -269,15 +300,15 @@ export default {
       })
       return finStr
     },
-    // 展示emoji
-    emojiToggle: function () {
+    // 展示|隐藏 emoji框
+    emojiToggle() {
       this.emojiShow = !this.emojiShow
     },
-    // 吟唱emoji
-    exitEmoji: function () {
+    // 隐藏emoji框
+    exitEmoji() {
       this.emojiShow = false
     },
-
+    // 回复评论
     rep: function (_id, name) {
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.aite = name
@@ -288,7 +319,7 @@ export default {
         this.replyOthers = true
       }
     },
-
+    // 点赞
     like: function (rev_id, rep_id) {
       if (rep_id) {
         this.handleLike(rev_id, rep_id, rep_id)
@@ -296,7 +327,7 @@ export default {
         this.handleLike(rev_id, undefined, rev_id)
       }
     },
-
+    // 
     handleLike: function (rev_id, rep_id, saveLocal) {
       let that = this
       //点赞
@@ -323,19 +354,9 @@ export default {
         })
       }
     },
-
-    removeLocal: function () {
-      localStorage.removeItem("map_blog_userInfo")
-    },
-
-    showLogin: function () {
-      if (!this.userInfo.name && !this.userInfo.imgUrl) {
-        this.handleMask(true)
-      }
-    }
   },
   mounted() {
-	let key = "articleId_comment" + this.$route.params.id
+    let key = "articleId_comment" + this.$route.params.id
     if (localStorage.getItem(key)) {
       this.hasLiked = JSON.parse(localStorage.getItem(key))
     }
@@ -409,20 +430,27 @@ h2 {
 .emoji {
   border-radius: 5px;
 }
+
 .emoji-box {
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
+  width: 400px;
   z-index: 500;
   margin-left: 10px;
   margin-top: 2px;
-}
-.emoji-exit {
-  /* float: right; */
+  .emoji-exit {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    /* float: right;
   margin-right: 25px;
-  margin-top: 15px;
-  color: red;
-  display: inline-block;
-  cursor: pointer;
+  margin-top: 15px; */
+    color: red;
+    cursor: pointer;
+    display: inline-block;
+  }
 }
+
 .icon-submit-box {
   width: 80%;
   margin-top: 8px;
