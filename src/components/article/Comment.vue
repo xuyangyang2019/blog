@@ -164,7 +164,7 @@ export default {
     ...mapActions({
       getComments: 'GetComments',
       postComment: 'PostComment',
-      addComment: 'addComment',
+      addComment: 'AddComment',
       addLike: 'addLike',
     }),
     ...mapMutations({
@@ -260,7 +260,6 @@ export default {
               that.replyOthers = false
               that.addLocalComments({ add: data, type: 2, _id: that._id })
             }, 200)
-
           }
         })
       }
@@ -309,7 +308,7 @@ export default {
       this.emojiShow = false
     },
     // 回复评论
-    rep: function (_id, name) {
+    rep(_id, name) {
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.aite = name
         this.handleMask(true)
