@@ -199,6 +199,10 @@ const actions = {
     PostComment({ commit }, payload) {
         return api.post("/api/saveComment", payload)
     },
+    // 回复评论
+    AddComment({ commit }, payload) {
+        return api.patch("/api/addComment", payload)
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
