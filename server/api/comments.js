@@ -43,14 +43,12 @@ module.exports = {
 			like: ctx.request.body.like,
 			date: ctx.request.body.date
 		}
-		let result = await db.comment.findByIdAndUpdate(
+		let doc = await db.comment.findByIdAndUpdate(
 			{ _id: ctx.request.body._id },
 			{ $push: { reply: addInfo } },
-			{ new: true },
-			(err, doc) => {
-			})
-		if (result._id) {
-			ctx.body = result
+			{ new: true })
+		if (doc._id) {
+			ctx.body = doc
 		}
 	},
 	// 前端文章点赞
@@ -60,9 +58,7 @@ module.exports = {
 			let ur = await db.comment.update(
 				{ _id: ctx.request.body.revId, "reply._id": ctx.request.body.repId },
 				{ $inc: { "reply.$.like": ctx.request.body.addOrDel } },
-				(err, doc) => {
-					console.log(doc)
-				})
+				(err, doc) => { })
 			if (ur) {
 				ctx.body = { code: 200 }
 			}
@@ -70,9 +66,7 @@ module.exports = {
 			let ur = await db.comment.update(
 				{ _id: ctx.request.body.revId },
 				{ $inc: { "like": ctx.request.body.addOrDel } },
-				(err, doc) => {
-					console.log(doc)
-				})
+				(err, doc) => { })
 			if (ur) {
 				ctx.body = { code: 200 }
 			}

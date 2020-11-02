@@ -214,8 +214,8 @@ export default {
       }
       let content = this.productContent()
       let that = this
-      //直接回复文章，一级评论
       if (!this.replyOthers) {
+        // 直接回复文章，一级评论
         this.$refs.pubButton.value = "发表中..."
         this.postComment({
           name: this.userInfo.name,
@@ -228,7 +228,6 @@ export default {
           title: this.articles.only[0].title,
           date: Date.now()
         }).then((data) => {
-          console.log(data)
           if (data._id) {
             setTimeout(() => {
               that.$refs.pubButton.value = "发表评论"
@@ -237,8 +236,8 @@ export default {
             }, 200)
           }
         })
-        //回复他人,二级评论
       } else {
+        // 回复他人,二级评论
         this.$refs.pubButton.value = "发表中..."
         let uif = this.userInfo
         this.addComment({
