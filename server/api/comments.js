@@ -32,7 +32,48 @@ module.exports = {
 			// }).save()
 		}
 	},
+	// 前后端文章评论回复（二级评论）
+	'PATCH /addComment': async (ctx, next) => {
+		let addInfo = {
+			name: ctx.request.body.name,
+			imgUrl: ctx.request.body.imgUrl,
+			email: ctx.request.body.email,
+			aite: ctx.request.body.aite,
+			content: ctx.request.body.content,
+			like: ctx.request.body.like,
+			date: ctx.request.body.date
+		}
+		let result = await db.comment.findByIdAndUpdate(
+			{ _id: ctx.request.body._id },
+			{ $push: { reply: addInfo } },
+			{ new: true },
+			(err, doc) => {
+			})
+		if (result._id) {
+			ctx.body = result
+		}
+	},
 }
+// router.patch("/api/addLike",(ctx,res) => {
+		// 	//是否为二级评论
+		// 	if(ctx.body.repId){
+		// 		db.comment.update({_id: ctx.body.revId,"reply._id": ctx.body.repId},{$inc: {"reply.$.like": ctx.body.addOrDel}},(err,doc) => {
+		// 			if(err){
+		// 				res.status(500).end()
+		// 			}else{
+		// 				res.json({code: 200})
+		// 			}
+		// 		})
+		// 	}else{
+		// 		db.comment.update({_id: ctx.body.revId},{$inc: {"like": ctx.body.addOrDel}},(err,doc) => {
+		// 			if(err){
+		// 				res.status(500).end()
+		// 			}else{
+		// 				res.json({code: 200})
+		// 			}
+		// 		})
+		// 	}	
+		// })
 // //后台管理
 // router.get("/api/getAdminComments",confirmToken,(ctx,res) =>{
 // 	let limit = 10
@@ -71,43 +112,5 @@ module.exports = {
 // 	})
 // })	
 
-// //前后端文章评论回复（二级评论）
-// router.patch("/api/addComment",(ctx,res) => {
-// 	let addInfo = {
-// 		name: ctx.body.name,
-// 		imgUrl: ctx.body.imgUrl,
-// 		email: ctx.body.email,
-// 		aite: ctx.body.aite,
-// 		content: ctx.body.content,
-// 		like: ctx.body.like,
-// 		date: ctx.body.date
-// 	}
-// 	db.comment.findByIdAndUpdate({_id: ctx.body._id},{$push: {reply: addInfo}},{new: true},(err,doc) => {
-// 		if(err){
-// 			res.status(500).end()
-// 		}else{
-// 			res.json(doc)
-// 		}
-// 	})
-// })
-// router.patch("/api/addLike",(ctx,res) => {
-// 	//是否为二级评论
-// 	if(ctx.body.repId){
-// 		db.comment.update({_id: ctx.body.revId,"reply._id": ctx.body.repId},{$inc: {"reply.$.like": ctx.body.addOrDel}},(err,doc) => {
-// 			if(err){
-// 				res.status(500).end()
-// 			}else{
-// 				res.json({code: 200})
-// 			}
-// 		})
-// 	}else{
-// 		db.comment.update({_id: ctx.body.revId},{$inc: {"like": ctx.body.addOrDel}},(err,doc) => {
-// 			if(err){
-// 				res.status(500).end()
-// 			}else{
-// 				res.json({code: 200})
-// 			}
-// 		})
-// 	}	
-// })
+
 // module.exports = router
