@@ -53,27 +53,33 @@ module.exports = {
 			ctx.body = result
 		}
 	},
+	// 前端文章点赞
+	'PATCH /addLike': async (ctx, next) => {
+		//是否为二级评论
+		if (ctx.request.body.repId) {
+			let ur = await db.comment.update(
+				{ _id: ctx.request.body.revId, "reply._id": ctx.request.body.repId },
+				{ $inc: { "reply.$.like": ctx.request.body.addOrDel } },
+				(err, doc) => {
+					console.log(doc)
+				})
+			if (ur) {
+				ctx.body = { code: 200 }
+			}
+		} else {
+			let ur = await db.comment.update(
+				{ _id: ctx.request.body.revId },
+				{ $inc: { "like": ctx.request.body.addOrDel } },
+				(err, doc) => {
+					console.log(doc)
+				})
+			if (ur) {
+				ctx.body = { code: 200 }
+			}
+		}
+	},
 }
-// router.patch("/api/addLike",(ctx,res) => {
-		// 	//是否为二级评论
-		// 	if(ctx.body.repId){
-		// 		db.comment.update({_id: ctx.body.revId,"reply._id": ctx.body.repId},{$inc: {"reply.$.like": ctx.body.addOrDel}},(err,doc) => {
-		// 			if(err){
-		// 				res.status(500).end()
-		// 			}else{
-		// 				res.json({code: 200})
-		// 			}
-		// 		})
-		// 	}else{
-		// 		db.comment.update({_id: ctx.body.revId},{$inc: {"like": ctx.body.addOrDel}},(err,doc) => {
-		// 			if(err){
-		// 				res.status(500).end()
-		// 			}else{
-		// 				res.json({code: 200})
-		// 			}
-		// 		})
-		// 	}	
-		// })
+
 // //后台管理
 // router.get("/api/getAdminComments",confirmToken,(ctx,res) =>{
 // 	let limit = 10
