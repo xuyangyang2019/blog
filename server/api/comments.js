@@ -13,11 +13,30 @@ module.exports = {
 			.sort({ _id: -1 })
 		ctx.body = comments
 	},
+	// 保存评论
+	'POST /saveComment': async (ctx, next) => {
+		let newDoc = await db.comment.create(ctx.request.body)
+		if (newDoc._id) {
+			ctx.body = newDoc
+			// 更新article
+			db.article.update(
+				{ articleId: ctx.body.articleId },
+				{ $inc: { commentNum: 1 } },
+				(err, doc) => { })
+			// 通知admin
+			// new db.newMsg({
+			// 	type: "comment",
+			// 	name: ctx.body.name,
+			// 	say: ctx.body.content,
+			// 	content: ctx.body.name + "在" + localTime(Date.now()) + "评论了你的文章--" + ctx.body.title
+			// }).save()
+		}
+	},
 }
 // //后台管理
-// router.get("/api/getAdminComments",confirmToken,(req,res) =>{
+// router.get("/api/getAdminComments",confirmToken,(ctx,res) =>{
 // 	let limit = 10
-// 	let skip = req.query.page*limit - limit
+// 	let skip = ctx.query.page*limit - limit
 // 	db.comment.find({},(err,doc) =>{
 // 		if(err){
 // 			res.status(500).end()
@@ -27,12 +46,12 @@ module.exports = {
 // 	}).sort({"_id": -1}).skip(skip).limit(limit)
 // })
 // //后台管理删除一级评论
-// router.delete("/api/removeComments",confirmToken,(req,res)=>{
-// 	db.comment.remove({_id: {$in: req.query.id}},(err)=>{
+// router.delete("/api/removeComments",confirmToken,(ctx,res)=>{
+// 	db.comment.remove({_id: {$in: ctx.query.id}},(err)=>{
 // 		if(err){
 // 			res.status(500).end()
 // 		}else{
-// 			db.article.update({articleId: req.query.articleId},{$inc: {commentNum: -1}},(err,doc) =>{
+// 			db.article.update({articleId: ctx.query.articleId},{$inc: {commentNum: -1}},(err,doc) =>{
 // 				if(err){
 // 					res.status(500)
 // 				}
@@ -42,8 +61,8 @@ module.exports = {
 // 	})
 // })
 // //后台管理删除二级评论
-// router.patch("/api/reduceComments",confirmToken,(req,res) =>{
-// 	db.comment.update({"_id": req.body.mainId},{$pull: {"reply": {"_id": req.body.secondId}}},(err,doc) => {
+// router.patch("/api/reduceComments",confirmToken,(ctx,res) =>{
+// 	db.comment.update({"_id": ctx.body.mainId},{$pull: {"reply": {"_id": ctx.body.secondId}}},(err,doc) => {
 // 		if(err){
 // 			res.status(500).end()
 // 		}else{
@@ -51,38 +70,19 @@ module.exports = {
 // 		}
 // 	})
 // })	
-// router.post("/api/saveComment",(req,res) => {
-// 	new db.comment(req.body).save((err,doc) => {
-// 		if(err){
-// 			res.status(500).end()
-// 		}else{
-// 			res.json(doc)
-// 			db.article.update({articleId: req.body.articleId},{$inc: {commentNum: 1}},(err,doc) => {
-// 				if(err){
-// 					res.status(500).end()
-// 				}
-// 			})
-// 			new db.newMsg({
-// 				type: "comment",
-// 				name: req.body.name,
-// 				say: req.body.content,
-// 				content: req.body.name + "在" + localTime(Date.now()) + "评论了你的文章--" +  req.body.title
-// 			}).save()
-// 		}
-// 	})	
-// })
+
 // //前后端文章评论回复（二级评论）
-// router.patch("/api/addComment",(req,res) => {
+// router.patch("/api/addComment",(ctx,res) => {
 // 	let addInfo = {
-// 		name: req.body.name,
-// 		imgUrl: req.body.imgUrl,
-// 		email: req.body.email,
-// 		aite: req.body.aite,
-// 		content: req.body.content,
-// 		like: req.body.like,
-// 		date: req.body.date
+// 		name: ctx.body.name,
+// 		imgUrl: ctx.body.imgUrl,
+// 		email: ctx.body.email,
+// 		aite: ctx.body.aite,
+// 		content: ctx.body.content,
+// 		like: ctx.body.like,
+// 		date: ctx.body.date
 // 	}
-// 	db.comment.findByIdAndUpdate({_id: req.body._id},{$push: {reply: addInfo}},{new: true},(err,doc) => {
+// 	db.comment.findByIdAndUpdate({_id: ctx.body._id},{$push: {reply: addInfo}},{new: true},(err,doc) => {
 // 		if(err){
 // 			res.status(500).end()
 // 		}else{
@@ -90,10 +90,10 @@ module.exports = {
 // 		}
 // 	})
 // })
-// router.patch("/api/addLike",(req,res) => {
+// router.patch("/api/addLike",(ctx,res) => {
 // 	//是否为二级评论
-// 	if(req.body.repId){
-// 		db.comment.update({_id: req.body.revId,"reply._id": req.body.repId},{$inc: {"reply.$.like": req.body.addOrDel}},(err,doc) => {
+// 	if(ctx.body.repId){
+// 		db.comment.update({_id: ctx.body.revId,"reply._id": ctx.body.repId},{$inc: {"reply.$.like": ctx.body.addOrDel}},(err,doc) => {
 // 			if(err){
 // 				res.status(500).end()
 // 			}else{
@@ -101,7 +101,7 @@ module.exports = {
 // 			}
 // 		})
 // 	}else{
-// 		db.comment.update({_id: req.body.revId},{$inc: {"like": req.body.addOrDel}},(err,doc) => {
+// 		db.comment.update({_id: ctx.body.revId},{$inc: {"like": ctx.body.addOrDel}},(err,doc) => {
 // 			if(err){
 // 				res.status(500).end()
 // 			}else{
