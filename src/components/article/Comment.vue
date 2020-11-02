@@ -165,13 +165,13 @@ export default {
       getComments: 'GetComments',
       postComment: 'PostComment',
       addComment: 'AddComment',
-      addLike: 'addLike',
+      addLike: 'AddLike',
     }),
     ...mapMutations({
       set_user: 'SET_USER',
       handleMask: 'HANDLE_MASK',
       addLocalComments: 'ADD_LOCAL_COMMENTS',
-      addLocalCommentsLike: 'addLocalCommentsLike',
+      addLocalCommentsLike: 'ADD_LOCAL_COMMENTS_LIKE',
     }),
     // 退出登陆
     loginOut() {
@@ -319,18 +319,18 @@ export default {
       }
     },
     // 点赞
-    like: function (rev_id, rep_id) {
+    like(rev_id, rep_id) {
       if (rep_id) {
         this.handleLike(rev_id, rep_id, rep_id)
       } else {
         this.handleLike(rev_id, undefined, rev_id)
       }
     },
-    // 
-    handleLike: function (rev_id, rep_id, saveLocal) {
+    // 点赞
+    handleLike(rev_id, rep_id, saveLocal) {
       let that = this
-      //点赞
       if (this.hasLiked.indexOf(saveLocal) === -1) {
+        // 点赞
         this.addLike({
           revId: rev_id,
           repId: rep_id,
@@ -355,10 +355,12 @@ export default {
     },
   },
   mounted() {
+    // 从localStorage读取某文章的点赞
     let key = "articleId_comment" + this.$route.params.id
     if (localStorage.getItem(key)) {
       this.hasLiked = JSON.parse(localStorage.getItem(key))
     }
+    // 从服务端获取评论
     this.getComments({
       articleId: this.$route.params.id,
       cache: false

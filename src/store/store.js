@@ -203,6 +203,10 @@ const actions = {
     AddComment({ commit }, payload) {
         return api.patch("/api/addComment", payload)
     },
+    // 点赞
+    AddLike({ commit }, payload) {
+        return api.patch("/api/addLike", payload)
+    },
     // fetchBar({ commit }) {
     //     return fetchBar().then((data) => {
     //         commit('SET_BAR', data)
@@ -325,6 +329,27 @@ const mutations = {
             state.comments.forEach((item, index, arr) => {
                 if (item._id === info._id) {
                     state.comments.splice(index, 1, info.add)
+                    return
+                }
+            })
+        }
+    },
+    ADD_LOCAL_COMMENTS_LIKE(state, info) {
+        if (info.rep_id) {
+            state.comments.forEach((item, index, arr) => {
+                if (item._id === info.rev_id) {
+                    item.reply.forEach((_item, _index, _arr) => {
+                        if (_item._id === info.rep_id) {
+                            _item.like += info.type
+                            return
+                        }
+                    })
+                }
+            })
+        } else {
+            state.comments.forEach((item, index, arr) => {
+                if (item._id === info.rev_id) {
+                    item.like += info.type
                     return
                 }
             })
