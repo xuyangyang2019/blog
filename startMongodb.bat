@@ -1,0 +1,1 @@
+mongod --dbpath "d:/data/db" --logpath "d:/data/log/mongo.log" --auth
