@@ -72,20 +72,26 @@ module.exports = {
 			}
 		}
 	},
+	// 后台管理
+	'GET /getAdminComments': async (ctx, next) => {
+		let limit = 10
+		let skip = ctx.query.page * limit - limit
+		await db.comment
+			.find({}, (err, doc) => {
+				if (err) {
+					console.log(err)
+				} else {
+					ctx.body = doc
+				}
+			})
+			.sort({ "_id": -1 })
+			.skip(skip)
+			.limit(limit)
+	},
 }
 
 // //后台管理
-// router.get("/api/getAdminComments",confirmToken,(ctx,res) =>{
-// 	let limit = 10
-// 	let skip = ctx.query.page*limit - limit
-// 	db.comment.find({},(err,doc) =>{
-// 		if(err){
-// 			res.status(500).end()
-// 		}else{
-// 			res.json(doc)
-// 		}
-// 	}).sort({"_id": -1}).skip(skip).limit(limit)
-// })
+
 // //后台管理删除一级评论
 // router.delete("/api/removeComments",confirmToken,(ctx,res)=>{
 // 	db.comment.remove({_id: {$in: ctx.query.id}},(err)=>{

@@ -44,5 +44,13 @@ module.exports = {
 		let num = await db.msgBoard.count({}, (err, num) => { })
 		ctx.body = num
 	},
-
 }
+// router.get("/api/getCommentsCount", (req, res) => {
+// 	db.comment.count({}, (err, num) => {
+// 	  if (err) {
+// 		res.status(500).end()
+// 	  } else {
+// 		res.json(num)
+// 	  }
+// 	})
+//   })

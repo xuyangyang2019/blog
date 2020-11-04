@@ -188,15 +188,14 @@ module.exports = {
             console.log(error)
         }
     },
-    // router.get("/api/getAdminArticle", confirmToken, (ctx, res) => {
-    //     db.article.find(ctx.query, (err, doc) => {
-    //       if (err) {
-    //         res.status(500).end()
-    //       } else {
-    //         res.json(doc)
-    //       }
-    //     })
-    //   })
+    'GET /getAdminArticle': async (ctx, next) => {
+        let doc = await db.article.find(ctx.query, (err, doc) => { })
+        ctx.body = doc
+    },
+    'GET /getAdminArticle': async (ctx, next) => {
+        let doc = await db.article.find(ctx.query, (err, doc) => { })
+        ctx.body = doc
+    },
     //   //修改文章
     //   router.patch("/api/updata", confirmToken, (ctx, res) => {
     //     let r = ctx.body

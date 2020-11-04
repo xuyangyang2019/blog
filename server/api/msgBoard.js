@@ -29,10 +29,60 @@ module.exports = {
 			})
 			// 		new db.newMsg({
 			// 			type: "msgboard",
-			// 			name: req.body.name,
-			// 			say: req.body.content,
-			// 			content: req.body.name + "在" + localTime(Date.now()) + "给你留言啦~~"
+			// 			name: ctx.body.name,
+			// 			say: ctx.body.content,
+			// 			content: ctx.body.name + "在" + localTime(Date.now()) + "给你留言啦~~"
 			// 		}).save()
 		}
 	},
+	// admin获取留言
+	'GET /getAdminBoard': async (ctx, next) => {
+		// 后台留言板抓取
+		let limit = 10
+		let skip = ctx.query.page * limit - limit
+		let docs = await db.msgBoard
+			.find({})
+			.sort({ _id: -1 })
+			.skip(skip)
+			.limit(limit)
+		ctx.body = docs
+	},
 }
+
+// router.patch("/api/addReply", (ctx, res) => {
+// 	let reply = {
+// 		name: ctx.body.name,
+// 		imgUrl: ctx.body.imgUrl,
+// 		email: ctx.body.email,
+// 		content: ctx.body.content,
+// 		date: ctx.body.date,
+// 		aite: ctx.body.aite
+// 	}
+// 	db.msgBoard.findByIdAndUpdate({ "_id": ctx.body.id }, { $push: { reply: reply } }, { new: true }, (err, doc) => {
+// 		if (err) {
+// 			res.status(500).end()
+// 		} else {
+// 			res.json(doc)
+// 		}
+// 	})
+// })
+// // 后台管理删除二级留言
+// router.patch("/api/reduceLeavewords", confirmToken, (ctx, res) => {
+// 	db.msgBoard.update({ "_id": ctx.body.mainId }, { $pull: { "reply": { "_id": ctx.body.secondId } } }, (err, doc) => {
+// 		if (err) {
+// 			res.status(500).end()
+// 		} else {
+// 			res.json({ deleteCode: 200 })
+// 		}
+// 	})
+// })
+// router.delete("/api/removeLeavewords", confirmToken, (ctx, res) => {
+// 	//因为用到批量删除，所以删除项的_id均放到数组中
+// 	db.msgBoard.remove({ _id: { $in: ctx.query.id } }, (err) => {
+// 		if (err) {
+// 			res.status(500).end()
+// 		} else {
+// 			res.json({ deleteCode: 200 })
+// 		}
+// 	})
+// })
