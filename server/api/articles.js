@@ -2,9 +2,7 @@
 const db = require("../db/mongodb/db")
 // const api = require("../http/server-api")
 // const getIp = require("../utils/getIp")
-
 // const localTime = require("../utils/reviseTime")
-// const confirmToken = require("../middleware/confirmToken")
 
 module.exports = {
     // 获取推荐文章
@@ -161,5 +159,126 @@ module.exports = {
                 .limit(limit)
             ctx.body = articles_time
         }
-    }
+    },
+    // =========================== admin ================================
+    // 后台抓取文章
+    'GET /getAdminArticles': async (ctx, next) => {
+        let params = {}
+        let limit = 10
+        let skip = ctx.query.page * limit - limit
+        //抓取首页文章
+        if (!ctx.query.tag) {
+            params = {
+                publish: ctx.query.publish
+            }
+        } else {
+            params = {
+                publish: ctx.query.publish,
+                tag: ctx.query.tag
+            }
+        }
+        try {
+            let docs = await db.article
+                .find(params, { content: 0 })
+                .sort({ "_id": -1 })
+                .skip(skip)
+                .limit(limit)
+            ctx.body = docs
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    // router.get("/api/getAdminArticle", confirmToken, (ctx, res) => {
+    //     db.article.find(ctx.query, (err, doc) => {
+    //       if (err) {
+    //         res.status(500).end()
+    //       } else {
+    //         res.json(doc)
+    //       }
+    //     })
+    //   })
+    //   //修改文章
+    //   router.patch("/api/updata", confirmToken, (ctx, res) => {
+    //     let r = ctx.body
+    //     db.article.update({ articleId: ctx.body.articleId }, {
+    //       publish: r.publish,
+    //       original: r.original,
+    //       title: r.title,
+    //       abstract: r.abstract,
+    //       tag: r.tag,
+    //       content: r.content
+    //     }, (err, doc) => {
+    //       if (err) {
+    //         res.status(500).end()
+    //       } else {
+    //         res.json({ code: 200 })
+    //       }
+    //     })
+    //   })
+    //   //存储文章
+    //   router.post("/api/saveArticle", confirmToken, (ctx, res) => {
+    //     let r = ctx.body
+    //     let newArticle = new db.article({
+    //       articleId: 0,
+    //       original: r.original,
+    //       title: r.title,
+    //       abstract: r.abstract,
+    //       content: r.content,
+    //       tag: r.tag,
+    //       publish: r.publish,
+    //       date: r.date,
+    //       commentNum: 0,
+    //       likeNum: 0,
+    //       pv: 0
+    //     })
+    //     newArticle.save((err, doc) => {
+    //       if (err) {
+    //         res.json({ code: 500 })
+    //       } else {
+    //         res.json({ code: 200 })
+    //       }
+    //     })
+    //   })
+    //   //删除文章
+    //   router.delete("/api/deleteArticle", confirmToken, (ctx, res) => {
+    //     //$in是为了批量删除，出入的articleId是数组
+    //     db.article.remove({ articleId: { $in: ctx.query.articleId } }, (err) => {
+    //       if (err) {
+    //         res.status(500).end()
+    //       } else {
+    //         res.json({ deleteCode: 200 })
+    //         db.comment.remove({ articleId: { $in: ctx.query.articleId } }, (err) => {
+    //           if (err) {
+    //             console.log(err)
+    //           }
+    //         })
+    //       }
+    //     })
+    //   })
+    //   //后台管理搜索文章
+    //   router.get("/api/adminSearch", confirmToken, (ctx, res) => {
+    //     let limit = 10
+    //     let skip = ctx.query.page * limit - limit
+    //     //后台管理根据关键词搜索
+    //     if (ctx.query.according === "key") {
+    //       db.article.find({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } }, { content: 0 }, (err, doc) => {
+    //         if (err) {
+    //           res.status(500).end()
+    //         } else {
+    //           res.json(doc)
+    //         }
+    //       }).sort({ "_id": -1 }).skip(skip).limit(limit)
+    //       //后台管理根据时间范围搜索
+    //     } else {
+    //       let start = new Date(parseInt(ctx.query.start))
+    //       let end = new Date(parseInt(ctx.query.end))
+    //       db.article.find({ publish: ctx.query.publish, date: { "$gte": start, "$lte": end } }, { content: 0 }, (err, doc) => {
+    //         if (err) {
+    //           res.status(500).end()
+    //         } else {
+    //           res.json(doc)
+    //         }
+    //       }).sort({ "_id": -1 }).skip(skip).limit(limit)
+    //     }
+    //   })
 }
