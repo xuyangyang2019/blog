@@ -34,9 +34,12 @@ module.exports = function setupDevServer(app, uri, cb) {
     clientConfig.entry.app = ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true', clientConfig.entry.app]
     // 增加后台热更新
     clientConfig.output.filename = '[name].js'
+    clientConfig.optimization = {
+        noEmitOnErrors: true
+    }
     clientConfig.plugins.push(
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoEmitOnErrorsPlugin()
+        // new webpack.NoEmitOnErrorsPlugin()
     )
 
     // 创建webpack实例
@@ -52,19 +55,18 @@ module.exports = function setupDevServer(app, uri, cb) {
         },
     })
     app.use(convert(devMiddleware))
+
     // hot update
-    clientCompiler.plugin('done', stats => {
+    clientCompiler.hooks.done.tap('BuildStatsPlugin', stats => {
         const fs = devMiddleware.fileSystem
         stats = stats.toJson()
         stats.errors.forEach(err => console.error(err))
         stats.warnings.forEach(err => console.warn(err))
         if (stats.errors.length) return
-
         // clientManifest = JSON.parse(readFile(
         //     devMiddleware.fileSystem,
         //     'vue-ssr-client-manifest.json'
         // ))
-
         let filePath = path.join(clientConfig.output.path, 'index.ssr.html')
         if (fs.existsSync(filePath)) {
             // 读取内存模板
@@ -72,6 +74,7 @@ module.exports = function setupDevServer(app, uri, cb) {
         }
         update()
     })
+
     // hot middleware
     app.use(convert(webpackHotMiddleware(clientCompiler)))
     // app.use(require('webpack-hot-middleware')(clientCompiler, { heartbeat: 5000 }))
