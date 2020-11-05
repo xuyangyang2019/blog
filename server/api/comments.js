@@ -76,37 +76,35 @@ module.exports = {
 	'GET /getAdminComments': async (ctx, next) => {
 		let limit = 10
 		let skip = ctx.query.page * limit - limit
-		await db.comment
-			.find({}, (err, doc) => {
-				if (err) {
-					console.log(err)
-				} else {
-					ctx.body = doc
-				}
-			})
+		let docs = await db.comment
+			.find({})
 			.sort({ "_id": -1 })
 			.skip(skip)
 			.limit(limit)
+		if (docs.length) {
+			ctx.body = docs
+		}
+	},
+	// 后台管理删除一级评论
+	'DELETE /removeComments': async (ctx, next) => {
+		let result = await db.comment.remove({ _id: { $in: ctx.query.id } })
+		// // 更新文章的评论数
+		// db.article.update(
+		// 	{ articleId: ctx.query.articleId },
+		// 	{ $inc: { commentNum: -1 } },
+		// 	(err, doc) => {
+		// 		if (err) {
+		// 			ctx.status(500)
+		// 		}
+		// 	})
+		if (result.ok) {
+			ctx.body = { deleteCode: 200 }
+		}
 	},
 }
 
 // //后台管理
 
-// //后台管理删除一级评论
-// router.delete("/api/removeComments",confirmToken,(ctx,res)=>{
-// 	db.comment.remove({_id: {$in: ctx.query.id}},(err)=>{
-// 		if(err){
-// 			res.status(500).end()
-// 		}else{
-// 			db.article.update({articleId: ctx.query.articleId},{$inc: {commentNum: -1}},(err,doc) =>{
-// 				if(err){
-// 					res.status(500)
-// 				}
-// 			})
-// 			res.json({deleteCode: 200})
-// 		}
-// 	})
-// })
 // //后台管理删除二级评论
 // router.patch("/api/reduceComments",confirmToken,(ctx,res) =>{
 // 	db.comment.update({"_id": ctx.body.mainId},{$pull: {"reply": {"_id": ctx.body.secondId}}},(err,doc) => {
