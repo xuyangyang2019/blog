@@ -44,13 +44,9 @@ module.exports = {
 		let num = await db.msgBoard.count({}, (err, num) => { })
 		ctx.body = num
 	},
+	// 获取评论数量
+	'GET /getCommentsCount': async (ctx, next) => {
+		let num = await db.comment.count({})
+		ctx.body = num
+	},
 }
-// router.get("/api/getCommentsCount", (req, res) => {
-// 	db.comment.count({}, (err, num) => {
-// 	  if (err) {
-// 		res.status(500).end()
-// 	  } else {
-// 		res.json(num)
-// 	  }
-// 	})
-//   })
