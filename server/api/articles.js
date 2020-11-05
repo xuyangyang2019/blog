@@ -1,5 +1,7 @@
 // mongodb
 const db = require("../db/mongodb/db")
+const confirmToken = require("../middlewares/confirmToken")
+
 // const api = require("../http/server-api")
 // const getIp = require("../utils/getIp")
 // const localTime = require("../utils/reviseTime")
@@ -163,6 +165,7 @@ module.exports = {
     // =========================== admin ================================
     // 后台抓取文章
     'GET /getAdminArticles': async (ctx, next) => {
+        confirmToken(ctx, next)
         let params = {}
         let limit = 10
         let skip = ctx.query.page * limit - limit
@@ -189,10 +192,12 @@ module.exports = {
         }
     },
     'GET /getAdminArticle': async (ctx, next) => {
+        confirmToken(ctx, next)
         let doc = await db.article.find(ctx.query, (err, doc) => { })
         ctx.body = doc
     },
     'GET /getAdminArticle': async (ctx, next) => {
+        confirmToken(ctx, next)
         let doc = await db.article.find(ctx.query, (err, doc) => { })
         ctx.body = doc
     },

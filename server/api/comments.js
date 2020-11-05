@@ -1,6 +1,6 @@
 const db = require("../db/mongodb/db")
 // const localTime = require("../utils/reviseTime")
-// const confirmToken = require("../middleware/confirmToken")
+const confirmToken = require("../middlewares/confirmToken")
 
 
 module.exports = {
@@ -74,6 +74,7 @@ module.exports = {
 	},
 	// 后台管理
 	'GET /getAdminComments': async (ctx, next) => {
+		confirmToken(ctx, next)
 		let limit = 10
 		let skip = ctx.query.page * limit - limit
 		let docs = await db.comment
@@ -87,6 +88,7 @@ module.exports = {
 	},
 	// 后台管理删除一级评论
 	'DELETE /removeComments': async (ctx, next) => {
+		confirmToken(ctx, next)
 		let result = await db.comment.remove({ _id: { $in: ctx.query.id } })
 		// // 更新文章的评论数
 		// db.article.update(
@@ -103,11 +105,10 @@ module.exports = {
 	},
 	// 后台管理删除二级评论
 	'PATCH /reduceComments': async (ctx, next) => {
-		// router.patch("/api/reduceComments",confirmToken,(ctx,res) =>{
+		confirmToken(ctx, next)
 		let result = await db.comment.update(
 			{ "_id": ctx.request.body.mainId },
 			{ $pull: { "reply": { "_id": ctx.request.body.secondId } } })
-		console.log(result)
 		if (result) {
 			ctx.body = { deleteCode: 200 }
 		}

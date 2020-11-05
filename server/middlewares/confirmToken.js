@@ -10,6 +10,7 @@ const confirmToken = (ctx, next) => {
 			if (err) {
 				ctx.body = { code: 401 }
 			} else {
+				console.log('token验证通过')
 				next()
 			}
 		})

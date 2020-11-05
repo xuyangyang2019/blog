@@ -1,7 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const confirmToken = require("../middlewares/confirmToken")
-
 
 /**
  * 绑定路由
@@ -12,12 +10,7 @@ function addMapping(router, mapping) {
   for (const url in mapping) {
     if (url.startsWith('GET ')) {
       let path = url.substring(4)
-      // 权限校验
-      if (path.indexOf('getAdmin') === 0) {
-        router.get(path, confirmToken, mapping[url])
-      } else {
-        router.get(path, mapping[url])
-      }
+      router.get(path, mapping[url])
     } else if (url.startsWith('POST ')) {
       let path = url.substring(5)
       router.post(path, mapping[url])
