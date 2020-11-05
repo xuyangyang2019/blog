@@ -101,20 +101,15 @@ module.exports = {
 			ctx.body = { deleteCode: 200 }
 		}
 	},
+	// 后台管理删除二级评论
+	'PATCH /reduceComments': async (ctx, next) => {
+		// router.patch("/api/reduceComments",confirmToken,(ctx,res) =>{
+		let result = await db.comment.update(
+			{ "_id": ctx.request.body.mainId },
+			{ $pull: { "reply": { "_id": ctx.request.body.secondId } } })
+		console.log(result)
+		if (result) {
+			ctx.body = { deleteCode: 200 }
+		}
+	},
 }
-
-// //后台管理
-
-// //后台管理删除二级评论
-// router.patch("/api/reduceComments",confirmToken,(ctx,res) =>{
-// 	db.comment.update({"_id": ctx.body.mainId},{$pull: {"reply": {"_id": ctx.body.secondId}}},(err,doc) => {
-// 		if(err){
-// 			res.status(500).end()
-// 		}else{
-// 			res.json({deleteCode: 200})
-// 		}
-// 	})
-// })	
-
-
-// module.exports = router
