@@ -49,10 +49,20 @@ module.exports = {
 	},
 	// 删除指定的留言
 	'DELETE /removeLeavewords': async (ctx, next) => {
-		// 因为用到批量删除，所以删除项的_id均放到数组中
 		confirmToken(ctx, next)
+		// 因为用到批量删除，所以删除项的_id均放到数组中
 		let result = await db.msgBoard.remove({ _id: { $in: ctx.query.id } })
 		if (result.ok) {
+			ctx.body = { deleteCode: 200 }
+		}
+	},
+	// 后台管理删除二级留言
+	'PATCH /reduceLeavewords': async (ctx, next) => {
+		confirmToken(ctx, next)
+		let result = await db.msgBoard.update(
+			{ "_id": ctx.request.body.mainId },
+			{ $pull: { "reply": { "_id": ctx.request.body.secondId } } })
+		if (result) {
 			ctx.body = { deleteCode: 200 }
 		}
 	},
@@ -72,16 +82,6 @@ module.exports = {
 // 			res.status(500).end()
 // 		} else {
 // 			res.json(doc)
-// 		}
-// 	})
-// })
-// // 后台管理删除二级留言
-// router.patch("/api/reduceLeavewords", confirmToken, (ctx, res) => {
-// 	db.msgBoard.update({ "_id": ctx.body.mainId }, { $pull: { "reply": { "_id": ctx.body.secondId } } }, (err, doc) => {
-// 		if (err) {
-// 			res.status(500).end()
-// 		} else {
-// 			res.json({ deleteCode: 200 })
 // 		}
 // 	})
 // })
