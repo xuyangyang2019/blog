@@ -52,10 +52,12 @@
               <pre><div class="board-content-s" v-html="item.content"></div></pre>
               <div class="board-content-details">
                 <span class="icon-clock"></span>
-                <span class="board-content-details-time">{{ item.date | reviseTime }}</span>
+                <span class="board-content-details-time" v-text="$options.filters.reviseTime(item.date)"></span>
+                <!-- <span class="board-content-details-time">{{ item.date | reviseTime }}</span> -->
               </div>
             </div>
           </div>
+          <!-- admin 回复 -->
           <div class="admin-reply">
             <ul v-if="item.reply.length !== 0">
               <li v-for="rep in item.reply" class="board-reply-item">
@@ -240,7 +242,7 @@ export default {
         })
       }
     },
-    // 回复
+    // 回复留言
     reply(_id, name) {
       this.replyInfo = {
         _id: _id,
