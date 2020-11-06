@@ -66,23 +66,22 @@ module.exports = {
 			ctx.body = { deleteCode: 200 }
 		}
 	},
+	// 回复留言
+	'PATCH /addReply': async (ctx, next) => {
+		let reply = {
+			name: ctx.request.body.name,
+			imgUrl: ctx.request.body.imgUrl,
+			email: ctx.request.body.email,
+			content: ctx.request.body.content,
+			date: ctx.request.body.date,
+			aite: ctx.request.body.aite
+		}
+		let doc = await db.msgBoard.findByIdAndUpdate(
+			{ "_id": ctx.request.body.id },
+			{ $push: { reply: reply } },
+			{ new: true })
+		if (doc._id) {
+			ctx.body = doc
+		}
+	}
 }
-
-// router.patch("/api/addReply", (ctx, res) => {
-// 	let reply = {
-// 		name: ctx.body.name,
-// 		imgUrl: ctx.body.imgUrl,
-// 		email: ctx.body.email,
-// 		content: ctx.body.content,
-// 		date: ctx.body.date,
-// 		aite: ctx.body.aite
-// 	}
-// 	db.msgBoard.findByIdAndUpdate({ "_id": ctx.body.id }, { $push: { reply: reply } }, { new: true }, (err, doc) => {
-// 		if (err) {
-// 			res.status(500).end()
-// 		} else {
-// 			res.json(doc)
-// 		}
-// 	})
-// })
-
