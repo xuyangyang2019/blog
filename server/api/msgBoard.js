@@ -1,6 +1,6 @@
 const db = require("../db/mongodb/db")
 const localTime = require("../utils/reviseTime")
-// const confirmToken = require("../middleware/confirmToken")
+const confirmToken = require("../middlewares/confirmToken")
 
 module.exports = {
 	// 获取留言
@@ -47,6 +47,15 @@ module.exports = {
 			.limit(limit)
 		ctx.body = docs
 	},
+	// 删除指定的留言
+	'DELETE /removeLeavewords': async (ctx, next) => {
+		// 因为用到批量删除，所以删除项的_id均放到数组中
+		confirmToken(ctx, next)
+		let result = await db.msgBoard.remove({ _id: { $in: ctx.query.id } })
+		if (result.ok) {
+			ctx.body = { deleteCode: 200 }
+		}
+	},
 }
 
 // router.patch("/api/addReply", (ctx, res) => {
@@ -76,13 +85,4 @@ module.exports = {
 // 		}
 // 	})
 // })
-// router.delete("/api/removeLeavewords", confirmToken, (ctx, res) => {
-// 	//因为用到批量删除，所以删除项的_id均放到数组中
-// 	db.msgBoard.remove({ _id: { $in: ctx.query.id } }, (err) => {
-// 		if (err) {
-// 			res.status(500).end()
-// 		} else {
-// 			res.json({ deleteCode: 200 })
-// 		}
-// 	})
-// })
+
