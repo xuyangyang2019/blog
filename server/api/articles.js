@@ -218,10 +218,16 @@ module.exports = {
             ctx.body = { code: 200 }
         }
         // let result = await new db.article(newArticle).save()
-        // console.log(result)
-        // if (result) {
-        //     ctx.body = { code: 200 }
-        // }
+    },
+    // 删除文章
+    'DELETE /deleteArticle': async (ctx, next) => {
+        confirmToken(ctx, next)
+        //$in是为了批量删除，出入的articleId是数组
+        let result = await db.article.remove({ articleId: { $in: ctx.query.articleId } })
+        if (result.ok) {
+            ctx.body = { deleteCode: 200 }
+            db.comment.remove({ articleId: { $in: ctx.query.articleId } })
+        }
     },
     //   //修改文章
     //   router.patch("/api/updata", confirmToken, (ctx, res) => {
@@ -242,22 +248,7 @@ module.exports = {
     //     })
     //   })
 
-    //   //删除文章
-    //   router.delete("/api/deleteArticle", confirmToken, (ctx, res) => {
-    //     //$in是为了批量删除，出入的articleId是数组
-    //     db.article.remove({ articleId: { $in: ctx.query.articleId } }, (err) => {
-    //       if (err) {
-    //         res.status(500).end()
-    //       } else {
-    //         res.json({ deleteCode: 200 })
-    //         db.comment.remove({ articleId: { $in: ctx.query.articleId } }, (err) => {
-    //           if (err) {
-    //             console.log(err)
-    //           }
-    //         })
-    //       }
-    //     })
-    //   })
+
     //   //后台管理搜索文章
     //   router.get("/api/adminSearch", confirmToken, (ctx, res) => {
     //     let limit = 10
