@@ -4,17 +4,12 @@ const jwt = require("jsonwebtoken")
 const secret = require("../secret")
 const db = require("../db/mongodb/db")
 const localTime = require("../utils/reviseTime")
-// const confirmToken = require("../middlewares/confirmToken")
+const confirmToken = require("../middlewares/confirmToken")
 
 // 创建token
 const createToken = (id, name) => {
 	return jwt.sign({ id: id, user: name }, secret.jwtSecret, { expiresIn: "10h" })
 }
-
-// //路由闯入编辑器页面进行token验证
-// router.get("/api/confirmToken", confirmToken, (ctx, res) => {
-// 	res.status(200).end()
-// })
 
 module.exports = {
 	// 后端登陆
@@ -55,5 +50,10 @@ module.exports = {
 			ctx.body = { code: 401 }
 		}
 	},
+	// 路由闯入编辑器页面进行token验证
+	'GET /confirmToken': async (ctx, next) => {
+		confirmToken(ctx, next)
+		ctx.state = 200
+	}
 
 }
