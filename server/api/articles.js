@@ -196,10 +196,32 @@ module.exports = {
         let doc = await db.article.find(ctx.query, (err, doc) => { })
         ctx.body = doc
     },
-    'GET /getAdminArticle': async (ctx, next) => {
+    // 存储文章
+    'POST /saveArticle': async (ctx, next) => {
         confirmToken(ctx, next)
-        let doc = await db.article.find(ctx.query, (err, doc) => { })
-        ctx.body = doc
+        let r = ctx.request.body
+        let newArticle = {
+            articleId: 0,
+            original: r.original,
+            title: r.title,
+            abstract: r.abstract,
+            content: r.content,
+            tag: r.tag,
+            publish: r.publish,
+            date: r.date,
+            commentNum: 0,
+            likeNum: 0,
+            pv: 0
+        }
+        let newDoc = await db.article.create(newArticle)
+        if (newDoc._id) {
+            ctx.body = { code: 200 }
+        }
+        // let result = await new db.article(newArticle).save()
+        // console.log(result)
+        // if (result) {
+        //     ctx.body = { code: 200 }
+        // }
     },
     //   //修改文章
     //   router.patch("/api/updata", confirmToken, (ctx, res) => {
@@ -219,30 +241,7 @@ module.exports = {
     //       }
     //     })
     //   })
-    //   //存储文章
-    //   router.post("/api/saveArticle", confirmToken, (ctx, res) => {
-    //     let r = ctx.body
-    //     let newArticle = new db.article({
-    //       articleId: 0,
-    //       original: r.original,
-    //       title: r.title,
-    //       abstract: r.abstract,
-    //       content: r.content,
-    //       tag: r.tag,
-    //       publish: r.publish,
-    //       date: r.date,
-    //       commentNum: 0,
-    //       likeNum: 0,
-    //       pv: 0
-    //     })
-    //     newArticle.save((err, doc) => {
-    //       if (err) {
-    //         res.json({ code: 500 })
-    //       } else {
-    //         res.json({ code: 200 })
-    //       }
-    //     })
-    //   })
+
     //   //删除文章
     //   router.delete("/api/deleteArticle", confirmToken, (ctx, res) => {
     //     //$in是为了批量删除，出入的articleId是数组
