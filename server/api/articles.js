@@ -141,25 +141,23 @@ module.exports = {
             let docs = await db.article
                 .find(
                     { publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } },
-                    { content: 0 },
-                    (err, doc) => { })
+                    { content: 0 })
                 .sort({ "_id": -1 })
                 .skip(skip)
                 .limit(limit)
             ctx.body = docs
         } else {
-            //前台时间轴根据时间范围搜索
+            // 前台时间轴根据时间范围搜索
             let start = new Date(parseInt(ctx.query.start))
             let end = new Date(parseInt(ctx.query.end))
-            let articles_time = await db.article
+            let docs = await db.article
                 .find(
                     { publish: ctx.query.publish, date: { "$gte": start, "$lte": end } },
-                    { content: 0 },
-                    (err, doc) => { })
+                    { content: 0 })
                 .sort({ "_id": -1 })
                 .skip(skip)
                 .limit(limit)
-            ctx.body = articles_time
+            ctx.body = docs
         }
     },
     // =========================== admin ================================
@@ -247,33 +245,37 @@ module.exports = {
             ctx.body = { code: 200 }
         }
     },
-
-
-
-    //   //后台管理搜索文章
-    //   router.get("/api/adminSearch", confirmToken, (ctx, res) => {
-    //     let limit = 10
-    //     let skip = ctx.query.page * limit - limit
-    //     //后台管理根据关键词搜索
-    //     if (ctx.query.according === "key") {
-    //       db.article.find({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } }, { content: 0 }, (err, doc) => {
-    //         if (err) {
-    //           res.status(500).end()
-    //         } else {
-    //           res.json(doc)
-    //         }
-    //       }).sort({ "_id": -1 }).skip(skip).limit(limit)
-    //       //后台管理根据时间范围搜索
-    //     } else {
-    //       let start = new Date(parseInt(ctx.query.start))
-    //       let end = new Date(parseInt(ctx.query.end))
-    //       db.article.find({ publish: ctx.query.publish, date: { "$gte": start, "$lte": end } }, { content: 0 }, (err, doc) => {
-    //         if (err) {
-    //           res.status(500).end()
-    //         } else {
-    //           res.json(doc)
-    //         }
-    //       }).sort({ "_id": -1 }).skip(skip).limit(limit)
-    //     }
-    //   })
+    // 后台管理搜索文章
+    'GET /adminSearch': async (ctx, next) => {
+        confirmToken(ctx, next)
+        let limit = 10
+        let skip = ctx.query.page * limit - limit
+        if (ctx.query.according === "key") {
+            // 后台管理根据关键词搜索
+            let docs = await db.article
+                .find(
+                    { publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } },
+                    { content: 0 })
+                .sort({ "_id": -1 })
+                .skip(skip)
+                .limit(limit)
+            if (docs) {
+                ctx.body = docs
+            }
+        } else {
+            // 后台管理根据时间范围搜索
+            let start = new Date(parseInt(ctx.query.start))
+            let end = new Date(parseInt(ctx.query.end))
+            let docs = await db.article
+                .find(
+                    { publish: ctx.query.publish, date: { "$gte": start, "$lte": end } },
+                    { content: 0 })
+                .sort({ "_id": -1 })
+                .skip(skip)
+                .limit(limit)
+            if (docs) {
+                ctx.body = docs
+            }
+        }
+    },
 }
