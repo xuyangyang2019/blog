@@ -69,11 +69,11 @@ function createRouter() {
             component: () => import(/* webpackChunkName: "msgboard" */ '../views/MsgBoard.vue') // 异步路由
         },
         // 搜索
-        // {
-        //     path: "/search/:searchKey",
-        //     name: "search",
-        //     component: search
-        // },
+        {
+            path: "/search/:searchKey",
+            name: "search",
+            component: () => import(/* webpackChunkName: "msgboard" */ '../components/base/Search.vue') // 异步路由
+        },
         // 时间轴
         {
             path: "/timeLine/:time",
