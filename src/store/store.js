@@ -149,6 +149,15 @@ const actions = {
         //     return data
         // })
     },
+    SearchArticles({ commit }, payload) {
+        return api.get("/api/search", payload)
+        // return api.get("/api/search", payload).then((data) => {
+        //     console.log(data)
+        //     commit("SET_ARTICLES_SEARCH", data)
+        //     commit("PRODUCT_BG", data)
+        //     return data
+        // })
+    },
     // 查询用户名是否存在
     SearchUser({ commit }, payload) {
         return api.get("/api/searchUser", payload)
@@ -255,6 +264,9 @@ const mutations = {
     },
     SET_ARTICLES_TECH(state, data) {
         state.articles.technical = data
+    },
+    SET_ARTICLES_SEARCH(state, data) {
+        state.articles.search = data
     },
     PRODUCT_BG(state, data) {
         state.tagBg = []
