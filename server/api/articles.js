@@ -229,24 +229,25 @@ module.exports = {
             db.comment.remove({ articleId: { $in: ctx.query.articleId } })
         }
     },
-    //   //修改文章
-    //   router.patch("/api/updata", confirmToken, (ctx, res) => {
-    //     let r = ctx.body
-    //     db.article.update({ articleId: ctx.body.articleId }, {
-    //       publish: r.publish,
-    //       original: r.original,
-    //       title: r.title,
-    //       abstract: r.abstract,
-    //       tag: r.tag,
-    //       content: r.content
-    //     }, (err, doc) => {
-    //       if (err) {
-    //         res.status(500).end()
-    //       } else {
-    //         res.json({ code: 200 })
-    //       }
-    //     })
-    //   })
+    // 修改文章
+    'PATCH /updata': async (ctx, next) => {
+        confirmToken(ctx, next)
+        let r = ctx.request.body
+        let result = await db.article.update(
+            { articleId: r.articleId },
+            {
+                publish: r.publish,
+                original: r.original,
+                title: r.title,
+                abstract: r.abstract,
+                tag: r.tag,
+                content: r.content
+            })
+        if (result) {
+            ctx.body = { code: 200 }
+        }
+    },
+
 
 
     //   //后台管理搜索文章
