@@ -29,8 +29,8 @@
           </li>
         </ul>
         <div class="search">
-          <input type="text" placeholder="请输入关键词" v-model="searchKey" @keyup.enter="search" />
-          <span class="icon-search search-article" @click="search"></span>
+          <input type="text" placeholder="请输入关键词" v-model="searchKey" @keyup.enter="searchArticle" />
+          <span class="icon-search search-article" @click="searchArticle"></span>
         </div>
       </div>
     </nav>
@@ -77,14 +77,13 @@ export default {
       this.show = !this.show;
     },
     // 搜索
-    search() {
-      console.log('搜索待实现实现')
-      // if (!this.searchKey.length) {
-      //   return
-      // } else {
-      //   this.active = -1
-      //   this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
-      // }
+    searchArticle() {
+      // 去除前后的空格
+      this.searchKey = this.searchKey.replace(/(^\s*)|(\s*$)/g, "")
+      if(this.searchKey.length){
+          // this.active = -1
+          this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
+      }
     },
     // 平缓滑动到top
     callback() {
@@ -142,7 +141,9 @@ export default {
   background: rgba(0, 0, 0, 0.9);
   /*background: rgba(2,61,105,.8);*/
   transition: all ease 0.5s;
-  transform: translateZ(0px); /*开启GPU硬件加速，提高性能和流畅的动画效果,否则其他元素有css动画时，fixed的nav有异常抖动*/
+  transform: translateZ(
+    0px
+  ); /*开启GPU硬件加速，提高性能和流畅的动画效果,否则其他元素有css动画时，fixed的nav有异常抖动*/
   li {
     list-style: none;
   }
