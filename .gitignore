@@ -10,4 +10,4 @@ server/config/mpapp.js
 yarn-error.log
 uploads/
 *.log
-server/dbData/
+server/dbBackUp/
