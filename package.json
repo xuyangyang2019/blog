@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server/server.js",
+    "dev": "cross-env NODE_ENV=development nodemon server/server.js -i ./server/dbBackUp/",
     "start": "cross-env NODE_ENV=production nodemon server/server.js",
     "build": "rimraf dist && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.config.js --progress --hide-modules",
