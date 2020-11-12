@@ -25,6 +25,7 @@
     "koa-jsonp": "^2.0.2",
     "koa-logger": "^3.2.1",
     "koa-router": "^7.4.0",
+    "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",
     "md5": "^2.3.0",
     "moment": "^2.29.1",
