@@ -35,7 +35,7 @@ module.exports = {
       archive.pipe(output)
       // 压缩包里添加文件夹
       archive.directory(path.join(__dirname, '../dbBackUp/dbCopy/admin'), "/admin")
-      archive.finalize()
+      await archive.finalize()
       ctx.body = { code: 200 }
     } catch (error) {
       console.log(error)
