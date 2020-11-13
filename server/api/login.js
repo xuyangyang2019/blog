@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken")
 
 const secret = require("../secret")
 const db = require("../db/mongodb/db")
+const APIError = require('../middlewares/rest').APIError
 const localTime = require("../utils/reviseTime")
 const confirmToken = require("../middlewares/confirmToken")
 
@@ -14,6 +15,12 @@ const createToken = (id, name) => {
 module.exports = {
 	// 后端登陆
 	'POST /login': async (ctx, next) => {
+		// user = processLogin(username, password);
+		// if (user != null) {
+		// 	ctx.rest(user);
+		// } else {
+		// 	throw new APIError('auth:user_not_found', 'user not found');
+		// }
 		let doc = await db.user.findOne({ user: ctx.request.body.user })
 		if (doc && doc._id && doc.salt) {
 			// 如果有用户且密码正确 返回token
@@ -40,14 +47,15 @@ module.exports = {
 					lastLogin: lastTime,
 					token: token
 				})
-
 			} else {
 				// 如果密码不对 返回401
 				ctx.rest({ code: 401 })
+				// throw new APIError('auth:user_not_found', 'user not found');
 			}
 		} else {
 			// 如果查不到用户名 返回401
 			ctx.rest({ code: 401 })
+			// throw new APIError('auth:user_not_found', 'user not found');
 		}
 	},
 	// 路由闯入编辑器页面进行token验证
@@ -55,5 +63,4 @@ module.exports = {
 		confirmToken(ctx, next)
 		ctx.state = 200
 	}
-
 }
