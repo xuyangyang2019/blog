@@ -84,6 +84,7 @@ backendApp.use(KoaCompress)
 
 // **************第二个middleware处理静态文件********************************
 backendApp.use(Koa_Static(resolve('dist'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+backendApp.use(Koa_Static(resolve('dist-admin'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
 backendApp.use(Koa_Static(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
 
 // 原生实现
@@ -264,15 +265,10 @@ router.get(["/", "/home", "/article", "/article/:articleList", "/article/:articl
 
 //后端请求
 router.get(["/admin", "/admin/*", "/login"], async (ctx, next) => {
-    ctx.response.body = '<h5>admin</h5>';
-    // fs.readFile('../admin/dist/admin.html', 'utf-8', function (err, data) {
-    //     if (err) {
-    //         console.log(err);
-    //     } else {
-    //         // console.log(data);
-    //         res.end(data)
-    //     }
-    // });
+    let html = fs.readFileSync(path.join(__dirname, '../dist-admin/index.html'), 'utf-8')
+    console.log(html)
+    // ctx.response.body = html
+    ctx.body = html
     // res.render("admin.html",{title: "登录"})
 })
 
