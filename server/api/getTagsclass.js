@@ -26,6 +26,6 @@ module.exports = {
 				})
 			}
 		}
-		ctx.body = tagArr
+		ctx.rest(tagArr)
 	}
 }

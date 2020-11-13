@@ -37,16 +37,16 @@ module.exports = {
 				// }
 			})
 		}
-		ctx.body = num
+		ctx.rest(num)
 	},
 	// 获取留言数量
 	'GET /getMsgCount': async (ctx, next) => {
 		let num = await db.msgBoard.count({}, (err, num) => { })
-		ctx.body = num
+		ctx.rest(num)
 	},
 	// 获取评论数量
 	'GET /getCommentsCount': async (ctx, next) => {
 		let num = await db.comment.count({})
-		ctx.body = num
+		ctx.rest(num)
 	},
 }

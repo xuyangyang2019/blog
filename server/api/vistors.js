@@ -7,31 +7,22 @@ module.exports = {
 	'GET /searchUser': async (ctx, next) => {
 		let doc = await db.vistor.find({ "name": ctx.query.name }, (err, doc) => { })
 		if (doc.length) {
-			ctx.body = { exist: "yes" }
+			ctx.rest({ exist: "yes" })
 		} else {
-			ctx.body = { exist: "no" }
+			ctx.rest({ exist: "no" })
 		}
 	},
 	// 保存新的用户
 	'POST /saveDesignUser': async (ctx, next) => {
 		let document = await db.vistor.create(ctx.request.body)
 		if (document._id) {
-			ctx.body = { code: 200 }
+			ctx.rest({ code: 200 })
 		} else {
-			ctx.body = { code: 500 }
+			ctx.rest({ code: 500 })
 		}
 	}
 }
 
-// router.post("/api/saveDesignUser",(req,res) => {
-// 	new db.vistor(req.body).save((err,doc) => {
-// 		if(err){
-// 			res.status(500).end()
-// 		}else{
-// 			res.json({code: 200})
-// 		}
-// 	})
-// })
 // //github登录	
 // router.get("/api/getGithub",(req,res) => {
 // 	db.vistor.find({githubID: req.query.id},(err,doc) => {

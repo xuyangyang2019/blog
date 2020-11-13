@@ -33,21 +33,21 @@ module.exports = {
 						}
 					})
 				// 返回
-				ctx.body = {
+				ctx.rest({
 					code: 200,
 					id: doc._id,
 					name: doc.user,
 					lastLogin: lastTime,
 					token: token
-				}
+				})
 
 			} else {
 				// 如果密码不对 返回401
-				ctx.body = { code: 401 }
+				ctx.rest({ code: 401 })
 			}
 		} else {
 			// 如果查不到用户名 返回401
-			ctx.body = { code: 401 }
+			ctx.rest({ code: 401 })
 		}
 	},
 	// 路由闯入编辑器页面进行token验证

@@ -12,14 +12,14 @@ module.exports = {
 			.sort({ _id: -1 })
 			.skip(skip)
 			.limit(limit)
-		ctx.body = docs
+		ctx.rest(docs)
 	},
 	// 保存留言
 	'POST /saveLeaveW': async (ctx, next) => {
 		let doc = ctx.request.body
 		let result = await db.msgBoard.create(doc)
 		if (result._id) {
-			ctx.body = result
+			ctx.rest(result)
 			// 保存到新消息 提醒后台
 			db.newMsg.create({
 				type: "msgboard",
@@ -45,7 +45,7 @@ module.exports = {
 			.sort({ _id: -1 })
 			.skip(skip)
 			.limit(limit)
-		ctx.body = docs
+		ctx.rest(docs)
 	},
 	// 删除指定的留言
 	'DELETE /removeLeavewords': async (ctx, next) => {
@@ -53,7 +53,7 @@ module.exports = {
 		// 因为用到批量删除，所以删除项的_id均放到数组中
 		let result = await db.msgBoard.remove({ _id: { $in: ctx.query.id } })
 		if (result.ok) {
-			ctx.body = { deleteCode: 200 }
+			ctx.rest({ deleteCode: 200 })
 		}
 	},
 	// 后台管理删除二级留言
@@ -63,7 +63,7 @@ module.exports = {
 			{ "_id": ctx.request.body.mainId },
 			{ $pull: { "reply": { "_id": ctx.request.body.secondId } } })
 		if (result) {
-			ctx.body = { deleteCode: 200 }
+			ctx.rest({ deleteCode: 200 })
 		}
 	},
 	// 回复留言
@@ -81,7 +81,7 @@ module.exports = {
 			{ $push: { reply: reply } },
 			{ new: true })
 		if (doc._id) {
-			ctx.body = doc
+			ctx.rest(doc)
 		}
 	}
 }

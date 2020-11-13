@@ -18,7 +18,7 @@ module.exports = {
                     console.log(err)
                 }
             }).limit(5)
-        ctx.body = hot
+        ctx.rest(hot)
     },
     // 抓取文章列表
     'GET /getArticles': async (ctx, next) => {
@@ -40,7 +40,7 @@ module.exports = {
             .sort({ "_id": -1 })
             .skip(skip)
             .limit(limit)
-        ctx.body = articles
+        ctx.rest(articles)
     },
     // 抓取单一文章
     'GET /onlyArticle': async (ctx, next) => {
@@ -64,9 +64,9 @@ module.exports = {
             }
         })
         if (doc.length === 0) {
-            ctx.body = [{ title: "您访问的路径不存在" }]
+            ctx.rest([{ title: "您访问的路径不存在" }])
         } else {
-            ctx.body = doc
+            ctx.rest(doc)
             // 更新文章的点击数
             db.article.update(
                 { "articleId": ctx.query.articleId },
@@ -102,7 +102,7 @@ module.exports = {
                 { publish: true, date: { "$gt": ctx.query.date } },
                 { articleId: 1, title: 1, tag: 1 }, (err, doc2) => { })
             .limit(1)
-        ctx.body = { pre: doc1, next: doc2 }
+        ctx.rest({ pre: doc1, next: doc2 })
     },
     // 更新文章的喜欢字段
     'PATCH /loveArticle': async (ctx, next) => {
@@ -112,7 +112,7 @@ module.exports = {
             { $inc: { likeNum: ctx.request.body.num } },
             (err, doc) => { })
         if (result.ok) {
-            ctx.body = { code: 200 }
+            ctx.rest({ code: 200 })
             // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx) }).then((data) => {
             //     // 将点赞加入到新消息
             //     if (ctx.body.num === "1") {
@@ -145,7 +145,7 @@ module.exports = {
                 .sort({ "_id": -1 })
                 .skip(skip)
                 .limit(limit)
-            ctx.body = docs
+            ctx.rest(docs)
         } else {
             // 前台时间轴根据时间范围搜索
             let start = new Date(parseInt(ctx.query.start))
@@ -157,7 +157,7 @@ module.exports = {
                 .sort({ "_id": -1 })
                 .skip(skip)
                 .limit(limit)
-            ctx.body = docs
+            ctx.rest(docs)
         }
     },
     // =========================== admin ================================
@@ -184,7 +184,7 @@ module.exports = {
                 .sort({ "_id": -1 })
                 .skip(skip)
                 .limit(limit)
-            ctx.body = docs
+            ctx.rest(docs)
         } catch (error) {
             console.log(error)
         }
@@ -192,7 +192,7 @@ module.exports = {
     'GET /getAdminArticle': async (ctx, next) => {
         confirmToken(ctx, next)
         let doc = await db.article.find(ctx.query, (err, doc) => { })
-        ctx.body = doc
+        ctx.rest(doc)
     },
     // 存储文章
     'POST /saveArticle': async (ctx, next) => {
@@ -213,7 +213,7 @@ module.exports = {
         }
         let newDoc = await db.article.create(newArticle)
         if (newDoc._id) {
-            ctx.body = { code: 200 }
+            ctx.rest({ code: 200 })
         }
         // let result = await new db.article(newArticle).save()
     },
@@ -223,7 +223,7 @@ module.exports = {
         //$in是为了批量删除，出入的articleId是数组
         let result = await db.article.remove({ articleId: { $in: ctx.query.articleId } })
         if (result.ok) {
-            ctx.body = { deleteCode: 200 }
+            ctx.rest({ deleteCode: 200 })
             db.comment.remove({ articleId: { $in: ctx.query.articleId } })
         }
     },
@@ -242,7 +242,7 @@ module.exports = {
                 content: r.content
             })
         if (result) {
-            ctx.body = { code: 200 }
+            ctx.rest({ code: 200 })
         }
     },
     // 后台管理搜索文章
@@ -260,7 +260,7 @@ module.exports = {
                 .skip(skip)
                 .limit(limit)
             if (docs) {
-                ctx.body = docs
+                ctx.rest(docs)
             }
         } else {
             // 后台管理根据时间范围搜索
@@ -274,7 +274,7 @@ module.exports = {
                 .skip(skip)
                 .limit(limit)
             if (docs) {
-                ctx.body = docs
+                ctx.rest(docs)
             }
         }
     },

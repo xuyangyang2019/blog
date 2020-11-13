@@ -11,13 +11,13 @@ module.exports = {
 				{ articleId: ctx.query.articleId },
 				(err, doc) => { })
 			.sort({ _id: -1 })
-		ctx.body = comments
+		ctx.rest(comments)
 	},
 	// 保存评论
 	'POST /saveComment': async (ctx, next) => {
 		let newDoc = await db.comment.create(ctx.request.body)
 		if (newDoc._id) {
-			ctx.body = newDoc
+			ctx.rest(newDoc)
 			// 更新article
 			db.article.update(
 				{ articleId: ctx.body.articleId },
@@ -48,7 +48,7 @@ module.exports = {
 			{ $push: { reply: addInfo } },
 			{ new: true })
 		if (doc._id) {
-			ctx.body = doc
+			ctx.rest(doc)
 		}
 	},
 	// 前端文章点赞
@@ -60,7 +60,7 @@ module.exports = {
 				{ $inc: { "reply.$.like": ctx.request.body.addOrDel } },
 				(err, doc) => { })
 			if (ur) {
-				ctx.body = { code: 200 }
+				ctx.rest({ code: 200 })
 			}
 		} else {
 			let ur = await db.comment.update(
@@ -68,7 +68,7 @@ module.exports = {
 				{ $inc: { "like": ctx.request.body.addOrDel } },
 				(err, doc) => { })
 			if (ur) {
-				ctx.body = { code: 200 }
+				ctx.rest({ code: 200 })
 			}
 		}
 	},
@@ -83,7 +83,7 @@ module.exports = {
 			.skip(skip)
 			.limit(limit)
 		if (docs.length) {
-			ctx.body = docs
+			ctx.rest(docs)
 		}
 	},
 	// 后台管理删除一级评论
@@ -100,7 +100,7 @@ module.exports = {
 		// 		}
 		// 	})
 		if (result.ok) {
-			ctx.body = { deleteCode: 200 }
+			ctx.rest({ deleteCode: 200 })
 		}
 	},
 	// 后台管理删除二级评论
@@ -110,7 +110,7 @@ module.exports = {
 			{ "_id": ctx.request.body.mainId },
 			{ $pull: { "reply": { "_id": ctx.request.body.secondId } } })
 		if (result) {
-			ctx.body = { deleteCode: 200 }
+			ctx.rest({ deleteCode: 200 })
 		}
 	},
 }

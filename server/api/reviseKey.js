@@ -16,10 +16,10 @@ module.exports = {
       if (doc.password === md5(ctx.request.body.oldKey + doc.salt)) {
         let result = await db.user.update({ user: "admin" }, { password: pwd, salt: salt })
         if (result.ok) {
-          ctx.body = ({ code: 200 })
+          ctx.rest({ code: 200 })
         }
       } else {
-        ctx.body = { code: "oldkey-401" }
+        ctx.rest({ code: "oldkey-401" })
       }
     }
   }

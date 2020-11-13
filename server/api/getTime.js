@@ -29,6 +29,6 @@ module.exports = {
 			}
 		}
 		// console.log('getTime', timeArr)
-		ctx.body = timeArr
+		ctx.rest(timeArr)
 	}
 }

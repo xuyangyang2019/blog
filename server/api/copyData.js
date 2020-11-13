@@ -36,10 +36,10 @@ module.exports = {
       // 压缩包里添加文件夹
       archive.directory(path.join(__dirname, '../dbBackUp/dbCopy/admin'), "/admin")
       await archive.finalize()
-      ctx.body = { code: 200 }
+      ctx.rest({ code: 200 })
     } catch (error) {
       console.log(error)
-      ctx.body = { code: 500 }
+      ctx.rest({ code: 500 })
     }
     // child_process.exec(cmdOne, (err, stdout, stderr) => {
     //   if (err !== null) {
@@ -48,7 +48,7 @@ module.exports = {
     //   } else {
     //     console.log('stdout', stdout)
     //     console.log('stderr', stderr)
-    //     ctx.body = { code: 200 }
+    //     ctx.rest( { code: 200 })
     //   }
     // })
   }
