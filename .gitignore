@@ -2,7 +2,7 @@
 node_modules/
 npm-debug.log
 
-dist/
+/dist*
 .vscode/
 admin.lock
 server/config/secret.js
