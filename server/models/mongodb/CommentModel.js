@@ -1,23 +1,23 @@
-const db = require('../../db/mongodb/db')
+const db = require('../../db/mongodb/mongoDB')
 
 module.exports = db.defineModel('Comment', {
-    name: "string",
-    imgUrl: "string",
-    email: "string",
-    content: "string",
+    name: String,
+    imgUrl: String,
+    email: String,
+    content: String,
     reply: [
         {
-            name: "string",
-            imgUrl: "string",
-            email: "string",
-            aite: "string",
-            content: "string",
-            like: "number",
-            date: "date"
+            name: String,
+            imgUrl: String,
+            email: String,
+            aite: String,
+            content: String,
+            like: Number,
+            date: Date
         }
     ], // 记得加上日期格式
-    like: "number",
-    articleId: "number",
-    title: "string",
-    date: "date"
+    like: Number,
+    articleId: Number,
+    title: String,
+    date: Date
 })

@@ -1,4 +1,4 @@
-const db = require('../../db/mongodb/db')
+const db = require('../../db/mongodb/mongoDB')
 
 // // 实现自增序列
 // articleSchema.pre("save", function (next) {
@@ -25,15 +25,15 @@ const db = require('../../db/mongodb/db')
 // })
 
 module.exports = db.defineModel('Article', {
-    articleId: "number",
-    original: "boolean",
-    title: "string",
-    abstract: "string",
-    content: "string",
-    publish: "boolean",
-    tag: "array",
-    commentNum: "number",
-    likeNum: "number",
-    pv: "number",
-    date: "date"
+    articleId: Number,
+    original: Boolean,
+    title: String,
+    abstract: String,
+    content: String,
+    publish: Boolean,
+    tag: Array,
+    commentNum: Number,
+    likeNum: Number,
+    pv: Number,
+    date: Date
 })

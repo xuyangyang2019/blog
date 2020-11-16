@@ -1,18 +1,18 @@
-const db = require('../../db/mongodb/db')
+const db = require('../../db/mongodb/mongoDB')
 
 module.exports = db.defineModel('MsgBoard', {
-    name: "string",
-    imgUrl: "string",
-    email: "string",
-    content: "string",
-    date: "date",
+    name: String,
+    imgUrl: String,
+    email: String,
+    content: String,
+    date: Date,
     reply: [
         {
-            name: "string",
-            aite: "string",
-            imgUrl: "string",
-            content: "string",
-            date: "date"
+            name: String,
+            aite: String,
+            imgUrl: String,
+            content: String,
+            date: Date
         }
     ]
 })

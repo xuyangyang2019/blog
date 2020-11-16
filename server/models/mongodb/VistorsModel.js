@@ -1,8 +1,8 @@
-const db = require('../../db/mongodb/db')
+const db = require('../../db/mongodb/mongoDB')
 
 module.exports = db.defineModel('Vistors', {
-    name: "string",
-    imgUrl: "string",
-    email: "string",
-    githubID: "number"
+    name: String,
+    imgUrl: String,
+    email: String,
+    githubID: Number
 })
