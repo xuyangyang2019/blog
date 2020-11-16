@@ -2,7 +2,7 @@
 
 //请自行设置盐值和密码
 const createSecret = {
-	salt: 12345,
+	salt: Math.ceil(Math.random() * 100000),
 	jwtSecret: "12345"
 }
 
