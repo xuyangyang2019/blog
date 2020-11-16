@@ -95,7 +95,8 @@ articleSchema.pre("save", function (next) {
     let _this = this
     db.counter.find({}, (err, doc) => {
         if (err) {
-            res.status(500).end()
+            console.log(err)
+            // res.status(500).end()
         } else {
             if (!doc.length) {
                 new db.counter({ _id: 'entityId', seq: 1 }).save()
