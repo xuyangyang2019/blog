@@ -1,7 +1,8 @@
 const md5 = require('md5')
 const salt = require('../../secret').salt
-const User = require('../../models/mongodb/UserModel')
 const localTime = require("../../utils/reviseTime")
+
+const User = require('../../models/mongodb/UserModel')
 
 User.find({}, (err, docs) => {
     if (err) {
