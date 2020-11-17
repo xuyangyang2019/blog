@@ -16,7 +16,7 @@
 // })
 
 module.exports = {
-    name: "MsgBoard",
+    name: "msgBoard",
     schema: {
         name: String,
         imgUrl: String,

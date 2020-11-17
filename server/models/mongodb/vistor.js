@@ -1,5 +1,5 @@
 module.exports = {
-    name: "Vistor",
+    name: "vistor",
     schema: {
         name: String,
         imgUrl: String,

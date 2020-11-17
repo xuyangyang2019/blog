@@ -6,7 +6,7 @@
 // })
 
 module.exports = {
-    name: "User",
+    name: "user",
     schema: {
         username: {
             type: String,
