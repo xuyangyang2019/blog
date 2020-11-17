@@ -15,5 +15,5 @@ for (const f of js_files) {
     // console.log(`import model from file ${f}...`)
     const name = f.substring(0, f.length - 3)
     // console.log(name)
-    module.exports[name] = require(path.resolve(__dirname, './models', f))
+    module.exports[name] = require(path.resolve(__dirname, '../../models/mongodb', f))
 }
