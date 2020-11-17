@@ -3,9 +3,10 @@ const mongoose = require('mongoose')
 const config = require('../config').mongoDB
 const { logger } = require('../middlewares/logger')
 
-const url = `mongodb://${config.user}:${config.pwd}@${config.host}:${config.port}/${config.db}?authSource=${config.authSource}`
+// const url = `mongodb://${config.user}:${config.pwd}@${config.host}:${config.port}/${config.db}?authSource=${config.authSource}`
+const url = `mongodb://${config.user}:${config.pwd}@${config.host}:${config.port}/${config.db}`
 // 创建一个数据库连接
-const mongo = mongoose.createConnection(url, { useNewUrlParser: true, useUnifiedTopology: true }) 
+const mongo = mongoose.createConnection(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
 
 mongo.on('connected', () => logger.info(`Connected to database: ${url}`))
