@@ -1,5 +1,5 @@
 module.exports = {
-    name: "article",
+    name: "Article",
     schema: {
         articleId: Number,
         original: Boolean,

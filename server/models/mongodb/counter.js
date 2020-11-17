@@ -6,7 +6,7 @@
 // })
 
 module.exports = {
-    name: "user",
+    name: "Counter",
     schema: {
         _id: String,
         seq: Number,

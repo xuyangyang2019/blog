@@ -9,7 +9,7 @@
 // })
 
 module.exports = {
-    name: "user",
+    name: "NewMsg",
     schema: {
         type: String,
         name: String,

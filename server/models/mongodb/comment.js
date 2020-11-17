@@ -1,5 +1,5 @@
 module.exports = {
-    name: "article",
+    name: "Comment",
     schema: {
         name: String,
         imgUrl: String,
