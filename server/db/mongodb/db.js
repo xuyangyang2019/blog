@@ -1,10 +1,5 @@
-const md5 = require("js-md5")
 const mongoose = require("mongoose")
-
-const localTime = require("../../utils/reviseTime")
-
 mongoose.Promise = global.Promise
-
 // 请自行更改用户名和密码
 mongoose.connection.openUri("mongodb://xuyy:1234509876@localhost:27017")
 
@@ -125,6 +120,8 @@ const db = {
     counter: mongoose.model("counter", counterSchema)
 }
 
+const md5 = require("js-md5")
+const localTime = require("../../utils/reviseTime")
 const initDbUser = () => {
     db.user.find({}, (err, doc) => {
         if (err) {
