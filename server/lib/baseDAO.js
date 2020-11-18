@@ -33,7 +33,8 @@ class BaseDAO {
    */
   async findByPage(condition = {}, pageNum = 1, pageSize = 10) {
     const count = await this.model.countDocuments(condition)
-    const list = await this.model.find(condition)
+    const list = await this.model
+      .find(condition)
       .skip((parseInt(pageNum) - 1) * 10)
       .limit(parseInt(pageSize))
       .sort({ _id: -1 })

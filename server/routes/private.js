@@ -1,15 +1,15 @@
 const router = require('koa-router')()
 const controllers = require('../controllers/AdminControllers')
-const { logger } = require('../middlewares/logger')
 
 const config = require('../config')
+const { logger } = require('../middlewares/logger')
+
 const koaJwt = require('koa-jwt')({ secret: config.secret })
 
+// 校验接口，进行登录验证后才能访问
 router.use(koaJwt)
 
-/**
- * 校验接口，进行登录验证后才能访问
- */
+
 for (const url in controllers) {
   const delimiter = url.indexOf(' ');
   const method = url.slice(0, delimiter);
