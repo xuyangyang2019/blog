@@ -16,53 +16,61 @@ const koaBody = require('koa-body')
 // ajax 跨域问题
 const jsonp = require('koa-jsonp')
 // rest中间件
-const rest = require('./middlewares/rest')
+// const rest = require('./middlewares/rest')
+
+const viewRouter = require('./routes/view')
+const publicRouter = require('./routes/public')
+const privateRouter = require('./routes/private')
+const { errorHandler, responseHandler } = require('./middlewares/response')
 
 // 开发环境配置
 const setUpDevServer = require('../build/setup.dev.server.js')
 // 开发环境
 const isProd = process.env.NODE_ENV === 'production'
-
 // 获取本地ip
 const currentIP = require('ip').address()
 const appConfig = require('../app.config')
 const uri = `http://${currentIP}:${appConfig.appPort}`
 
-// const resolve = file => path.resolve(__dirname, file)
 function resolve(dir) {
     return path.resolve(process.cwd(), dir)
 }
-
-const viewRouter = require('./routes/view')
-const publicRouter = require('./routes/public')
-const privateRouter = require('./routes/private')
-
 
 // 后端Server
 // 创建一个Koa对象表示web app本身:
 const backendApp = new Koa()
 
-// 日志
+// Logger
 backendApp.use(Koa_Logger((str) => {
     console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
 }))
 
-// gzip压缩
-backendApp.use(KoaCompress)
+// Error Handler
+backendApp.use(errorHandler)
 
-// 处理静态文件
-backendApp.use(Koa_Static(resolve('dist'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
-backendApp.use(Koa_Static(resolve('dist-admin'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
-backendApp.use(Koa_Static(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+// gzip
+backendApp.use(KoaCompress)
 
 // 解析post请求
 backendApp.use(koaBody())
 
-// rest
-backendApp.use(rest.restify())
+// 处理静态文件
+backendApp.use(Koa_Static(resolve('dist'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+// backendApp.use(Koa_Static(resolve('dist-admin'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+backendApp.use(Koa_Static(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
 
-// 跨域
+// // Helmet
+// backendApp.use(helmet())
+
+// // rest
+// backendApp.use(rest.restify())
+
+// Cors
 backendApp.use(jsonp())
+
+// // View
+// backendApp.use(views(config.viewsDir))
+// backendApp.use(static(config.viewsDir))
 
 // ssr
 const LRU = require('lru-cache')
@@ -76,9 +84,7 @@ function createRenderer(bundle, options) {
         runInNewContext: false // 推荐
     }))
 }
-
 let renderer
-
 if (isProd) {
     // 生产环境,从打包好的文件夹读取bundle和manifest
     const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
@@ -98,7 +104,6 @@ if (isProd) {
         }
     })
 }
-
 // 把renderData添加在app.context上
 backendApp.context.renderData = function (ctx) {
     const context = {
@@ -123,6 +128,10 @@ backendApp.context.renderData = function (ctx) {
 backendApp.use(viewRouter.routes(), viewRouter.allowedMethods())
 backendApp.use(publicRouter.routes(), publicRouter.allowedMethods())
 backendApp.use(privateRouter.routes(), privateRouter.allowedMethods())
+
+// Response
+backendApp.use(responseHandler)
+
 
 // 错误处理
 backendApp.on('error', (err) => {
