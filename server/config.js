@@ -6,7 +6,7 @@ module.exports = {
     secret: 'havana',
     expired: 60 * 60 * 24 //1h 
   },
-  // publicDir: path.resolve(__dirname, './public'),
+  publicDir: path.resolve(__dirname, './public'),
   // viewsDir: path.resolve(__dirname, './views'),
   logPath: path.resolve(__dirname, './logs/koa-server'),
   mongoDB: {
