@@ -19,23 +19,11 @@ module.exports = {
 		if (ctx.query.start) {
 			let start = new Date(parseInt(ctx.query.start))
 			let end = new Date(parseInt(ctx.query.end))
-			num = await db.article.count({ publish: ctx.query.publish, date: { "$gte": start, "$lte": end } }, (err, num) => {
-				// if (err) {
-				//     res.status(500).end()
-				// } else {
-				//     res.json(num)
-				// }
-			})
+			num = await db.article.count({ publish: ctx.query.publish, date: { "$gte": start, "$lte": end } })
 		}
 		// 前台后台关键词搜索请求
 		if (ctx.query.key) {
-			num = await db.article.count({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } }, (err, num) => {
-				// if (err) {
-				//     res.status(500).end()
-				// } else {
-				//     res.json(num)
-				// }
-			})
+			num = await db.article.count({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } })
 		}
 		ctx.rest(num)
 	},
