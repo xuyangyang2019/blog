@@ -34,8 +34,8 @@ function resolve(dir) {
 }
 
 const viewRouter = require('./routes/view')
-// const publicRouter = require('./routes/public')
-// const privateRouter = require('./routes/private')
+const publicRouter = require('./routes/public')
+const privateRouter = require('./routes/private')
 
 
 // 后端Server
@@ -121,8 +121,8 @@ backendApp.context.renderData = function (ctx) {
 
 // Routes
 backendApp.use(viewRouter.routes(), viewRouter.allowedMethods())
-// backendApp.use(publicRouter.routes(), publicRouter.allowedMethods())
-// backendApp.use(privateRouter.routes(), privateRouter.allowedMethods())
+backendApp.use(publicRouter.routes(), publicRouter.allowedMethods())
+backendApp.use(privateRouter.routes(), privateRouter.allowedMethods())
 
 // 错误处理
 backendApp.on('error', (err) => {
