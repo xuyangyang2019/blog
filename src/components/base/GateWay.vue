@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex"
+import { mapState, mapActions } from "vuex"
 
 export default {
   data() {
@@ -38,12 +38,14 @@ export default {
       getTagsClass: 'GetTagsClass'
     }),
     // 初始化背景色
-    initBackground: function () {
+    initBackground() {
       this.$nextTick(() => {
         // IE10不支持refs.tag
-        this.$refs.tag.forEach((item, index, arr) => {
-          item.style.backgroundColor = this.color[Math.floor(Math.random() * 10)]
-        })
+        if (this.$refs.tag) {
+          this.$refs.tag.forEach((item, index, arr) => {
+            item.style.backgroundColor = this.color[Math.floor(Math.random() * 10)]
+          })
+        }
       })
     },
     // 跳转到标签
