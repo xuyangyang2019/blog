@@ -20,8 +20,8 @@ class BaseDAO {
    * @param {Object} condition 查询条件
    * @return {Array} 查询结果
    */
-  async findMany(condition) {
-    const result = await this.model.find(condition)
+  async findMany(condition, fields) {
+    const result = await this.model.find(condition, fields)
     return result
   }
   /**
