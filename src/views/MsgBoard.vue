@@ -39,7 +39,7 @@
 
     <div class="leavemsg">
       <h2>所有留言：</h2>
-      <ul>
+      <ul v-if="msgBoardArr.length > 0">
         <li v-for="item in msgBoardArr" class="board-item">
           <div class="msg-leaver">
             <div class="profile-pic">
@@ -53,13 +53,12 @@
               <div class="board-content-details">
                 <span class="icon-clock"></span>
                 <span class="board-content-details-time" v-text="$options.filters.reviseTime(item.date)"></span>
-                <!-- <span class="board-content-details-time">{{ item.date | reviseTime }}</span> -->
               </div>
             </div>
           </div>
           <!-- admin 回复 -->
           <div class="admin-reply">
-            <ul v-if="item.reply.length !== 0">
+            <!-- <ul v-if="item.reply.length !== 0">
               <li v-for="rep in item.reply" class="board-reply-item">
                 <div class="profile-pic admin-pic">
                   <img :src="rep.imgUrl" alt />
@@ -78,13 +77,13 @@
                   </div>
                 </div>
               </li>
-            </ul>
+            </ul> -->
           </div>
         </li>
-        <li class="empty-msgboard" v-if="!msgBoardArr.length">
-          <h3>( >﹏<。)哎~~没人理我</h3>
-        </li>
       </ul>
+      <div v-else class="empty-msgboard">
+        <h3>( >﹏<。)哎~~没人理我</h3>
+      </div>
     </div>
 
     <transition name="fade">
@@ -131,10 +130,10 @@ export default {
       store.dispatch("GetLeaveWords", {
         page: 1,
         cache: false
-      }),
-      store.dispatch("GetMsgCount", {
-        cache: false
       })
+      // store.dispatch("GetMsgCount", {
+      //   cache: false
+      // })
     ])
   },
   name: 'MsgBoard',
