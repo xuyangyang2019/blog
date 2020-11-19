@@ -26,6 +26,11 @@ module.exports = {
     }
     return next()
   },
+  // 获取评论数量
+  'GET /getCommentsCount': async (ctx, next) => {
+    let num = await db.comment.count({})
+    ctx.rest(num)
+  },
   // // 保存评论
   // 'POST /api/saveComment': async (ctx, next) => {
   //   let newDoc = await db.comment.create(ctx.request.body)
