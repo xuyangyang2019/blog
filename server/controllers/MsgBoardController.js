@@ -15,6 +15,11 @@ module.exports = {
     }
     return next()
   },
+  // 获取留言数量
+  'GET /getMsgCount': async (ctx, next) => {
+    let num = await db.msgBoard.count({}, (err, num) => { })
+    ctx.rest(num)
+  },
   // // 保存留言
   // 'POST /saveLeaveW': async (ctx, next) => {
   //   let doc = ctx.request.body
