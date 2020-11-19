@@ -50,36 +50,6 @@ const getters = {
 
 // actions
 const actions = {
-    // 获取推荐的文章
-    GetHot({ commit }) {
-        api.get("/api/getHot", {}).then((data) => {
-            commit('SET_HOT', data)
-        })
-        // return api.get("/api/getHot", {}).then((data) => {
-        //     // state.articles.hot = data
-        //     // return data
-        // })
-    },
-    //获取技术文章的tag生成导航
-    GetTagsClass({ commit }, payload) {
-        api.get("/api/tags", { publish: payload.publish }).then((data) => {
-            commit("SetTags", data)
-        })
-        // return api.get("/api/tags", { publish: payload.publish }).then((data) => {
-        //     state.tags = data
-        //     return data
-        // })
-    },
-    // 获取时间轴
-    GetTime({ commit }, payload) {
-        api.get("/api/getTime", payload).then((data) => {
-            commit('SET_TIME_LINE', data)
-        })
-        // return api.get("/api/getTime",payload).then((data) =>{
-        // 	state.timeLine = data
-        // 	return data
-        // })
-    },
     // 获取文章
     GetArticles({ commit }, payload) {
         let params = {}
@@ -92,29 +62,48 @@ const actions = {
         } else {
             params = payload
         }
-        api.get("/api/getArticles", params).then((data) => {
+        api.get("/api/getArticles", params).then((res) => {
+            console.log('文章列表:', res)
             if (!payload.tag) {
-                commit("SET_ARTICLES_ALL", data)
+                commit("SET_ARTICLES_ALL", res.data.list)
             } else if (payload.tag === "life") {
-                commit("SET_ARTICLES_LIFE", data)
+                commit("SET_ARTICLES_LIFE", res.data.list)
             } else {
-                commit("SET_ARTICLES_TECH", data)
+                commit("SET_ARTICLES_TECH", res.data.list)
             }
-            commit("PRODUCT_BG", data)
-            // return data
+            commit("PRODUCT_BG", res.data.list)
         })
-        // return api.get("/api/getArticles", params).then((data) => {
-        //     if (!payload.tag) {
-        //         state.articles.all = data
-        //     } else if (payload.tag === "life") {
-        //         state.articles.life = data
-        //     } else {
-        //         state.articles.technical = data
-        //     }
-        //     commit("productBg", data)
-        //     return data
-        // })
     },
+    // 获取对应模块的文章总数，为分页按钮个数提供支持
+    GetArticlesCount({ commit }, payload) {
+        api.get("/api/getArticlesCount", payload).then((res) => {
+            console.log('文章数:', res)
+            commit("SET_ARTICLES_SUM", res.data)
+            commit("SET_PAGE_ARR", res.data || 0)
+        })
+    },
+    // 获取推荐的文章
+    GetHot({ commit }) {
+        api.get("/api/getArticlesByPv", {}).then((res) => {
+            console.log('推荐文章:', res)
+            commit('SET_HOT', res.data || [])
+        })
+    },
+    //获取技术文章的tag生成导航
+    GetTagsClass({ commit }, payload) {
+        api.get("/api/getArticleTags", { publish: payload.publish }).then((res) => {
+            console.log('文章标签:', res)
+            commit("SetTags", res.data || [])
+        })
+    },
+    // 获取时间轴
+    GetTime({ commit }, payload) {
+        api.get("/api/getArticelsByTime", payload).then((res) => {
+            console.log('归档:', res)
+            commit('SET_TIME_LINE', res.data || [])
+        })
+    },
+
     // 精准获取文章
     GetArticle({ commit }, payload) {
         // life目录下路由参数只有ID，无tag参数
@@ -137,26 +126,9 @@ const actions = {
             }
         })
     },
-    // 获取对应模块的文章总数，为分页按钮个数提供支持
-    GetArticlesCount({ commit }, payload) {
-        api.get("/api/getCount", payload).then((data) => {
-            commit("SET_ARTICLES_SUM", data)
-            commit("SET_PAGE_ARR", data)
-            // return data
-        })
-        // return api.get("/api/getCount", payload).then((data) => {
-        //     commit("SET_PAGE_ARR", data)
-        //     return data
-        // })
-    },
+
     SearchArticles({ commit }, payload) {
         return api.get("/api/search", payload)
-        // return api.get("/api/search", payload).then((data) => {
-        //     console.log(data)
-        //     commit("SET_ARTICLES_SEARCH", data)
-        //     commit("PRODUCT_BG", data)
-        //     return data
-        // })
     },
     // 查询用户名是否存在
     SearchUser({ commit }, payload) {
