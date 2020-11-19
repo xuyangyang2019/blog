@@ -2,24 +2,11 @@ const ArticleService = require('../services').ArticleService
 const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
-  // // 获取推荐文章
-  // 'GET /getHot': async (ctx, next) => {
-  //   let hot = await db.article.find(
-  //     { publish: true },
-  //     { title: 1, articleId: 1, tag: 1 },
-  //     { sort: { pv: -1 } },
-  //     (err, doc) => {
-  //       if (err) {
-  //         console.log(err)
-  //       }
-  //     }).limit(5)
-  //   ctx.rest(hot)
-  // },
   // 文章列表
   'GET /api/getArticles': async (ctx, next) => {
     let params = {}
-    let pageSize = 10
-    let pageNum = ctx.query.page
+    let pageNum = ctx.query.pageNum || 1
+    let pageSize = ctx.query.pageSize || 10
     if (!ctx.query.tag) {  // 抓取首页文章
       params = {
         publish: ctx.query.publish
@@ -30,40 +17,102 @@ module.exports = {
         tag: ctx.query.tag
       }
     }
-    //   const { pageNum, pageSize } = ctx.request.body
     let result = await ArticleService.findByPage(params, pageNum, pageSize)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
-      console.log(result)
       ctx.result = result
     }
     return next()
   },
   // 获取文章数量 暂时不用
-  'GET /api/getCount': async (ctx, next) => {
-    // let publish = ctx.query.publish === "false" ? false : true
-    // let num = 0
-    // // 首页请求
-    // if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
-    //   num = await db.article.count({ publish: publish }, (err, num) => { })
-    // }
-    // // 通过文章标签请求
-    // if (ctx.query.tag) {
-    //   let tag = ctx.query.tag
-    //   num = await db.article.count({ publish: publish, tag: tag }, (err, num) => { })
-    // }
-    // // 前台后台时间范围请求
-    // if (ctx.query.start) {
-    //   let start = new Date(parseInt(ctx.query.start))
-    //   let end = new Date(parseInt(ctx.query.end))
-    //   num = await db.article.count({ publish: ctx.query.publish, date: { "$gte": start, "$lte": end } })
-    // }
-    // // 前台后台关键词搜索请求
-    // if (ctx.query.key) {
-    //   num = await db.article.count({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } })
-    // }
-    // return next()
+  'GET /api/getArticlesCount': async (ctx, next) => {
+    let publish = ctx.query.publish === "false" ? false : true
+    let result = {}
+    // 首页请求
+    if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
+      result = await ArticleService.getArticlesCount({ publish: publish })
+    }
+    // 通过文章标签请求
+    if (ctx.query.tag) {
+      let tag = ctx.query.tag
+      result = await ArticleService.getArticlesCount({ publish: publish, tag: tag })
+    }
+    // 前台后台时间范围请求
+    if (ctx.query.start) {
+      let start = new Date(parseInt(ctx.query.start))
+      let end = new Date(parseInt(ctx.query.end))
+      result = await ArticleService.getArticlesCount({ publish: ctx.query.publish, date: { "$gte": start, "$lte": end } })
+    }
+    // 前台后台关键词搜索请求
+    if (ctx.query.key) {
+      num = await ArticleService.getArticlesCount({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } })
+    }
+    ctx.result = result
+    return next()
+  },
+  // 获取推荐文章
+  'GET /api/getArticlesByPv': async (ctx, next) => {
+    let result = await ArticleService.getArticlesByPv()
+    if (!result) {
+      ctx.error = '文章不存在'
+    } else {
+      ctx.result = result
+    }
+    return next()
+  },
+  // 文章归档
+  'GET /api/getArticelsByTime': async (ctx, next) => {
+    let publish = ctx.query.publish === "false" ? false : true
+    let timeArr = []
+    let timeMap = {}
+    let doc = await ArticleService.findMany({ publish: publish }, { data: 1 })
+    if (!doc) {
+      ctx.error = '文章不存在'
+    } else {
+      doc.forEach((item, index, arr) => {
+        let yearMonth = new Date(item.date).getFullYear() + "年" + (new Date(item.date).getMonth() + 1) + "月"
+        timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
+      })
+      for (const key in timeMap) {
+        if (timeMap.hasOwnProperty(key)) {
+          timeArr.push({
+            time: key,
+            num: timeMap[key]
+          })
+        }
+      }
+      ctx.result = timeArr
+    }
+    return next()
+  },
+  // 获取已发表的文章标签
+  'GET /api/getArticleTags': async (ctx, next) => {
+    let publish = ctx.query.publish === "false" ? false : true
+    let tagArr = []
+    let tagMap = {}
+    // 所有的文章
+    let docs = await ArticleService.findMany({ publish: publish }, { tag: 1, _id: 0 })
+    if (!docs) {
+      ctx.error = '文章不存在'
+    } else {
+      // 计算标签的文章数
+      docs.forEach((doc, index, arr) => {
+        for (const tag of doc.tag) {
+          tagMap[tag] = tagMap[tag] ? tagMap[tag] + 1 : 1
+        }
+      })
+      for (const key in tagMap) {
+        if (tagMap.hasOwnProperty(key)) {
+          tagArr.push({
+            tag: key,
+            num: tagMap[key]
+          })
+        }
+      }
+      ctx.result = tagMap
+    }
+    return next()
   },
   // // 抓取单一文章
   // 'GET /onlyArticle': async (ctx, next) => {
