@@ -58,7 +58,7 @@
           </div>
           <!-- admin 回复 -->
           <div class="admin-reply">
-            <!-- <ul v-if="item.reply.length !== 0">
+            <ul v-if="item.reply.length !== 0">
               <li v-for="rep in item.reply" class="board-reply-item">
                 <div class="profile-pic admin-pic">
                   <img :src="rep.imgUrl" alt />
@@ -77,7 +77,7 @@
                   </div>
                 </div>
               </li>
-            </ul> -->
+            </ul>
           </div>
         </li>
       </ul>
@@ -130,10 +130,10 @@ export default {
       store.dispatch("GetLeaveWords", {
         page: 1,
         cache: false
+      }),
+      store.dispatch("GetMsgCount", {
+        cache: false
       })
-      // store.dispatch("GetMsgCount", {
-      //   cache: false
-      // })
     ])
   },
   name: 'MsgBoard',
@@ -202,7 +202,6 @@ export default {
     },
     // 留言
     postLeaveW() {
-      console.log('postW')
       if (!this.validatePub()) return
       let content = this.productContent()
       let ui = this.userInfo
@@ -214,12 +213,12 @@ export default {
           email: ui.email,
           content: content,
           date: Date.now()
-        }).then((data) => {
-          if (data._id) {
+        }).then((res) => {
+          if (res.data && res.data._id) {
             setTimeout(() => {
               this.$refs.pubButton.value = "留言"
               this.sayWords = ""
-              this.addLocalWords({ add: data, type: 1 })
+              this.addLocalWords({ add: res.data, type: 1 })
             }, 200)
           }
         })
@@ -232,11 +231,11 @@ export default {
           email: ui.email,
           content: content,
           date: Date.now()
-        }).then((data) => {
-          if (data._id) {
+        }).then((res) => {
+          if (res.data && res.data._id) {
             that.$refs.pubButton.value = "留言"
             that.sayWords = ""
-            that.addLocalWords({ add: data, type: 2, _id: that.replyInfo._id })
+            that.addLocalWords({ add: res.data, type: 2, _id: that.replyInfo._id })
           }
         })
       }
