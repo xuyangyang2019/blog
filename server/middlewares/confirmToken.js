@@ -8,7 +8,7 @@ const confirmToken = (ctx, next) => {
 		const token = ctx.headers.authorization
 		jwt.verify(token, secret.jwtSecret, (err) => {
 			if (err) {
-				ctx.body = { code: 401 }
+				throw { code: 401, message: 'no authorization' }
 			} else {
 				console.log('token验证通过')
 				next()
