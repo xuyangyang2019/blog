@@ -16,43 +16,41 @@ module.exports = {
     return next()
   },
   // 获取留言数量
-  'GET /getMsgCount': async (ctx, next) => {
-    let num = await db.msgBoard.count({}, (err, num) => { })
-    ctx.rest(num)
+  'GET /api/getMsgCount': async (ctx, next) => {
+    let result = await MsgBoardService.count()
+    if (!result) {
+      ctx.error = '获取列表失败'
+    } else {
+      ctx.result = result
+    }
+    return next()
   },
-  // // 保存留言
-  // 'POST /saveLeaveW': async (ctx, next) => {
-  //   let doc = ctx.request.body
-  //   let result = await db.msgBoard.create(doc)
-  //   if (result._id) {
-  //     ctx.rest(result)
-  //     // 保存到新消息 提醒后台
-  //     db.newMsg.create({
-  //       type: "msgboard",
-  //       name: result.name,
-  //       say: result.content,
-  //       content: result.name + "在" + localTime(Date.now()) + "给你留言啦~~"
-  //     })
-  //     // 		new db.newMsg({
-  //     // 			type: "msgboard",
-  //     // 			name: ctx.body.name,
-  //     // 			say: ctx.body.content,
-  //     // 			content: ctx.body.name + "在" + localTime(Date.now()) + "给你留言啦~~"
-  //     // 		}).save()
-  //   }
-  // },
-  // // admin获取留言
-  // 'GET /getAdminBoard': async (ctx, next) => {
-  //   // 后台留言板抓取
-  //   let limit = 10
-  //   let skip = ctx.query.page * limit - limit
-  //   let docs = await db.msgBoard
-  //     .find({})
-  //     .sort({ _id: -1 })
-  //     .skip(skip)
-  //     .limit(limit)
-  //   ctx.rest(docs)
-  // },
+  // 保存留言
+  'POST /api/saveLeaveW': async (ctx, next) => {
+    let doc = ctx.request.body
+    let result = await MsgBoardService.save(doc)
+    if (!result) {
+      ctx.error = '获取列表失败'
+    } else {
+      console.log(result)
+      ctx.result = result
+      //   // 保存到新消息 提醒后台
+      //   db.newMsg.create({
+      //     type: "msgboard",
+      //     name: result.name,
+      //     say: result.content,
+      //     content: result.name + "在" + localTime(Date.now()) + "给你留言啦~~"
+      //   })
+      //   // 		new db.newMsg({
+      //   // 			type: "msgboard",
+      //   // 			name: ctx.body.name,
+      //   // 			say: ctx.body.content,
+      //   // 			content: ctx.body.name + "在" + localTime(Date.now()) + "给你留言啦~~"
+      //   // 		}).save()
+      // }
+    }
+    return next()
+  },
   // // 删除指定的留言
   // 'DELETE /removeLeavewords': async (ctx, next) => {
   //   confirmToken(ctx, next)
