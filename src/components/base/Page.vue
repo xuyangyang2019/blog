@@ -109,7 +109,7 @@ export default {
           this.timeArticles(params)
           break
         case "msgboard":
-          this.getLeaveWords({ page: page })
+          this.getLeaveWords({ pageNum: page })
           break
         case "search":
           this.search({
