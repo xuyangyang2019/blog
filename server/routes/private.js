@@ -1,10 +1,9 @@
 const router = require('koa-router')()
 const controllers = require('../controllers/AdminControllers')
-
-const config = require('../config')
 const { logger } = require('../middlewares/logger')
 
-const koaJwt = require('koa-jwt')({ secret: config.secret })
+const config = require('../secret')
+const koaJwt = require('koa-jwt')({ secret: config.jwtSecret })
 
 // 校验接口，进行登录验证后才能访问
 router.use(koaJwt)
@@ -40,5 +39,6 @@ for (const url in controllers) {
 }
 
 logger.info('Private routes registered')
+
 
 module.exports = router
