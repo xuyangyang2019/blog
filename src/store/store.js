@@ -140,14 +140,14 @@ const actions = {
     },
     // 获取留言
     GetLeaveWords({ commit }, payload) {
-        api.get("/api/getMsgBoard", payload).then((data) => {
-            commit('SET_MSG_BOARD_ARR', data)
+        api.get("/api/getMsgBoard", payload).then((res) => {
+            commit('SET_MSG_BOARD_ARR', res.data.list)
         })
     },
     // 获取留言数量
     GetMsgCount({ commit }, payload) {
-        api.get("/api/getMsgCount", payload).then((data) => {
-            commit("SET_PAGE_ARR", data)
+        api.get("/api/getMsgCount", payload).then((res) => {
+            commit("SET_PAGE_ARR", res.data.count || 0)
         })
     },
     // 回复留言
