@@ -7,6 +7,14 @@ class BaseDAO {
     this.model = model
   }
   /**
+  * 查询条数
+  * @param {Object} condition 查询条件
+  */
+  async count(condition = {}) {
+    const count = await this.model.countDocuments(condition)
+    return { count: count }
+  }
+  /**
     * 条件查询，单个结果
     * @param {Object} condition 查询条件
     * @return {Object | null} 查询结果,为空时返回null
