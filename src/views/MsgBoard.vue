@@ -7,21 +7,21 @@
       <div v-show="replyInfo.aite.length">
         <strong>回复：@</strong>
         <span>{{ replyInfo.aite }}</span>
-        <span @click="replyInfo.aite = ''" class="exit-aite" :title="'取消回复' + replyInfo.aite">x</span>
+        <span class="exit-aite" :title="'取消回复' + replyInfo.aite" @click="replyInfo.aite = ''">x</span>
       </div>
       <!-- 文本域 -->
-      <textarea v-model="sayWords" @focus="showLogin" placeholder="这小地盘儿交给你啦 *^_^*"></textarea>
+      <textarea v-model="sayWords" placeholder="这小地盘儿交给你啦 *^_^*" @focus="showLogin"></textarea>
       <!-- 提交 -->
       <div class="icon-submit-box">
         <div class="icon-userInfo-box">
           <!-- emoji按钮 -->
-          <div @click="emojiToggle" class="emoji-icon">
+          <div class="emoji-icon" @click="emojiToggle">
             <img src="/img/emoji/grinning.png" height="20px" width="20px" alt />
           </div>
           <!-- | -->
           <span class="fence"></span>
           <!-- 退出 -->
-          <div class="reviewer-info" v-show="!!userInfo.name">
+          <div v-show="!!userInfo.name" class="reviewer-info">
             <img :src="userInfo.imgUrl" alt width="20px" height="20px" />
             <span>{{ userInfo.name }}</span>
             <a href="javascript: void(0)" @click="loginOut">退出</a>
@@ -32,8 +32,8 @@
       </div>
     </div>
 
-    <div class="emoji-box" v-show="emojiShow">
-      <span @click="exitEmoji" class="emoji-exit">x</span>
+    <div v-show="emojiShow" class="emoji-box">
+      <span class="emoji-exit" @click="exitEmoji">x</span>
       <emoji @select="selectEmoji"></emoji>
     </div>
 
@@ -93,8 +93,8 @@
     <!-- 第三方登录 -->
     <login></login>
 
-    <transition name="mask" v-show="dialogErr.show">
-      <div class="mask" v-show="dialogErr.show" @click="dialogErr.show = false">
+    <transition v-show="dialogErr.show" name="mask">
+      <div v-show="dialogErr.show" class="mask" @click="dialogErr.show = false">
         <transition name="dialog">
           <div class="dialog" @click.stop>
             <h1>o(╯□╰)o</h1>
@@ -110,60 +110,59 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from "vuex"
+import { mapMutations, mapActions, mapState } from 'vuex'
 
-import page from "@/components/base/Page"
-import emoji from "@/components/base/Emoji"
-import login from "@/components/userLogin/UserLogin"
-import emojiData from "@/assets/js/emoji-data"
+import page from '@/components/base/Page'
+import emoji from '@/components/base/Emoji'
+import login from '@/components/userLogin/UserLogin'
+import emojiData from '@/assets/js/emoji-data'
 import headMixin from '@/mixins/head-mixin'
 
-
 export default {
-  head() {
-    return {
-      title: '留言',
-    }
-  },
-  asyncData({ store, route }) {
-    return Promise.all([
-      store.dispatch("GetLeaveWords", {
-        page: 1,
-        cache: false
-      }),
-      store.dispatch("GetMsgCount", {
-        cache: false
-      })
-    ])
-  },
   name: 'MsgBoard',
-  mixins: [headMixin],
   components: {
     page,
     emoji,
     login
   },
+  mixins: [headMixin],
+  asyncData({ store, route }) {
+    return Promise.all([
+      store.dispatch('GetLeaveWords', {
+        page: 1,
+        cache: false
+      }),
+      store.dispatch('GetMsgCount', {
+        cache: false
+      })
+    ])
+  },
   data() {
     return {
-      sayWords: "", // 想留的言
-      content: "",
+      sayWords: '', // 想留的言
+      content: '',
       emojiShow: false, // 展示emoji框
       hasLiked: [],
-      dialogErr: { show: false, info: "" },
-      replyInfo: { _id: "", firstLevel: true, aite: "" }
+      dialogErr: { show: false, info: '' },
+      replyInfo: { _id: '', firstLevel: true, aite: '' }
+    }
+  },
+  head() {
+    return {
+      title: '留言'
     }
   },
   computed: {
     ...mapState({
       msgBoardArr: 'msgBoardArr', // 留言
       userInfo: 'userInfo', // 用户信息
-      pageArr: 'pageArr', // 分页
+      pageArr: 'pageArr' // 分页
     })
   },
   methods: {
     ...mapActions({
       addLeaveWords: 'AddLeaveWords',
-      saveLeaveWords: 'SaveLeaveWords',
+      saveLeaveWords: 'SaveLeaveWords'
     }),
     ...mapMutations({
       set_user: 'SET_USER',
@@ -181,15 +180,15 @@ export default {
     // 退出登陆
     loginOut() {
       // vuex 用户信息重置
-      this.set_user({ name: "", imgUrl: "", email: "" })
-      // 删除本地保存的用户信息 
-      localStorage.removeItem("map_blog_userInfo")
+      this.set_user({ name: '', imgUrl: '', email: '' })
+      // 删除本地保存的用户信息
+      localStorage.removeItem('map_blog_userInfo')
       // 获取cookie
       // let pattern = /githubId/
       // let gitCookie = document.cookie.split(";").filter((item, index, arr) => {
       //   return pattern.test(item)
       // })
-      //清除github登陆的cookie信息
+      // 清除github登陆的cookie信息
       // if (gitCookie.length) {
       //   //设置cookie的过期时间为一分钟前，让浏览器自动将其删除
       //   let gitId = gitCookie[0].replace(/(^\s*)|(\s*$)/, "")
@@ -203,9 +202,9 @@ export default {
     // 留言
     postLeaveW() {
       if (!this.validatePub()) return
-      let content = this.productContent()
-      let ui = this.userInfo
-      this.$refs.pubButton.value = "发表中..."
+      const content = this.productContent()
+      const ui = this.userInfo
+      this.$refs.pubButton.value = '发表中...'
       if (this.replyInfo.firstLevel) {
         this.saveLeaveWords({
           name: ui.name,
@@ -216,8 +215,8 @@ export default {
         }).then((res) => {
           if (res.data && res.data._id) {
             setTimeout(() => {
-              this.$refs.pubButton.value = "留言"
-              this.sayWords = ""
+              this.$refs.pubButton.value = '留言'
+              this.sayWords = ''
               this.addLocalWords({ add: res.data, type: 1 })
             }, 200)
           }
@@ -233,8 +232,8 @@ export default {
           date: Date.now()
         }).then((res) => {
           if (res.data && res.data._id) {
-            that.$refs.pubButton.value = "留言"
-            that.sayWords = ""
+            that.$refs.pubButton.value = '留言'
+            that.sayWords = ''
             that.addLocalWords({ add: res.data, type: 2, _id: that.replyInfo._id })
           }
         })
@@ -256,21 +255,21 @@ export default {
         return false
       }
       if (!this.sayWords.length) {
-        this.dialogErr = { show: true, info: "内容不能为空" }
+        this.dialogErr = { show: true, info: '内容不能为空' }
         return false
       }
       if (this.sayWords.length > 300) {
-        this.dialogErr = { show: true, info: "内容过长，请不要超过300个字符" }
+        this.dialogErr = { show: true, info: '内容过长，请不要超过300个字符' }
         return false
       }
       return true
     },
-    // 留言内容emoji转图片 
+    // 留言内容emoji转图片
     productContent() {
       let emojiObject = {}
       let finStr = this.sayWords
-      finStr = finStr.replace(new RegExp("<", "g"), "&lt")
-      finStr = finStr.replace(new RegExp(">", "g"), "&gt")
+      finStr = finStr.replace(new RegExp('<', 'g'), '&lt')
+      finStr = finStr.replace(new RegExp('>', 'g'), '&gt')
       // 把所有的emoji放到一个数组,之后遍历json数组，将所有的json整合到一个json
       Object.values(emojiData).forEach((item, index, arr) => {
         emojiObject = Object.assign(emojiObject, item)
@@ -278,12 +277,12 @@ export default {
       // 所有key的集合，
       Object.keys(emojiObject).forEach((item) => {
         // 基本路径
-        let path = "/img/emoji/"
+        const path = '/img/emoji/'
         // 图片
-        let value = emojiObject[item]
-        let imgURL = `<span style = "display: inline-block;vertical-align: middle"><img src=${path}${value} alt="" width = "16px" height = "16px" /></span>`
+        const value = emojiObject[item]
+        const imgURL = `<span style = "display: inline-block;vertical-align: middle"><img src=${path}${value} alt="" width = "16px" height = "16px" /></span>`
         // content中的emoji替换为img
-        finStr = finStr.replace(new RegExp(item, "g"), imgURL)
+        finStr = finStr.replace(new RegExp(item, 'g'), imgURL)
       })
       return finStr
     },
@@ -299,7 +298,7 @@ export default {
     selectEmoji(emojiCode) {
       this.sayWords += emojiCode
       this.emojiShow = false
-    },
+    }
   }
 }
 </script>
@@ -335,7 +334,7 @@ h2 {
 .say-box {
   margin: 10px 10px 5px;
   textarea {
-    font-family: "STFangsong";
+    font-family: 'STFangsong';
     resize: none;
     overflow-y: none;
     outline: none;
@@ -478,7 +477,7 @@ h2 {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  font-family: "微软雅黑";
+  font-family: '微软雅黑';
   font-size: 12px;
 }
 .board-details-reply {

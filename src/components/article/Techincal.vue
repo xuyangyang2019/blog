@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex"
+import { mapActions, mapState, mapMutations } from 'vuex'
 
-import articleList from "@/components/article/ArticleList"
-import loading from "@/components/base/Loading"
+import articleList from '@/components/article/ArticleList'
+import loading from '@/components/base/Loading'
 
 export default {
   components: {
@@ -26,26 +26,26 @@ export default {
   //   },
   asyncData({ store, route }) {
     return Promise.all([
-      store.dispatch("GetArticles", {
+      store.dispatch('GetArticles', {
         publish: true,
         page: 1,
         tag: route.params.articleList,
         cache: true
       }),
-      store.dispatch("GetArticlesCount", {
+      store.dispatch('GetArticlesCount', {
         publish: true,
         page: 1,
         tag: route.params.articleList,
         cache: true
       })
     ]).then(() => {
-      store.commit("CHANGE_CODE", 200)
+      store.commit('CHANGE_CODE', 200)
     })
   },
   computed: {
     ...mapState({
       articles: 'articles',
-      code: 'code',
+      code: 'code'
     })
   },
   methods: {
@@ -54,14 +54,14 @@ export default {
     }),
     ...mapMutations({
       clear: 'CLEAR_PAGE',
-      changeCode: 'CHANGE_CODE',
+      changeCode: 'CHANGE_CODE'
     })
   },
   beforeRouteLeave(to, from, next) {
-    this.clear() //清除页码数组
+    this.clear() // 清除页码数组
     next()
   },
-  //传送门模块切换时复用此组件，故重新获取数据
+  // 传送门模块切换时复用此组件，故重新获取数据
   beforeRouteUpdate(to, from, next) {
     this.getArticlesCount({
       publish: true,

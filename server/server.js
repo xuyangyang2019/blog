@@ -5,12 +5,12 @@ const path = require('path')
 const Koa = require('koa')
 // 日志中间件
 const Koa_Logger = require('koa-logger')
-const Moment = require("moment")
+const Moment = require('moment')
 // const { loggerMiddleware } = require('./middlewares/logger')
 // 数据压缩
 const KoaCompress = require('koa-compress')()
 // 解析静态资源
-const Koa_Static = require("koa-static")
+const Koa_Static = require('koa-static')
 // 解析POST请求
 const koaBody = require('koa-body')
 // ajax 跨域问题
@@ -33,7 +33,7 @@ const appConfig = require('../app.config')
 const uri = `http://${currentIP}:${appConfig.appPort}`
 
 function resolve(dir) {
-    return path.resolve(process.cwd(), dir)
+  return path.resolve(process.cwd(), dir)
 }
 
 // 后端Server
@@ -42,7 +42,7 @@ const backendApp = new Koa()
 
 // Logger
 backendApp.use(Koa_Logger((str) => {
-    console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
+  console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
 }))
 
 // Error Handler
@@ -76,52 +76,52 @@ backendApp.use(jsonp())
 const LRU = require('lru-cache')
 const { createBundleRenderer } = require('vue-server-renderer')
 function createRenderer(bundle, options) {
-    return createBundleRenderer(bundle, Object.assign(options, {
-        cache: LRU({
-            max: 1000,
-            maxAge: 1000 * 60 * 15
-        }),
-        runInNewContext: false // 推荐
-    }))
+  return createBundleRenderer(bundle, Object.assign(options, {
+    cache: LRU({
+      max: 1000,
+      maxAge: 1000 * 60 * 15
+    }),
+    runInNewContext: false // 推荐
+  }))
 }
 let renderer
 if (isProd) {
-    // 生产环境,从打包好的文件夹读取bundle和manifest
-    const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
-    const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
-    const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
-    renderer = createRenderer(serverBundle, {
-        template: template, // （可选）页面模板
-        clientManifest: clientManifest // （可选）客户端构建 manifest
-    })
+  // 生产环境,从打包好的文件夹读取bundle和manifest
+  const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
+  const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
+  const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
+  renderer = createRenderer(serverBundle, {
+    template: template, // （可选）页面模板
+    clientManifest: clientManifest // （可选）客户端构建 manifest
+  })
 } else {
-    // 开发环境,从内存中读取bundle和manifest
-    setUpDevServer(backendApp, uri, (bundle, options) => {
-        try {
-            renderer = createRenderer(bundle, options)
-        } catch (e) {
-            console.log('\nbundle error', e)
-        }
-    })
+  // 开发环境,从内存中读取bundle和manifest
+  setUpDevServer(backendApp, uri, (bundle, options) => {
+    try {
+      renderer = createRenderer(bundle, options)
+    } catch (e) {
+      console.log('\nbundle error', e)
+    }
+  })
 }
 // 把renderData添加在app.context上
 backendApp.context.renderData = function (ctx) {
-    const context = {
-        url: ctx.url,
-        title: '首页 -xyy的小站', // 默认title
-        author: 'xyy', // 默认author
-        keywords: 'xyy', // 默认keywords
-        description: 'xyy的blog', //默认description 
-        cookies: ctx.request.headers.cookie
-    }
-    return new Promise((resolve, reject) => {
-        renderer.renderToString(context, (err, html) => {
-            if (err) {
-                return reject(err)
-            }
-            resolve(html)
-        })
+  const context = {
+    url: ctx.url,
+    title: '首页 -xyy的小站', // 默认title
+    author: 'xyy', // 默认author
+    keywords: 'xyy', // 默认keywords
+    description: 'xyy的blog', // 默认description
+    cookies: ctx.request.headers.cookie
+  }
+  return new Promise((resolve, reject) => {
+    renderer.renderToString(context, (err, html) => {
+      if (err) {
+        return reject(err)
+      }
+      resolve(html)
     })
+  })
 }
 
 // Routes
@@ -132,17 +132,15 @@ backendApp.use(privateRouter.routes(), privateRouter.allowedMethods())
 // Response
 backendApp.use(responseHandler)
 
-
 // 错误处理
 backendApp.on('error', (err) => {
-    console.error('Server error: \n%s\n%s ', err.stack || '')
+  console.error('Server error: \n%s\n%s ', err.stack || '')
 })
 
 backendApp.listen(appConfig.appPort, () => {
-    // console.log('服务器端渲染地址： http://localhost:3000')
-    console.log(`\n> Starting server... ${uri} \n`)
+  // console.log('服务器端渲染地址： http://localhost:3000')
+  console.log(`\n> Starting server... ${uri} \n`)
 })
-
 
 // 前端Server
 // const frontendApp = new Koa()

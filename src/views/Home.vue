@@ -8,49 +8,48 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex"
+import { mapActions, mapState, mapMutations } from 'vuex'
 
 // import banner from "@/components/home/Banner"
-import loading from "@/components/base/Loading"
-import articleList from "@/components/article/ArticleList"
+import loading from '@/components/base/Loading'
+import articleList from '@/components/article/ArticleList'
 import headMixin from '@/mixins/head-mixin'
 
-
 export default {
+  name: 'Home',
+  components: {
+    // banner,
+    loading,
+    articleList
+  },
+  mixins: [headMixin],
+  asyncData({ store, route }) {
+    return Promise.all([
+      store.dispatch('GetArticles', {
+        publish: true,
+        page: 1,
+        cache: true
+      }),
+      store.dispatch('GetArticlesCount', {
+        cache: true,
+        publish: true
+      })
+    ]).then(() => {
+      store.commit('CHANGE_CODE', 200)
+    })
+  },
   head() {
     return {
       title: '首页',
       author: 'xuyy',
       keywords: 'koa2 webpack vue-ssr vuex vue-router axios',
-      description: '欢迎来到我的小站！',
+      description: '欢迎来到我的小站！'
     }
-  },
-  asyncData({ store, route }) {
-    return Promise.all([
-      store.dispatch("GetArticles", {
-        publish: true,
-        page: 1,
-        cache: true
-      }),
-      store.dispatch("GetArticlesCount", {
-        cache: true,
-        publish: true
-      })
-    ]).then(() => {
-      store.commit("CHANGE_CODE", 200)
-    })
-  },
-  name: 'Home',
-  mixins: [headMixin],
-  components: {
-    // banner,
-    loading,
-    articleList,
   },
   computed: {
     ...mapState({
       code: 'code',
-      articles: 'articles',
+      articles: 'articles'
     })
   },
   methods: {
@@ -59,7 +58,7 @@ export default {
       getArticlesCount: 'GetArticlesCount'
     }),
     ...mapMutations({
-      clear: 'CLEAR_PAGE',
+      clear: 'CLEAR_PAGE'
     })
   },
   beforeRouteLeave(to, from, next) {
@@ -70,7 +69,7 @@ export default {
     // this.$nextTick(function () {
     //   Prism.highlightAll()
     // })
-  },
+  }
 }
 </script>
 <style lang = "scss" scoped>

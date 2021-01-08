@@ -25,19 +25,19 @@ module.exports = {
     'vue/require-prop-types': 0, // 不检查默认类型
     'block-spacing': [2, 'always'], // 块间距
     'brace-style': [2, '1tbs', { allowSingleLine: true }], // 大括号样式允许单行
-    'camelcase': [0, { properties: 'always' }], // 为属性强制执行驼峰命名
+    camelcase: [0, { properties: 'always' }], // 为属性强制执行驼峰命名
     'comma-dangle': [2, 'never'], // 逗号不使用悬挂
     'comma-spacing': [2, { before: false, after: true }], // 逗号间距
     'comma-style': [2, 'last'], // （默认）与数组元素，对象属性或变量声明在同一行之后和同一行需要逗号
     'constructor-super': 2,
     'consistent-this': [2, 'that'], // 强制this别名为that
-    'curly': [2, 'multi-line'], // 当一个块只包含一条语句时，不允许省略花括号。
+    curly: [2, 'multi-line'], // 当一个块只包含一条语句时，不允许省略花括号。
     'dot-location': [2, 'property'], // 成员表达式中的点应与属性部分位于同一行
     'eol-last': [2, 'always'], // 强制文件以换行符结束（LF）
-    'eqeqeq': ['error', 'always', { null: 'ignore' }], // 强制使用全等
+    eqeqeq: ['error', 'always', { null: 'ignore' }], // 强制使用全等
     'generator-star-spacing': [2, { before: true, after: true }], // 生成器中'*'两侧都要有间距
     'global-require': 1, // 所有调用require()都位于模块的顶层
-    'indent': [2, 2, { SwitchCase: 1 }], // 缩进风格
+    indent: [2, 2, { SwitchCase: 1 }], // 缩进风格
     'key-spacing': [2, { beforeColon: false, afterColon: true }], // 强制在对象字面量属性中的键和值之间保持一致的间距
     'keyword-spacing': [2, { before: true, after: true }], // 关键字如if/function等的间距
     'new-cap': [2, { newIsCap: true, capIsNew: false }], // 允许在没有new操作符的情况下调用大写启动的函数;（默认）要求new使用大写启动函数调用所有操作符
@@ -116,22 +116,26 @@ module.exports = {
     'operator-linebreak': [2, 'after', { overrides: { '?': 'before', ':': 'before' }}], // 实施一致的换行
     'padded-blocks': [2, 'never'], // 在块内强制执行一致的空行填充
     'prefer-destructuring': ['error', { object: false, array: false }], // 此规则强制使用解构而不是通过成员表达式访问属性。
-    'quotes': [2, 'single', { avoidEscape: true, allowTemplateLiterals: true }], // avoidEscape: true 允许字符串使用单引号或双引号，只要字符串包含必须以其他方式转义的引号 ;allowTemplateLiterals: true 允许字符串使用反引号
-    'radix': 2, // parseInt必须指定第二个参数
-    'semi': [2, 'never'], // 不使用分号
+    quotes: [2, 'single', { avoidEscape: true, allowTemplateLiterals: true }], // avoidEscape: true 允许字符串使用单引号或双引号，只要字符串包含必须以其他方式转义的引号 ;allowTemplateLiterals: true 允许字符串使用反引号
+    radix: 2, // parseInt必须指定第二个参数
+    semi: [2, 'never'], // 不使用分号
     'semi-spacing': [2, { before: false, after: true }], // 强制分号间隔
     'space-before-blocks': [2, 'always'], // 块必须至少有一个先前的空间
     'space-before-function-paren': [0, 'never'], // 在(参数后面不允许任何空格
     'space-in-parens': [2, 'never'], // 禁止或要求（或）左边的一个或多个空格
     'space-infix-ops': 2, // 强制二元运算符左右各有一个空格
     'space-unary-ops': [2, { words: true, nonwords: false }], // words: true 如：new，delete，typeof，void，yield 左右必须有空格 // nonwords: false 一元运算符，如：-，+，--，++，!，!!左右不能有空格
-    'spaced-comment': [2, 'always', { markers: ['global', 'globals', 'eslint', 'eslint-disable', '*package', '!', ','] }], // 注释开始后，此规则将强制间距的一致性// 或/*
+    'spaced-comment': [
+      2,
+      'always',
+      { markers: ['global', 'globals', 'eslint', 'eslint-disable', '*package', '!', ','] }
+    ], // 注释开始后，此规则将强制间距的一致性// 或/*
     'template-curly-spacing': [2, 'never'], // 不允许大括号内的空格
     'use-isnan': 2, // 禁止比较时使用NaN，只能用isNaN()
     'valid-typeof': 2, // 必须使用合法的typeof的值
     'wrap-iife': [2, 'any'], // 立即执行函数表达式的小括号风格
     'yield-star-spacing': [2, 'both'], // 强制执行*周围 yield*表达式的间距，两侧都必须有空格
-    'yoda': [2, 'never'],
+    yoda: [2, 'never'],
     'prefer-const': 2, // 使用let关键字声明的变量，但在初始分配后从未重新分配变量，应改为const声明
     'object-curly-spacing': [2, 'always', { objectsInObjects: false }], // 不允许以对象元素开始和/或以对象元素结尾的对象的大括号内的间距
     'array-bracket-spacing': [2, 'never'] // 不允许数组括号内的空格

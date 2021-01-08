@@ -1,10 +1,10 @@
 <template>
   <div class="article-root-box">
     <h3 v-if="!tags.length" class="none-article">暂时没有文章，敬请期待...</h3>
-    <div class="article-root" v-if="tags.length">
+    <div v-if="tags.length" class="article-root">
       <div class="articles-sum">文章总数：{{ articles.sum }} 篇</div>
       <!-- 列表展示 -->
-      <div class="stage-list" v-show="!rotate">
+      <div v-show="!rotate" class="stage-list">
         <ul>
           <li v-for="(item, index) in tags">
             <a href="javascript: void(0)" @click.stop="jumpArticle(item.tag)">
@@ -15,8 +15,8 @@
         </ul>
       </div>
       <!-- 滚筒展示 -->
-      <div class="stage" v-show="rotate">
-        <ul class="rotate" @click="leftSlider" ref="container">
+      <div v-show="rotate" class="stage">
+        <ul ref="container" class="rotate" @click="leftSlider">
           <li v-for="(item, index) in tags" ref="degItem">
             <div class="deg-item-mask">
               <a href="javascript: void(0)" @click.stop="jumpArticle(item.tag)">
@@ -29,43 +29,42 @@
         <div class="right-move" @click="rightSlider"></div>
       </div>
 
-      <div class="change-stage" v-show="hiddenChange">
-        <button v-show="show3D" @click="changeStage('rotate')" :class="{ 'active-bg': rotate }">3D模式</button>
-        <button @click="changeStage('list')" :class="{ 'active-bg': !rotate }">列表模式</button>
+      <div v-show="hiddenChange" class="change-stage">
+        <button v-show="show3D" :class="{ 'active-bg': rotate }" @click="changeStage('rotate')">3D模式</button>
+        <button :class="{ 'active-bg': !rotate }" @click="changeStage('list')">列表模式</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex"
-import { getBrowserInfo } from "@/utils/getBrowserInfo.js"
+import { mapActions, mapState } from 'vuex'
+import { getBrowserInfo } from '@/utils/getBrowserInfo.js'
 import headMixin from '@/mixins/head-mixin'
 
-
 export default {
-  head() {
-    return {
-      title: '技术文章',
-    }
-  },
+  name: 'ArticleRoot',
+  mixins: [headMixin],
   data() {
     return {
       currentIndex: 0,
       reg: 0,
       rotate: true,
       hiddenChange: true,
-      show3D: true,
+      show3D: true
     }
   },
-  name: 'ArticleRoot',
-  mixins: [headMixin],
+  head() {
+    return {
+      title: '技术文章'
+    }
+  },
   watch: {
     tags() {
       if (this.tags.length) {
-        let that = this
+        const that = this
         this.initRotate()
-        window.addEventListener("resize", that.addEvent)
+        window.addEventListener('resize', that.addEvent)
         if (this.tags.length < 9 && this.tags.length > 1) {
           this.rotate = true
         } else {
@@ -87,7 +86,7 @@ export default {
     }),
     // 切换展示方式
     changeStage(type) {
-      if (type === "rotate") {
+      if (type === 'rotate') {
         this.rotate = true
       } else {
         this.rotate = false
@@ -96,53 +95,53 @@ export default {
     // 右滑
     rightSlider() {
       this.currentIndex++
-      ["mozTransform,webkitTransform", "msTransform", "oTransform", "transform"].forEach((item, index, arr) => {
-        this.$refs.container.style[item] = "rotateY(" + this.reg * this.currentIndex + "deg)"
+      ['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item, index, arr) => {
+        this.$refs.container.style[item] = 'rotateY(' + this.reg * this.currentIndex + 'deg)'
       })
     },
     // 左滑
     leftSlider() {
       this.currentIndex--
-      ["mozTransform,webkitTransform", "msTransform", "oTransform", "transform"].forEach((item, index, arr) => {
-        this.$refs.container.style[item] = "rotateY(" + this.reg * this.currentIndex + "deg)"
+      ['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item, index, arr) => {
+        this.$refs.container.style[item] = 'rotateY(' + this.reg * this.currentIndex + 'deg)'
       })
     },
     // 打开文章
     jumpArticle(item) {
-      if (item === "life") {
-        this.$router.push({ name: "life" })
+      if (item === 'life') {
+        this.$router.push({ name: 'life' })
       } else {
-        this.$router.push({ name: "techincal", params: { articleList: item } })
+        this.$router.push({ name: 'techincal', params: { articleList: item }})
       }
     },
     // 初始化
     initRotate() {
       this.$nextTick(() => {
-        let dom = this.$refs.degItem,
-          container = this.$refs.container,
-          reg = 360 / dom.length,
-          z = container.offsetWidth / 2 / Math.tan(reg / 2 / 180 * Math.PI) + 15
+        const dom = this.$refs.degItem
+        const container = this.$refs.container
+        const reg = 360 / dom.length
+        const z = container.offsetWidth / 2 / Math.tan(reg / 2 / 180 * Math.PI) + 15
         this.reg = reg
-        container.style.height = 1.618 * container.offsetWidth + "px"
+        container.style.height = 1.618 * container.offsetWidth + 'px'
         dom.forEach((item, index, arr) => {
-          ["mozTransform,webkitTransform", "msTransform", "oTransform", "transform"].forEach((_item, _index, _arr) => {
-            item.style[_item] = "rotateY(" + (index + 1) * reg + "deg)" + " " + "translateZ(" + z + "px)"
+          ['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((_item, _index, _arr) => {
+            item.style[_item] = 'rotateY(' + (index + 1) * reg + 'deg)' + ' ' + 'translateZ(' + z + 'px)'
           })
           item.style.background = "url('/img/technical/" + index + ".jpg')  0 0 no-repeat"
-          item.style.backgroundSize = "100% 100%"
+          item.style.backgroundSize = '100% 100%'
         })
       })
     },
     // 添加事件
     addEvent() {
-      let that = this
-      //窗口大小改变重新计算锚点距离	
+      const that = this
+      // 窗口大小改变重新计算锚点距离
       this.debounce(that.initRotate, 350)
     },
     // 函数去抖，防止scroll和resize频繁触发
     debounce(func, delay) {
-      var context = this
-      var args = arguments
+      const context = this
+      const args = arguments
       if (this.timer) {
         clearTimeout(this.timer)
       }
@@ -152,36 +151,36 @@ export default {
     },
     // 检查浏览器是否至此3D模式
     regBrowser() {
-      let info = getBrowserInfo()[0]
-      let brow_reg = /[a-zA-Z]+/gi
-      let ver_reg = /\d+\.\d+/g
-      let name = info.match(brow_reg)[0]
-      let ver = info.match(ver_reg)[0]
-      let warning = "您的浏览器版本过低，将无法查看3D模式"
-      if (name === "chrome" && ver < 49) {
+      const info = getBrowserInfo()[0]
+      const brow_reg = /[a-zA-Z]+/gi
+      const ver_reg = /\d+\.\d+/g
+      const name = info.match(brow_reg)[0]
+      const ver = info.match(ver_reg)[0]
+      const warning = '您的浏览器版本过低，将无法查看3D模式'
+      if (name === 'chrome' && ver < 49) {
         this.rotate = false
         this.hiddenChange = false
         alert(warning)
       }
-      if (name === "firefox" && ver < 56) {
+      if (name === 'firefox' && ver < 56) {
         this.rotate = false
         this.hiddenChange = false
         alert(warning)
       }
-      if (name === "msie" && ver < 11) {
+      if (name === 'msie' && ver < 11) {
         this.rotate = false
         this.hiddenChange = false
         alert(warning)
       }
-      if (name === "safari" && ver < 11) {
+      if (name === 'safari' && ver < 11) {
         this.rotate = false
         this.hiddenChange = false
         alert(warning)
       }
-      if (name === "opera") {
+      if (name === 'opera') {
         this.rotate = false
         this.hiddenChange = false
-        alert("由于opera浏览器兼容性问题，您将无法查看3D模式")
+        alert('由于opera浏览器兼容性问题，您将无法查看3D模式')
       }
     }
   },
@@ -190,10 +189,10 @@ export default {
     this.getArticlesCount({ publish: true })
     // 从别的路由跳转到当前路由，若不加条件，当前路由刷新，基于tags的
     if (this.tags.length) {
-      let that = this  // this.$refs会报错，因为tags还没取到
+      const that = this // this.$refs会报错，因为tags还没取到
       this.initRotate()
       // 窗口大小改变重新计算锚点距离
-      window.addEventListener("resize", that.addEvent)
+      window.addEventListener('resize', that.addEvent)
       // 最多8个标签时显示3D旋转，否则显示列表模式
       if (this.tags.length < 9 && this.tags.length > 1) {
         this.rotate = true
@@ -204,8 +203,8 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener("resize", this.addEvent)
-  },
+    window.removeEventListener('resize', this.addEvent)
+  }
 }
 </script>
 
@@ -290,7 +289,7 @@ export default {
 }
 .left-move {
   cursor: pointer;
-  background: url("../../public/img/bigmove.png") 0 0 no-repeat;
+  background: url('../../public/img/bigmove.png') 0 0 no-repeat;
   position: absolute;
   width: 60px;
   height: 60px;
@@ -300,7 +299,7 @@ export default {
 }
 .right-move {
   cursor: pointer;
-  background: url("../../public/img/bigmove.png") -60px 0 no-repeat;
+  background: url('../../public/img/bigmove.png') -60px 0 no-repeat;
   position: absolute;
   top: 50%;
   right: 20px;

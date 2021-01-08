@@ -4,7 +4,7 @@ module.exports = {
   // port: '10081',
   tokenConfig: {
     secret: 'havana',
-    expired: 60 * 60 * 24 //1h 
+    expired: 60 * 60 * 24 // 1h
   },
   publicDir: path.resolve(__dirname, './public'),
   // viewsDir: path.resolve(__dirname, './views'),
@@ -15,6 +15,6 @@ module.exports = {
     user: 'xyy',
     pwd: '123456',
     db: 'blog',
-    authSource: 'admin',
+    authSource: 'admin'
   }
 }
