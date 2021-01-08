@@ -10,7 +10,7 @@
           <!-- 标签 -->
           <div class="article-details-tag">
             <span class="icon-tag-stroke i-p"></span>
-            <span class="each-tag" v-for="tag in item.tag">{{ tag | changeLife }}</span>
+            <span v-for="tag in item.tag" class="each-tag">{{ tag | changeLife }}</span>
           </div>
           <div class="article-details-other">
             <!-- 发布时间 -->
@@ -21,7 +21,7 @@
             <!-- 阅读数|评论数|点赞数 -->
             <div class="pv-c-l">
               <span class="icon-eye i-p"></span>
-              <span>{{ item.pv }} 次阅读 </span>
+              <span>{{ item.pv }} 次阅读</span>
               <span class="icon-commenting-o i-p"></span>
               <span>{{ item.commentNum }} 条评论</span>
               <span class="icon-like i-p"></span>
@@ -44,11 +44,11 @@
         </div>
 
         <!-- 文章出处 -->
-        <div class="article-warning" v-if="item.original">
+        <div v-if="item.original" class="article-warning">
           <h6>本文为作者原创文章，转载请注明出处：</h6>
-          <i
-            ><a href="javascript: void(0)">http://www.xyy.ink{{ fullPath }}</a></i
-          >
+          <i>
+            <a href="javascript: void(0)">http://www.xyy.ink{{ fullPath }}</a>
+          </i>
         </div>
         <div class="article-line"></div>
 
@@ -58,53 +58,53 @@
           <!--分享到qq  -->
           <a
             href="javascript: void(0)"
-            @click="share('QQ', 'http://connect.qq.com/widget/shareqq/index.html')"
             class="design-bg-qq"
+            @click="share('QQ', 'http://connect.qq.com/widget/shareqq/index.html')"
           ></a>
           <!-- 分享到qq空间 -->
           <a
             href="javascript: void(0)"
-            @click="share('qzone', 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey')"
             class="design-bg-qzone"
+            @click="share('qzone', 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey')"
           ></a>
           <!-- 分享到新浪微博 -->
           <a
             href="javascript: void(0)"
-            @click="share('sina', 'http://v.t.sina.com.cn/share/share.php')"
             class="design-bg-sina"
+            @click="share('sina', 'http://v.t.sina.com.cn/share/share.php')"
           ></a>
           <!-- 分享到微信 -->
-          <a href="javascript: void(0)" @click="showQRCode" class="design-bg-weixin"></a>
+          <a href="javascript: void(0)" class="design-bg-weixin" @click="showQRCode"></a>
           <!-- 分享到豆瓣 -->
           <a
             href="javascript: void(0)"
-            @click="share('douban', 'http://shuo.douban.com/!service/share')"
             class="design-bg-douban"
+            @click="share('douban', 'http://shuo.douban.com/!service/share')"
           ></a>
         </div>
 
         <div class="otherArticle"></div>
 
         <!-- vue-qr 生成二维码 -->
-        <div class="qrcode-box" v-show="qrShow">
+        <div v-show="qrShow" class="qrcode-box">
           <p>
             <span>微信扫一扫分享到朋友圈</span>
             <span class="exit-qrcode" @click="qrShow = false">X</span>
           </p>
-          <vue-qr v-show="qrShow" backgroundColor="#ccc" :logoSrc="qrLogo" :text="qrText" :size="200"> </vue-qr>
+          <vue-qr v-show="qrShow" backgroundColor="#ccc" :logoSrc="qrLogo" :text="qrText" :size="200"></vue-qr>
         </div>
 
         <div class="pre-next">
-          <div class="pre" v-if="articles.pre_next.pre.length">
+          <div v-if="articles.pre_next.pre.length" class="pre">
             <h6>上一篇：</h6>
-            <a href="javascript: void(0)" v-for="item in articles.pre_next.pre"
-              ><span @click="jumpPn(item)"> {{ item.title }}</span>
+            <a v-for="item in articles.pre_next.pre" href="javascript: void(0)">
+              <span @click="jumpPn(item)">{{ item.title }}</span>
             </a>
           </div>
-          <div class="next" v-if="articles.pre_next.next.length">
+          <div v-if="articles.pre_next.next.length" class="next">
             <h6>下一篇：</h6>
-            <a href="javascript: void(0)" v-for="item in articles.pre_next.next"
-              ><span @click="jumpPn(item)"> {{ item.title }}</span>
+            <a v-for="item in articles.pre_next.next" href="javascript: void(0)">
+              <span @click="jumpPn(item)">{{ item.title }}</span>
             </a>
           </div>
         </div>
@@ -116,41 +116,41 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex"
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 import Prism from 'prismjs'
 import VueQr from 'vue-qr'
 import headMixin from '@/mixins/head-mixin'
-import comment from "@/components/article/Comment"
+import comment from '@/components/article/Comment'
 
 export default {
-  head() {
-    return {
-      title: this.currentTitle,
-    }
+  name: 'ArticleShow',
+  components: {
+    VueQr,
+    comment
   },
+  mixins: [headMixin],
   asyncData({ store, route }) {
-    return store.dispatch("GetArticle", {
+    return store.dispatch('GetArticle', {
       publish: true,
       tag: route.params.articleList,
       articleId: route.params.id,
       cache: true
     })
   },
-  name: 'ArticleShow',
-  mixins: [headMixin],
-  components: {
-    VueQr,
-    comment
-  },
   data() {
     return {
       qrShow: false, // 显示二维码与否
-      loveText: "赞", // 点赞文字
+      loveText: '赞', // 点赞文字
       lovedArr: [], // 电站的id集合
-      fullPath: "", // 完整的path
-      qrLogo: require("../../../public/img/defaultUser.jpg"), // 二维码的log
-      qrText: '', // 二维码的地址
+      fullPath: '', // 完整的path
+      qrLogo: require('../../../public/img/defaultUser.jpg'), // 二维码的log
+      qrText: '' // 二维码的地址
+    }
+  },
+  head() {
+    return {
+      title: this.currentTitle
     }
   },
   computed: {
@@ -161,9 +161,9 @@ export default {
     // 是否点赞
     love_t() {
       if (this.lovedArr.indexOf(this.articles.only[0]._id) !== -1) {
-        return "已赞"
+        return '已赞'
       } else {
-        return "赞"
+        return '赞'
       }
     },
     // 获取文章成功
@@ -177,7 +177,7 @@ export default {
       this.$nextTick(function () {
         Prism.highlightAll()
       })
-    },
+    }
   },
   methods: {
     ...mapActions({
@@ -189,8 +189,8 @@ export default {
     }),
     // 点击回复按钮会在地址栏加上锚点，故刷新时去除，第三方分享链接亦如此
     getOriginUrl() {
-      if (this.$route.fullPath.indexOf("#anchor-comment") > -1) {
-        this.fullPath = this.$route.fullPath.substring(0, this.$route.fullPath.indexOf("#"))
+      if (this.$route.fullPath.indexOf('#anchor-comment') > -1) {
+        this.fullPath = this.$route.fullPath.substring(0, this.$route.fullPath.indexOf('#'))
       } else {
         this.fullPath = this.$route.fullPath
       }
@@ -208,7 +208,7 @@ export default {
           if (data.code === 200) {
             // 更新并保存点赞的状态
             this.lovedArr.push(_id)
-            localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
+            localStorage.setItem('articleLoved', JSON.stringify(this.lovedArr))
           }
         })
       } else {
@@ -219,7 +219,7 @@ export default {
         }).then((data) => {
           if (data.code === 200) {
             this.lovedArr.splice(this.lovedArr.indexOf(_id), 1)
-            localStorage.setItem("articleLoved", JSON.stringify(this.lovedArr))
+            localStorage.setItem('articleLoved', JSON.stringify(this.lovedArr))
           }
         })
       }
@@ -228,40 +228,39 @@ export default {
     },
     // 跳转页面
     jumpPn(item) {
-      if (item.tag[0] === "life") {
-        this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
+      if (item.tag[0] === 'life') {
+        this.$router.push({ name: 'lifeShow', params: { id: item.articleId }})
       } else {
-        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
+        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId }})
       }
     },
     // 分享
     share(type, url) {
-      let title = document.title + " 这是一个积累web知识的个人博客",
-        el = document.createElement("a"),
-        _href,
-        _url
-      if (window.location.href.indexOf("#anchor-comment") > -1) {
-        _url = window.location.href.substring(0, window.location.href.indexOf("#"))
+      const title = document.title + ' 这是一个积累web知识的个人博客'
+      const el = document.createElement('a')
+      let _href
+      let _url
+      if (window.location.href.indexOf('#anchor-comment') > -1) {
+        _url = window.location.href.substring(0, window.location.href.indexOf('#'))
       } else {
         _url = window.location.href
       }
-      el.target = "_blank"
+      el.target = '_blank'
       switch (type) {
-        case "QQ":
-          _href = url + "?title=" + title + "&url=" + _url + "&desc=我分享了一篇文章，快来看看哦~" + "&site=mapblog小站"
+        case 'QQ':
+          _href = url + '?title=' + title + '&url=' + _url + '&desc=我分享了一篇文章，快来看看哦~' + '&site=mapblog小站'
           break
-        case "qzone":
-          _href = url + "?title=" + title + "&url=" + _url + "&desc=我分享了一篇文章，快来看看哦~" + "&site=mapblog小站" + "summary="
+        case 'qzone':
+          _href = url + '?title=' + title + '&url=' + _url + '&desc=我分享了一篇文章，快来看看哦~' + '&site=mapblog小站' + 'summary='
           break
-        case "sina":
-          _href = url + "?title=" + title + "&url=" + _url
+        case 'sina':
+          _href = url + '?title=' + title + '&url=' + _url
           break
-        case "weixin":
-          _href = url + "&url=" + _url
+        case 'weixin':
+          _href = url + '&url=' + _url
           break
-        case "douban":
-          _href = url + "?name=" + title + "&href=" + _url
-
+        case 'douban':
+          _href = url + '?name=' + title + '&href=' + _url
       }
       el.href = _href
       el.click()
@@ -274,17 +273,17 @@ export default {
   },
   mounted() {
     // 读取本地的点赞数据
-    if (localStorage.getItem("articleLoved")) {
-      this.lovedArr = JSON.parse(localStorage.getItem("articleLoved"))
+    if (localStorage.getItem('articleLoved')) {
+      this.lovedArr = JSON.parse(localStorage.getItem('articleLoved'))
     }
     // 代码高亮
     this.$nextTick(function () {
       Prism.highlightAll()
     })
     this.getOriginUrl()
-  },
+  }
 }
-</script> 
+</script>
 
 <style lang = "scss" scoped>
 .article-show-content {
@@ -341,7 +340,7 @@ export default {
   margin: 0 5px;
 }
 .article-like {
-  background: url("/img/love-before.png") no-repeat;
+  background: url('/img/love-before.png') no-repeat;
   width: 50px;
   height: 50px;
   margin: 15px auto;
@@ -357,7 +356,7 @@ export default {
 }
 .article-like-after {
   transform: rotateY(360deg);
-  background: url("/img/love-after.png") no-repeat;
+  background: url('/img/love-after.png') no-repeat;
 }
 .article-like-after:hover,
 .article-like:hover {
@@ -399,19 +398,19 @@ export default {
 }
 .share .design-bg-qq {
   margin: 0 5px 0 0;
-  background: url("/img/share.png") 0 0 no-repeat !important;
+  background: url('/img/share.png') 0 0 no-repeat !important;
 }
 .design-bg-qzone {
-  background: url("/img/share.png") -57px 0 no-repeat !important;
+  background: url('/img/share.png') -57px 0 no-repeat !important;
 }
 .design-bg-sina {
-  background: url("/img/share.png") -118px -71px no-repeat !important;
+  background: url('/img/share.png') -118px -71px no-repeat !important;
 }
 .design-bg-douban {
-  background: url("/img/share.png") -118px -138px no-repeat !important;
+  background: url('/img/share.png') -118px -138px no-repeat !important;
 }
 .design-bg-weixin {
-  background: url("/img/share.png") 0 -71px no-repeat !important;
+  background: url('/img/share.png') 0 -71px no-repeat !important;
 }
 .qrcode-box {
   position: fixed;
