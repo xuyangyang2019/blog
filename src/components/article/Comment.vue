@@ -5,19 +5,20 @@
     <div class="say-box">
       <!-- 回复某人的评论 -->
       <div v-show="aite.length">
-        <strong>回复：@</strong><span>{{ aite }}</span>
-        <span @click="aite = ''" class="exit-aite" :title="'取消回复' + aite">x</span>
+        <strong>回复：@</strong>
+        <span>{{ aite }}</span>
+        <span class="exit-aite" :title="'取消回复' + aite" @click="aite = ''">x</span>
       </div>
       <!-- 文本域 -->
-      <textarea v-model="sayWords" @focus="showLogin" placeholder="这小地盘儿交给你啦 *^_^*"></textarea>
+      <textarea v-model="sayWords" placeholder="这小地盘儿交给你啦 *^_^*" @focus="showLogin"></textarea>
       <!-- 退出 -->
       <div class="icon-submit-box">
         <div class="icon-userInfo-box">
-          <div @click="emojiToggle" class="emoji-icon">
+          <div class="emoji-icon" @click="emojiToggle">
             <img src="/img/emoji/grinning.png" height="20px" width="20px" alt="" />
           </div>
           <span class="fence"></span>
-          <div class="reviewer-info" v-show="!!userInfo.name">
+          <div v-show="!!userInfo.name" class="reviewer-info">
             <img :src="userInfo.imgUrl" alt="" width="20px" height="20px" />
             <span>{{ userInfo.name }}</span>
             <a href="javascript: void(0)" @click="loginOut">退出</a>
@@ -29,8 +30,8 @@
     </div>
 
     <!-- emoji表情 -->
-    <div class="emoji-box" v-show="emojiShow">
-      <span @click="exitEmoji" class="emoji-exit">x</span>
+    <div v-show="emojiShow" class="emoji-box">
+      <span class="emoji-exit" @click="exitEmoji">x</span>
       <emoji @select="selectEmoji"></emoji>
     </div>
 
@@ -44,56 +45,56 @@
               <div><img :src="item.imgUrl" alt="" /></div>
               <h3>{{ item.name }}</h3>
             </div>
-            <pre><div class = "rev-c" v-html = "item.content"></div></pre>
+            <pre><div class="rev-c" v-html="item.content"></div></pre>
             <div class="rev-details">
               <span class="icon-clock"></span>
               <span class="rev-details-time">
                 {{ item.date | reviseTime }}
               </span>
-              <a href="#anchor-comment" class="rev-details-reply"
-                ><span @click="rep(item._id, item.name)"> 回复 </span></a
-              >
+              <a href="#anchor-comment" class="rev-details-reply">
+                <span @click="rep(item._id, item.name)">回复</span>
+              </a>
               <span
-                @click="like(item._id)"
                 :class="{
                   'icon-thumbsup': hasLiked.indexOf(item._id) !== -1,
                   'icon-like': hasLiked.indexOf(item._id) === -1
                 }"
+                @click="like(item._id)"
               ></span>
-              <span> {{ item.like }} </span>
+              <span>{{ item.like }}</span>
             </div>
           </div>
-          <div class="answer" v-if="item.reply.length > 0">
+          <div v-if="item.reply.length > 0" class="answer">
             <ul>
               <li v-for="reply in item.reply">
                 <div class="name-img-box">
                   <div><img :src="reply.imgUrl" alt="" /></div>
                   <h3>{{ reply.name }}: @{{ reply.aite }}</h3>
                 </div>
-                <pre><div class = "ans-c" v-html = "reply.content"></div></pre>
+                <pre><div class="ans-c" v-html="reply.content"></div></pre>
                 <div class="ans-details">
                   <span class="icon-clock"></span>
                   <span class="ans-details-time">
                     {{ reply.date | reviseTime }}
                   </span>
-                  <a href="#anchor-comment" class="ans-details-reply"
-                    ><span @click="rep(item._id, reply.name)"> 回复 </span></a
-                  >
+                  <a href="#anchor-comment" class="ans-details-reply">
+                    <span @click="rep(item._id, reply.name)">回复</span>
+                  </a>
                   <span
-                    @click="like(item._id, reply._id)"
                     :class="{
                       'icon-thumbsup': hasLiked.indexOf(reply._id) !== -1,
                       'icon-like': hasLiked.indexOf(reply._id) === -1
                     }"
+                    @click="like(item._id, reply._id)"
                   ></span>
-                  <span> {{ reply.like }} </span>
+                  <span>{{ reply.like }}</span>
                 </div>
               </li>
             </ul>
           </div>
         </li>
         <!-- 没有评论时显示 -->
-        <li class="empty-comment" v-if="!comments.length">
+        <li v-if="!comments.length" class="empty-comment">
           <h3>( >﹏<。)哎~~没人理我</h3>
         </li>
       </ul>
@@ -103,8 +104,8 @@
     <login></login>
 
     <!-- 错误提示框 -->
-    <transition name="mask" v-show="dialogErr.show">
-      <div class="mask" v-show="dialogErr.show" @click="dialogErr.show = false">
+    <transition v-show="dialogErr.show" name="mask">
+      <div v-show="dialogErr.show" class="mask" @click="dialogErr.show = false">
         <transition name="dialog">
           <div class="dialog" @click.stop>
             <h1>o(╯□╰)o</h1>
@@ -118,37 +119,37 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex"
+import { mapState, mapMutations, mapActions } from 'vuex'
 
-import emoji from "@/components/base/Emoji"
-import emojiData from "@/assets/js/emoji-data"
-import login from "@/components/userLogin/UserLogin"
+import emoji from '@/components/base/Emoji'
+import emojiData from '@/assets/js/emoji-data'
+import login from '@/components/userLogin/UserLogin'
 
 export default {
-  data() {
-    return {
-      sayWords: "",
-      content: "",
-      emojiShow: false,
-      replyOthers: false,
-      aite: "",
-      loginType: "",
-      _id: "",
-      hasLiked: [],
-      dialogErr: { show: false, info: "" }
-    }
-  },
   components: {
     emoji,
     login
   },
+  data() {
+    return {
+      sayWords: '',
+      content: '',
+      emojiShow: false,
+      replyOthers: false,
+      aite: '',
+      loginType: '',
+      _id: '',
+      hasLiked: [],
+      dialogErr: { show: false, info: '' }
+    }
+  },
   watch: {
     $route() {
-      let r = this.$route
-      if (r.fullPath.indexOf("#anchor-comment") === -1) {
+      const r = this.$route
+      if (r.fullPath.indexOf('#anchor-comment') === -1) {
         this.getComments({
           articleId: r.params.id,
-          cache: false 	//推荐模块切换文章重新抓取评论
+          cache: false // 推荐模块切换文章重新抓取评论
         })
       }
     }
@@ -157,7 +158,7 @@ export default {
     ...mapState({
       comments: 'comments',
       userInfo: 'userInfo',
-      articles: 'articles',
+      articles: 'articles'
     })
   },
   methods: {
@@ -165,23 +166,23 @@ export default {
       getComments: 'GetComments',
       postComment: 'PostComment',
       addComment: 'AddComment',
-      addLike: 'AddLike',
+      addLike: 'AddLike'
     }),
     ...mapMutations({
       set_user: 'SET_USER',
       handleMask: 'HANDLE_MASK',
       addLocalComments: 'ADD_LOCAL_COMMENTS',
-      addLocalCommentsLike: 'ADD_LOCAL_COMMENTS_LIKE',
+      addLocalCommentsLike: 'ADD_LOCAL_COMMENTS_LIKE'
     }),
     // 退出登陆
     loginOut() {
       // 重置用户信息
-      this.set_user({ name: "", imgUrl: "", email: "" })
+      this.set_user({ name: '', imgUrl: '', email: '' })
       // this.removeLocal()
-      localStorage.removeItem("map_blog_userInfo")
+      localStorage.removeItem('map_blog_userInfo')
       // 处理第三方登陆信息
-      let pattern = /githubId/
-      let gitCookie = document.cookie.split(";").filter((item, index, arr) => {
+      const pattern = /githubId/
+      const gitCookie = document.cookie.split(';').filter((item, index, arr) => {
         return pattern.test(item)
       })
       // // 清除github登陆的cookie信息
@@ -207,16 +208,16 @@ export default {
       this.emojiShow = false
     },
     // 发表评论
-    publishComment: function (index) {
+    publishComment: (index) => {
       // 表单验证
       if (this.validatePub()) {
         return
       }
-      let content = this.productContent()
-      let that = this
+      const content = this.productContent()
+      const that = this
       if (!this.replyOthers) {
         // 直接回复文章，一级评论
-        this.$refs.pubButton.value = "发表中..."
+        this.$refs.pubButton.value = '发表中...'
         this.postComment({
           name: this.userInfo.name,
           imgUrl: this.userInfo.imgUrl,
@@ -230,16 +231,16 @@ export default {
         }).then((data) => {
           if (data._id) {
             setTimeout(() => {
-              that.$refs.pubButton.value = "发表评论"
-              that.sayWords = ""
+              that.$refs.pubButton.value = '发表评论'
+              that.sayWords = ''
               that.addLocalComments({ add: data, type: 1 })
             }, 200)
           }
         })
       } else {
         // 回复他人,二级评论
-        this.$refs.pubButton.value = "发表中..."
-        let uif = this.userInfo
+        this.$refs.pubButton.value = '发表中...'
+        const uif = this.userInfo
         this.addComment({
           _id: this._id,
           name: uif.name,
@@ -253,9 +254,9 @@ export default {
         }).then((data) => {
           if (data._id) {
             setTimeout(() => {
-              that.$refs.pubButton.value = "发表评论"
-              that.sayWords = ""
-              that.aite = ""
+              that.$refs.pubButton.value = '发表评论'
+              that.sayWords = ''
+              that.aite = ''
               that.replyOthers = false
               that.addLocalComments({ add: data, type: 2, _id: that._id })
             }, 200)
@@ -272,12 +273,12 @@ export default {
       }
       // 非空
       if (!this.sayWords.length) {
-        this.dialogErr = { show: true, info: "内容不能为空" }
+        this.dialogErr = { show: true, info: '内容不能为空' }
         return true
       }
       // 不能多于500字
       if (this.sayWords.length > 500) {
-        this.dialogErr = { show: true, info: "内容过长，请不要超过500个字符" }
+        this.dialogErr = { show: true, info: '内容过长，请不要超过500个字符' }
         return true
       }
     },
@@ -285,16 +286,16 @@ export default {
     productContent() {
       let emojiObject = {}
       let finStr = this.sayWords
-      finStr = finStr.replace(new RegExp("<", "g"), "&lt")
-      finStr = finStr.replace(new RegExp(">", "g"), "&gt")
+      finStr = finStr.replace(new RegExp('<', 'g'), '&lt')
+      finStr = finStr.replace(new RegExp('>', 'g'), '&gt')
       Object.values(emojiData).forEach((item, index, arr) => {
         emojiObject = Object.assign(emojiObject, item)
       })
       Object.keys(emojiObject).forEach((item) => {
-        let path = "/img/emoji/"
-        let value = emojiObject[item]
-        let imgURL = `<span style = "display: inline-block;vertical-align: middle"><img src=${path}${value} alt="" width = "16px" height = "16px" /></span>`
-        finStr = finStr.replace(new RegExp(item, "g"), imgURL)
+        const path = '/img/emoji/'
+        const value = emojiObject[item]
+        const imgURL = `<span style = "display: inline-block;vertical-align: middle"><img src=${path}${value} alt="" width = "16px" height = "16px" /></span>`
+        finStr = finStr.replace(new RegExp(item, 'g'), imgURL)
       })
       return finStr
     },
@@ -327,7 +328,7 @@ export default {
     },
     // 点赞
     handleLike(rev_id, rep_id, saveLocal) {
-      let that = this
+      const that = this
       if (this.hasLiked.indexOf(saveLocal) === -1) {
         // 点赞
         this.addLike({
@@ -336,26 +337,26 @@ export default {
           addOrDel: 1
         }).then((data) => {
           that.hasLiked.push(saveLocal)
-          localStorage.setItem("articleId_comment" + that.$route.params.id, JSON.stringify(that.hasLiked))
+          localStorage.setItem('articleId_comment' + that.$route.params.id, JSON.stringify(that.hasLiked))
           that.addLocalCommentsLike({ type: 1, rev_id: rev_id, rep_id: rep_id })
         })
       } else {
-        //取消赞
+        // 取消赞
         this.addLike({
           revId: rev_id,
           repId: rep_id,
           addOrDel: -1
         }).then(() => {
           that.hasLiked.splice(that.hasLiked.indexOf(saveLocal), 1)
-          localStorage.setItem("articleId_comment" + that.$route.params.id, JSON.stringify(that.hasLiked))
+          localStorage.setItem('articleId_comment' + that.$route.params.id, JSON.stringify(that.hasLiked))
           that.addLocalCommentsLike({ type: -1, rev_id: rev_id, rep_id: rep_id })
         })
       }
-    },
+    }
   },
   mounted() {
     // 从localStorage读取某文章的点赞
-    let key = "articleId_comment" + this.$route.params.id
+    const key = 'articleId_comment' + this.$route.params.id
     if (localStorage.getItem(key)) {
       this.hasLiked = JSON.parse(localStorage.getItem(key))
     }
@@ -364,7 +365,7 @@ export default {
       articleId: this.$route.params.id,
       cache: false
     })
-  },
+  }
 }
 </script>
 
@@ -394,7 +395,7 @@ h2 {
 .say-box {
   margin: 10px 10px 5px;
   textarea {
-    font-family: "STFangsong";
+    font-family: 'STFangsong';
     resize: none;
     overflow-y: none;
     outline: none;
@@ -550,7 +551,7 @@ h2 {
 .rev-details,
 .ans-details {
   display: flex;
-  font-family: "微软雅黑";
+  font-family: '微软雅黑';
   font-size: 12px;
   font-weight: 500;
   justify-content: flex-end;
