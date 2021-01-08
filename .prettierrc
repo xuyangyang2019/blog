@@ -2,11 +2,13 @@
   "tabWidth": 2,
   "useTabs": false,
   "semi": false,
-  "singleQuote": false,
-  "trailingComma": "none",
+  "singleQuote": true,
+  "TrailingCooma": "none",
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
   "arrowParens": "always",
+  "parser": "babel",
   "printWidth": 120,
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "htmlWhitespaceSensitivity": "ignore"
 }

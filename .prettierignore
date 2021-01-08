@@ -5,3 +5,5 @@ lib/
 node_modules/
 data/
 dist/
+public/
+src/assets/
