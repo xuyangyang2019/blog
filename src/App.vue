@@ -267,8 +267,8 @@ export default {
 // @import "~@/assets/font-awesome/css/font-awesome.css";
 
 // @import "./assets/css/prism.css";
-@import "./assets/icomoon/style.css";
-@import "./assets/css/emoji-sprite.css";
+@import './assets/icomoon/style.css';
+@import './assets/css/emoji-sprite.css';
 
 * {
   margin: 0;
@@ -280,7 +280,7 @@ a {
 }
 
 body {
-  font: 400 16px/20px Arial, Helvetica, Tahoma, "华文细黑", "Microsoft YaHei", "微软雅黑", sans-serif;
+  font: 400 16px/20px Arial, Helvetica, Tahoma, '华文细黑', 'Microsoft YaHei', '微软雅黑', sans-serif;
   color: #000;
 }
 
@@ -339,7 +339,7 @@ a {
     display: inline-block;
     width: 50px;
     height: 50px;
-    background: url("/img/backTop.png") 0 0 no-repeat;
+    background: url('/img/backTop.png') 0 0 no-repeat;
   }
   a:hover {
     background-position: -50px 0;
@@ -384,7 +384,7 @@ a {
 //平板
 @media screen and (min-width: 768px) {
   .fix-bg {
-    background: url("../public/img/mainBg2.jpg") 0 0 no-repeat;
+    background: url('../public/img/mainBg2.jpg') 0 0 no-repeat;
     background-size: 100% 100%;
   }
   .section {

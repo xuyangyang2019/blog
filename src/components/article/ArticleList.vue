@@ -5,13 +5,13 @@
       <li v-for="(item, index) in articleList" class="article-item">
         <!-- title -->
         <h2 class="article-title">
-          <a href="javascript: void(0)" @click="jump(item)"> {{ item.title }} </a>
+          <a href="javascript: void(0)" @click="jump(item)">{{ item.title }}</a>
         </h2>
         <div class="article-msg">
           <!-- 标签 -->
           <span class="icon-tag-stroke"></span>
           <span class="article-msg-tag">
-            <span v-for="tag in item.tag"> {{ tag | changeLife }} </span>
+            <span v-for="tag in item.tag">{{ tag | changeLife }}</span>
           </span>
           <!-- 时间 -->
           <span class="icon-clock"></span>
