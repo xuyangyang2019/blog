@@ -6,6 +6,7 @@ class BaseDAO {
   constructor(model) {
     this.model = model
   }
+
   /**
   * 查询条数
   * @param {Object} condition 查询条件
@@ -14,6 +15,7 @@ class BaseDAO {
     const count = await this.model.countDocuments(condition)
     return { count: count }
   }
+
   /**
     * 条件查询，单个结果
     * @param {Object} condition 查询条件
@@ -23,6 +25,7 @@ class BaseDAO {
     const result = await this.model.findOne(condition)
     return result
   }
+
   /**
    * 条件查询，多个结果
    * @param {Object} condition 查询条件
@@ -32,6 +35,7 @@ class BaseDAO {
     const result = await this.model.find(condition, fields)
     return result
   }
+
   /**
    * 分页查询
    * @param {Object} condition 查询条件
@@ -43,21 +47,23 @@ class BaseDAO {
     const count = await this.model.countDocuments(condition)
     const list = await this.model
       .find(condition)
-      .skip((parseInt(pageNum) - 1) * 10)
-      .limit(parseInt(pageSize))
+      .skip((parseInt(pageNum, 10) - 1) * 10)
+      .limit(parseInt(pageSize, 10))
       .sort({ _id: -1 })
       .exec()
     return { count, list }
   }
+
   /**
    * id查询
-   * @param {String} id 
+   * @param {String} id
    * @return {Object} 查询结果
    */
   async findById(id) {
     const result = await this.model.findById(id)
     return result
   }
+
   /**
    * id删除
    * @param {String} id
@@ -67,6 +73,7 @@ class BaseDAO {
     const result = await this.model.findByIdAndRemove(id)
     return result
   }
+
   /**
    * id更新
    * @param {String} id
@@ -76,6 +83,7 @@ class BaseDAO {
     const result = await this.model.findByIdAndUpdate(id, data, options)
     return result
   }
+
   /**
    * 新增
    * @param {Object} data Json数据
@@ -86,6 +94,7 @@ class BaseDAO {
     const result = await instance.save()
     return result
   }
+
   /**
    * 批量删除
    * @param {Object} condition 条件
@@ -94,6 +103,7 @@ class BaseDAO {
     const result = await this.model.deleteMany(condition)
     return result
   }
+
   /**
    * 批量更新
    * @param {Object} condition 条件

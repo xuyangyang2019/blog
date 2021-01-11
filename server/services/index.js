@@ -7,6 +7,7 @@ const services = {}
 console.log(`process services ...`)
 
 for (const file of files) {
+  // eslint-disable-next-line global-require
   const service = require(`./${file}`)
   services[`${file.replace(/\.js/, '')}`] = service
 }
