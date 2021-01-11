@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 const fs = require('fs')
 const path = require('path')
 
@@ -41,9 +42,11 @@ function resolve(dir) {
 const backendApp = new Koa()
 
 // Logger
-backendApp.use(Koa_Logger((str) => {
-  console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
-}))
+backendApp.use(
+  Koa_Logger((str) => {
+    console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
+  })
+)
 
 // Error Handler
 backendApp.use(errorHandler)
@@ -76,18 +79,22 @@ backendApp.use(jsonp())
 const LRU = require('lru-cache')
 const { createBundleRenderer } = require('vue-server-renderer')
 function createRenderer(bundle, options) {
-  return createBundleRenderer(bundle, Object.assign(options, {
-    cache: LRU({
-      max: 1000,
-      maxAge: 1000 * 60 * 15
-    }),
-    runInNewContext: false // 推荐
-  }))
+  return createBundleRenderer(
+    bundle,
+    Object.assign(options, {
+      cache: LRU({
+        max: 1000,
+        maxAge: 1000 * 60 * 15
+      }),
+      runInNewContext: false // 推荐
+    })
+  )
 }
 let renderer
 if (isProd) {
   // 生产环境,从打包好的文件夹读取bundle和manifest
   const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
+  // ssr
   const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
   const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
   renderer = createRenderer(serverBundle, {

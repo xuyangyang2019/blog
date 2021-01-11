@@ -5,9 +5,10 @@ module.exports = {
   // 文章列表
   'GET /api/getArticles': async (ctx, next) => {
     let params = {}
-    let pageNum = ctx.query.pageNum || 1
-    let pageSize = ctx.query.pageSize || 10
-    if (!ctx.query.tag) {  // 抓取首页文章
+    const pageNum = ctx.query.pageNum || 1
+    const pageSize = ctx.query.pageSize || 10
+    if (!ctx.query.tag) {
+      // 抓取首页文章
       params = {
         publish: ctx.query.publish
       }
@@ -17,7 +18,7 @@ module.exports = {
         tag: ctx.query.tag
       }
     }
-    let result = await ArticleService.findByPage(params, pageNum, pageSize)
+    const result = await ArticleService.findByPage(params, pageNum, pageSize)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
@@ -27,7 +28,7 @@ module.exports = {
   },
   // 获取文章数量 暂时不用
   'GET /api/getArticlesCount': async (ctx, next) => {
-    let publish = ctx.query.publish === "false" ? false : true
+    const publish = ctx.query.publish !== 'false'
     let result = {}
     // 首页请求
     if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
@@ -35,25 +36,28 @@ module.exports = {
     }
     // 通过文章标签请求
     if (ctx.query.tag) {
-      let tag = ctx.query.tag
+      const tag = ctx.query.tag
       result = await ArticleService.getArticlesCount({ publish: publish, tag: tag })
     }
     // 前台后台时间范围请求
     if (ctx.query.start) {
-      let start = new Date(parseInt(ctx.query.start))
-      let end = new Date(parseInt(ctx.query.end))
-      result = await ArticleService.getArticlesCount({ publish: ctx.query.publish, date: { "$gte": start, "$lte": end } })
+      const start = new Date(parseInt(ctx.query.start, 10))
+      const end = new Date(parseInt(ctx.query.end, 10))
+      result = await ArticleService.getArticlesCount({ publish: ctx.query.publish, date: { $gte: start, $lte: end } })
     }
     // 前台后台关键词搜索请求
     if (ctx.query.key) {
-      num = await ArticleService.getArticlesCount({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } })
+      num = await ArticleService.getArticlesCount({
+        publish: ctx.query.publish,
+        title: { $regex: ctx.query.key, $options: 'i' }
+      })
     }
     ctx.result = result
     return next()
   },
   // 获取推荐文章
   'GET /api/getArticlesByPv': async (ctx, next) => {
-    let result = await ArticleService.getArticlesByPv()
+    const result = await ArticleService.getArticlesByPv()
     if (!result) {
       ctx.error = '文章不存在'
     } else {
@@ -63,15 +67,15 @@ module.exports = {
   },
   // 文章归档
   'GET /api/getArticelsByTime': async (ctx, next) => {
-    let publish = ctx.query.publish === "false" ? false : true
-    let timeArr = []
-    let timeMap = {}
-    let doc = await ArticleService.findMany({ publish: publish }, { data: 1 })
+    const publish = ctx.query.publish !== 'false'
+    const timeArr = []
+    const timeMap = {}
+    const doc = await ArticleService.findMany({ publish: publish }, { data: 1 })
     if (!doc) {
       ctx.error = '文章不存在'
     } else {
       doc.forEach((item, index, arr) => {
-        let yearMonth = new Date(item.date).getFullYear() + "年" + (new Date(item.date).getMonth() + 1) + "月"
+        const yearMonth = new Date(item.date).getFullYear() + '年' + (new Date(item.date).getMonth() + 1) + '月'
         timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
       })
       for (const key in timeMap) {
@@ -88,11 +92,11 @@ module.exports = {
   },
   // 获取已发表的文章标签
   'GET /api/getArticleTags': async (ctx, next) => {
-    let publish = ctx.query.publish === "false" ? false : true
-    let tagArr = []
-    let tagMap = {}
+    const publish = ctx.query.publish !== 'false'
+    const tagArr = []
+    const tagMap = {}
     // 所有的文章
-    let docs = await ArticleService.findMany({ publish: publish }, { tag: 1, _id: 0 })
+    const docs = await ArticleService.findMany({ publish: publish }, { tag: 1, _id: 0 })
     if (!docs) {
       ctx.error = '文章不存在'
     } else {
@@ -113,7 +117,7 @@ module.exports = {
       ctx.result = tagMap
     }
     return next()
-  },
+  }
   // // 抓取单一文章
   // 'GET /onlyArticle': async (ctx, next) => {
   //   let params = {}
