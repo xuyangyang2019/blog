@@ -9,19 +9,19 @@ const path = require('path')
 function addMapping(router, mapping) {
   for (const url in mapping) {
     if (url.startsWith('GET ')) {
-      let path = url.substring(4)
+      const path = url.substring(4)
       router.get(path, mapping[url])
     } else if (url.startsWith('POST ')) {
-      let path = url.substring(5)
+      const path = url.substring(5)
       router.post(path, mapping[url])
     } else if (url.startsWith('PUT ')) {
-      let path = url.substring(4)
+      const path = url.substring(4)
       router.put(path, mapping[url])
     } else if (url.startsWith('PATCH ')) {
-      let path = url.substring(6)
+      const path = url.substring(6)
       router.patch(path, mapping[url])
     } else if (url.startsWith('DELETE ')) {
-      let path = url.substring(7)
+      const path = url.substring(7)
       router.del(path, mapping[url])
     } else {
       console.log(`invalid URL: ${url}`)
@@ -36,16 +36,16 @@ function addMapping(router, mapping) {
  */
 function addControllers(router) {
   // 这里可以用sync是因为启动时只运行一次，不存在性能问题:
-  let controllers_path = path.resolve(__dirname, '../api')
-  let files = fs.readdirSync(controllers_path)
+  const controllers_path = path.resolve(__dirname, '../api')
+  const files = fs.readdirSync(controllers_path)
   // 过滤出.js文件:
-  let js_files = files.filter((f) => {
+  const js_files = files.filter((f) => {
     return f.endsWith('.js')
   })
   // 处理每个js文件:
-  for (let f of js_files) {
+  for (const f of js_files) {
     // 导入js文件
-    let mapping = require(`${controllers_path}/` + f)
+    const mapping = require(`${controllers_path}/` + f)
     addMapping(router, mapping)
   }
 }

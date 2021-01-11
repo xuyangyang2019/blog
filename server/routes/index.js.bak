@@ -4,7 +4,7 @@
 
 const router = require('koa-router')()
 
-const api = require('./api')()
+const api = require('./api.js.bak')()
 
 router.use('/api', api.routes(), api.allowedMethods())
 
