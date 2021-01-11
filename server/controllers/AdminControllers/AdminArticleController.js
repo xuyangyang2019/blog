@@ -1,4 +1,5 @@
 const ArticleService = require('../../services').ArticleService
+
 const ImgUploadService = require('../../services/fileService/ImgUploadService')
 const { InvalidQueryError } = require('../../lib/error')
 
@@ -44,7 +45,7 @@ module.exports = {
     return next()
   },
   'POST /api/uploadArticleImg': async (ctx, next) => {
-    //按月存放上传的图片
+    // 按月存放上传的图片
     const date = new Date()
     const year = date.getFullYear()
     const month = (Array(2).join(0) + (date.getMonth() + 1)).slice(-2)

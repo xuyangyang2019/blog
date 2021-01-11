@@ -4,11 +4,11 @@ const { InvalidQueryError } = require('../../lib/error')
 module.exports = {
   // 删除指定的留言
   'DELETE /api/removeLeavewords': async (ctx, next) => {
-    let ids = ctx.query.id
+    const ids = ctx.query.id
     if (!ids) {
       throw new InvalidQueryError()
     }
-    let result = await MsgBoardService.delete({ _id: { $in: ids } })
+    const result = await MsgBoardService.delete({ _id: { $in: ids } })
     if (!result) {
       ctx.error = '删除留言失败！'
     } else {
