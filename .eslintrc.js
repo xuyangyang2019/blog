@@ -11,9 +11,10 @@ module.exports = {
     es6: true // 设置所需检查代码为 es6 语法书写
   },
   extends: ['plugin:vue/recommended', 'eslint:recommended'], // 扩展使用 vue 检查规则和eslint推荐规则
+  // add your custom rules here 0忽略 1warn 2 error
   rules: {
     'vue/attribute-hyphenation': 0, // 忽略属性连字
-    'vue/max-attributes-per-line': [2, { singleline: 10, multiline: { max: 1, allowFirstLine: false }}], // 每行最大属性
+    'vue/max-attributes-per-line': [2, { singleline: 10, multiline: { max: 1, allowFirstLine: false } }], // 每行最大属性
     'vue/singleline-html-element-content-newline': 'off', // 单行html元素内容在新的一行
     'vue/multiline-html-element-content-newline': 'off', // 多行html元素内容在新的一行
     'vue/html-closing-bracket-newline': 'off', // html右括号在新的一行
@@ -113,7 +114,7 @@ module.exports = {
     'no-with': 2, // 禁用with
     'no-var': 2, // 禁用var
     'one-var': [2, { initialized: 'never' }], // 强制将变量声明为每个函数（对于var）或块（对于let和const）范围一起声明或单独声明。 initialized: 'never' 每个作用域要求多个变量声明用于初始化变量
-    'operator-linebreak': [2, 'after', { overrides: { '?': 'before', ':': 'before' }}], // 实施一致的换行
+    'operator-linebreak': [2, 'after', { overrides: { '?': 'before', ':': 'before' } }], // 实施一致的换行
     'padded-blocks': [2, 'never'], // 在块内强制执行一致的空行填充
     'prefer-destructuring': ['error', { object: false, array: false }], // 此规则强制使用解构而不是通过成员表达式访问属性。
     quotes: [2, 'single', { avoidEscape: true, allowTemplateLiterals: true }], // avoidEscape: true 允许字符串使用单引号或双引号，只要字符串包含必须以其他方式转义的引号 ;allowTemplateLiterals: true 允许字符串使用反引号
@@ -137,7 +138,7 @@ module.exports = {
     'yield-star-spacing': [2, 'both'], // 强制执行*周围 yield*表达式的间距，两侧都必须有空格
     yoda: [2, 'never'],
     'prefer-const': 2, // 使用let关键字声明的变量，但在初始分配后从未重新分配变量，应改为const声明
-    'object-curly-spacing': [2, 'always', { objectsInObjects: false }], // 不允许以对象元素开始和/或以对象元素结尾的对象的大括号内的间距
+    'object-curly-spacing': [0, 'always', { objectsInObjects: false }], // 不允许以对象元素开始和/或以对象元素结尾的对象的大括号内的间距
     'array-bracket-spacing': [2, 'never'] // 不允许数组括号内的空格
   }
 }

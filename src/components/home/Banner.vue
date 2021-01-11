@@ -1,6 +1,6 @@
 <template>
   <!-- 给图片加遮罩层 -->
-  <div class="banner" ref="banner">
+  <div ref="banner" class="banner">
     <ul>
       <!-- 此处transition有bug,离开当前标签，再次返回后，图片会消失，直到轮播到下一张图片 -->
       <!-- <transition-group name="slider-fade" tag="div"> -->
@@ -13,7 +13,7 @@
         @touchstart.stop="touchStart($event)"
         @touchend.stop="touchEnd($event)"
       >
-        <img :data-src="item.url" alt="" src="/img/pic-loading.gif" ref="img" />
+        <img ref="img" :data-src="item.url" alt="" src="/img/pic-loading.gif" />
         <div class="img-shadow">
           <div class="wellknown">
             <div>{{ item.word }}</div>
@@ -45,37 +45,42 @@ export default {
   data() {
     return {
       currentIndex: 0, // 当前的banner
-      startPos: { x: "", y: "", date: "" },
-      move: { x: "", y: "" },
+      startPos: { x: '', y: '', date: '' },
+      move: { x: '', y: '' },
       // banner信息
       bannerData: [
         {
           url: '/img/banner/one.jpeg',
-          word: "Success is not final, failure is not fatal. It is the courage to continue that counts.",
-          person: "Winston Churchill"
+          word: 'Success is not final, failure is not fatal. It is the courage to continue that counts.',
+          person: 'Winston Churchill'
         },
         {
-          url: "/img/banner/two.jpeg",
-          word: "生命中最伟大的光辉不在于永不坠落，而是坠落后总能再度升起。我欣赏这种有弹性的生命状态，快乐地经历风雨，笑对人生。",
-          person: "曼德拉"
+          url: '/img/banner/two.jpeg',
+          word:
+            '生命中最伟大的光辉不在于永不坠落，而是坠落后总能再度升起。我欣赏这种有弹性的生命状态，快乐地经历风雨，笑对人生。',
+          person: '曼德拉'
         },
         {
-          url: "/img/banner/three.jpeg",
-          word: "时间是一只藏在黑暗中的温柔的手，在你一出神一恍惚之间，物走星移。",
-          person: "龙应台"
+          url: '/img/banner/three.jpeg',
+          word: '时间是一只藏在黑暗中的温柔的手，在你一出神一恍惚之间，物走星移。',
+          person: '龙应台'
         },
         {
-          url: "/img/banner/four.jpeg",
-          word: "一个人可以被毁灭，但不能被打败。",
-          person: "海明威"
+          url: '/img/banner/four.jpeg',
+          word: '一个人可以被毁灭，但不能被打败。',
+          person: '海明威'
         },
         {
-          url: "/img/banner/five.jpeg",
-          word: "我要纵身跳入时代的奔走，我要纵身跳入时代的年轮：苦痛，欢乐，失败，成功，我都不问，男儿的事业原本要昼夜不停。",
-          person: "歌德"
+          url: '/img/banner/five.jpeg',
+          word:
+            '我要纵身跳入时代的奔走，我要纵身跳入时代的年轮：苦痛，欢乐，失败，成功，我都不问，男儿的事业原本要昼夜不停。',
+          person: '歌德'
         }
       ]
     }
+  },
+  mounted() {
+    this.lazyLoad()
   },
   methods: {
     // 实现图片懒加载
@@ -84,7 +89,7 @@ export default {
         if (index === this.currentIndex) {
           // 清]除定时器，防止图片还没加载完成就轮播到下一张
           clearInterval(this.timer)
-          let img = new Image()
+          const img = new Image()
           img.src = item.dataset.src
           img.onload = () => {
             item.src = img.src
@@ -120,51 +125,49 @@ export default {
     },
     // 移动端也会触发mouseover事件（奇怪--），所以做一下判断，否则手动切换图片会消除定时器
     stopSlider_cpt() {
-      if (!/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) { //移动端
+      if (!/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+        // 移动端
         clearInterval(this.timer)
       }
     },
     // 移动端滑动
     touchStart(event) {
       clearInterval(this.timer)
-      let touch = event.targetTouches[0] // touches数组对象获得屏幕上所有的touch，取第一个touch
-      this.startPos = { x: touch.pageX, y: touch.pageY, date: +new Date } // 取第一个touch的坐标值
+      const touch = event.targetTouches[0] // touches数组对象获得屏幕上所有的touch，取第一个touch
+      this.startPos = { x: touch.pageX, y: touch.pageY, date: +new Date() } // 取第一个touch的坐标值
     },
     touchMove: function (event, index) {
       // 防止滚屏
       event.preventDefault()
-      if (event.targetTouches.length > 1 || event.scale && event.scale !== 1) return
-      let touch = event.targetTouches[0]
+      if (event.targetTouches.length > 1 || (event.scale && event.scale !== 1)) return
+      const touch = event.targetTouches[0]
       this.move.x = touch.pageX - this.startPos.x
       this.move.y = touch.pageY - this.startPos.y
     },
     touchEnd(event) {
-      let ted = event.targetTouches[0], // touches数组对象获得屏幕上所有的touch，取第一个touch
-        moveDate = +new Date() - this.startPos.date
+      const ted = event.targetTouches[0] // touches数组对象获得屏幕上所有的touch，取第一个touch
+      const moveDate = +new Date() - this.startPos.date
       if (Math.abs(this.move.x) > Math.abs(this.move.y) && moveDate < 1000 && this.move.x < -150) {
         if (this.currentIndex < this.bannerData.length - 1) {
           this.currentIndex++
-          this.move = { x: 0, y: 0, date: "" }
+          this.move = { x: 0, y: 0, date: '' }
         } else {
           this.currentIndex = 0
-          this.move = { x: 0, y: 0, date: "" }
+          this.move = { x: 0, y: 0, date: '' }
         }
       }
       if (Math.abs(this.move.x) > Math.abs(this.move.y) && moveDate < 1000 && this.move.x > 150) {
         if (this.currentIndex > 0) {
           this.currentIndex--
-          this.move = { x: 0, y: 0, date: "" }
+          this.move = { x: 0, y: 0, date: '' }
         } else {
           this.currentIndex = this.bannerData.length - 1
-          this.move = { x: 0, y: 0, date: "" }
+          this.move = { x: 0, y: 0, date: '' }
         }
       }
       this.lazyLoad()
     }
-  },
-  mounted() {
-    this.lazyLoad()
-  },
+  }
 }
 </script>
 

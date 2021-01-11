@@ -5,13 +5,13 @@ const path = require('path')
 const Koa = require('koa')
 // 日志中间件
 const Koa_Logger = require('koa-logger')
-const Moment = require("moment")
+const Moment = require('moment')
 // const { loggerMiddleware } = require('./middlewares/logger')
 
 // 数据压缩
 const KoaCompress = require('koa-compress')()
 // 解析静态资源
-const Koa_Static = require("koa-static")
+const Koa_Static = require('koa-static')
 // 解析POST请求
 const koaBody = require('koa-body')
 // ajax 跨域问题
@@ -35,12 +35,12 @@ const uri = `http://${currentIP}:${appConfig.appPort}`
 const isProd = process.env.NODE_ENV === 'production'
 // const resolve = file => path.resolve(__dirname, file)
 function resolve(dir) {
-    return path.resolve(process.cwd(), dir)
+  return path.resolve(process.cwd(), dir)
 }
 // /**
 //  * 用Promise封装异步读取文件方法
 //  * @param  {string} page html文件名称
-//  * @return {promise}      
+//  * @return {promise}
 //  */
 // function render(page) {
 //     return new Promise((resolve, reject) => {
@@ -77,9 +77,11 @@ const backendApp = new Koa()
 // const loggerAsync = require('./middlewares/logger-async')
 // app.use(loggerAsync())
 // app.use(logger())
-backendApp.use(Koa_Logger((str) => {
+backendApp.use(
+  Koa_Logger((str) => {
     console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
-}))
+  })
+)
 
 // gzip压缩
 backendApp.use(KoaCompress)
@@ -156,7 +158,7 @@ backendApp.use(jsonp())
 
 // **************最后一个middleware处理URL路由*******************************
 /**
- * 自动扫描controllers文件夹中的js文件 
+ * 自动扫描controllers文件夹中的js文件
  * controllers中的js文件 导出模块方法{'GET /login':async (ctx,next)=>{},...}
  * 自动require js文件到 mapping = {'GET /login':async (ctx,next)=>{}}
  * 遍历每个mapping 自动添加router router.get(path, mapping[url])
@@ -169,131 +171,145 @@ backendApp.use(jsonp())
 const routers = require('./routers/index')
 backendApp.use(routers.routes()).use(routers.allowedMethods())
 
-
 function createRenderer(bundle, options) {
-    return createBundleRenderer(bundle, Object.assign(options, {
-        cache: LRU({
-            max: 1000,
-            maxAge: 1000 * 60 * 15
-        }),
-        runInNewContext: false // 推荐
-    }))
+  return createBundleRenderer(
+    bundle,
+    Object.assign(options, {
+      cache: LRU({
+        max: 1000,
+        maxAge: 1000 * 60 * 15
+      }),
+      runInNewContext: false // 推荐
+    })
+  )
 }
 let renderer
 if (isProd) {
-    // 生产环境,从打包好的文件夹读取bundle和manifest
-    const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
-    const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
-    const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
-    renderer = createRenderer(serverBundle, {
-        template: template, // （可选）页面模板
-        clientManifest: clientManifest // （可选）客户端构建 manifest
-    })
+  // 生产环境,从打包好的文件夹读取bundle和manifest
+  const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
+  const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
+  const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
+  renderer = createRenderer(serverBundle, {
+    template: template, // （可选）页面模板
+    clientManifest: clientManifest // （可选）客户端构建 manifest
+  })
 } else {
-    // 开发环境,从内存中读取bundle和manifest
-    setUpDevServer(backendApp, uri, (bundle, options) => {
-        try {
-            renderer = createRenderer(bundle, options)
-        } catch (e) {
-            console.log('\nbundle error', e)
-        }
-    })
+  // 开发环境,从内存中读取bundle和manifest
+  setUpDevServer(backendApp, uri, (bundle, options) => {
+    try {
+      renderer = createRenderer(bundle, options)
+    } catch (e) {
+      console.log('\nbundle error', e)
+    }
+  })
 }
 
 const renderData = (ctx, renderer) => {
-    const context = {
-        url: ctx.url,
-        title: '首页 -xyy的小站', // 默认title
-        author: 'xyy', // 默认author
-        keywords: 'xyy', // 默认keywords
-        description: 'xyy的blog', //默认description 
-        cookies: ctx.request.headers.cookie
-    }
-    return new Promise((resolve, reject) => {
-        renderer.renderToString(context, (err, html) => {
-            if (err) {
-                return reject(err)
-            }
-            resolve(html)
-        })
+  const context = {
+    url: ctx.url,
+    title: '首页 -xyy的小站', // 默认title
+    author: 'xyy', // 默认author
+    keywords: 'xyy', // 默认keywords
+    description: 'xyy的blog', // 默认description
+    cookies: ctx.request.headers.cookie
+  }
+  return new Promise((resolve, reject) => {
+    renderer.renderToString(context, (err, html) => {
+      if (err) {
+        return reject(err)
+      }
+      resolve(html)
     })
+  })
 }
 
 // 实例化路由
 const router = new Router()
 
-//前端请求
-router.get(["/", "/home", "/article", "/article/:articleList", "/article/:articleList/:id", "/life",
-    "/life/:id", "/msgBoard", "/search/:searchKey", "/timeLine/:time", "/login_qq"], async (ctx, next) => {
-        // const context = {
-        //     title: 'mapBlog',
-        //     url: req.url
-        // }
-        if (!renderer) {
-            ctx.type = 'html'
-            return ctx.body = 'waiting for compilation... refresh in a moment.'
-        }
-        // if (Object.keys(proxyConfig).findIndex(vl => ctx.url.startsWith(vl)) > -1) {
-        //     return next()
-        // }
-        let html, status
-        try {
-            status = 200
-            html = await renderData(ctx, renderer)
-        } catch (e) {
-            console.log('\ne', e)
-            if (e.code === 404) {
-                status = 404
-                html = '404 | Not Found'
-            } else {
-                status = 500
-                html = '500 | Internal Server Error'
-            }
-        }
-        ctx.type = 'html'
-        ctx.status = status ? status : ctx.status
-        ctx.body = html
-        // renderer.renderToString(context, (err, html) => {
-        //     const { title, meta } = context.meta.inject()
-        //     if (err) {
-        //         res.status(500).end('Internal Server Error')
-        //         return
-        //     }
-        //     html = html.replace(/<title.*?<\/title>/g, title.text())
-        //     html = html.replace(/<meta\s+.*?name="description".*?>/g, meta.text())
-        //     res.end(html)
-        // })
-    })
-
-//后端请求
-router.get(["/admin", "/admin/*", "/login"], async (ctx, next) => {
-    let html = fs.readFileSync(path.join(__dirname, '../dist-admin/index.html'), 'utf-8')
-    console.log(html)
-    // ctx.response.body = html
+// 前端请求
+router.get(
+  [
+    '/',
+    '/home',
+    '/article',
+    '/article/:articleList',
+    '/article/:articleList/:id',
+    '/life',
+    '/life/:id',
+    '/msgBoard',
+    '/search/:searchKey',
+    '/timeLine/:time',
+    '/login_qq'
+  ],
+  async (ctx, next) => {
+    // const context = {
+    //     title: 'mapBlog',
+    //     url: req.url
+    // }
+    if (!renderer) {
+      ctx.type = 'html'
+      return (ctx.body = 'waiting for compilation... refresh in a moment.')
+    }
+    // if (Object.keys(proxyConfig).findIndex(vl => ctx.url.startsWith(vl)) > -1) {
+    //     return next()
+    // }
+    let html, status
+    try {
+      status = 200
+      html = await renderData(ctx, renderer)
+    } catch (e) {
+      console.log('\ne', e)
+      if (e.code === 404) {
+        status = 404
+        html = '404 | Not Found'
+      } else {
+        status = 500
+        html = '500 | Internal Server Error'
+      }
+    }
+    ctx.type = 'html'
+    ctx.status = status || ctx.status
     ctx.body = html
-    // res.render("admin.html",{title: "登录"})
+    // renderer.renderToString(context, (err, html) => {
+    //     const { title, meta } = context.meta.inject()
+    //     if (err) {
+    //         res.status(500).end('Internal Server Error')
+    //         return
+    //     }
+    //     html = html.replace(/<title.*?<\/title>/g, title.text())
+    //     html = html.replace(/<meta\s+.*?name="description".*?>/g, meta.text())
+    //     res.end(html)
+    // })
+  }
+)
+
+// 后端请求
+router.get(['/admin', '/admin/*', '/login'], async (ctx, next) => {
+  const html = fs.readFileSync(path.join(__dirname, '../dist-admin/index.html'), 'utf-8')
+  console.log(html)
+  // ctx.response.body = html
+  ctx.body = html
+  // res.render("admin.html",{title: "登录"})
 })
 
 router.get('*', function (ctx, next) {
-    // res.render('404.html', {
-    //     title: 'No Found'
-    // })
-    ctx.response.body = '<h5>Index</h5>';
+  // res.render('404.html', {
+  //     title: 'No Found'
+  // })
+  ctx.response.body = '<h5>Index</h5>'
 })
 
 backendApp.use(router.routes())
 
 // 错误处理
 backendApp.on('error', (err) => {
-    console.error('Server error: \n%s\n%s ', err.stack || '')
+  console.error('Server error: \n%s\n%s ', err.stack || '')
 })
-
 
 backendApp.listen(appConfig.appPort, () => {
-    // console.log('服务器端渲染地址： http://localhost:3000')
-    console.log(`\n> Starting server... ${uri} \n`)
+  // console.log('服务器端渲染地址： http://localhost:3000')
+  console.log(`\n> Starting server... ${uri} \n`)
 })
-
 
 // 前端Server
 // const frontendApp = new Koa()
