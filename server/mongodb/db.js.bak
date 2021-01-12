@@ -121,7 +121,7 @@ const db = {
 }
 
 const md5 = require('js-md5')
-const localTime = require('../../utils/reviseTime')
+const localTime = require('../utils/reviseTime')
 const initDbUser = () => {
   db.user.find({}, (err, doc) => {
     if (err) {

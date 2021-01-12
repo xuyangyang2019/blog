@@ -1,8 +1,8 @@
 const md5 = require('md5')
-const salt = require('../../secret').salt
-const localTime = require('../../utils/reviseTime')
+const salt = require('../secret').salt
+const localTime = require('../utils/reviseTime')
 
-const UserService = require('../../services').UserService
+const UserService = require('../services').UserService
 
 async function initUser() {
   const users = await UserService.findMany({})
