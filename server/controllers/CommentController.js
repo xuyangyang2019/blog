@@ -1,13 +1,11 @@
 const CommentService = require('../services').CommentService
-const { InvalidQueryError } = require('../lib/error')
+// const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
-  // 后台获取所有的评论
-  'GET /api/getAdminComments': async (ctx, next) => {
-    // confirmToken(ctx, next)
-    let pageNum = ctx.query.pageNum || 1
-    let pageSize = ctx.query.pageSize || 10
-    let result = await CommentService.findByPage({}, pageNum, pageSize)
+  // 分页获取评论
+  'GET /api/getCommentsList': async (ctx, next) => {
+    const { pageNum, pageSize } = ctx.request.query
+    const result = await CommentService.findByPage({}, pageNum || 1, pageSize || 10)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
@@ -17,7 +15,7 @@ module.exports = {
   },
   // 获取指定文章的评论
   'GET /api/getComments': async (ctx, next) => {
-    let result = await CommentService.findMany({ articleId: ctx.query.articleId })
+    const result = await CommentService.findMany({ articleId: ctx.query.articleId })
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
@@ -28,9 +26,9 @@ module.exports = {
   },
   // 获取评论数量
   'GET /getCommentsCount': async (ctx, next) => {
-    let num = await db.comment.count({})
+    const num = await db.comment.count({})
     ctx.rest(num)
-  },
+  }
   // // 保存评论
   // 'POST /api/saveComment': async (ctx, next) => {
   //   let newDoc = await db.comment.create(ctx.request.body)
