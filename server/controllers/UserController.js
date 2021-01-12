@@ -13,7 +13,7 @@ module.exports = {
     if (!username || !password) {
       throw new InvalidQueryError()
     }
-    const user = await UserService.findOne({ username })
+    const user = await UserService.findOne({ username: username })
     if (!user) {
       ctx.error = '用户不存在'
       ctx.code = 0
