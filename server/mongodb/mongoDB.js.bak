@@ -25,6 +25,7 @@ function defineModel(name, attributes, plugin = '') {
   // 定义一个schema, 描述此集合里有哪些字段，字段是什么类型
   const schema = new Schema(attributes)
   if (plugin) {
+    // eslint-disable-next-line global-require
     schema.plugin(require(plugin))
   }
   // 创建模型，可以用它来操作数据库中的集合，指的是整体
@@ -44,6 +45,7 @@ const js_files = files.filter((f) => {
 const db = {}
 for (const f of js_files) {
   const name = f.substring(0, f.length - 3)
+  // eslint-disable-next-line global-require
   const schema = require(path.resolve(__dirname, './schema', f))
   db[name] = defineModel(name, schema)
 }

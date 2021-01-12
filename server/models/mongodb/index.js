@@ -12,6 +12,7 @@ const Models = {}
 console.log(`process models ...`)
 
 files.forEach((file) => {
+  // eslint-disable-next-line global-require
   const modelFile = require(path.join(__dirname, file))
   const schema = new mongoose.Schema(modelFile.schema, modelFile.options || {})
   Models[modelFile.name] = mongo.model(modelFile.name, schema)
