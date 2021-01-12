@@ -16,7 +16,6 @@ module.exports = {
     const user = await UserService.findOne({ username: username })
     if (!user) {
       ctx.error = '用户不存在'
-      ctx.code = 0
     } else if (user.password !== md5(password + user.salt)) {
       ctx.error = '密码错误'
     } else {
