@@ -1,9 +1,9 @@
-const fs = require('fs');
+const fs = require('fs')
 const path = require('path')
 
-const { query } = require('./async-db');
+const { query } = require('./async-db')
 
-let sqlContentMap = {}
+const sqlContentMap = {}
 
 /**
  * 遍历目录下的文件目录
@@ -12,35 +12,33 @@ let sqlContentMap = {}
  * @return {object}              返回遍历后的目录结果
  */
 const walkFile = function (pathResolve, mime) {
-    let files = fs.readdirSync(pathResolve)
-    let fileList = {}
-    for (let [i, item] of files.entries()) {
-        let itemArr = item.split('\.')
-        let itemMime = (itemArr.length > 1) ? itemArr[itemArr.length - 1] : 'undefined'
-        let keyName = item + ''
-        if (mime === itemMime) {
-            fileList[item] = pathResolve + item
-        }
+  const files = fs.readdirSync(pathResolve)
+  const fileList = {}
+  for (const [i, item] of files.entries()) {
+    const itemArr = item.split('.')
+    const itemMime = itemArr.length > 1 ? itemArr[itemArr.length - 1] : 'undefined'
+    const keyName = item + ''
+    if (mime === itemMime) {
+      fileList[item] = pathResolve + item
     }
-    return fileList
+  }
+  return fileList
 }
-
 
 /**
  * 获取sql目录下的文件目录数据
- * @return {object} 
+ * @return {object}
  */
 function getSqlMap() {
-    // let basePath = __dirname
-    let basePath = path.join(__dirname, './sql/')
-    basePath = basePath.replace(/\\/g, '\/')
-    // let pathArr = basePath.split('\/')
-    // pathArr = pathArr.splice(0, pathArr.length - 1)
-    // basePath = pathArr.join('/') + '/sql/'
-    let fileList = walkFile(basePath, 'sql')
-    return fileList
+  // let basePath = __dirname
+  let basePath = path.join(__dirname, './sql/')
+  basePath = basePath.replace(/\\/g, '/')
+  // let pathArr = basePath.split('\/')
+  // pathArr = pathArr.splice(0, pathArr.length - 1)
+  // basePath = pathArr.join('/') + '/sql/'
+  const fileList = walkFile(basePath, 'sql')
+  return fileList
 }
-
 
 /**
  * 读取sql文件内容
@@ -49,30 +47,29 @@ function getSqlMap() {
  * @return {string}          脚本文件内容
  */
 function getSqlContent(fileName, path) {
-    let content = fs.readFileSync(path, 'binary')
-    sqlContentMap[fileName] = content
+  const content = fs.readFileSync(path, 'binary')
+  sqlContentMap[fileName] = content
 }
 
 /**
  * 封装所有sql文件脚本内容
- * @return {object} 
+ * @return {object}
  */
 function getSqlContentMap() {
-    let sqlMap = getSqlMap()
-    for (let key in sqlMap) {
-        getSqlContent(key, sqlMap[key])
-    }
-    // return sqlContentMap
+  const sqlMap = getSqlMap()
+  for (const key in sqlMap) {
+    getSqlContent(key, sqlMap[key])
+  }
+  // return sqlContentMap
 }
-
 
 // 打印脚本执行日志
 const eventLog = function (err, sqlFile, index) {
-    if (err) {
-        console.log(`[ERROR] sql脚本文件: ${sqlFile} 第${index + 1}条脚本 执行失败 o(╯□╰)o ！`)
-    } else {
-        console.log(`[SUCCESS] sql脚本文件: ${sqlFile} 第${index + 1}条脚本 执行成功 O(∩_∩)O !`)
-    }
+  if (err) {
+    console.log(`[ERROR] sql脚本文件: ${sqlFile} 第${index + 1}条脚本 执行失败 o(╯□╰)o ！`)
+  } else {
+    console.log(`[SUCCESS] sql脚本文件: ${sqlFile} 第${index + 1}条脚本 执行成功 O(∩_∩)O !`)
+  }
 }
 
 // 获取所有sql脚本内容
@@ -81,23 +78,23 @@ getSqlContentMap()
 
 // 执行建表sql脚本
 const createAllTables = async () => {
-    for (let key in sqlContentMap) {
-        let sqlShell = sqlContentMap[key]
-        let sqlShellList = sqlShell.split(';')
-        // console.log(sqlShellList)
-        for (let [i, shell] of sqlShellList.entries()) {
-            if (shell.trim()) {
-                let result = await query(shell)
-                if (result.serverStatus * 1 === 2) {
-                    eventLog(null, key, i)
-                } else {
-                    eventLog(true, key, i)
-                }
-            }
+  for (const key in sqlContentMap) {
+    const sqlShell = sqlContentMap[key]
+    const sqlShellList = sqlShell.split(';')
+    // console.log(sqlShellList)
+    for (const [i, shell] of sqlShellList.entries()) {
+      if (shell.trim()) {
+        const result = await query(shell)
+        if (result.serverStatus * 1 === 2) {
+          eventLog(null, key, i)
+        } else {
+          eventLog(true, key, i)
         }
+      }
     }
-    console.log('sql脚本执行结束！')
-    console.log('请按 ctrl + c 键退出！')
+  }
+  console.log('sql脚本执行结束！')
+  console.log('请按 ctrl + c 键退出！')
 }
 
 createAllTables()
