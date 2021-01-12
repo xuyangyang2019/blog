@@ -1,29 +1,29 @@
 // mongodb
-const db = require("../db/mongodb/db")
+const db = require('../db/mongodb/db')
 // const api = require("../http/server-api")
 
 module.exports = {
-	// 查询用户名
-	'GET /searchUser': async (ctx, next) => {
-		let doc = await db.vistor.find({ "name": ctx.query.name }, (err, doc) => { })
-		if (doc.length) {
-			ctx.rest({ exist: "yes" })
-		} else {
-			ctx.rest({ exist: "no" })
-		}
-	},
-	// 保存新的用户
-	'POST /saveDesignUser': async (ctx, next) => {
-		let document = await db.vistor.create(ctx.request.body)
-		if (document._id) {
-			ctx.rest({ code: 200 })
-		} else {
-			ctx.rest({ code: 500 })
-		}
-	}
+  // 查询用户名
+  'GET /searchUser': async (ctx, next) => {
+    const doc = await db.vistor.find({ name: ctx.query.name }, (err, doc) => {})
+    if (doc.length) {
+      ctx.rest({ exist: 'yes' })
+    } else {
+      ctx.rest({ exist: 'no' })
+    }
+  },
+  // 保存新的用户
+  'POST /saveDesignUser': async (ctx, next) => {
+    const document = await db.vistor.create(ctx.request.body)
+    if (document._id) {
+      ctx.rest({ code: 200 })
+    } else {
+      ctx.rest({ code: 500 })
+    }
+  }
 }
 
-// //github登录	
+// //github登录
 // router.get("/api/getGithub",(req,res) => {
 // 	db.vistor.find({githubID: req.query.id},(err,doc) => {
 // 		if(err){
@@ -36,7 +36,7 @@ module.exports = {
 // router.get("/login/git",(req,res) => {
 // 	//请替换为自己的client_id
 // 	let path = "https://github.com/login/oauth/authorize?client_id=YourID&scope=['user']"
-// 	res.redirect(path)	
+// 	res.redirect(path)
 // })
 // router.get("/login_github",(req,res) => {
 // 	//请替换为自己的client_id和client_secret
