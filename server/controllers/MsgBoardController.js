@@ -1,13 +1,11 @@
 const MsgBoardService = require('../services').MsgBoardService
-const { InvalidQueryError } = require('../lib/error')
+// const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
   // 获取留言
   'GET /api/getMsgBoard': async (ctx, next) => {
-    // const { pageNum, pageSize } = ctx.query
-    let pageNum = ctx.query.pageNum || 1
-    let pageSize = ctx.query.pageSize || 10
-    let result = await MsgBoardService.findByPage({}, pageNum, pageSize)
+    const { pageNum, pageSize } = ctx.request.query
+    const result = await MsgBoardService.findByPage({}, pageNum || 1, pageSize || 10)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
@@ -17,7 +15,7 @@ module.exports = {
   },
   // 获取留言数量
   'GET /api/getMsgCount': async (ctx, next) => {
-    let result = await MsgBoardService.count()
+    const result = await MsgBoardService.count()
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
@@ -27,8 +25,8 @@ module.exports = {
   },
   // 保存留言
   'POST /api/saveLeaveW': async (ctx, next) => {
-    let doc = ctx.request.body
-    let result = await MsgBoardService.save(doc)
+    const doc = ctx.request.body
+    const result = await MsgBoardService.save(doc)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
@@ -50,7 +48,7 @@ module.exports = {
       // }
     }
     return next()
-  },
+  }
   // // 删除指定的留言
   // 'DELETE /removeLeavewords': async (ctx, next) => {
   //   confirmToken(ctx, next)
