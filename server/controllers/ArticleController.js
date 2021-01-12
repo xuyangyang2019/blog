@@ -1,24 +1,18 @@
 const ArticleService = require('../services').ArticleService
-const { InvalidQueryError } = require('../lib/error')
+// const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
   // 文章列表
-  'GET /api/getArticles': async (ctx, next) => {
-    let params = {}
-    const pageNum = ctx.query.pageNum || 1
-    const pageSize = ctx.query.pageSize || 10
-    if (!ctx.query.tag) {
-      // 抓取首页文章
-      params = {
-        publish: ctx.query.publish
-      }
-    } else {
-      params = {
-        publish: ctx.query.publish,
-        tag: ctx.query.tag
-      }
+  'GET /api/getArticleList': async (ctx, next) => {
+    const { pageNum, pageSize, publish, tag } = ctx.request.query
+    const condition = {}
+    if (publish) {
+      condition.publish = publish
     }
-    const result = await ArticleService.findByPage(params, pageNum, pageSize)
+    if (tag) {
+      condition.tag = tag
+    }
+    const result = await ArticleService.findByPage(condition, pageNum, pageSize)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
