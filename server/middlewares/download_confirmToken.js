@@ -12,7 +12,6 @@ const download_confirmToken = (ctx, next) => {
       if (err) {
         ctx.status = 401
       } else {
-        console.log('通过')
         next()
       }
     })
