@@ -7,7 +7,7 @@ function deleteFolder(url) {
   if (fs.existsSync(url)) {
     // 返回文件和子目录的数组
     const files = fs.readdirSync(url)
-    files.forEach(function(file, index) {
+    files.forEach(function (file) {
       const curPath = path.join(url, file)
       if (fs.statSync(curPath).isDirectory()) {
         // fs.statSync同步读取文件夹文件，如果是文件夹，在重复触发函数
@@ -29,7 +29,7 @@ function deleteFile(url) {
   if (fs.existsSync(url)) {
     // 返回文件和子目录的数组
     const files = fs.readdirSync(url)
-    files.forEach(function(file, index) {
+    files.forEach(function (file) {
       const curPath = path.join(url, file)
       if (fs.statSync(curPath).isDirectory()) {
         // fs.statSync同步读取文件夹文件，如果是文件夹，重复触发函数
@@ -42,9 +42,7 @@ function deleteFile(url) {
   }
 }
 
-const deleteF = {
-  folder: deleteFolder,
-  file: deleteFile
+module.exports = {
+  deleteFolder,
+  deleteFile
 }
-
-module.exports = deleteF
