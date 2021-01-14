@@ -2,9 +2,32 @@ const MsgBoardService = require('../../services').MsgBoardService
 const { InvalidQueryError } = require('../../lib/error')
 
 module.exports = {
-  // 删除指定的留言
-  'DELETE /api/removeLeavewords': async (ctx, next) => {
-    const ids = ctx.query.id
+  // 回复留言
+  'PATCH /api/replyMsgBoard': async (ctx, next) => {
+    const { id, name, aite, imgUrl, content, date } = ctx.request.body
+    // 参数不对抛出异常
+    if (!id || !name || !aite || !imgUrl || !content || !date) {
+      throw new InvalidQueryError()
+    }
+    const reply = {
+      name: name,
+      imgUrl: imgUrl,
+      // email: email,
+      content: content,
+      date: date,
+      aite: aite
+    }
+    const result = await MsgBoardService.updateById({ _id: id }, { $push: { reply: reply } }, { new: true })
+    if (result) {
+      ctx.result = result
+    } else {
+      ctx.error = '回复失败'
+    }
+    return next()
+  },
+  // 删除留言
+  'DELETE /api/deleteLeavewords': async (ctx, next) => {
+    const ids = ctx.query.ids
     if (!ids) {
       throw new InvalidQueryError()
     }
@@ -15,36 +38,17 @@ module.exports = {
       ctx.result = result
     }
     return next()
-  },
-  // 后台管理删除二级留言
-  'PATCH /reduceLeavewords': async (ctx, next) => {
-    // confirmToken(ctx, next)
-    // let result = await db.msgBoard.update(
-    //   { "_id": ctx.request.body.mainId },
-    //   { $pull: { "reply": { "_id": ctx.request.body.secondId } } })
-    // if (result) {
-    //   ctx.rest({ deleteCode: 200 })
-    // }
-  },
-  // 回复留言
-  'PATCH /addReply': async (ctx, next) => {
-    // let reply = {
-    //   name: ctx.request.body.name,
-    //   imgUrl: ctx.request.body.imgUrl,
-    //   email: ctx.request.body.email,
-    //   content: ctx.request.body.content,
-    //   date: ctx.request.body.date,
-    //   aite: ctx.request.body.aite
-    // }
-    // let doc = await db.msgBoard.findByIdAndUpdate(
-    //   { "_id": ctx.request.body.id },
-    //   { $push: { reply: reply } },
-    //   { new: true })
-    // if (doc._id) {
-    //   ctx.rest(doc)
-    // }
   }
-
+  // 后台管理删除二级留言
+  // 'PATCH /reduceLeavewords': async (ctx, next) => {
+  //   // confirmToken(ctx, next)
+  //   // let result = await db.msgBoard.update(
+  //   //   { "_id": ctx.request.body.mainId },
+  //   //   { $pull: { "reply": { "_id": ctx.request.body.secondId } } })
+  //   // if (result) {
+  //   //   ctx.rest({ deleteCode: 200 })
+  //   // }
+  // }
   // 'POST /api/getComment': async (ctx, next) => {
   //   const { article_id } = ctx.request.body
   //   if (!article_id) {
