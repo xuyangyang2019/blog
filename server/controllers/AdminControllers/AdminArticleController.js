@@ -4,6 +4,12 @@ const ImgUploadService = require('../../services/fileService/ImgUploadService')
 const { InvalidQueryError } = require('../../lib/error')
 
 module.exports = {
+  // // 路由闯入编辑器页面进行token验证
+  // 'GET /api/confirmToken': async (ctx, next) => {
+  //   console.log('鉴权')
+  //   ctx.result = '鉴权通过'
+  //   return next()
+  // },
   'POST /api/delArticle': async (ctx, next) => {
     const { _id } = ctx.request.body
     if (!_id) {
