@@ -26,7 +26,7 @@ module.exports = {
     return next()
   },
   // 删除留言
-  'DELETE /api/deleteLeavewords': async (ctx, next) => {
+  'DELETE /api/deleteMsgBoards': async (ctx, next) => {
     const ids = ctx.query.ids
     if (!ids) {
       throw new InvalidQueryError()
@@ -35,20 +35,25 @@ module.exports = {
     if (!result) {
       ctx.error = '删除留言失败！'
     } else {
+      console.log(result)
+      ctx.result = result
+    }
+    return next()
+  },
+  // 删除二级留言
+  'PATCH /api/updateMsgBoard': async (ctx, next) => {
+    const { msgId, replyId } = ctx.request.body
+    if (!msgId || !replyId) {
+      throw new InvalidQueryError()
+    }
+    const result = await MsgBoardService.update({ _id: msgId }, { $pull: { reply: { _id: replyId } } })
+    if (!result) {
+      ctx.error = '删除二级留言失败！'
+    } else {
       ctx.result = result
     }
     return next()
   }
-  // 后台管理删除二级留言
-  // 'PATCH /reduceLeavewords': async (ctx, next) => {
-  //   // confirmToken(ctx, next)
-  //   // let result = await db.msgBoard.update(
-  //   //   { "_id": ctx.request.body.mainId },
-  //   //   { $pull: { "reply": { "_id": ctx.request.body.secondId } } })
-  //   // if (result) {
-  //   //   ctx.rest({ deleteCode: 200 })
-  //   // }
-  // }
   // 'POST /api/getComment': async (ctx, next) => {
   //   const { article_id } = ctx.request.body
   //   if (!article_id) {
