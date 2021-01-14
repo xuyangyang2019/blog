@@ -7,6 +7,6 @@ const process = require('process')
 const mode = process.argv[2] === 'prod' ? 'prod' : 'dev'
 
 module.exports = {
-    mode, // 当前所处环境
-    ...(mode === 'prod' ? require('./config.prod') : require('./config.dev'))  // 当前环境的配置
+  mode, // 当前所处环境
+  ...(mode === 'prod' ? require('./config.prod') : require('./config.dev')) // 当前环境的配置
 }
