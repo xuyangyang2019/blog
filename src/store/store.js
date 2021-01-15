@@ -107,23 +107,25 @@ const actions = {
   GetArticle({ commit }, payload) {
     // life目录下路由参数只有ID，无tag参数
     const tag = payload.tag === undefined ? 'life' : payload.tag
-    api.get('/api/onlyArticle', {
-      publish: payload.publish,
-      tag: tag,
-      articleId: payload.articleId,
-      cache: true
-    }).then((data) => {
-      // 页面title
-      commit('CHANGE_TITLE', data[0].title)
-      // 文章
-      commit('SET_ONLY_ARTICLES', data)
-      // 查询上篇文章|下篇文章
-      if (data.length) {
-        api.get('/api/preAndNext', { date: data[0].date, cache: true }).then((data1) => {
-          commit('SET_PRE_NEXT', data1)
-        })
-      }
-    })
+    api
+      .get('/api/onlyArticle', {
+        publish: payload.publish,
+        tag: tag,
+        articleId: payload.articleId,
+        cache: true
+      })
+      .then((data) => {
+        // 页面title
+        commit('CHANGE_TITLE', data[0].title)
+        // 文章
+        commit('SET_ONLY_ARTICLES', data)
+        // 查询上篇文章|下篇文章
+        if (data.length) {
+          api.get('/api/preAndNext', { date: data[0].date, cache: true }).then((data1) => {
+            commit('SET_PRE_NEXT', data1)
+          })
+        }
+      })
   },
 
   SearchArticles({ commit }, payload) {

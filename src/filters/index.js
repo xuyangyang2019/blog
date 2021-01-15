@@ -1,4 +1,4 @@
-const reviseTime = value => {
+const reviseTime = (value) => {
   const localTime = new Date(value)
   const year = localTime.getFullYear()
   const month = localTime.getMonth() + 1
@@ -6,19 +6,18 @@ const reviseTime = value => {
   const hours = localTime.getHours()
   let minutes = localTime.getMinutes()
   // seconds = localTime.getSeconds(),
-  let finTime
   for (let i = 0; i < 10; i++) {
     if (i === minutes) {
       minutes = '0' + minutes
     }
   }
-  finTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes
+  const finTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes
   // + ":" +seconds
   return finTime
 }
 
 const changeLife = (value) => {
-  if (value == 'life') {
+  if (value === 'life') {
     return '生活'
   } else {
     return value

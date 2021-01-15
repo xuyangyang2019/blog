@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 import loading from '@/components/base/Loading'
 import articleList from '@/components/article/ArticleList'

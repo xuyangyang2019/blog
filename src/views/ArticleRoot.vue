@@ -95,14 +95,14 @@ export default {
     // 右滑
     rightSlider() {
       this.currentIndex++
-      ['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item, index, arr) => {
+      ;['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item, index, arr) => {
         this.$refs.container.style[item] = 'rotateY(' + this.reg * this.currentIndex + 'deg)'
       })
     },
     // 左滑
     leftSlider() {
       this.currentIndex--
-      ['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item, index, arr) => {
+      ;['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item, index, arr) => {
         this.$refs.container.style[item] = 'rotateY(' + this.reg * this.currentIndex + 'deg)'
       })
     },
@@ -111,7 +111,7 @@ export default {
       if (item === 'life') {
         this.$router.push({ name: 'life' })
       } else {
-        this.$router.push({ name: 'techincal', params: { articleList: item }})
+        this.$router.push({ name: 'techincal', params: { articleList: item } })
       }
     },
     // 初始化
@@ -120,11 +120,11 @@ export default {
         const dom = this.$refs.degItem
         const container = this.$refs.container
         const reg = 360 / dom.length
-        const z = container.offsetWidth / 2 / Math.tan(reg / 2 / 180 * Math.PI) + 15
+        const z = container.offsetWidth / 2 / Math.tan((reg / 2 / 180) * Math.PI) + 15
         this.reg = reg
         container.style.height = 1.618 * container.offsetWidth + 'px'
         dom.forEach((item, index, arr) => {
-          ['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((_item, _index, _arr) => {
+          ;['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((_item, _index, _arr) => {
             item.style[_item] = 'rotateY(' + (index + 1) * reg + 'deg)' + ' ' + 'translateZ(' + z + 'px)'
           })
           item.style.background = "url('/img/technical/" + index + ".jpg')  0 0 no-repeat"
