@@ -22,6 +22,7 @@ module.exports = {
         })
       }
     }
+    console.log('tags', tagArr)
     ctx.result = tagArr
     return next()
   },
