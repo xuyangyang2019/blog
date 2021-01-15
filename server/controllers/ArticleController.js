@@ -2,6 +2,29 @@ const ArticleService = require('../services').ArticleService
 // const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
+  // 获取标签
+  'GET /api/tags': async (ctx, next) => {
+    const publish = !!ctx.query.publish
+    const tagArr = []
+    const tagMap = {}
+    const docs = await ArticleService.findMany({ publish: publish }, { tag: 1, _id: 0 })
+    // 计算标签的文章数
+    docs.forEach((doc) => {
+      for (const tag of doc.tag) {
+        tagMap[tag] = tagMap[tag] ? tagMap[tag] + 1 : 1
+      }
+    })
+    for (const key in tagMap) {
+      if (Object.hasOwnProperty.call(tagMap, key)) {
+        tagArr.push({
+          tag: key,
+          num: tagMap[key]
+        })
+      }
+    }
+    ctx.result = tagArr
+    return next()
+  },
   // 文章列表
   'GET /api/getArticleList': async (ctx, next) => {
     const { pageNum, pageSize, publish, tag } = ctx.request.query
@@ -41,7 +64,7 @@ module.exports = {
     }
     // 前台后台关键词搜索请求
     if (ctx.query.key) {
-      num = await ArticleService.getArticlesCount({
+      await ArticleService.getArticlesCount({
         publish: ctx.query.publish,
         title: { $regex: ctx.query.key, $options: 'i' }
       })
@@ -68,12 +91,12 @@ module.exports = {
     if (!doc) {
       ctx.error = '文章不存在'
     } else {
-      doc.forEach((item, index, arr) => {
+      doc.forEach((item) => {
         const yearMonth = new Date(item.date).getFullYear() + '年' + (new Date(item.date).getMonth() + 1) + '月'
         timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
       })
       for (const key in timeMap) {
-        if (timeMap.hasOwnProperty(key)) {
+        if (Object.hasOwnProperty.call(timeMap, key)) {
           timeArr.push({
             time: key,
             num: timeMap[key]
@@ -95,13 +118,13 @@ module.exports = {
       ctx.error = '文章不存在'
     } else {
       // 计算标签的文章数
-      docs.forEach((doc, index, arr) => {
+      docs.forEach((doc) => {
         for (const tag of doc.tag) {
           tagMap[tag] = tagMap[tag] ? tagMap[tag] + 1 : 1
         }
       })
       for (const key in tagMap) {
-        if (tagMap.hasOwnProperty(key)) {
+        if (Object.hasOwnProperty.call(tagMap, key)) {
           tagArr.push({
             tag: key,
             num: tagMap[key]
