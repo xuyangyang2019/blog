@@ -43,6 +43,41 @@ module.exports = {
     }
     return next()
   },
+  // 获取推荐文章
+  'GET /api/getArticlesByPv': async (ctx, next) => {
+    const result = await ArticleService.getArticlesByPv()
+    if (!result) {
+      ctx.error = '文章不存在'
+    } else {
+      ctx.result = result
+    }
+    return next()
+  },
+  // 文章归档
+  'GET /api/getArticelsByTime': async (ctx, next) => {
+    const publish = ctx.query.publish !== 'false'
+    const timeArr = []
+    const timeMap = {}
+    const docs = await ArticleService.findMany({ publish: publish }, { data: 1 })
+    if (!docs) {
+      ctx.error = '文章不存在'
+    } else {
+      docs.forEach((item) => {
+        const yearMonth = new Date(item.date).getFullYear() + '年' + (new Date(item.date).getMonth() + 1) + '月'
+        timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
+      })
+      for (const key in timeMap) {
+        if (Object.hasOwnProperty.call(timeMap, key)) {
+          timeArr.push({
+            time: key,
+            num: timeMap[key]
+          })
+        }
+      }
+      ctx.result = timeArr
+    }
+    return next()
+  },
   // =====================================================
   // 获取文章数量 暂时不用
   'GET /api/getArticlesCount': async (ctx, next) => {
@@ -71,69 +106,6 @@ module.exports = {
       })
     }
     ctx.result = result
-    return next()
-  },
-  // 获取推荐文章
-  'GET /api/getArticlesByPv': async (ctx, next) => {
-    const result = await ArticleService.getArticlesByPv()
-    if (!result) {
-      ctx.error = '文章不存在'
-    } else {
-      ctx.result = result
-    }
-    return next()
-  },
-  // 文章归档
-  'GET /api/getArticelsByTime': async (ctx, next) => {
-    const publish = ctx.query.publish !== 'false'
-    const timeArr = []
-    const timeMap = {}
-    const doc = await ArticleService.findMany({ publish: publish }, { data: 1 })
-    if (!doc) {
-      ctx.error = '文章不存在'
-    } else {
-      doc.forEach((item) => {
-        const yearMonth = new Date(item.date).getFullYear() + '年' + (new Date(item.date).getMonth() + 1) + '月'
-        timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
-      })
-      for (const key in timeMap) {
-        if (Object.hasOwnProperty.call(timeMap, key)) {
-          timeArr.push({
-            time: key,
-            num: timeMap[key]
-          })
-        }
-      }
-      ctx.result = timeArr
-    }
-    return next()
-  },
-  // 获取已发表的文章标签
-  'GET /api/getArticleTags': async (ctx, next) => {
-    const publish = ctx.query.publish !== 'false'
-    const tagArr = []
-    const tagMap = {}
-    // 所有的文章
-    const docs = await ArticleService.findMany({ publish: publish }, { tag: 1, _id: 0 })
-    if (!docs) {
-      ctx.error = '文章不存在'
-    } else {
-      // 计算标签的文章数
-      docs.forEach((doc) => {
-        for (const tag of doc.tag) {
-          tagMap[tag] = tagMap[tag] ? tagMap[tag] + 1 : 1
-        }
-      })
-      for (const key in tagMap) {
-        if (Object.hasOwnProperty.call(tagMap, key)) {
-          tagArr.push({
-            tag: key,
-            num: tagMap[key]
-          })
-        }
-      }
-      ctx.result = tagMap
-    }
     return next()
   }
   // // 抓取单一文章

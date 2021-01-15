@@ -31,20 +31,22 @@ export default {
         '#336666',
         '#9BBFEA',
         '#CCCC00'
-      ]
+      ] // 随机的颜色库
     }
   },
   computed: {
     ...mapState({
-      tags: 'tags'
+      tags: 'tags' // 标签
     })
   },
   watch: {
+    // tag改变重新生成背景色
     tags() {
       this.initBackground()
     }
   },
   mounted() {
+    // 获取tags
     this.getTagsClass({ publish: true })
   },
   methods: {

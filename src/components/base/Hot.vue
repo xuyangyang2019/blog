@@ -3,8 +3,8 @@
     <h2 class="hot-header">推荐</h2>
     <div class="hot-content">
       <ul v-if="hotArticles.length > 0">
-        <li class="hot-item" v-for="(item, index) in hotArticles">
-          <span>{{ index + 1 }}. </span>
+        <li v-for="(item, index) in hotArticles" :key="index" class="hot-item">
+          <span>{{ index + 1 }}.</span>
           <span class="article-title" :title="item.title" @click="jumpHot(item)" v-text="item.title"></span>
         </li>
       </ul>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex"
+import { mapState } from 'vuex'
 
 export default {
   computed: {
@@ -26,20 +26,20 @@ export default {
       return this.articles.hot || []
     }
   },
+  mounted() {
+    // 页面加载完成后 获取推荐的文章
+    this.$store.dispatch('GetHotArticles')
+  },
   methods: {
     // 跳转到文章
     jumpHot(item) {
       this.$store.commit('CHANGE_TITLE', item.title)
-      if (item.tag[0] === "life") {
+      if (item.tag[0] === 'life') {
         this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
       } else {
         this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
       }
     }
-  },
-  mounted() {
-    // 页面加载完成后 获取推荐的文章
-    this.$store.dispatch('GetHot')
   }
 }
 </script>

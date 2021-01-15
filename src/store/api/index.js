@@ -23,15 +23,17 @@ function ajax(type, url, options) {
       baseURL: 'http://192.168.0.111:8098',
       params: type === 'get' ? options : null,
       data: type !== 'get' ? qs.stringify(options) : null
-    }).then((res) => {
-      if (res.status === 200) {
-        resolve(res.data)
-      } else {
-        reject('request error in ' + url)
-      }
-    }).catch((err) => {
-      console.log(err, url)
     })
+      .then((res) => {
+        if (res.status === 200) {
+          resolve(res.data)
+        } else {
+          reject('request error in ' + url)
+        }
+      })
+      .catch((err) => {
+        console.log(err, url)
+      })
   })
 }
 
@@ -39,6 +41,7 @@ const config = {
   get(url, options) {
     const key = md5(url + JSON.stringify(options))
     if (cached && cached.has(key)) {
+      console.log('有缓存，返回缓存的数据')
       return Promise.resolve(cached.get(key))
     }
     return new Promise((resolve, reject) => {
@@ -81,4 +84,3 @@ const config = {
 }
 
 export default config
-

@@ -49,6 +49,27 @@ const getters = {
 
 // actions
 const actions = {
+  // 获取技术文章的tag生成导航
+  GetTagsClass({ commit }, payload) {
+    api.get('/api/tags', { publish: payload.publish }).then((res) => {
+      console.log('文章标签:', res)
+      commit('SetTags', res.data || [])
+    })
+  },
+  // 获取推荐的文章
+  GetHotArticles({ commit }) {
+    api.get('/api/getArticlesByPv', {}).then((res) => {
+      console.log('推荐文章:', res)
+      commit('SET_HOT', res.data || [])
+    })
+  },
+  // 获取时间轴
+  GetTime({ commit }, payload) {
+    api.get('/api/getArticelsByTime', payload).then((res) => {
+      console.log('归档:', res)
+      commit('SET_TIME_LINE', res.data || [])
+    })
+  },
   // 获取文章
   GetArticles({ commit }, payload) {
     let params = {}
@@ -61,7 +82,7 @@ const actions = {
     } else {
       params = payload
     }
-    api.get('/api/getArticles', params).then((res) => {
+    api.get('/api/getArticleList', params).then((res) => {
       console.log('文章列表:', res)
       if (!payload.tag) {
         commit('SET_ARTICLES_ALL', res.data.list)
@@ -73,33 +94,13 @@ const actions = {
       commit('PRODUCT_BG', res.data.list)
     })
   },
+  // ============================================================================
   // 获取对应模块的文章总数，为分页按钮个数提供支持
   GetArticlesCount({ commit }, payload) {
     api.get('/api/getArticlesCount', payload).then((res) => {
       console.log('文章数:', res)
       commit('SET_ARTICLES_SUM', res.data)
       commit('SET_PAGE_ARR', res.data || 0)
-    })
-  },
-  // 获取推荐的文章
-  GetHot({ commit }) {
-    api.get('/api/getArticlesByPv', {}).then((res) => {
-      console.log('推荐文章:', res)
-      commit('SET_HOT', res.data || [])
-    })
-  },
-  // 获取技术文章的tag生成导航
-  GetTagsClass({ commit }, payload) {
-    api.get('/api/getArticleTags', { publish: payload.publish }).then((res) => {
-      console.log('文章标签:', res)
-      commit('SetTags', res.data || [])
-    })
-  },
-  // 获取时间轴
-  GetTime({ commit }, payload) {
-    api.get('/api/getArticelsByTime', payload).then((res) => {
-      console.log('归档:', res)
-      commit('SET_TIME_LINE', res.data || [])
     })
   },
 
