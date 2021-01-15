@@ -23,6 +23,7 @@ export default {
     articleList
   },
   mixins: [headMixin],
+  // eslint-disable-next-line no-unused-vars
   asyncData({ store, route }) {
     return Promise.all([
       store.dispatch('GetArticles', {
@@ -52,6 +53,11 @@ export default {
       articles: 'articles'
     })
   },
+  mounted() {
+    // this.$nextTick(function () {
+    //   Prism.highlightAll()
+    // })
+  },
   methods: {
     ...mapActions({
       getArticles: 'GetArticles',
@@ -60,15 +66,6 @@ export default {
     ...mapMutations({
       clear: 'CLEAR_PAGE'
     })
-  },
-  beforeRouteLeave(to, from, next) {
-    this.clear()
-    next()
-  },
-  mounted() {
-    // this.$nextTick(function () {
-    //   Prism.highlightAll()
-    // })
   }
 }
 </script>

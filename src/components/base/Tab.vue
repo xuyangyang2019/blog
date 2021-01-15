@@ -1,12 +1,12 @@
 <template>
-  <div id="tab" class="tab" ref="tab" :class="{ 'tab-bg': tabBg }">
+  <div id="tab" ref="tab" class="tab" :class="{ 'tab-bg': tabBg }">
     <nav class="navbar">
       <div class="nav-header">
         <div class="logo">
           <img src="/img/logo.png" alt="" />
         </div>
         <!-- 小屏幕下的导航按钮 -->
-        <button class="navbar-toggle" @click="navShow" :class="{ 'toggle-click': show }">
+        <button class="navbar-toggle" :class="{ 'toggle-click': show }" @click="navShow">
           <div class="line"></div>
           <div class="line"></div>
           <div class="line"></div>
@@ -29,7 +29,7 @@
           </li>
         </ul>
         <div class="search">
-          <input type="text" placeholder="请输入关键词" v-model="searchKey" @keyup.enter="searchArticle" />
+          <input v-model="searchKey" type="text" placeholder="请输入关键词" @keyup.enter="searchArticle" />
           <span class="icon-search search-article" @click="searchArticle"></span>
         </div>
       </div>
@@ -38,27 +38,27 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex"
+import { mapState, mapMutations } from 'vuex'
 
 // import { getScrollTop } from "@/utils/getScrollTop"
 // js动画 解决css3无法实现的动画
-import { requestAnimation } from "@/utils/requestAnimation"
+import { requestAnimation } from '@/utils/requestAnimation'
 
 export default {
   data() {
     return {
       show: false, // 展示导航栏
-      searchKey: "", // 搜索的关键词
-      // fixed: false, 
+      searchKey: '', // 搜索的关键词
+      // fixed: false,
       // scrollFlag: 0,
-      routeName: "", // 路由name
-      intervalId: "",
+      routeName: '', // 路由name
+      intervalId: '',
       // 导航列表
       tabs: [
-        { name: "home", render: "首页", icon: "icon-home" },
-        { name: "article", render: "文章", icon: "icon-book" },
-        { name: "msgboard", render: "留言", icon: "icon-messages" },
-        { name: "life", render: "生活", icon: "icon-images" }
+        { name: 'home', render: '首页', icon: 'icon-home' },
+        { name: 'article', render: '文章', icon: 'icon-book' },
+        { name: 'msgboard', render: '留言', icon: 'icon-messages' },
+        { name: 'life', render: '生活', icon: 'icon-images' }
       ]
     }
   },
@@ -74,25 +74,25 @@ export default {
   methods: {
     // 显示或隐藏 navs
     navShow() {
-      this.show = !this.show;
+      this.show = !this.show
     },
     // 搜索
     searchArticle() {
       // 去除前后的空格
-      this.searchKey = this.searchKey.replace(/(^\s*)|(\s*$)/g, "")
-      if(this.searchKey.length){
-          // this.active = -1
-          this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
+      this.searchKey = this.searchKey.replace(/(^\s*)|(\s*$)/g, '')
+      if (this.searchKey.length) {
+        // this.active = -1
+        this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
       }
     },
     // 平缓滑动到top
     callback() {
       // html的scrollTop
-      let htmlTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop
+      const htmlTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop
       // 每次移动的px
-      let movepx = Math.ceil((this.anchorScroll.move / 250) * (1000 / 60))
+      const movepx = Math.ceil((this.anchorScroll.move / 250) * (1000 / 60))
       // 要到的基准点
-      let bsetTop = this.anchorScroll.top
+      const bsetTop = this.anchorScroll.top
       if (htmlTop < bsetTop) {
         if (document.documentElement) {
           document.documentElement.scrollTop = Math.min(htmlTop + movepx, bsetTop)
@@ -227,7 +227,7 @@ export default {
 .navbar:after,
 .nav-body:after {
   clear: both;
-  content: ".";
+  content: '.';
   display: block;
   height: 0;
   line-height: 0;
@@ -347,7 +347,7 @@ export default {
         }
         .span-box span:before,
         .span-box span:after {
-          content: "";
+          content: '';
           position: absolute;
           top: 100%;
           left: 0;

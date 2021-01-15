@@ -244,7 +244,7 @@ const mutations = {
   PRODUCT_BG(state, data) {
     state.tagBg = []
     const pattern = /^[\u4e00-\u9fa5]+$/
-    data.forEach((item, index, arr) => {
+    data.forEach((item) => {
       if (item.tag[0] === '服务器' || item.tag[0] === 'apache' || item.tag[0] === 'tomcat') {
         state.tagBg.push('webserver')
       } else if (item.tag[0] === '云服务器') {
@@ -311,7 +311,7 @@ const mutations = {
     if (info.type === 1) {
       state.comments.unshift(info.add)
     } else {
-      state.comments.forEach((item, index, arr) => {
+      state.comments.forEach((item, index) => {
         if (item._id === info._id) {
           state.comments.splice(index, 1, info.add)
           return
@@ -321,9 +321,9 @@ const mutations = {
   },
   ADD_LOCAL_COMMENTS_LIKE(state, info) {
     if (info.rep_id) {
-      state.comments.forEach((item, index, arr) => {
+      state.comments.forEach((item) => {
         if (item._id === info.rev_id) {
-          item.reply.forEach((_item, _index, _arr) => {
+          item.reply.forEach((_item) => {
             if (_item._id === info.rep_id) {
               _item.like += info.type
               return
@@ -332,7 +332,7 @@ const mutations = {
         }
       })
     } else {
-      state.comments.forEach((item, index, arr) => {
+      state.comments.forEach((item) => {
         if (item._id === info.rev_id) {
           item.like += info.type
           return

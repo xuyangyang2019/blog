@@ -12,20 +12,22 @@
             <!-- 文章 -->
             <div class="content">
               <!-- 导航按钮 -->
-              <div class="location" v-show="$route.name !== 'home'">
+              <div v-show="$route.name !== 'home'" class="location">
                 <span>当前位置：</span>
                 <a href="javascript: void(0)" @click="backHome">首页</a>
-                <div v-for="item in location">
+                <div v-for="(item, index) in location" :key="index">
                   ->
                   <a href="javascript: void(0)" @click="back(item)">{{ item.showName }}</a>
                 </div>
               </div>
+
               <!-- 页面再这里展示 -->
               <keep-alive v-if="$route.meta.keepAlive">
                 <router-view />
               </keep-alive>
               <router-view v-if="!$route.meta.keepAlive"></router-view>
             </div>
+
             <!-- 右边栏 -->
             <div class="r-slide">
               <div class="r-slide-content">
@@ -49,7 +51,7 @@
 
     <!-- 动画效果 -->
     <transition name="fade">
-      <div class="rocket" v-show="showBackTop">
+      <div v-show="showBackTop" class="rocket">
         <a href="javascript: void(0)" @click="backTop"></a>
       </div>
     </transition>
@@ -60,14 +62,14 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex"
+import { mapState, mapMutations } from 'vuex'
 
-import tab from "@/components/base/Tab"
-import about from "@/components/base/About"
-import hot from "@/components/base/Hot"
-import gateWay from "@/components/base/GateWay"
-import fileOnPlace from "@/components/base/FileOnPlace"
-import foot from "@/components/base/Foot"
+import tab from '@/components/base/Tab'
+import about from '@/components/base/About'
+import hot from '@/components/base/Hot'
+import gateWay from '@/components/base/GateWay'
+import fileOnPlace from '@/components/base/FileOnPlace'
+import foot from '@/components/base/Foot'
 
 // html的scrollTop
 // import { getScrollTop } from "@/utils/getScrollTop"
@@ -75,13 +77,6 @@ import foot from "@/components/base/Foot"
 // import { getElementTop } from "@/utils/getElementTop"
 
 export default {
-  data() {
-    return {
-      location: [],
-      timer: "",
-      showBackTop: true, // 展示回到top的按钮
-    }
-  },
   components: {
     tab,
     gateWay,
@@ -90,10 +85,22 @@ export default {
     hot,
     foot
   },
+  data() {
+    return {
+      location: [],
+      timer: '',
+      showBackTop: true // 展示回到top的按钮
+    }
+  },
+  computed: {
+    ...mapState({
+      currentTitle: 'currentTitle'
+    })
+  },
   watch: {
     // route改变
     $route() {
-      if (this.$route.name === "home") {
+      if (this.$route.name === 'home') {
         this.location = []
       }
       this.currentLocation(this.$route)
@@ -112,22 +119,25 @@ export default {
       // if (head.description) document.querySelector('meta[name="description"]').setAttribute('content', head.description)
     }
   },
-  computed: {
-    ...mapState({
-      currentTitle: 'currentTitle'
-    })
+  mounted() {
+    // 计算当前的面包屑导航
+    this.currentLocation(this.$route)
+    // 监听页面大小和scroll事件
+    this.scrollCotainer()
+    // 页面重载计算锚点距离并判断tab的背景样式
+    this.getTop()
   },
   methods: {
     ...mapMutations({
       addTabBg: 'AddTabBg',
-      positionTop: 'PositionTop',
+      positionTop: 'PositionTop'
     }),
     // 监听滚动和窗口
     scrollCotainer() {
       // 监听滚动
-      window.addEventListener("scroll", this.scrollResize)
+      window.addEventListener('scroll', this.scrollResize)
       // 改变窗口大小后对导航栏状态重新进行确认
-      window.addEventListener("resize", this.scrollResize)
+      window.addEventListener('resize', this.scrollResize)
     },
     // 重新获取scrollTop
     scrollResize() {
@@ -135,21 +145,21 @@ export default {
     },
     // 函数去抖，防止scroll和resize频繁触发
     debounce: function (func, delay) {
-      let context = this
-      let args = arguments
+      // const context = this
+      const args = arguments
       // 如果有定时器 先清除
       if (this.timer) {
         clearTimeout(this.timer)
       }
       // 设置timer
       this.timer = setTimeout(function () {
-        func.apply(context, args)
+        func.apply(this, args)
       }, delay)
     },
     // 获取基准点
     getTop() {
       // html的scrollTop
-      let htmlTop = document.documentElement ? document.documentElement.scrollTop : 0
+      const htmlTop = document.documentElement ? document.documentElement.scrollTop : 0
       // 如果往下滚动了 就显示回到top的按钮
       if (htmlTop > 0) {
         this.showBackTop = true
@@ -170,12 +180,12 @@ export default {
     },
     // 跳转路由
     back(item) {
-      let name = item.pathName
-      if (name === "techincal") {
+      const name = item.pathName
+      if (name === 'techincal') {
         this.$router.push({ name: name, params: { articleList: item.params.tag } })
-      } else if (name === "articleShow") {
+      } else if (name === 'articleShow') {
         this.$router.push({ name: name, params: { articleList: item.params.tag, id: item.params.id } })
-      } else if (name === "lifeShow") {
+      } else if (name === 'lifeShow') {
         this.$router.push({ name: name, params: { id: item.params.id } })
       } else {
         this.$router.push({ name: name })
@@ -189,72 +199,64 @@ export default {
     // 返回首页
     backHome() {
       this.location = []
-      this.$router.push({ name: "home" })
+      this.$router.push({ name: 'home' })
     },
     // 当前位置的路由信息表
     currentLocation(route) {
+      const tag = route.params.articleList
+      const _tag = route.params.articleList
       switch (route.name) {
-        case "article":
-          this.location = [{ pathName: "article", showName: "技术文章" }]
+        case 'article':
+          this.location = [{ pathName: 'article', showName: '技术文章' }]
           break
-        case "techincal":
-          let tag = route.params.articleList
+        case 'techincal':
           this.location = [
-            { pathName: "article", showName: "技术文章" },
-            { pathName: "techincal", showName: tag, params: { tag: tag } }
+            { pathName: 'article', showName: '技术文章' },
+            { pathName: 'techincal', showName: tag, params: { tag: tag } }
           ]
           break
-        case "articleShow":
-          let _tag = route.params.articleList
+        case 'articleShow':
           this.location = [
             {
-              pathName: "article",
-              showName: "技术文章"
+              pathName: 'article',
+              showName: '技术文章'
             },
             {
-              pathName: "techincal",
+              pathName: 'techincal',
               showName: _tag,
               params: { tag: _tag }
             },
             {
-              pathName: "articleShow",
+              pathName: 'articleShow',
               showName: this.currentTitle,
               params: { tag: _tag, id: route.params.id }
             }
           ]
           break
-        case "life":
-          this.location = [{ pathName: "life", showName: "生活" }]
+        case 'life':
+          this.location = [{ pathName: 'life', showName: '生活' }]
           break
-        case "lifeShow":
+        case 'lifeShow':
           this.location = [
-            { pathName: "life", showName: "生活" },
-            { pathName: "lifeShow", showName: this.currentTitle, params: { id: route.params.id } }
+            { pathName: 'life', showName: '生活' },
+            { pathName: 'lifeShow', showName: this.currentTitle, params: { id: route.params.id } }
           ]
           break
-        case "msgboard":
-          this.location = [{ pathName: "msgboard", showName: "留言板" }]
+        case 'msgboard':
+          this.location = [{ pathName: 'msgboard', showName: '留言板' }]
           break
-        case "search":
-          this.location = [{ pathName: "search", showName: "搜索" }]
+        case 'search':
+          this.location = [{ pathName: 'search', showName: '搜索' }]
           break
-        case "timeLine":
-          this.location = [{ pathName: "timeLine", showName: "时间轴" }]
+        case 'timeLine':
+          this.location = [{ pathName: 'timeLine', showName: '时间轴' }]
+          break
         default:
           // home页面没有面包屑导航
           break
       }
     }
-  },
-  mounted() {
-    // 计算当前的面包屑导航
-    this.currentLocation(this.$route)
-    // 监听页面大小和scroll事件
-    this.scrollCotainer()
-    // 页面重载计算锚点距离并判断tab的背景样式
-    this.getTop()
-  },
-
+  }
 }
 </script>
 

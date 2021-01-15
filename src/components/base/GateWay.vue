@@ -3,8 +3,8 @@
     <h2 class="gateway-header" @click="getTagsClass">标签</h2>
     <div class="gateway-content">
       <ul>
-        <li v-for="item in tags">
-          <a href="javascript: void(0)" @click="jumpGate(item.tag)" ref="tag">
+        <li v-for="(item, index) in tags" :key="index">
+          <a ref="tag" href="javascript: void(0)" @click="jumpGate(item.tag)">
             <span>{{ item.tag | changeLife }}</span>
             <span v-if="item.num" v-text="' ' + item.num + '篇'"></span>
           </a>
@@ -15,12 +15,23 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex"
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
-      color: ["#FF9933", "#663300", "#CC6600", "#99CC33", "#CC6699", "#009966", "#999999", "#336666", "#9BBFEA", "#CCCC00"]
+      color: [
+        '#FF9933',
+        '#663300',
+        '#CC6600',
+        '#99CC33',
+        '#CC6699',
+        '#009966',
+        '#999999',
+        '#336666',
+        '#9BBFEA',
+        '#CCCC00'
+      ]
     }
   },
   computed: {
@@ -33,6 +44,9 @@ export default {
       this.initBackground()
     }
   },
+  mounted() {
+    this.getTagsClass({ publish: true })
+  },
   methods: {
     ...mapActions({
       getTagsClass: 'GetTagsClass'
@@ -42,7 +56,7 @@ export default {
       this.$nextTick(() => {
         // IE10不支持refs.tag
         if (this.$refs.tag) {
-          this.$refs.tag.forEach((item, index, arr) => {
+          this.$refs.tag.forEach((item) => {
             item.style.backgroundColor = this.color[Math.floor(Math.random() * 10)]
           })
         }
@@ -51,15 +65,12 @@ export default {
     // 跳转到标签
     jumpGate(item) {
       this.$store.commit('CHANGE_TITLE', item)
-      if (item === "life") {
-        this.$router.push({ name: "life" })
+      if (item === 'life') {
+        this.$router.push({ name: 'life' })
       } else {
-        this.$router.push({ name: "techincal", params: { articleList: item } })
+        this.$router.push({ name: 'techincal', params: { articleList: item } })
       }
     }
-  },
-  mounted() {
-    this.getTagsClass({ publish: true })
   }
 }
 </script>
@@ -73,7 +84,7 @@ export default {
 }
 .gateway-content:after {
   display: block;
-  content: "";
+  content: '';
   clear: both;
   line-height: 0;
   height: 0;

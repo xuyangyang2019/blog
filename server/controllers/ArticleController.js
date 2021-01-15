@@ -22,11 +22,10 @@ module.exports = {
         })
       }
     }
-    console.log('tags', tagArr)
     ctx.result = tagArr
     return next()
   },
-  // 文章列表
+  // 分页查询文章列表
   'GET /api/getArticleList': async (ctx, next) => {
     const { pageNum, pageSize, publish, tag } = ctx.request.query
     const condition = {}
@@ -44,6 +43,7 @@ module.exports = {
     }
     return next()
   },
+  // =====================================================
   // 获取文章数量 暂时不用
   'GET /api/getArticlesCount': async (ctx, next) => {
     const publish = ctx.query.publish !== 'false'
