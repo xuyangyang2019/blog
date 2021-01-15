@@ -12,7 +12,6 @@ module.exports = {
   // },
   // 添加文章
   'POST /api/addArticle': async (ctx, next) => {
-    console.log('添加文章', ctx.request.body)
     const data = ctx.request.body
     if (!data) {
       throw new InvalidQueryError()
@@ -27,19 +26,18 @@ module.exports = {
     return next()
   },
   // 删除文章
-  'DELETE /api/deleteArticle': async (ctx, next) => {
-    console.log('删除文章')
-    // const { _id } = ctx.request.body
-    // if (!_id) {
-    //   throw new InvalidQueryError()
-    // }
-    // const result = await ArticleService.deleteById(_id)
-    // if (!result) {
-    //   ctx.error = '文章不存在'
-    // } else {
-    //   ctx.result = result
-    // }
-    // return next()
+  'DELETE /api/deleteArticles': async (ctx, next) => {
+    const ids = ctx.query.ids
+    if (!ids) {
+      throw new InvalidQueryError()
+    }
+    const result = await ArticleService.delete({ _id: { $in: ids } })
+    if (!result) {
+      ctx.error = '文章不存在'
+    } else {
+      ctx.result = result
+    }
+    return next()
   },
   // 更新文章
   'PATCH /api/updateArticle': async (ctx, next) => {
