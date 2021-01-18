@@ -15,7 +15,9 @@ Vue.mixin({
       asyncData({
         store: this.$store,
         route: to
-      }).then(next).catch(next)
+      })
+        .then(next)
+        .catch(next)
     } else {
       next()
     }
@@ -47,7 +49,7 @@ router.onReady(() => {
     // 所以我们对比它们，找出两个匹配列表的差异组件
     let diffed = false
     const activated = matched.filter((c, i) => {
-      return diffed || (diffed = (prevMatched[i] !== c))
+      return diffed || (diffed = prevMatched[i] !== c)
     })
 
     if (!activated.length) {
@@ -56,17 +58,20 @@ router.onReady(() => {
 
     // 这里如果有加载指示器 (loading indicator)，就触发
 
-    Promise.all(activated.map(c => {
-      if (c.asyncData) {
-        return c.asyncData({ store, route: to })
-      }
-    })).then(() => {
-      // 停止加载指示器(loading indicator)
+    Promise.all(
+      activated.map((c) => {
+        if (c.asyncData) {
+          return c.asyncData({ store, route: to })
+        }
+      })
+    )
+      .then(() => {
+        // 停止加载指示器(loading indicator)
 
-      next()
-    }).catch(next)
+        next()
+      })
+      .catch(next)
   })
   // 这里假定 App.vue 模板中根元素具有 `id="app"`
   app.$mount('#app')
 })
-
