@@ -54,13 +54,13 @@ module.exports = {
     return next()
   },
   // 文章归档
-  'GET /api/getArticelsByTime': async (ctx, next) => {
-    const publish = ctx.query.publish !== 'false'
+  'GET /api/getArticlesByTime': async (ctx, next) => {
+    const publish = !!ctx.query.publish
     const timeArr = []
     const timeMap = {}
-    const docs = await ArticleService.findMany({ publish: publish }, { data: 1 })
+    const docs = await ArticleService.findMany({ publish: publish }, { date: 1 })
     if (!docs) {
-      ctx.error = '文章不存在'
+      ctx.error = '查询出错'
     } else {
       docs.forEach((item) => {
         const yearMonth = new Date(item.date).getFullYear() + '年' + (new Date(item.date).getMonth() + 1) + '月'
