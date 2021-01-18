@@ -1,17 +1,18 @@
 module.exports = {
-  presets: [
-    '@babel/preset-env'
-  ],
-  'plugins': [
+  presets: ['@babel/preset-env'],
+  plugins: [
     'dynamic-import-webpack',
-    ['prismjs',
+    [
+      'prismjs',
       {
-        'languages': ['html', 'css', 'javascript', 'php', 'dart', 'bash', 'nginx', 'sql'],
-        'plugins': ['line-numbers', 'highlight-keywords'],
-        'theme': 'okaidia',
-        'css': true
-      }]
+        languages: ['html', 'css', 'javascript', 'php', 'dart', 'bash', 'nginx', 'sql'],
+        plugins: ['line-numbers', 'highlight-keywords'],
+        theme: 'okaidia',
+        css: true
+      }
+    ]
   ]
+  // element-ui
   // "presets": [
   //     '@vue/cli-plugin-babel/preset'
   // ],

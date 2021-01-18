@@ -3,12 +3,17 @@ import App from './App.vue'
 import createRouter from './router'
 import createStore from './store/store.js'
 import { sync } from 'vuex-router-sync'
+// element-ui
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
 
 import filters from './filters'
 // 全局过滤器
-Object.keys(filters).forEach(filterName => {
+Object.keys(filters).forEach((filterName) => {
   Vue.filter(filterName, filters[filterName])
 })
+
+// Vue.use(ElementUI)
 
 // // 全局引入 Mixin
 // import headMixin from './mixins/head-mixin'
@@ -57,7 +62,7 @@ export function createApp() {
   const app = new Vue({
     router,
     store,
-    render: h => h(App)
+    render: (h) => h(App)
   })
 
   // 暴露 app, router 和 store。
