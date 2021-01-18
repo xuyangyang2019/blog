@@ -23,7 +23,7 @@ export default {
     })
   },
   mounted() {
-    getArticlesByTime({ publish: true }).then((res) => {
+    getArticlesByTime(true).then((res) => {
       if (res.code === 200) {
         this.SET_ARTICLES_TIME(res.data || [])
       }

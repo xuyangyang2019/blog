@@ -6,9 +6,20 @@
 
 import fetch from '../utils/fetchFront'
 
-// 归档
-function getArticlesByTime(payload) {
-  return fetch.get('/api/getArticlesByTime', payload)
+// 获取推荐的文章
+function getHotArticles({ commit }) {
+  return fetch.get('/api/getArticlesByPv', {}).then((res) => {
+    // console.log('推荐文章:', res)
+    // commit('SET_HOT', res.data || [])
+  })
+}
+
+/**
+ * 归档
+ * @param {Boolean} publish 是否已发布 true or false
+ */
+function getArticlesByTime(publish) {
+  return fetch.get('/api/getArticlesByTime', { publish: publish })
 }
 
 // ==============================================
@@ -21,4 +32,4 @@ function getTags(publish) {
   return fetch.get('/api/tags', { publish: publish })
 }
 
-export { getTags, getArticlesByTime }
+export { getTags, getArticlesByTime, getHotArticles }
