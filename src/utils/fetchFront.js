@@ -128,11 +128,12 @@ httpInstance.interceptors.request.use(
     // 但是即使token存在，也有可能token是过期的，所以在每次的请求头中携带token
     // 后台根据携带的token判断用户的登录情况，并返回给我们对应的状态码
     // 而后我们可以在响应拦截器中，根据状态码进行一些统一的操作。
-    const token = localStorage.getItem('validateToken')
     // token && (config.headers.Authorization = token)
+
     // 如果后端使用的是koa-jwt鉴权
-    token && (config.headers.Authorization = 'Bearer ' + token)
-    console.log(config)
+    // const token = localStorage.getItem('validateToken')
+    // token && (config.headers.Authorization = 'Bearer ' + token)
+    // console.log(config)
     return config
   },
   (error) => {
@@ -188,6 +189,7 @@ function apiAxios(method, url, params) {
       url: url,
       method: method,
       // baseURL: 'http://192.168.0.115:10010', // 开发模式下vue-cli已经配置了请求转发，所以不用基础路径即可
+      baseURL: 'http://192.168.0.111:8098',
       params: method === 'GET' || method === 'DELETE' ? params : null,
       paramsSerializer: (params) => {
         return qs.stringify(params, { indices: false })
