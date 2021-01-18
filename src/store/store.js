@@ -26,8 +26,8 @@ const state = {
     life: [], // 生活类文章
     search: [], // 搜索结果
     only: [], // 单个文章
-    time: [], // 时间线
-    hot: [], // 推荐的文章
+    time: [], // 归档
+    hot: [], // 热门文章
     pre_next: {
       pre: [],
       next: []
@@ -37,7 +37,6 @@ const state = {
   userInfo: { name: '', imgUrl: '', email: '' }, // 用户信息
   pageArr: [], // 分页
   tags: [], // 标签
-  timeLine: [], // 时间轴
   maskShow: false, // 展示登陆框
   comments: [] // 文章评论
 }
@@ -61,13 +60,6 @@ const actions = {
     api.get('/api/getArticlesByPv', {}).then((res) => {
       console.log('推荐文章:', res)
       commit('SET_HOT', res.data || [])
-    })
-  },
-  // 获取时间轴
-  GetTime({ commit }, payload) {
-    api.get('/api/getArticelsByTime', payload).then((res) => {
-      console.log('归档:', res)
-      commit('SET_TIME_LINE', res.data || [])
     })
   },
   // 获取文章
@@ -210,9 +202,6 @@ const mutations = {
   SetTags(state, data) {
     state.tags = data
   },
-  SET_TIME_LINE(state, data) {
-    state.timeLine = data
-  },
   CLEAR_PAGE(state) {
     state.pageArr = []
   },
@@ -241,6 +230,9 @@ const mutations = {
   },
   SET_ARTICLES_SEARCH(state, data) {
     state.articles.search = data
+  },
+  SET_ARTICLES_TIME(state, data) {
+    state.articles.time = data
   },
   PRODUCT_BG(state, data) {
     state.tagBg = []
@@ -272,7 +264,7 @@ const mutations = {
     if (info.type === 1) {
       state.msgBoardArr.unshift(info.add)
     } else {
-      state.msgBoardArr.forEach((item, index, arr) => {
+      state.msgBoardArr.forEach((item, index) => {
         if (item._id === info._id) {
           state.msgBoardArr.splice(index, 1, info.add)
           return

@@ -12,7 +12,7 @@ import router from '../router'
 // 引入vuex
 // import store from '../store'
 // ui
-import { Message } from 'element-ui'
+// import { Message } from 'element-ui'
 // 配置文件
 // import { baseUrl, baseUrlDev } from '../../app.config'
 
@@ -136,7 +136,7 @@ httpInstance.interceptors.request.use(
     return config
   },
   (error) => {
-    Message.error({ message: '请求超时!' })
+    // Message.error({ message: '请求超时!' })
     return Promise.reject(error)
   }
 )
@@ -167,12 +167,11 @@ httpInstance.interceptors.response.use(
     } else {
       // console.log('响应拦截器-请求失败', error)
       console.log('请求超时或断网', error)
-      // Message.error({ message: error })
-      Message({
-        type: 'error',
-        message: `请求超时或断网:${error}`,
-        duration: 3000
-      })
+      // Message({
+      //   type: 'error',
+      //   message: `请求超时或断网:${error}`,
+      //   duration: 3000
+      // })
       // 处理断网的情况
       // eg:请求超时或断网时，更新state的network状态
       // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
