@@ -7,7 +7,7 @@
 import fetch from '../utils/fetchFront'
 
 /**
- * 获取人们文章
+ * 获取热门文章
  */
 function getHotArticles() {
   return fetch.get('/api/getArticlesByPv')
@@ -28,7 +28,5 @@ function getArticlesByTime(publish) {
 function getTags(publish) {
   return fetch.get('/api/tags', { publish: publish })
 }
-
-// ==============================================
 
 export { getTags, getArticlesByTime, getHotArticles }
