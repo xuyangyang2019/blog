@@ -1,6 +1,6 @@
 <template>
   <div class="gateway">
-    <h2 class="gateway-header" @click="getTagsClass">标签</h2>
+    <h2 class="gateway-header">标签</h2>
     <div class="gateway-content">
       <ul>
         <li v-for="(item, index) in tags" :key="index">
@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import { getTags } from '../../api/front'
 
 export default {
   data() {
@@ -47,11 +48,15 @@ export default {
   },
   mounted() {
     // 获取tags
-    this.getTagsClass({ publish: true })
+    getTags(true).then((res) => {
+      if (res.code === 200) {
+        this.SetTags(res.data)
+      }
+    })
   },
   methods: {
-    ...mapActions({
-      getTagsClass: 'GetTagsClass'
+    ...mapMutations({
+      SetTags: 'SetTags'
     }),
     // 初始化背景色
     initBackground() {

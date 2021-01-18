@@ -48,13 +48,6 @@ const getters = {
 
 // actions
 const actions = {
-  // 获取技术文章的tag生成导航
-  GetTagsClass({ commit }, payload) {
-    api.get('/api/tags', { publish: payload.publish }).then((res) => {
-      console.log('文章标签:', res)
-      commit('SetTags', res.data || [])
-    })
-  },
   // 获取文章
   GetArticles({ commit }, payload) {
     let params = {}
@@ -197,11 +190,11 @@ const mutations = {
   SET_ARTICLES_TIME(state, data) {
     state.articles.time = data
   },
-  // =========================================
   // 设置标签
   SetTags(state, data) {
     state.tags = data
   },
+  // =========================================
   // 清理分页
   CLEAR_PAGE(state) {
     state.pageArr = []

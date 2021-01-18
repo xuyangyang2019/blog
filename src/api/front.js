@@ -21,14 +21,14 @@ function getArticlesByTime(publish) {
   return fetch.get('/api/getArticlesByTime', { publish: publish })
 }
 
-// ==============================================
-
 /**
  * 获取技术文章的tag 生成导航
- * @param {Boolean} publish 已发布的文章标签
+ * @param {Boolean} publish 是否已发布 true or false
  */
 function getTags(publish) {
   return fetch.get('/api/tags', { publish: publish })
 }
+
+// ==============================================
 
 export { getTags, getArticlesByTime, getHotArticles }
