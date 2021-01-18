@@ -16,21 +16,21 @@ export default {
     store.registerModule('foo', fooStoreModule)
     return store.dispatch('foo/inc')
   },
-  // 重要信息：当多次访问路由时，
-  // 避免在客户端重复注册模块。
-  destroyed() {
-    this.$store.unregisterModule('foo')
-  },
   computed: {
     fooCount() {
       return this.$store.state.foo.count
     }
   },
+  // 重要信息：当多次访问路由时，
+  // 避免在客户端重复注册模块。
+  destroyed() {
+    this.$store.unregisterModule('foo')
+  },
   methods: {
     onHandleClick() {
-      alert('foo');
+      alert('foo')
     }
-  },
+  }
 }
 </script>
 
