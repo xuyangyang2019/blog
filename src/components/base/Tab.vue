@@ -14,7 +14,7 @@
       </div>
       <div class="nav-body" :class="{ heightZero: show }">
         <ul class="nav-list">
-          <li v-for="(item, index) in tabs">
+          <li v-for="(item, index) in tabs" :key="index">
             <router-link :to="{ name: item.name }" tag="div">
               <span class="bg-box" @click.stop="goAnchor(item.name, index)">
                 <!-- <span class="bg-box"> -->
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
 // import { getScrollTop } from "@/utils/getScrollTop"
 // js动画 解决css3无法实现的动画
@@ -57,19 +57,19 @@ export default {
       tabs: [
         { name: 'home', render: '首页', icon: 'icon-home' },
         { name: 'article', render: '文章', icon: 'icon-book' },
-        { name: 'msgboard', render: '留言', icon: 'icon-messages' },
-        { name: 'life', render: '生活', icon: 'icon-images' }
+        { name: 'life', render: '生活', icon: 'icon-images' },
+        { name: 'msgboard', render: '留言', icon: 'icon-messages' }
       ]
     }
-  },
-  mounted() {
-    requestAnimation()
   },
   computed: {
     ...mapState({
       tabBg: 'tabBg',
       anchorScroll: 'anchorScroll'
     })
+  },
+  mounted() {
+    requestAnimation()
   },
   methods: {
     // 显示或隐藏 navs
@@ -97,10 +97,10 @@ export default {
         if (document.documentElement) {
           document.documentElement.scrollTop = Math.min(htmlTop + movepx, bsetTop)
         } else {
-          document.body.scrollTop = Math.min(scrollTop + movepx, bsetTop)
+          document.body.scrollTop = Math.min(htmlTop + movepx, bsetTop)
         }
         // 当页面不够长使container滚动不到页面顶端时，清除定时器(适合container上方有其他元素时)
-        if (getScrollTop() === scrollTop) {
+        if (bsetTop === htmlTop) {
           this.$router.push({ name: this.routeName })
           window.cancelAnimationFrame(this.intervalId)
         } else {
@@ -110,7 +110,7 @@ export default {
         if (document.documentElement) {
           document.documentElement.scrollTop = Math.max(htmlTop - movepx, bsetTop)
         } else {
-          document.body.scrollTop = Math.max(scrollTop - movepx, bsetTop)
+          document.body.scrollTop = Math.max(htmlTop - movepx, bsetTop)
         }
         window.requestAnimationFrame(this.callback)
       } else {
@@ -119,7 +119,7 @@ export default {
       }
     },
     // 锚点动态跳转
-    goAnchor(name, index) {
+    goAnchor(name) {
       this.show = !this.show
       // 重复的路由不处理
       if (this.$route.name === name) return
