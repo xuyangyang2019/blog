@@ -55,13 +55,6 @@ const actions = {
       commit('SetTags', res.data || [])
     })
   },
-  // 获取推荐的文章
-  GetHotArticles({ commit }) {
-    api.get('/api/getArticlesByPv', {}).then((res) => {
-      console.log('推荐文章:', res)
-      commit('SET_HOT', res.data || [])
-    })
-  },
   // 获取文章
   GetArticles({ commit }, payload) {
     let params = {}
@@ -196,12 +189,20 @@ const mutations = {
   // 'SET_BAR'(state, data) {
   //     state.bar = data
   // }
-  SET_HOT(state, data) {
+  // 设置热门文章
+  SET_ARTICLES_HOT(state, data) {
     state.articles.hot = data
   },
+  // 设置归档数据
+  SET_ARTICLES_TIME(state, data) {
+    state.articles.time = data
+  },
+  // =========================================
+  // 设置标签
   SetTags(state, data) {
     state.tags = data
   },
+  // 清理分页
   CLEAR_PAGE(state) {
     state.pageArr = []
   },
@@ -231,9 +232,7 @@ const mutations = {
   SET_ARTICLES_SEARCH(state, data) {
     state.articles.search = data
   },
-  SET_ARTICLES_TIME(state, data) {
-    state.articles.time = data
-  },
+
   PRODUCT_BG(state, data) {
     state.tagBg = []
     const pattern = /^[\u4e00-\u9fa5]+$/

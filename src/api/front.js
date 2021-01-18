@@ -6,12 +6,11 @@
 
 import fetch from '../utils/fetchFront'
 
-// 获取推荐的文章
-function getHotArticles({ commit }) {
-  return fetch.get('/api/getArticlesByPv', {}).then((res) => {
-    // console.log('推荐文章:', res)
-    // commit('SET_HOT', res.data || [])
-  })
+/**
+ * 获取人们文章
+ */
+function getHotArticles() {
+  return fetch.get('/api/getArticlesByPv')
 }
 
 /**

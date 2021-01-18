@@ -2,35 +2,38 @@
   <div class="hot">
     <h2 class="hot-header">推荐</h2>
     <div class="hot-content">
-      <ul v-if="hotArticles.length > 0">
-        <li v-for="(item, index) in hotArticles" :key="index" class="hot-item">
+      <ul>
+        <li v-for="(item, index) in articles.hot" :key="index" class="hot-item">
           <span>{{ index + 1 }}.</span>
           <span class="article-title" :title="item.title" @click="jumpHot(item)" v-text="item.title"></span>
         </li>
       </ul>
-      <div v-else>没有文章</div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
+import { getHotArticles } from '../../api/front'
 
 export default {
   computed: {
     ...mapState({
       articles: 'articles'
-    }),
-    // 热门文章
-    hotArticles() {
-      return this.articles.hot || []
-    }
+    })
   },
   mounted() {
     // 页面加载完成后 获取推荐的文章
-    this.$store.dispatch('GetHotArticles')
+    getHotArticles().then((res) => {
+      if (res.code === 200) {
+        this.SET_ARTICLES_HOT(res.data || [])
+      }
+    })
   },
   methods: {
+    ...mapMutations({
+      SET_ARTICLES_HOT: 'SET_ARTICLES_HOT'
+    }),
     // 跳转到文章
     jumpHot(item) {
       this.$store.commit('CHANGE_TITLE', item.title)
