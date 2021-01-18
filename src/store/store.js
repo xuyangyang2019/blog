@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import api from './api'
 import modules from './modules'
+
+import api from './api'
+
+// 通用 API（请忽略此 API 具体实现细节）
+import { getArticleList } from '../api/front'
 
 // 假定我们有一个可以返回 Promise 的
 // 通用 API（请忽略此 API 具体实现细节）
@@ -50,29 +54,35 @@ const getters = {
 const actions = {
   // 获取文章
   GetArticles({ commit }, payload) {
-    let params = {}
-    if (!payload.tag) {
-      params = {
-        publish: payload.publish,
-        page: payload.page,
-        cache: true
-      }
-    } else {
-      params = payload
-    }
-    api.get('/api/getArticleList', params).then((res) => {
+    // let params = {}
+    // if (!payload.tag) {
+    //   params = {
+    //     publish: payload.publish,
+    //     page: payload.page,
+    //     cache: true
+    //   }
+    // } else {
+    //   params = payload
+    // }
+    // return api.get('/api/getArticleList', params).then((res) => {
+    const { publish, tag, pageNum, pageSize } = payload
+    return getArticleList(publish, tag, pageNum, pageSize).then((res) => {
       console.log('文章列表:', res)
-      if (!payload.tag) {
-        commit('SET_ARTICLES_ALL', res.data.list)
-      } else if (payload.tag === 'life') {
-        commit('SET_ARTICLES_LIFE', res.data.list)
-      } else {
-        commit('SET_ARTICLES_TECH', res.data.list)
+      if (res.code === 200) {
+        if (!payload.tag) {
+          commit('SET_ARTICLES_ALL', res.data.list)
+        } else if (payload.tag === 'life') {
+          commit('SET_ARTICLES_LIFE', res.data.list)
+        } else {
+          commit('SET_ARTICLES_TECH', res.data.list)
+        }
+        commit('PRODUCT_BG', res.data.list)
+        commit('SET_ARTICLES_SUM', res.data.count)
+        commit('SET_PAGE_ARR', res.data.count)
+        commit('CHANGE_CODE', 200)
       }
-      commit('PRODUCT_BG', res.data.list)
     })
   },
-  // ============================================================================
   // 获取对应模块的文章总数，为分页按钮个数提供支持
   GetArticlesCount({ commit }, payload) {
     api.get('/api/getArticlesCount', payload).then((res) => {
@@ -81,6 +91,8 @@ const actions = {
       commit('SET_PAGE_ARR', res.data || 0)
     })
   },
+
+  // ============================================================================
 
   // 精准获取文章
   GetArticle({ commit }, payload) {
@@ -280,9 +292,6 @@ const mutations = {
   },
   SET_ONLY_ARTICLES(state, onlyArticles) {
     state.articles.only = onlyArticles
-  },
-  SET_ARTICLES_TIME(state, timeArticles) {
-    state.articles.time = timeArticles
   },
   // 设置上|下页
   SET_PRE_NEXT(state, pn) {

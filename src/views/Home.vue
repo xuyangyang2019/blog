@@ -11,32 +11,37 @@
 import { mapActions, mapState, mapMutations } from 'vuex'
 
 // import banner from "@/components/home/Banner"
-import loading from '@/components/base/Loading'
-import articleList from '@/components/article/ArticleList'
+import Loading from '@/components/base/Loading.vue'
+import ArticleList from '@/components/article/ArticleList.vue'
 import headMixin from '@/mixins/head-mixin'
 
 export default {
   name: 'Home',
   components: {
     // banner,
-    loading,
-    articleList
+    Loading,
+    ArticleList
   },
   mixins: [headMixin],
-  // eslint-disable-next-line no-unused-vars
-  asyncData({ store, route }) {
-    return Promise.all([
-      store.dispatch('GetArticles', {
-        publish: true,
-        page: 1,
-        cache: true
-      }),
-      store.dispatch('GetArticlesCount', {
-        cache: true,
-        publish: true
-      })
-    ]).then(() => {
-      store.commit('CHANGE_CODE', 200)
+  asyncData({ store }) {
+    // return Promise.all([
+    //   store.dispatch('GetArticles', {
+    //     publish: true,
+    //     page: 1,
+    //     cache: true
+    //   }),
+    //   store.dispatch('GetArticlesCount', {
+    //     cache: true,
+    //     publish: true
+    //   })
+    // ]).then(() => {
+    //   store.commit('CHANGE_CODE', 200)
+    // })
+
+    return store.dispatch('GetArticles', {
+      publish: true,
+      page: 1,
+      cache: true
     })
   },
   head() {
@@ -60,8 +65,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getArticles: 'GetArticles',
-      getArticlesCount: 'GetArticlesCount'
+      getArticles: 'GetArticles'
+      // getArticlesCount: 'GetArticlesCount'
     }),
     ...mapMutations({
       clear: 'CLEAR_PAGE'

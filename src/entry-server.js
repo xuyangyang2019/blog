@@ -58,8 +58,8 @@ export default (context) => {
         matchedComponents.map((Component) => {
           if (Component.asyncData) {
             // 不知道为什么用return 先注释掉看看有没有问题
-            // return Component.asyncData({ store, route: router.currentRoute })
-            Component.asyncData({ store, router, route: router.currentRoute })
+            return Component.asyncData({ store, route: router.currentRoute })
+            // Component.asyncData({ store, router, route: router.currentRoute })
           }
         })
       ).then(() => {
