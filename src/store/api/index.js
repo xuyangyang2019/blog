@@ -39,16 +39,16 @@ function ajax(type, url, options) {
 
 const config = {
   get(url, options) {
-    const key = md5(url + JSON.stringify(options))
-    if (cached && cached.has(key)) {
-      console.log('有缓存，返回缓存的数据')
-      return Promise.resolve(cached.get(key))
-    }
+    // const key = md5(url + JSON.stringify(options))
+    // if (cached && cached.has(key)) {
+    //   console.log('有缓存，返回缓存的数据')
+    //   return Promise.resolve(cached.get(key))
+    // }
     return new Promise((resolve, reject) => {
       ajax('get', url, options).then((data) => {
-        if (cached && options.cache) {
-          cached.set(key, data)
-        }
+        // if (cached && options.cache) {
+        //   cached.set(key, data)
+        // }
         resolve(data)
       })
     })
