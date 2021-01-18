@@ -40,7 +40,7 @@
     <div class="leavemsg">
       <h2>所有留言：</h2>
       <ul v-if="msgBoardArr.length > 0">
-        <li v-for="item in msgBoardArr" class="board-item">
+        <li v-for="(item, index) in msgBoardArr" :key="index" class="board-item">
           <div class="msg-leaver">
             <div class="profile-pic">
               <img :src="item.imgUrl" alt />
@@ -59,7 +59,7 @@
           <!-- admin 回复 -->
           <div class="admin-reply">
             <ul v-if="item.reply.length !== 0">
-              <li v-for="rep in item.reply" class="board-reply-item">
+              <li v-for="(rep, repIndex) in item.reply" :key="repIndex" class="board-reply-item">
                 <div class="profile-pic admin-pic">
                   <img :src="rep.imgUrl" alt />
                 </div>
@@ -82,7 +82,7 @@
         </li>
       </ul>
       <div v-else class="empty-msgboard">
-        <h3>( >﹏<。)哎~~没人理我</h3>
+        <h3>( >﹏&gt;。)哎~~没人理我</h3>
       </div>
     </div>
 
@@ -126,7 +126,7 @@ export default {
     login
   },
   mixins: [headMixin],
-  asyncData({ store, route }) {
+  asyncData({ store }) {
     return Promise.all([
       store.dispatch('GetLeaveWords', {
         page: 1,
@@ -232,9 +232,9 @@ export default {
           date: Date.now()
         }).then((res) => {
           if (res.data && res.data._id) {
-            that.$refs.pubButton.value = '留言'
-            that.sayWords = ''
-            that.addLocalWords({ add: res.data, type: 2, _id: that.replyInfo._id })
+            this.$refs.pubButton.value = '留言'
+            this.sayWords = ''
+            this.addLocalWords({ add: res.data, type: 2, _id: this.replyInfo._id })
           }
         })
       }
@@ -271,7 +271,7 @@ export default {
       finStr = finStr.replace(new RegExp('<', 'g'), '&lt')
       finStr = finStr.replace(new RegExp('>', 'g'), '&gt')
       // 把所有的emoji放到一个数组,之后遍历json数组，将所有的json整合到一个json
-      Object.values(emojiData).forEach((item, index, arr) => {
+      Object.values(emojiData).forEach((item) => {
         emojiObject = Object.assign(emojiObject, item)
       })
       // 所有key的集合，

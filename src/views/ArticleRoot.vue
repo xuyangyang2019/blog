@@ -6,9 +6,9 @@
       <!-- 列表展示 -->
       <div v-show="!rotate" class="stage-list">
         <ul>
-          <li v-for="(item, index) in tags">
+          <li v-for="(item, tagIndex) in tags" :key="tagIndex">
             <a href="javascript: void(0)" @click.stop="jumpArticle(item.tag)">
-              <h4>{{ index + 1 }}. {{ item.tag }}</h4>
+              <h4>{{ tagIndex + 1 }}. {{ item.tag }}</h4>
               <span>（{{ item.num }} 篇）</span>
             </a>
           </li>
@@ -17,7 +17,7 @@
       <!-- 滚筒展示 -->
       <div v-show="rotate" class="stage">
         <ul ref="container" class="rotate" @click="leftSlider">
-          <li v-for="(item, index) in tags" ref="degItem">
+          <li v-for="(item, index) in tags" ref="degItem" :key="index">
             <div class="deg-item-mask">
               <a href="javascript: void(0)" @click.stop="jumpArticle(item.tag)">
                 {{ index + 1 }}.{{ item.tag }} （{{ item.num }} 篇）
@@ -59,6 +59,12 @@ export default {
       title: '技术文章'
     }
   },
+  computed: {
+    ...mapState({
+      tags: 'tags',
+      articles: 'articles'
+    })
+  },
   watch: {
     tags() {
       if (this.tags.length) {
@@ -74,11 +80,26 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapState({
-      tags: 'tags',
-      articles: 'articles'
-    })
+  mounted() {
+    this.regBrowser()
+    this.getArticlesCount({ publish: true })
+    // 从别的路由跳转到当前路由，若不加条件，当前路由刷新，基于tags的
+    if (this.tags.length) {
+      const that = this // this.$refs会报错，因为tags还没取到
+      this.initRotate()
+      // 窗口大小改变重新计算锚点距离
+      window.addEventListener('resize', that.addEvent)
+      // 最多8个标签时显示3D旋转，否则显示列表模式
+      if (this.tags.length < 9 && this.tags.length > 1) {
+        this.rotate = true
+      } else {
+        this.rotate = false
+        this.show3D = false
+      }
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.addEvent)
   },
   methods: {
     ...mapActions({
@@ -95,14 +116,14 @@ export default {
     // 右滑
     rightSlider() {
       this.currentIndex++
-      ;['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item, index, arr) => {
+      ;['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item) => {
         this.$refs.container.style[item] = 'rotateY(' + this.reg * this.currentIndex + 'deg)'
       })
     },
     // 左滑
     leftSlider() {
       this.currentIndex--
-      ;['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item, index, arr) => {
+      ;['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((item) => {
         this.$refs.container.style[item] = 'rotateY(' + this.reg * this.currentIndex + 'deg)'
       })
     },
@@ -123,8 +144,8 @@ export default {
         const z = container.offsetWidth / 2 / Math.tan((reg / 2 / 180) * Math.PI) + 15
         this.reg = reg
         container.style.height = 1.618 * container.offsetWidth + 'px'
-        dom.forEach((item, index, arr) => {
-          ;['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((_item, _index, _arr) => {
+        dom.forEach((item, index) => {
+          ['mozTransform,webkitTransform', 'msTransform', 'oTransform', 'transform'].forEach((_item) => {
             item.style[_item] = 'rotateY(' + (index + 1) * reg + 'deg)' + ' ' + 'translateZ(' + z + 'px)'
           })
           item.style.background = "url('/img/technical/" + index + ".jpg')  0 0 no-repeat"
@@ -140,6 +161,7 @@ export default {
     },
     // 函数去抖，防止scroll和resize频繁触发
     debounce(func, delay) {
+      // eslint-disable-next-line consistent-this
       const context = this
       const args = arguments
       if (this.timer) {
@@ -183,27 +205,6 @@ export default {
         alert('由于opera浏览器兼容性问题，您将无法查看3D模式')
       }
     }
-  },
-  mounted() {
-    this.regBrowser()
-    this.getArticlesCount({ publish: true })
-    // 从别的路由跳转到当前路由，若不加条件，当前路由刷新，基于tags的
-    if (this.tags.length) {
-      const that = this // this.$refs会报错，因为tags还没取到
-      this.initRotate()
-      // 窗口大小改变重新计算锚点距离
-      window.addEventListener('resize', that.addEvent)
-      // 最多8个标签时显示3D旋转，否则显示列表模式
-      if (this.tags.length < 9 && this.tags.length > 1) {
-        this.rotate = true
-      } else {
-        this.rotate = false
-        this.show3D = false
-      }
-    }
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.addEvent)
   }
 }
 </script>

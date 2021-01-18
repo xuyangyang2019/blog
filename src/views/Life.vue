@@ -20,7 +20,11 @@ export default {
     loading
   },
   mixins: [headMixin],
-  asyncData({ store, route }) {
+  beforeRouteLeave(to, from, next) {
+    this.clear()
+    next()
+  },
+  asyncData({ store }) {
     return Promise.all([
       store.dispatch('GetArticles', {
         publish: true,
@@ -53,10 +57,6 @@ export default {
     ...mapMutations({
       clear: 'CLEAR_PAGE'
     })
-  },
-  beforeRouteLeave(to, from, next) {
-    this.clear()
-    next()
   }
 }
 </script>
