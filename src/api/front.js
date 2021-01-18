@@ -6,6 +6,13 @@
 
 import fetch from '../utils/fetchFront'
 
+// 归档
+function getArticlesByTime(payload) {
+  return fetch.get('/api/getArticlesByTime', payload)
+}
+
+// ==============================================
+
 /**
  * 获取技术文章的tag 生成导航
  * @param {Boolean} publish 已发布的文章标签
@@ -14,4 +21,4 @@ function getTags(publish) {
   return fetch.get('/api/tags', { publish: publish })
 }
 
-export { getTags }
+export { getTags, getArticlesByTime }
