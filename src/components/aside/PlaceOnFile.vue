@@ -1,9 +1,9 @@
 <template>
   <div class="timeLine">
-    <h1 class="timeLine-header" @click="getTime">时间轴</h1>
+    <h1 class="timeLine-header">归档</h1>
     <div class="timeLine-content">
       <ul>
-        <li v-for="(item, index) in timeLine" :key="index">
+        <li v-for="(item, index) in articles.time" :key="index">
           <!-- <a href="jacascript: void(0)" @click="jumpTime(item.time)"> {{ item.time }}({{ item.num }})</a> -->
           <a :href="jumpTime(item.time)" target="_blank">{{ item.time }}({{ item.num }})</a>
         </li>
@@ -13,19 +13,25 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
+import { getArticlesByTime } from '../../api/front'
+
 export default {
   computed: {
     ...mapState({
-      timeLine: 'timeLine'
+      articles: 'articles'
     })
   },
   mounted() {
-    this.getTime({ publish: true })
+    getArticlesByTime({ publish: true }).then((res) => {
+      if (res.code === 200) {
+        this.SET_ARTICLES_TIME(res.data || [])
+      }
+    })
   },
   methods: {
-    ...mapActions({
-      getTime: 'GetTime'
+    ...mapMutations({
+      SET_ARTICLES_TIME: 'SET_ARTICLES_TIME'
     }),
     // 跳转到时间轴
     jumpTime(time) {
