@@ -32,13 +32,13 @@
             <div class="r-slide">
               <div class="r-slide-content">
                 <!-- 关于本站 -->
-                <about></about>
+                <about-me></about-me>
                 <!-- 推荐 -->
-                <hot></hot>
+                <hot-articles></hot-articles>
                 <!-- 标签 -->
-                <gateWay></gateWay>
+                <article-tags></article-tags>
                 <!-- 时间轴 -->
-                <file-on-place></file-on-place>
+                <place-on-file></place-on-file>
               </div>
             </div>
           </section>
@@ -65,11 +65,12 @@
 import { mapState, mapMutations } from 'vuex'
 
 import tab from '@/components/base/Tab'
-import about from '@/components/base/About'
-import hot from '@/components/base/Hot'
-import gateWay from '@/components/base/GateWay'
-import fileOnPlace from '@/components/base/FileOnPlace'
 import foot from '@/components/base/Foot'
+
+import AboutMe from './components/aside/AboutMe.vue'
+import ArticleTags from './components/aside/ArticleTags.vue'
+import HotArticles from './components/aside/HotArticles.vue'
+import PlaceOnFile from './components/aside/PlaceOnFile.vue'
 
 // html的scrollTop
 // import { getScrollTop } from "@/utils/getScrollTop"
@@ -79,11 +80,11 @@ import foot from '@/components/base/Foot'
 export default {
   components: {
     tab,
-    gateWay,
-    fileOnPlace,
-    about,
-    hot,
-    foot
+    foot,
+    AboutMe,
+    ArticleTags,
+    HotArticles,
+    PlaceOnFile
   },
   data() {
     return {
