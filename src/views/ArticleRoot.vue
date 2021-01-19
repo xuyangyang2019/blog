@@ -171,7 +171,7 @@ export default {
         func.apply(context, args)
       }, delay)
     },
-    // 检查浏览器是否至此3D模式
+    // 检查浏览器是否支持3D模式
     regBrowser() {
       const info = getBrowserInfo()[0]
       const brow_reg = /[a-zA-Z]+/gi

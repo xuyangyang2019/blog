@@ -25,22 +25,29 @@ export default {
     next()
   },
   asyncData({ store }) {
-    return Promise.all([
-      store.dispatch('GetArticles', {
-        publish: true,
-        page: 1,
-        tag: 'life',
-        cache: true
-      }),
-      store.dispatch('GetArticlesCount', {
-        publish: true,
-        page: 1,
-        tag: 'life',
-        cache: true
-      })
-    ]).then(() => {
-      store.commit('CHANGE_CODE', 200)
+    return store.dispatch('GetArticles', {
+      publish: true,
+      tag: 'life',
+      pageNo: 1,
+      pageSize: 10
+      // cache: true
     })
+    // return Promise.all([
+    //   store.dispatch('GetArticles', {
+    //     publish: true,
+    //     page: 1,
+    //     tag: 'life',
+    //     cache: true
+    //   }),
+    //   store.dispatch('GetArticlesCount', {
+    //     publish: true,
+    //     page: 1,
+    //     tag: 'life',
+    //     cache: true
+    //   })
+    // ]).then(() => {
+    //   store.commit('CHANGE_CODE', 200)
+    // })
   },
   head() {
     return {
