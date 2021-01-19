@@ -8,12 +8,12 @@ Vue.use(Router)
 // 修改路由push方法,阻止重复点击报错
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
+  return originalPush.call(this, location).catch((err) => err)
 }
 // 修改路由replace方法,阻止重复点击报错
 const originalReplace = Router.prototype.replace
 Router.prototype.replace = function replace(location) {
-  return originalReplace.call(this, location).catch(err => err)
+  return originalReplace.call(this, location).catch((err) => err)
 }
 
 function createRouter() {
@@ -46,10 +46,9 @@ function createRouter() {
     },
     // 具体的文章
     {
-      path: '/article/:articleList/:id',
+      path: '/article/:tag/:id',
       name: 'articleShow',
       component: () => import(/* webpackChunkName: "article" */ '../components/article/ArticleShow.vue')
-
     },
     // 生活
     {
