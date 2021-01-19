@@ -1,20 +1,20 @@
 <template>
   <transition name="mask">
-    <div class="mask" @click="exitMask" v-show="maskShow">
+    <div v-show="maskShow" class="mask" @click="exitMask">
       <transition name="login">
-        <div class="login-box" @click.stop v-show="maskShow">
+        <div v-show="maskShow" class="login-box" @click.stop>
           <!-- 关闭 -->
           <div class="exit-login-box" @click="exitMask">X</div>
           <!-- 登陆 -->
           <div class="self-login">
             <div class="design-name">
               <label for="">昵称：</label>
-              <input type="text" placeholder="请输入昵称" v-model="designName" @focus="userInfoErr.name = ''" />
+              <input v-model="designName" type="text" placeholder="请输入昵称" @focus="userInfoErr.name = ''" />
             </div>
             <div class="name-info">{{ userInfoErr.name }}</div>
             <div class="email">
               <label for="">邮箱：</label>
-              <input type="text" placeholder="请输入邮箱" v-model="designEmail" @focus="userInfoErr.email = ''" />
+              <input v-model="designEmail" type="text" placeholder="请输入邮箱" @focus="userInfoErr.email = ''" />
             </div>
             <div class="email-info">{{ userInfoErr.email }}</div>
             <div class="register">
@@ -26,11 +26,11 @@
             <div class="line">第三方登录</div>
             <!-- qq登陆 -->
             <!-- onclick="return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=YourID&response_type=token&scope=all&redirect_uri=http://localhost:6180/qc_back.html', 'oauth2Login_10000' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');" -->
-            <a href="javascript: void(0)" @click="open" class="login-qq">
+            <a href="javascript: void(0)" class="login-qq" @click="open">
               <img src="/img/qq.png" alt="QQ登录" />
             </a>
             <!-- github登陆 -->
-            <a href="javascript: void(0)" @click="open" class="login-github">
+            <a href="javascript: void(0)" class="login-github" @click="open">
               <img src="/img/github.png" alt="github登录" />
             </a>
           </div>
@@ -41,27 +41,35 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex"
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
-      userInfoErr: { name: "", email: "" }, // 错误信息
-      loginType: "", // 登陆方式
-      designName: "", // 用户名
-      designEmail: "" // 邮箱
+      userInfoErr: { name: '', email: '' }, // 错误信息
+      loginType: '', // 登陆方式
+      designName: '', // 用户名
+      designEmail: '' // 邮箱
     }
   },
   computed: {
     ...mapState({
       userInfo: 'userInfo',
-      maskShow: 'maskShow',
+      maskShow: 'maskShow'
     })
+  },
+  mounted() {
+    this.getLocal()
+    // if (!localStorage.getItem("map_blog_userInfo")) {
+    //   this.qq_user_info()
+    // } else {
+    //   this.getLocal()
+    // }
   },
   methods: {
     ...mapActions({
       saveUser: 'SaveUser',
-      searchUser: 'SearchUser',
+      searchUser: 'SearchUser'
       //   githubUser: 'GithubUser',
     }),
     ...mapMutations({
@@ -123,8 +131,8 @@ export default {
         // 查询用户是否存在
         this.searchUser({ name: this.designName }).then((data) => {
           console.log(data)
-          if (data.exist === "yes") {
-            this.userInfoErr.name = "该用户名已存在，换一个试试？"
+          if (data.exist === 'yes') {
+            this.userInfoErr.name = '该用户名已存在，换一个试试？'
           } else {
             this.saveUser({
               name: this.designName,
@@ -132,9 +140,9 @@ export default {
             }).then((data) => {
               console.log(data)
               if (data.code === 200) {
-                let userInfo = {
+                const userInfo = {
                   name: this.designName,
-                  imgUrl: "/img/defaultUser.jpg",
+                  imgUrl: '/img/defaultUser.jpg',
                   email: this.designEmail
                 }
                 this.set_user(userInfo)
@@ -148,28 +156,28 @@ export default {
     },
     // 表单验证
     validateReg() {
-      let eReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,5}$/
-      let nReg = /^[0-9]*$/
-      let dName = this.designName
-      let dEmail = this.designEmail
-      let pattern = /admin|管理员|admin（管理员）/gi
+      const eReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,5}$/
+      const nReg = /^[0-9]*$/
+      const dName = this.designName
+      const dEmail = this.designEmail
+      const pattern = /admin|管理员|admin（管理员）/gi
       if (dName.length === 0) {
-        this.userInfoErr.name = "请填写用户名"
+        this.userInfoErr.name = '请填写用户名'
       } else if (pattern.test(dName)) {
-        this.userInfoErr.name = "喔唷~和管理员有点相似...换一个试试？"
+        this.userInfoErr.name = '喔唷~和管理员有点相似...换一个试试？'
       } else if (dName.length > 8) {
-        this.userInfoErr.name = "用户名最长8位"
+        this.userInfoErr.name = '用户名最长8位'
       } else if (nReg.test(dName)) {
-        this.userInfoErr.name = "用户名不能全是数字"
+        this.userInfoErr.name = '用户名不能全是数字'
       } else {
-        this.userInfoErr.name = ""
+        this.userInfoErr.name = ''
       }
       if (dEmail.length === 0) {
-        this.userInfoErr.email = "请填写邮箱"
+        this.userInfoErr.email = '请填写邮箱'
       } else if (!eReg.test(dEmail)) {
-        this.userInfoErr.email = "请填写正确的邮箱格式"
+        this.userInfoErr.email = '请填写正确的邮箱格式'
       } else {
-        this.userInfoErr.email = ""
+        this.userInfoErr.email = ''
       }
     },
     // 退出登陆
@@ -179,16 +187,16 @@ export default {
     },
     // 清除错误信息
     clearErr() {
-      this.designName = ""
-      this.designEmail = ""
-      this.userInfoErr.name = ""
-      this.userInfoErr.email = ""
+      this.designName = ''
+      this.designEmail = ''
+      this.userInfoErr.name = ''
+      this.userInfoErr.email = ''
     },
     // 获取本地信息
     getLocal() {
       // 如果本地的数据库有信息 就读取
-      if (localStorage.getItem("map_blog_userInfo")) {
-        let info = JSON.parse(localStorage.getItem("map_blog_userInfo"))
+      if (localStorage.getItem('map_blog_userInfo')) {
+        const info = JSON.parse(localStorage.getItem('map_blog_userInfo'))
         this.set_user({
           name: info.name,
           imgUrl: info.imgUrl,
@@ -200,16 +208,8 @@ export default {
     setLocal(info) {
       // let info = this.userInfo
       // let s_info = JSON.stringify({ name: info.name, imgUrl: info.imgUrl, email: info.email })
-      localStorage.setItem("map_blog_userInfo", JSON.stringify(info))
+      localStorage.setItem('map_blog_userInfo', JSON.stringify(info))
     }
-  },
-  mounted() {
-    this.getLocal()
-    // if (!localStorage.getItem("map_blog_userInfo")) {
-    //   this.qq_user_info()
-    // } else {
-    //   this.getLocal()
-    // }
   }
 }
 </script>
@@ -239,7 +239,7 @@ h2 {
 .say-box {
   margin: 10px 10px 5px;
   textarea {
-    font-family: "STFangsong";
+    font-family: 'STFangsong';
     resize: none;
     overflow-y: none;
     outline: none;
@@ -374,7 +374,7 @@ h2 {
 .rev-details,
 .ans-details {
   display: flex;
-  font-family: "微软雅黑";
+  font-family: '微软雅黑';
   font-size: 12px;
   font-weight: 500;
   justify-content: flex-end;

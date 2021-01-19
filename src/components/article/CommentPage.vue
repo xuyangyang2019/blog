@@ -21,7 +21,7 @@
           <div v-show="!!userInfo.name" class="reviewer-info">
             <img :src="userInfo.imgUrl" alt="" width="20px" height="20px" />
             <span>{{ userInfo.name }}</span>
-            <a href="javascript: void(0)" @click="loginOut">退出</a>
+            <a href="javascript: void(0)" @click="userLogOut">退出</a>
           </div>
         </div>
         <!-- 评论 -->
@@ -101,7 +101,7 @@
     </div>
 
     <!-- 登陆框 -->
-    <login></login>
+    <user-login></user-login>
 
     <!-- 错误提示框 -->
     <transition v-show="dialogErr.show" name="mask">
@@ -121,14 +121,14 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 
-import emoji from '@/components/base/Emoji'
+import Emoji from '@/components/base/Emoji.vue'
+import UserLogin from '@/components/userLogin/UserLogin.vue'
 import emojiData from '@/assets/js/emoji-data'
-import login from '@/components/userLogin/UserLogin'
 
 export default {
   components: {
-    emoji,
-    login
+    Emoji,
+    UserLogin
   },
   data() {
     return {
@@ -169,7 +169,7 @@ export default {
     }
     // 从服务端获取评论
     this.getComments({
-      articleId: this.$route.params.id
+      id: this.$route.params.id
       // cache: false
     })
   },
@@ -181,15 +181,15 @@ export default {
       addLike: 'AddLike'
     }),
     ...mapMutations({
-      set_user: 'SET_USER',
-      handleMask: 'HANDLE_MASK',
+      SET_USER: 'SET_USER',
+      HANDLE_MASK: 'HANDLE_MASK',
       addLocalComments: 'ADD_LOCAL_COMMENTS',
       addLocalCommentsLike: 'ADD_LOCAL_COMMENTS_LIKE'
     }),
-    // 退出登陆
-    loginOut() {
+    // 用户退出登陆
+    userLogOut() {
       // 重置用户信息
-      this.set_user({ name: '', imgUrl: '', email: '' })
+      this.SET_USER({ name: '', imgUrl: '', email: '' })
       // this.removeLocal()
       localStorage.removeItem('map_blog_userInfo')
       // 处理第三方登陆信息
@@ -212,14 +212,23 @@ export default {
     // 展示登陆框
     showLogin() {
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
-        this.handleMask(true)
+        this.HANDLE_MASK(true)
       }
+    },
+    // 展示|隐藏 emoji框
+    emojiToggle() {
+      this.emojiShow = !this.emojiShow
+    },
+    // 隐藏emoji框
+    exitEmoji() {
+      this.emojiShow = false
     },
     // 选emoji
     selectEmoji(emojiCode) {
       this.sayWords += emojiCode
       this.emojiShow = false
     },
+
     // 发表评论
     publishComment: () => {
       // 表单验证
@@ -281,7 +290,7 @@ export default {
     validatePub: function () {
       // 有用户信息
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
-        this.handleMask(true)
+        this.HANDLE_MASK(true)
         return true
       }
       // 非空
@@ -312,19 +321,11 @@ export default {
       })
       return finStr
     },
-    // 展示|隐藏 emoji框
-    emojiToggle() {
-      this.emojiShow = !this.emojiShow
-    },
-    // 隐藏emoji框
-    exitEmoji() {
-      this.emojiShow = false
-    },
     // 回复评论
     rep(_id, name) {
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.aite = name
-        this.handleMask(true)
+        this.HANDLE_MASK(true)
       } else {
         this._id = _id
         this.aite = name
