@@ -74,6 +74,14 @@ function getMsgCount() {
   return fetch.get('/api/getMsgCount')
 }
 
+/**
+ * 获取指定文章的评论
+ * @param {String} id 文章的_id
+ */
+function getCommets(id) {
+  return fetch.get('/api/getComments', { id: id })
+}
+
 export {
   getTags,
   getArticlesByTime,
@@ -82,5 +90,6 @@ export {
   getArticlesCount,
   getArticle,
   getMsgBoard,
-  getMsgCount
+  getMsgCount,
+  getCommets
 }

@@ -5,7 +5,7 @@ import modules from './modules'
 import api from './api'
 
 // 通用 API（请忽略此 API 具体实现细节）
-import { getArticleList, getArticlesCount, getArticle, getMsgBoard, getMsgCount } from '../api/front'
+import { getArticleList, getArticlesCount, getArticle, getMsgBoard, getMsgCount, getCommets } from '../api/front'
 
 // state
 const state = {
@@ -117,6 +117,16 @@ const actions = {
       // }
     })
   },
+  // 获取文章评论
+  GetComments({ commit }, payload) {
+    const { id } = payload
+    return getCommets(id).then((res) => {
+      console.log(res)
+      if (res.code === 200) {
+        commit('SET_COMMENTS', res.data)
+      }
+    })
+  },
 
   // ============================================================================
 
@@ -151,13 +161,7 @@ const actions = {
       commit('PRODUCT_BG', data)
     })
   },
-  // 获取文章评论
-  GetComments({ commit }, payload) {
-    api.get('/api/getComments', payload).then((data) => {
-      commit('SET_COMMENTS', data)
-      //   return data
-    })
-  },
+
   // 发表评论
   PostComment({ commit }, payload) {
     return api.post('/api/saveComment', payload)
