@@ -41,6 +41,16 @@ function getArticleList(publish, tag, pageNum, pageSize) {
 }
 
 /**
+ * 通过文章_id查询文章
+ * @param {Boolean} publish 是否发表
+ * @param {String} tag 标签名
+ * @param {String} id 文章的内部id
+ */
+function getArticle(publish, tag, id) {
+  return fetch.get('/api/getArticle', { publish: publish, tag: tag, id: id })
+}
+
+/**
  * 获取文章总数
  * @param {Boolean} publish 是否发表
  */
@@ -64,4 +74,13 @@ function getMsgCount() {
   return fetch.get('/api/getMsgCount')
 }
 
-export { getTags, getArticlesByTime, getHotArticles, getArticleList, getArticlesCount, getMsgBoard, getMsgCount }
+export {
+  getTags,
+  getArticlesByTime,
+  getHotArticles,
+  getArticleList,
+  getArticlesCount,
+  getArticle,
+  getMsgBoard,
+  getMsgCount
+}
