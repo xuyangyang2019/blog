@@ -111,7 +111,7 @@
       </div>
     </div>
     <!-- 评论组件 -->
-    <comment></comment>
+    <!-- <comment></comment> -->
   </div>
 </template>
 
@@ -121,23 +121,23 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import Prism from 'prismjs'
 import VueQr from 'vue-qr'
 import headMixin from '@/mixins/head-mixin'
-import comment from '@/components/article/Comment'
+// import comment from '@/components/article/Comment'
 
 const qrLogo = require('../../../public/img/defaultUser.jpg')
 
 export default {
   name: 'ArticleShow',
   components: {
-    VueQr,
-    comment
+    VueQr
+    // comment
   },
   mixins: [headMixin],
   asyncData({ store, route }) {
     return store.dispatch('GetArticle', {
       publish: true,
-      tag: route.params.articleList,
-      articleId: route.params.id,
-      cache: true
+      tag: route.params.tag,
+      id: route.params.id
+      // cache: true
     })
   },
   data() {
