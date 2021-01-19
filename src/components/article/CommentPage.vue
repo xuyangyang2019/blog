@@ -39,7 +39,7 @@
     <div class="all-comments">
       <h2>文章评论：</h2>
       <ul>
-        <li v-for="item in comments" class="reviewer-item">
+        <li v-for="(item, index) in comments" :key="index" class="reviewer-item">
           <div class="reviewer">
             <div class="name-img-box">
               <div><img :src="item.imgUrl" alt="" /></div>
@@ -66,7 +66,7 @@
           </div>
           <div v-if="item.reply.length > 0" class="answer">
             <ul>
-              <li v-for="reply in item.reply">
+              <li v-for="(reply, replyIndex) in item.reply" :key="replyIndex">
                 <div class="name-img-box">
                   <div><img :src="reply.imgUrl" alt="" /></div>
                   <h3>{{ reply.name }}: @{{ reply.aite }}</h3>
@@ -95,7 +95,7 @@
         </li>
         <!-- 没有评论时显示 -->
         <li v-if="!comments.length" class="empty-comment">
-          <h3>( >﹏<。)哎~~没人理我</h3>
+          <h3>( >﹏&lg;。)哎~~没人理我</h3>
         </li>
       </ul>
     </div>
@@ -143,22 +143,34 @@ export default {
       dialogErr: { show: false, info: '' }
     }
   },
-  watch: {
-    $route() {
-      const r = this.$route
-      if (r.fullPath.indexOf('#anchor-comment') === -1) {
-        this.getComments({
-          articleId: r.params.id,
-          cache: false // 推荐模块切换文章重新抓取评论
-        })
-      }
-    }
-  },
   computed: {
     ...mapState({
       comments: 'comments',
       userInfo: 'userInfo',
       articles: 'articles'
+    })
+  },
+  watch: {
+    $route() {
+      const r = this.$route
+      if (r.fullPath.indexOf('#anchor-comment') === -1) {
+        this.getComments({
+          id: r.params.id
+          // cache: false // 推荐模块切换文章重新抓取评论
+        })
+      }
+    }
+  },
+  mounted() {
+    // 从localStorage读取某文章的点赞
+    const key = 'articleId_comment' + this.$route.params.id
+    if (localStorage.getItem(key)) {
+      this.hasLiked = JSON.parse(localStorage.getItem(key))
+    }
+    // 从服务端获取评论
+    this.getComments({
+      articleId: this.$route.params.id
+      // cache: false
     })
   },
   methods: {
@@ -182,7 +194,8 @@ export default {
       localStorage.removeItem('map_blog_userInfo')
       // 处理第三方登陆信息
       const pattern = /githubId/
-      const gitCookie = document.cookie.split(';').filter((item, index, arr) => {
+      // const gitCookie =
+      document.cookie.split(';').filter((item) => {
         return pattern.test(item)
       })
       // // 清除github登陆的cookie信息
@@ -208,7 +221,7 @@ export default {
       this.emojiShow = false
     },
     // 发表评论
-    publishComment: (index) => {
+    publishComment: () => {
       // 表单验证
       if (this.validatePub()) {
         return
@@ -288,7 +301,7 @@ export default {
       let finStr = this.sayWords
       finStr = finStr.replace(new RegExp('<', 'g'), '&lt')
       finStr = finStr.replace(new RegExp('>', 'g'), '&gt')
-      Object.values(emojiData).forEach((item, index, arr) => {
+      Object.values(emojiData).forEach((item) => {
         emojiObject = Object.assign(emojiObject, item)
       })
       Object.keys(emojiObject).forEach((item) => {
@@ -335,7 +348,7 @@ export default {
           revId: rev_id,
           repId: rep_id,
           addOrDel: 1
-        }).then((data) => {
+        }).then(() => {
           that.hasLiked.push(saveLocal)
           localStorage.setItem('articleId_comment' + that.$route.params.id, JSON.stringify(that.hasLiked))
           that.addLocalCommentsLike({ type: 1, rev_id: rev_id, rep_id: rep_id })
@@ -353,18 +366,6 @@ export default {
         })
       }
     }
-  },
-  mounted() {
-    // 从localStorage读取某文章的点赞
-    const key = 'articleId_comment' + this.$route.params.id
-    if (localStorage.getItem(key)) {
-      this.hasLiked = JSON.parse(localStorage.getItem(key))
-    }
-    // 从服务端获取评论
-    this.getComments({
-      articleId: this.$route.params.id,
-      cache: false
-    })
   }
 }
 </script>
