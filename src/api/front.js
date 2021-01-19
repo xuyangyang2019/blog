@@ -40,4 +40,12 @@ function getArticleList(publish, tag, pageNum, pageSize) {
   return fetch.get('/api/getArticleList', { publish: publish, tag: tag, pageNum: pageNum, pageSize: pageSize })
 }
 
-export { getTags, getArticlesByTime, getHotArticles, getArticleList }
+/**
+ * 获取文章总数
+ * @param {Boolean} publish 是否发表
+ */
+function getArticlesCount(publish) {
+  return fetch.get('/api/getArticlesCount', { publish: publish })
+}
+
+export { getTags, getArticlesByTime, getHotArticles, getArticleList, getArticlesCount }

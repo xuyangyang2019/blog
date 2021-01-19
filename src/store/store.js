@@ -5,7 +5,7 @@ import modules from './modules'
 import api from './api'
 
 // 通用 API（请忽略此 API 具体实现细节）
-import { getArticleList } from '../api/front'
+import { getArticleList, getArticlesCount } from '../api/front'
 
 // 假定我们有一个可以返回 Promise 的
 // 通用 API（请忽略此 API 具体实现细节）
@@ -85,7 +85,8 @@ const actions = {
   },
   // 获取对应模块的文章总数，为分页按钮个数提供支持
   GetArticlesCount({ commit }, payload) {
-    api.get('/api/getArticlesCount', payload).then((res) => {
+    const { publish } = payload
+    return getArticlesCount(publish).then((res) => {
       console.log('文章数:', res)
       commit('SET_ARTICLES_SUM', res.data)
       commit('SET_PAGE_ARR', res.data || 0)

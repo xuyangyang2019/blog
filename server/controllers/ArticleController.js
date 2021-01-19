@@ -27,6 +27,7 @@ module.exports = {
   },
   // 分页查询文章列表
   'GET /api/getArticleList': async (ctx, next) => {
+    console.log('分页查询文章列表', ctx.request.query)
     const { pageNum, pageSize, publish, tag } = ctx.request.query
     const condition = {}
     if (publish) {
@@ -78,10 +79,9 @@ module.exports = {
     }
     return next()
   },
-  // =====================================================
   // 获取文章数量 暂时不用
   'GET /api/getArticlesCount': async (ctx, next) => {
-    const publish = ctx.query.publish !== 'false'
+    const publish = !!ctx.query.publish
     let result = {}
     // 首页请求
     if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
@@ -108,6 +108,8 @@ module.exports = {
     ctx.result = result
     return next()
   }
+  // =====================================================
+
   // // 抓取单一文章
   // 'GET /onlyArticle': async (ctx, next) => {
   //   let params = {}
