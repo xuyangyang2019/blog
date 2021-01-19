@@ -127,15 +127,20 @@ export default {
   },
   mixins: [headMixin],
   asyncData({ store }) {
-    return Promise.all([
-      store.dispatch('GetLeaveWords', {
-        page: 1,
-        cache: false
-      }),
-      store.dispatch('GetMsgCount', {
-        cache: false
-      })
-    ])
+    return store.dispatch('GetMsgBoard', {
+      pageNum: 1,
+      pageSize: 10
+      // cache: false
+    })
+    // return Promise.all([
+    //   store.dispatch('GetLeaveWords', {
+    //     page: 1,
+    //     cache: false
+    //   }),
+    //   store.dispatch('GetMsgCount', {
+    //     cache: false
+    //   })
+    // ])
   },
   data() {
     return {

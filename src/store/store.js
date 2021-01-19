@@ -5,17 +5,7 @@ import modules from './modules'
 import api from './api'
 
 // 通用 API（请忽略此 API 具体实现细节）
-import { getArticleList, getArticlesCount } from '../api/front'
-
-// 假定我们有一个可以返回 Promise 的
-// 通用 API（请忽略此 API 具体实现细节）
-// const fetchBar = function () {
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             resolve('bar 组件返回 ajax 数据')
-//         }, 1000)
-//     })
-// }
+import { getArticleList, getArticlesCount, getMsgBoard, getMsgCount } from '../api/front'
 
 // state
 const state = {
@@ -92,6 +82,20 @@ const actions = {
       commit('SET_PAGE_ARR', res.data || 0)
     })
   },
+  // 获取留言
+  GetMsgBoard({ commit }, payload) {
+    const { pageNum, pageSize } = payload
+    return getMsgBoard(pageNum, pageSize).then((res) => {
+      commit('SET_MSG_BOARD_ARR', res.data.list)
+      commit('SET_PAGE_ARR', res.data.count || 0)
+    })
+  },
+  // 获取留言数量
+  GetMsgCount({ commit }) {
+    return getMsgCount().then((res) => {
+      commit('SET_PAGE_ARR', res.data.count || 0)
+    })
+  },
 
   // ============================================================================
 
@@ -131,18 +135,7 @@ const actions = {
   SaveUser({ commit }, payload) {
     return api.post('/api/saveDesignUser', payload)
   },
-  // 获取留言
-  GetLeaveWords({ commit }, payload) {
-    api.get('/api/getMsgBoard', payload).then((res) => {
-      commit('SET_MSG_BOARD_ARR', res.data.list)
-    })
-  },
-  // 获取留言数量
-  GetMsgCount({ commit }, payload) {
-    api.get('/api/getMsgCount', payload).then((res) => {
-      commit('SET_PAGE_ARR', res.data.count || 0)
-    })
-  },
+
   // 回复留言
   AddLeaveWords({ commit }, payload) {
     return api.patch('/api/addReply', payload)
@@ -181,20 +174,10 @@ const actions = {
   AddLike({ commit }, payload) {
     return api.patch('/api/addLike', payload)
   }
-  // fetchBar({ commit }) {
-  //     return fetchBar().then((data) => {
-  //         commit('SET_BAR', data)
-  //     }).catch((err) => {
-  //         console.error(err)
-  //     })
-  // }
 }
 
 // mutations
 const mutations = {
-  // 'SET_BAR'(state, data) {
-  //     state.bar = data
-  // }
   // 设置热门文章
   SET_ARTICLES_HOT(state, data) {
     state.articles.hot = data
@@ -202,6 +185,22 @@ const mutations = {
   // 设置归档数据
   SET_ARTICLES_TIME(state, data) {
     state.articles.time = data
+  },
+  // 设置文章总数
+  SET_ARTICLES_SUM(state, data) {
+    state.articles.sum = data
+  },
+  // 设置所有的文章
+  SET_ARTICLES_ALL(state, data) {
+    state.articles.all = data
+  },
+  // 设置生活类文章
+  SET_ARTICLES_LIFE(state, data) {
+    state.articles.life = data
+  },
+  // 设置科技文章
+  SET_ARTICLES_TECH(state, data) {
+    state.articles.technical = data
   },
   // 设置标签
   SetTags(state, data) {
@@ -212,9 +211,11 @@ const mutations = {
   CLEAR_PAGE(state) {
     state.pageArr = []
   },
+  // 设置请求状态
   CHANGE_CODE(state, code) {
     state.code = code
   },
+  // 设置分页数据
   SET_PAGE_ARR(state, data) {
     const pageNum = Math.ceil(data / 8)
     const arr = []
@@ -223,22 +224,11 @@ const mutations = {
     }
     state.pageArr = arr
   },
-  SET_ARTICLES_SUM(state, data) {
-    state.articles.sum = data
-  },
-  SET_ARTICLES_ALL(state, data) {
-    state.articles.all = data
-  },
-  SET_ARTICLES_LIFE(state, data) {
-    state.articles.life = data
-  },
-  SET_ARTICLES_TECH(state, data) {
-    state.articles.technical = data
-  },
+  // 设置搜索的结果
   SET_ARTICLES_SEARCH(state, data) {
     state.articles.search = data
   },
-
+  // 设置文章的背景图片
   PRODUCT_BG(state, data) {
     state.tagBg = []
     const pattern = /^[\u4e00-\u9fa5]+$/
@@ -258,6 +248,7 @@ const mutations = {
       }
     })
   },
+
   SET_USER(state, info) {
     state.userInfo = info
   },
@@ -338,6 +329,7 @@ const mutations = {
 }
 
 Vue.use(Vuex)
+
 function createStore() {
   return new Vuex.Store({
     modules,

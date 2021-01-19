@@ -48,4 +48,20 @@ function getArticlesCount(publish) {
   return fetch.get('/api/getArticlesCount', { publish: publish })
 }
 
-export { getTags, getArticlesByTime, getHotArticles, getArticleList, getArticlesCount }
+/**
+ * 获取留言
+ * @param {Number} pageNum
+ * @param {Number} pageSize
+ */
+function getMsgBoard(pageNum, pageSize) {
+  return fetch.get('/api/getMsgBoard', { pageNum: pageNum, pageSize: pageSize })
+}
+
+/**
+ * 获取留言总数
+ */
+function getMsgCount() {
+  return fetch.get('/api/getMsgCount')
+}
+
+export { getTags, getArticlesByTime, getHotArticles, getArticleList, getArticlesCount, getMsgBoard, getMsgCount }
