@@ -15,19 +15,23 @@ module.exports = {
   },
   // 获取指定文章的评论
   'GET /api/getComments': async (ctx, next) => {
-    const result = await CommentService.findMany({ articleId: ctx.query.articleId })
+    const result = await CommentService.findMany({ _id: ctx.query.id })
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
-      console.log(result)
       ctx.result = result
     }
     return next()
   },
   // 获取评论数量
   'GET /getCommentsCount': async (ctx, next) => {
-    const num = await db.comment.count({})
-    ctx.rest(num)
+    const result = await CommentService.count({})
+    if (result) {
+      ctx.result = result
+    } else {
+      ctx.error = '获取评论数量出错'
+    }
+    return next()
   }
   // // 保存评论
   // 'POST /api/saveComment': async (ctx, next) => {
