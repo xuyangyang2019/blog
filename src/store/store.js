@@ -5,7 +5,7 @@ import modules from './modules'
 import api from './api'
 
 // 通用 API（请忽略此 API 具体实现细节）
-import { getArticleList, getArticlesCount, getMsgBoard, getMsgCount } from '../api/front'
+import { getArticleList, getArticlesCount, getArticle, getMsgBoard, getMsgCount } from '../api/front'
 
 // state
 const state = {
@@ -96,33 +96,29 @@ const actions = {
       commit('SET_PAGE_ARR', res.data.count || 0)
     })
   },
-
-  // ============================================================================
-
   // 精准获取文章
   GetArticle({ commit }, payload) {
     // life目录下路由参数只有ID，无tag参数
-    const tag = payload.tag === undefined ? 'life' : payload.tag
-    api
-      .get('/api/onlyArticle', {
-        publish: payload.publish,
-        tag: tag,
-        articleId: payload.articleId,
-        cache: true
-      })
-      .then((data) => {
+    // const tag = payload.tag === undefined ? 'life' : payload.tag
+    const { publish, tag, id } = payload
+    getArticle(publish, tag, id).then((res) => {
+      console.log(res)
+      if (res.code === 200) {
         // 页面title
-        commit('CHANGE_TITLE', data[0].title)
+        commit('CHANGE_TITLE', res.data.title)
         // 文章
-        commit('SET_ONLY_ARTICLES', data)
-        // 查询上篇文章|下篇文章
-        if (data.length) {
-          api.get('/api/preAndNext', { date: data[0].date, cache: true }).then((data1) => {
-            commit('SET_PRE_NEXT', data1)
-          })
-        }
-      })
+        commit('SET_ARTICLES_ONLY', res.data)
+      }
+      // 查询上篇文章|下篇文章
+      // if (data.length) {
+      //   api.get('/api/preAndNext', { date: data[0].date, cache: true }).then((data1) => {
+      //     commit('SET_PRE_NEXT', data1)
+      //   })
+      // }
+    })
   },
+
+  // ============================================================================
 
   SearchArticles({ commit }, payload) {
     return api.get('/api/search', payload)
@@ -201,6 +197,10 @@ const mutations = {
   // 设置科技文章
   SET_ARTICLES_TECH(state, data) {
     state.articles.technical = data
+  },
+  SET_ARTICLES_ONLY(state, onlyArticles) {
+    // state.articles.only = onlyArticles
+    state.articles.only = [onlyArticles]
   },
   // 设置标签
   SetTags(state, data) {
@@ -282,9 +282,7 @@ const mutations = {
   CHANGE_TITLE(state, title) {
     state.currentTitle = title
   },
-  SET_ONLY_ARTICLES(state, onlyArticles) {
-    state.articles.only = onlyArticles
-  },
+
   // 设置上|下页
   SET_PRE_NEXT(state, pn) {
     state.articles.pre_next = pn
