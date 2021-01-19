@@ -2,7 +2,7 @@
   <div class="article-show">
     <!-- 文章详情 -->
     <div class="article-show-content">
-      <div v-for="item in articles.only" class="article-body">
+      <div v-for="(item, index) in articles.only" :key="index" class="article-body">
         <!-- 文章标题 -->
         <h2 class="article-title">{{ item.title }}</h2>
         <!-- 文章详情 -->
@@ -10,7 +10,7 @@
           <!-- 标签 -->
           <div class="article-details-tag">
             <span class="icon-tag-stroke i-p"></span>
-            <span v-for="tag in item.tag" class="each-tag">{{ tag | changeLife }}</span>
+            <span v-for="(tag, tagIndex) in item.tag" :key="tagIndex" class="each-tag">{{ tag | changeLife }}</span>
           </div>
           <div class="article-details-other">
             <!-- 发布时间 -->
@@ -97,14 +97,14 @@
         <div class="pre-next">
           <div v-if="articles.pre_next.pre.length" class="pre">
             <h6>上一篇：</h6>
-            <a v-for="item in articles.pre_next.pre" href="javascript: void(0)">
-              <span @click="jumpPn(item)">{{ item.title }}</span>
+            <a v-for="(preItem, preIndex) in articles.pre_next.pre" :key="preIndex" href="javascript: void(0)">
+              <span @click="jumpPn(preItem)">{{ preItem.title }}</span>
             </a>
           </div>
           <div v-if="articles.pre_next.next.length" class="next">
             <h6>下一篇：</h6>
-            <a v-for="item in articles.pre_next.next" href="javascript: void(0)">
-              <span @click="jumpPn(item)">{{ item.title }}</span>
+            <a v-for="(nexItem, nexIndex) in articles.pre_next.next" :key="nexIndex" href="javascript: void(0)">
+              <span @click="jumpPn(nexItem)">{{ nexItem.title }}</span>
             </a>
           </div>
         </div>
@@ -122,6 +122,8 @@ import Prism from 'prismjs'
 import VueQr from 'vue-qr'
 import headMixin from '@/mixins/head-mixin'
 import comment from '@/components/article/Comment'
+
+const qrLogo = require('../../../public/img/defaultUser.jpg')
 
 export default {
   name: 'ArticleShow',
@@ -144,7 +146,7 @@ export default {
       loveText: '赞', // 点赞文字
       lovedArr: [], // 电站的id集合
       fullPath: '', // 完整的path
-      qrLogo: require('../../../public/img/defaultUser.jpg'), // 二维码的log
+      qrLogo: qrLogo, // 二维码的log
       qrText: '' // 二维码的地址
     }
   },
@@ -178,6 +180,17 @@ export default {
         Prism.highlightAll()
       })
     }
+  },
+  mounted() {
+    // 读取本地的点赞数据
+    if (localStorage.getItem('articleLoved')) {
+      this.lovedArr = JSON.parse(localStorage.getItem('articleLoved'))
+    }
+    // 代码高亮
+    this.$nextTick(function () {
+      Prism.highlightAll()
+    })
+    this.getOriginUrl()
   },
   methods: {
     ...mapActions({
@@ -229,9 +242,9 @@ export default {
     // 跳转页面
     jumpPn(item) {
       if (item.tag[0] === 'life') {
-        this.$router.push({ name: 'lifeShow', params: { id: item.articleId }})
+        this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
       } else {
-        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId }})
+        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
       }
     },
     // 分享
@@ -251,7 +264,15 @@ export default {
           _href = url + '?title=' + title + '&url=' + _url + '&desc=我分享了一篇文章，快来看看哦~' + '&site=mapblog小站'
           break
         case 'qzone':
-          _href = url + '?title=' + title + '&url=' + _url + '&desc=我分享了一篇文章，快来看看哦~' + '&site=mapblog小站' + 'summary='
+          _href =
+            url +
+            '?title=' +
+            title +
+            '&url=' +
+            _url +
+            '&desc=我分享了一篇文章，快来看看哦~' +
+            '&site=mapblog小站' +
+            'summary='
           break
         case 'sina':
           _href = url + '?title=' + title + '&url=' + _url
@@ -270,17 +291,6 @@ export default {
       this.qrShow = !this.qrShow
       this.qrText = window.location.href
     }
-  },
-  mounted() {
-    // 读取本地的点赞数据
-    if (localStorage.getItem('articleLoved')) {
-      this.lovedArr = JSON.parse(localStorage.getItem('articleLoved'))
-    }
-    // 代码高亮
-    this.$nextTick(function () {
-      Prism.highlightAll()
-    })
-    this.getOriginUrl()
   }
 }
 </script>

@@ -24,6 +24,19 @@ export default {
   //       meta: [{ vmid: "description", name: "description", content: title + "文章 -mapblog小站" }]
   //     }
   //   },
+  beforeRouteLeave(to, from, next) {
+    this.clear() // 清除页码数组
+    next()
+  },
+  // 传送门模块切换时复用此组件，故重新获取数据
+  beforeRouteUpdate(to, from, next) {
+    this.getArticlesCount({
+      publish: true,
+      page: 1,
+      tag: to.params.articleList
+    })
+    next()
+  },
   asyncData({ store, route }) {
     return Promise.all([
       store.dispatch('GetArticles', {
@@ -56,19 +69,6 @@ export default {
       clear: 'CLEAR_PAGE',
       changeCode: 'CHANGE_CODE'
     })
-  },
-  beforeRouteLeave(to, from, next) {
-    this.clear() // 清除页码数组
-    next()
-  },
-  // 传送门模块切换时复用此组件，故重新获取数据
-  beforeRouteUpdate(to, from, next) {
-    this.getArticlesCount({
-      publish: true,
-      page: 1,
-      tag: to.params.articleList
-    })
-    next()
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="article-list">
     <!-- 文章列表 -->
     <ul>
-      <li v-for="(item, index) in articleList" class="article-item">
+      <li v-for="(item, index) in articleList" :key="index" class="article-item">
         <!-- title -->
         <h2 class="article-title">
           <a href="javascript: void(0)" @click="jump(item)">{{ item.title }}</a>
@@ -11,7 +11,7 @@
           <!-- 标签 -->
           <span class="icon-tag-stroke"></span>
           <span class="article-msg-tag">
-            <span v-for="tag in item.tag">{{ tag | changeLife }}</span>
+            <span v-for="(tag, tagIndex) in item.tag" :key="tagIndex">{{ tag | changeLife }}</span>
           </span>
           <!-- 时间 -->
           <span class="icon-clock"></span>
@@ -75,9 +75,9 @@ export default {
     jump(item) {
       this.changeTitle(item.title)
       if (item.tag[0] === 'life') {
-        this.$router.push({ name: 'lifeShow', params: { id: item.articleId }})
+        this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
       } else {
-        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId }})
+        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
       }
     }
   }

@@ -35,7 +35,7 @@ function createRouter() {
     {
       path: '/article',
       name: 'article',
-      component: () => import(/* webpackChunkName: "article" */ '../views/ArticleRoot.vue') // 异步路由
+      component: () => import(/* webpackChunkName: "article" */ '../views/ArticleRoot.vue')
     },
     // article的子路由
     // 标签
@@ -48,14 +48,14 @@ function createRouter() {
     {
       path: '/article/:articleList/:id',
       name: 'articleShow',
-      component: () => import(/* webpackChunkName: "article" */ '../components/article/ArticleShow.vue') // 异步路由
+      component: () => import(/* webpackChunkName: "article" */ '../components/article/ArticleShow.vue')
 
     },
     // 生活
     {
       path: '/life',
       name: 'life',
-      component: () => import(/* webpackChunkName: "life" */ '../views/Life.vue') // 异步路由
+      component: () => import(/* webpackChunkName: "life" */ '../views/Life.vue')
     },
     // {
     //     path: "/life/:id",
@@ -66,7 +66,7 @@ function createRouter() {
     {
       path: '/msgboard',
       name: 'msgboard',
-      component: () => import(/* webpackChunkName: "msgboard" */ '../views/MsgBoard.vue') // 异步路由
+      component: () => import(/* webpackChunkName: "msgboard" */ '../views/MsgBoard.vue')
     },
     // 搜索
     {
