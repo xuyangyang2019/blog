@@ -1,5 +1,5 @@
 const ArticleService = require('../services').ArticleService
-// const { InvalidQueryError } = require('../lib/error')
+const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
   // 获取标签
@@ -107,53 +107,33 @@ module.exports = {
     }
     ctx.result = result
     return next()
+  },
+  // 抓取单一文章
+  'GET /api/getArticle': async (ctx, next) => {
+    const { id } = ctx.request.query
+    if (!id) {
+      throw new InvalidQueryError()
+    }
+    const doc = await ArticleService.findById({ _id: id })
+    if (doc) {
+      ctx.result = doc
+      // 更新文章的点击数
+      ArticleService.updateById({ _id: id }, { $inc: { pv: 1 } })
+      // 查询ip 并提醒后台
+      // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx.request) }).then((res) => {
+      //     console.log(res)
+      //     // new db.newMsg({
+      //     //     type: "pv",
+      //     //     content: data.data.city + "网友 在" + localTime(Date.now()) + "浏览了你的文章--" + doc[0].title
+      //     // }).save()
+      // })
+    } else {
+      ctx.error = '查不到文章'
+    }
+    return next()
   }
   // =====================================================
 
-  // // 抓取单一文章
-  // 'GET /onlyArticle': async (ctx, next) => {
-  //   let params = {}
-  //   if (ctx.query.tag === undefined) {
-  //     params = {
-  //       publish: ctx.query.publish,
-  //       tag: "life",
-  //       articleId: ctx.query.articleId
-  //     }
-  //   } else {
-  //     params = {
-  //       publish: ctx.query.publish,
-  //       tag: ctx.query.tag,
-  //       articleId: ctx.query.articleId
-  //     }
-  //   }
-  //   let doc = await db.article.find(params, (err, doc) => {
-  //     if (err) {
-  //       console.log(err)
-  //     }
-  //   })
-  //   if (doc.length === 0) {
-  //     ctx.rest([{ title: "您访问的路径不存在" }])
-  //   } else {
-  //     ctx.rest(doc)
-  //     // 更新文章的点击数
-  //     db.article.update(
-  //       { "articleId": ctx.query.articleId },
-  //       { $inc: { "pv": 1 } },
-  //       (err, doc) => {
-  //         if (err) {
-  //           console.log(err)
-  //         }
-  //       })
-  //     // 查询ip 并提醒后台
-  //     // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx.request) }).then((res) => {
-  //     //     console.log(res)
-  //     //     // new db.newMsg({
-  //     //     //     type: "pv",
-  //     //     //     content: data.data.city + "网友 在" + localTime(Date.now()) + "浏览了你的文章--" + doc[0].title
-  //     //     // }).save()
-  //     // })
-  //   }
-  // },
   // // 获得上一篇文章和下一篇文章
   // 'GET /preAndNext': async (ctx, next) => {
   //   // pre使用倒序查询，否则只会显示第一条数据，因为他是最早的
