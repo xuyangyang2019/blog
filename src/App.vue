@@ -12,7 +12,7 @@
             <!-- 文章 -->
             <div class="content">
               <!-- 导航按钮 -->
-              <div v-show="$route.name !== 'home'" class="location">
+              <div v-show="$route.name !== 'home'" class="nav-location">
                 <span>当前位置：</span>
                 <a href="javascript: void(0)" @click="backHome">首页</a>
                 <div v-for="(item, index) in location" :key="index">
@@ -64,8 +64,8 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 
-import tab from '@/components/base/Tab'
-import foot from '@/components/base/Foot'
+import Tab from './components/base/Tab.vue'
+import Foot from './components/base/Foot.vue'
 
 import AboutMe from './components/aside/AboutMe.vue'
 import ArticleTags from './components/aside/ArticleTags.vue'
@@ -79,8 +79,8 @@ import PlaceOnFile from './components/aside/PlaceOnFile.vue'
 
 export default {
   components: {
-    tab,
-    foot,
+    Tab,
+    Foot,
     AboutMe,
     ArticleTags,
     HotArticles,
@@ -204,8 +204,8 @@ export default {
     },
     // 当前位置的路由信息表
     currentLocation(route) {
-      const tag = route.params.articleList
-      const _tag = route.params.articleList
+      const tag = route.params.tag
+      const _tag = route.params.tag
       switch (route.name) {
         case 'article':
           this.location = [{ pathName: 'article', showName: '技术文章' }]
@@ -307,7 +307,7 @@ a {
   position: relative;
 }
 
-.location {
+.nav-location {
   background: #faf7f7;
   margin-top: 10px;
   padding: 10px;
@@ -380,7 +380,7 @@ a {
   .r-slide {
     width: 100%;
   }
-  .location {
+  .nav-location {
     margin-top: 0;
   }
 }
