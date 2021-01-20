@@ -127,19 +127,19 @@ const actions = {
       }
     })
   },
+  // // 查询用户名是否存在
+  // SearchUser({ commit }, payload) {
+  //   return api.get('/api/searchUser', payload)
+  // },
+  // // 保存用户
+  // SaveUser({ commit }, payload) {
+  //   return api.post('/api/saveDesignUser', payload)
+  // },
 
   // ============================================================================
 
   SearchArticles({ commit }, payload) {
     return api.get('/api/search', payload)
-  },
-  // 查询用户名是否存在
-  SearchUser({ commit }, payload) {
-    return api.get('/api/searchUser', payload)
-  },
-  // 保存用户
-  SaveUser({ commit }, payload) {
-    return api.post('/api/saveDesignUser', payload)
   },
 
   // 回复留言

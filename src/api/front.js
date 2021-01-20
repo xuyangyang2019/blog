@@ -91,6 +91,15 @@ function vistorLogin(userName, password) {
   return fetch.post('/api/vistorLogin', { userName: userName, password: password })
 }
 
+/**
+ * 游客注册
+ * @param {String} userName 用户名
+ * @param {String} password 密码
+ */
+function vistorRegister(userName, password) {
+  return fetch.post('/api/vistorRegister', { userName: userName, password: password })
+}
+
 export {
   getTags,
   getArticlesByTime,
@@ -101,5 +110,6 @@ export {
   getMsgBoard,
   getMsgCount,
   getCommets,
-  vistorLogin
+  vistorLogin,
+  vistorRegister
 }
