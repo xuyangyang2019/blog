@@ -2,8 +2,9 @@ module.exports = {
   name: 'vistor',
   schema: {
     name: String,
-    imgUrl: String,
+    password: String,
     email: String,
+    imgUrl: String,
     githubID: Number,
     create_time: {
       type: Date,
