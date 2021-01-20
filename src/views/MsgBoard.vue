@@ -91,7 +91,7 @@
     </transition>
 
     <!-- 第三方登录 -->
-    <login></login>
+    <vistor-login></vistor-login>
 
     <transition v-show="dialogErr.show" name="mask">
       <div v-show="dialogErr.show" class="mask" @click="dialogErr.show = false">
@@ -113,8 +113,9 @@
 import { mapMutations, mapActions, mapState } from 'vuex'
 
 import page from '@/components/base/Page'
-import emoji from '@/components/base/Emoji'
-import login from '@/components/userLogin/UserLogin'
+import Emoji from '@/components/base/Emoji'
+import VistorLogin from '@/components/base/VistorLogin'
+
 import emojiData from '@/assets/js/emoji-data'
 import headMixin from '@/mixins/head-mixin'
 
@@ -122,8 +123,8 @@ export default {
   name: 'MsgBoard',
   components: {
     page,
-    emoji,
-    login
+    Emoji,
+    VistorLogin
   },
   mixins: [headMixin],
   asyncData({ store }) {

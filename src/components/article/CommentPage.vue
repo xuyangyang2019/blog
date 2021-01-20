@@ -101,7 +101,7 @@
     </div>
 
     <!-- 登陆框 -->
-    <user-login></user-login>
+    <vistor-login></vistor-login>
 
     <!-- 错误提示框 -->
     <transition v-show="dialogErr.show" name="mask">
@@ -122,13 +122,14 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 import Emoji from '@/components/base/Emoji.vue'
-import UserLogin from '@/components/userLogin/UserLogin.vue'
+import VistorLogin from '@/components/base/VistorLogin.vue'
+
 import emojiData from '@/assets/js/emoji-data'
 
 export default {
   components: {
     Emoji,
-    UserLogin
+    VistorLogin
   },
   data() {
     return {
