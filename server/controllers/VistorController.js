@@ -5,13 +5,14 @@ const VistorService = require('../services').VistorService
 const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
+  // 游客登陆
   'POST /api/vistorLogin': async (ctx, next) => {
     const { userName, password } = ctx.request.body
     console.log('vistorLogin', ctx.request.body)
     if (!userName || !password) {
       throw new InvalidQueryError()
     }
-    const vistor = await VistorService.findOne({ userName: userName })
+    const vistor = await VistorService.findOne({ name: userName })
     if (!vistor) {
       ctx.error = '用户不存在'
       ctx.code = 0
@@ -36,31 +37,34 @@ module.exports = {
     }
     return next()
   },
+  // 游客注册
   'POST /api/vistorRegister': async (ctx, next) => {
-    const { username, password } = ctx.request.body
-    if (!username || !password) {
+    const { userName, password } = ctx.request.body
+    if (!userName || !password) {
       throw new InvalidQueryError()
     }
-    if (await UserService.findOne({ username })) {
+
+    if (await VistorService.findOne({ name: userName })) {
       ctx.error = '用户已存在'
     } else {
-      const user = UserService.save({ username, password })
-      ctx.result = {
-        userInfo: {
-          id: user._id,
-          username: user.username,
-          nickname: user.nickname
-        },
-        token: jwt.sign(
-          {
-            data: user._id,
-            exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3 // 设置 token 过期时间: 3d
-          },
-          tokenConfig.secret
-        )
-      }
+      const result = await VistorService.save({ name: userName, password: password })
+      console.log(result)
+      ctx.result = result
+      // {
+      // userInfo: {
+      //   id: user._id,
+      //   username: user.username,
+      //   nickname: user.nickname
+      // },
+      // token: jwt.sign(
+      //   {
+      //     data: user._id,
+      //     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3 // 设置 token 过期时间: 3d
+      //   },
+      //   tokenConfig.secret
+      // )
+      // }
     }
-
     return next()
   }
   // //github登录
