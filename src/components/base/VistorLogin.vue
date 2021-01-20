@@ -62,8 +62,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
-import { vistorLogin } from '../../api/front'
+import { mapState, mapMutations } from 'vuex'
+import { vistorLogin, vistorRegister } from '../../api/front'
 
 export default {
   data() {
@@ -90,11 +90,6 @@ export default {
     // }
   },
   methods: {
-    ...mapActions({
-      saveUser: 'SaveUser',
-      searchUser: 'SearchUser'
-      //   githubUser: 'GithubUser',
-    }),
     ...mapMutations({
       set_user: 'SET_USER',
       handleMask: 'HANDLE_MASK'
@@ -193,6 +188,14 @@ export default {
           console.log(res)
           if (res.code === 200) {
             console.log('登陆成功')
+            const userInfo = {
+              name: this.userName,
+              imgUrl: '/img/defaultUser.jpg',
+              password: this.password
+            }
+            this.set_user(userInfo)
+            this.setLocal(userInfo)
+            this.exitMask()
           } else {
             console.log('登陆失败')
           }
@@ -205,29 +208,37 @@ export default {
       // 如果没有错误信息
       if (!this.userNameErr && !this.passwordErr) {
         // 查询用户是否存在
-        this.searchUser({ name: this.userName }).then((data) => {
-          console.log(data)
-          if (data.exist === 'yes') {
-            this.userNameErr = '该用户名已存在，换一个试试？'
+        vistorRegister(this.userName, this.password).then((res) => {
+          console.log(res)
+          if (res.code === 200) {
+            console.log('注册成功！')
           } else {
-            this.saveUser({
-              name: this.userName,
-              email: this.password
-            }).then((data) => {
-              console.log(data)
-              if (data.code === 200) {
-                const userInfo = {
-                  name: this.userName,
-                  imgUrl: '/img/defaultUser.jpg',
-                  email: this.password
-                }
-                this.set_user(userInfo)
-                this.setLocal(userInfo)
-                this.exitMask()
-              }
-            })
+            console.log(res.msg)
           }
         })
+        // this.searchUser({ name: this.userName }).then((data) => {
+        //   console.log(data)
+        //   if (data.exist === 'yes') {
+        //     this.userNameErr = '该用户名已存在，换一个试试？'
+        //   } else {
+        //     this.saveUser({
+        //       name: this.userName,
+        //       email: this.password
+        //     }).then((data) => {
+        //       console.log(data)
+        //       if (data.code === 200) {
+        //         const userInfo = {
+        //           name: this.userName,
+        //           imgUrl: '/img/defaultUser.jpg',
+        //           email: this.password
+        //         }
+        //         this.set_user(userInfo)
+        //         this.setLocal(userInfo)
+        //         this.exitMask()
+        //       }
+        //     })
+        //   }
+        // })
       }
     },
     // 退出登陆
