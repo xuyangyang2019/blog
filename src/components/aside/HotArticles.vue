@@ -17,6 +17,7 @@ import { mapMutations, mapState } from 'vuex'
 import { getHotArticles } from '../../api/front'
 
 export default {
+  name: 'HotArticles',
   computed: {
     ...mapState({
       articles: 'articles'

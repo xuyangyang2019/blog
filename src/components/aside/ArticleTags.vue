@@ -19,6 +19,7 @@ import { mapState, mapMutations } from 'vuex'
 import { getTags } from '../../api/front'
 
 export default {
+  name: 'ArticleTags',
   data() {
     return {
       color: [
