@@ -16,10 +16,10 @@
                   v-model="userName"
                   type="text"
                   placeholder="请输入昵称"
-                  @focus="userInfoErr.name = ''"
+                  @focus="userNameErr = ''"
                 />
               </div>
-              <div class="error-info">{{ userInfoErr.name }}</div>
+              <div class="error-info">{{ userNameErr }}</div>
             </div>
 
             <div class="form-item">
@@ -30,10 +30,10 @@
                   v-model="password"
                   type="password"
                   placeholder="请输入密码"
-                  @focus="userInfoErr.email = ''"
+                  @focus="passwordErr = ''"
                 />
               </div>
-              <div class="error-info">{{ userInfoErr.email }}</div>
+              <div class="error-info">{{ passwordErr }}</div>
             </div>
 
             <div class="operation">
@@ -68,10 +68,11 @@ import { vistorLogin } from '../../api/front'
 export default {
   data() {
     return {
-      userInfoErr: { name: '', email: '' }, // 错误信息
-      loginType: '', // 登陆方式
       userName: '', // 用户名
-      password: '' // 邮箱
+      password: '', // 邮箱
+      loginType: '', // 登陆方式
+      userNameErr: '', // 用户名错误提示
+      passwordErr: '' // 密码错误提示
     }
   },
   computed: {
@@ -90,7 +91,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      // VistorLogin: 'VistorLogin',
       saveUser: 'SaveUser',
       searchUser: 'SearchUser'
       //   githubUser: 'GithubUser',
@@ -150,37 +150,52 @@ export default {
     },
     // 表单验证
     validateReg() {
-      const eReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,5}$/
+      // const eReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,5}$/
       const nReg = /^[0-9]*$/
+      const pReg = /[A-Za-z\d]{6,10}$/
       const dName = this.userName
-      const dEmail = this.password
+      // const dEmail = this.password
+      const dPasswor = this.password
       const pattern = /admin|管理员|admin（管理员）/gi
+
       if (dName.length === 0) {
-        this.userInfoErr.name = '请填写用户名'
+        this.userNameErr = '请填写用户名'
       } else if (pattern.test(dName)) {
-        this.userInfoErr.name = '喔唷~和管理员有点相似...换一个试试？'
+        this.userNameErr = '喔唷~和管理员有点相似...换一个试试？'
       } else if (dName.length > 8) {
-        this.userInfoErr.name = '用户名最长8位'
+        this.userNameErr = '用户名最长8位'
       } else if (nReg.test(dName)) {
-        this.userInfoErr.name = '用户名不能全是数字'
+        this.userNameErr = '用户名不能全是数字'
       } else {
-        this.userInfoErr.name = ''
+        this.userNameErr = ''
       }
-      if (dEmail.length === 0) {
-        this.userInfoErr.email = '请填写邮箱'
-      } else if (!eReg.test(dEmail)) {
-        this.userInfoErr.email = '请填写正确的邮箱格式'
+      if (dPasswor.length === 0) {
+        this.passwordErr = '请填写密码'
+      } else if (!pReg.test(dPasswor)) {
+        this.passwordErr = '请填写正确的密码格式'
       } else {
-        this.userInfoErr.email = ''
+        this.passwordErr = ''
       }
+      // if (dEmail.length === 0) {
+      //   this.passwordErr = '请填写邮箱'
+      // } else if (!eReg.test(dEmail)) {
+      //   this.passwordErr = '请填写正确的邮箱格式'
+      // } else {
+      //   this.passwordErr = ''
+      // }
     },
     // 用户登陆
     vistorLogin() {
       this.validateReg()
       // 如果没有错误信息
-      if (!this.userInfoErr.name && !this.userInfoErr.email) {
-        vistorLogin({ userName: this.userName, password: this.password }).then((res) => {
+      if (!this.userNameErr && !this.passwordErr) {
+        vistorLogin(this.userName, this.password).then((res) => {
           console.log(res)
+          if (res.code === 200) {
+            console.log('登陆成功')
+          } else {
+            console.log('登陆失败')
+          }
         })
       }
     },
@@ -188,12 +203,12 @@ export default {
     vistorRegister() {
       this.validateReg()
       // 如果没有错误信息
-      if (!this.userInfoErr.name && !this.userInfoErr.email) {
+      if (!this.userNameErr && !this.passwordErr) {
         // 查询用户是否存在
         this.searchUser({ name: this.userName }).then((data) => {
           console.log(data)
           if (data.exist === 'yes') {
-            this.userInfoErr.name = '该用户名已存在，换一个试试？'
+            this.userNameErr = '该用户名已存在，换一个试试？'
           } else {
             this.saveUser({
               name: this.userName,
@@ -224,8 +239,8 @@ export default {
     clearErr() {
       this.userName = ''
       this.password = ''
-      this.userInfoErr.name = ''
-      this.userInfoErr.email = ''
+      this.userNameErr = ''
+      this.passwordErr = ''
     },
     // 获取本地信息
     getLocal() {
