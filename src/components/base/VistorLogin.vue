@@ -18,7 +18,8 @@
             </div>
             <div class="email-info">{{ userInfoErr.email }}</div>
             <div class="register">
-              <button @click="register">注册</button>
+              <button style="margin-right: 20px" @click="vistorLogin">登陆</button>
+              <button @click="vistorRegister">注册</button>
             </div>
           </div>
           <!-- 第三方登陆 -->
@@ -104,27 +105,60 @@ export default {
       //     }
       //   }, 500)
     },
-
     // qq信息
-    // qq_user_info() {
-    //   let that = this
-    //   QC.Login({
-    //     //请求成功后的回调
-    //   }, function (oInfo, oOpts) {
-    //     that.set_user({
-    //       name: oInfo.nickname,
-    //       imgUrl: oInfo.figureurl_qq_1,
-    //       email: ""
-    //     })
-    //     that.handleMask(false)
-    //     that.setLocal()
-    //   }, function () {
-    //     console.log("退出成功")
-    //   })
-    // },
-
-    // 注册
-    register() {
+    qq_user_info() {
+      // let that = this
+      // QC.Login(
+      //   {
+      //     //请求成功后的回调
+      //   },
+      //   function (oInfo, oOpts) {
+      //     that.set_user({
+      //       name: oInfo.nickname,
+      //       imgUrl: oInfo.figureurl_qq_1,
+      //       email: ''
+      //     })
+      //     that.handleMask(false)
+      //     that.setLocal()
+      //   },
+      //   function () {
+      //     console.log('退出成功')
+      //   }
+      // )
+    },
+    // 用户登陆
+    vistorLogin() {
+      this.validateReg()
+      // 如果没有错误信息
+      if (!this.userInfoErr.name && !this.userInfoErr.email) {
+        // 查询用户是否存在
+        this.searchUser({ name: this.designName }).then((data) => {
+          console.log(data)
+          if (data.exist === 'yes') {
+            this.userInfoErr.name = '该用户名已存在，换一个试试？'
+          } else {
+            this.saveUser({
+              name: this.designName,
+              email: this.designEmail
+            }).then((data) => {
+              console.log(data)
+              if (data.code === 200) {
+                const userInfo = {
+                  name: this.designName,
+                  imgUrl: '/img/defaultUser.jpg',
+                  email: this.designEmail
+                }
+                this.set_user(userInfo)
+                this.setLocal(userInfo)
+                this.exitMask()
+              }
+            })
+          }
+        })
+      }
+    },
+    // 用户注册
+    vistorRegister() {
       this.validateReg()
       // 如果没有错误信息
       if (!this.userInfoErr.name && !this.userInfoErr.email) {
