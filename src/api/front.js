@@ -82,6 +82,15 @@ function getCommets(id) {
   return fetch.get('/api/getComments', { id: id })
 }
 
+/**
+ * 游客登陆
+ * @param {String} userName 用户名
+ * @param {String} password 密码
+ */
+function vistorLogin(userName, password) {
+  return fetch.post('/api/vistorLogin', { userName: userName, password: password })
+}
+
 export {
   getTags,
   getArticlesByTime,
@@ -91,5 +100,6 @@ export {
   getArticle,
   getMsgBoard,
   getMsgCount,
-  getCommets
+  getCommets,
+  vistorLogin
 }
