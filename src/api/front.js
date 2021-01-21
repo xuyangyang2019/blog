@@ -100,6 +100,25 @@ function vistorRegister(userName, password) {
   return fetch.post('/api/vistorRegister', { userName: userName, password: password })
 }
 
+/**
+ * 点赞文章
+ * @param {String} id 文章的_id
+ * @param {Number} number 点赞1 取消点赞-1
+ * @param {String} title 文章的标题
+ */
+function likeArticle(id, number, title) {
+  return fetch.patch('/api/likeArticle', { id: id, number: number, title: title })
+}
+
+// 点赞|取消点赞
+// LoveArticle({ commit }, payload) {
+//   return api.patch('/api/loveArticle', payload)
+// },
+// // 点赞评论
+// AddLike({ commit }, payload) {
+//   return api.patch('/api/addLike', payload)
+// },
+
 export {
   getTags,
   getArticlesByTime,
@@ -107,6 +126,7 @@ export {
   getArticleList,
   getArticlesCount,
   getArticle,
+  likeArticle,
   getMsgBoard,
   getMsgCount,
   getCommets,
