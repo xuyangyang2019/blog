@@ -7,13 +7,14 @@
           <div class="exit-login-box" @click="exitMask">X</div>
 
           <!-- 登陆 -->
-          <div class="self-login">
+          <form class="self-login" action="" onsubmit="return false" method="post">
             <div class="form-item">
               <div class="input-box">
                 <label for="userNameId">昵称</label>
                 <input
                   id="userNameId"
                   v-model="userName"
+                  name="userName"
                   type="text"
                   placeholder="请输入昵称"
                   @focus="userNameErr = ''"
@@ -28,8 +29,10 @@
                 <input
                   id="passeordId"
                   v-model="password"
+                  name="password"
                   type="password"
                   placeholder="请输入密码"
+                  autocomplete="false"
                   @focus="passwordErr = ''"
                 />
               </div>
@@ -40,7 +43,7 @@
               <button class="operation-btn" style="margin-right: 20px" @click="vistorLogin">登陆</button>
               <button class="operation-btn" @click="vistorRegister">注册</button>
             </div>
-          </div>
+          </form>
 
           <!-- 第三方登陆 -->
           <div class="third-login">
