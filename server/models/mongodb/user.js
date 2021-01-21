@@ -1,10 +1,3 @@
-// module.exports = db.defineModel('User', {
-//     user: String,
-//     password: String,
-//     lastLogin: String,
-//     salt: String
-// })
-
 module.exports = {
   name: 'user',
   schema: {
@@ -22,17 +15,17 @@ module.exports = {
     birthday: String, // 生日
     salt: String, // 盐
     last_login_time: String, // 上次登录时间
-    create_time: {
+    createTime: {
       type: Date,
       default: Date.now
     }, // 创建时间
-    update_time: {
+    updateTime: {
       type: Date,
       default: Date.now
     } // 修改时间
   },
   options: {
     versionKey: false,
-    timestamps: { createdAt: 'create_time', updatedAt: 'update_time' }
+    timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
   }
 }

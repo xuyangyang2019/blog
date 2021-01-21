@@ -1,13 +1,3 @@
-// module.exports = db.defineModel('NewMsg', {
-//     type: String,
-//     name: String,
-//     say: String,
-//     title: String,
-//     content: String,
-//     ip: String,
-//     date: Date
-// })
-
 module.exports = {
   name: 'newMsg',
   schema: {
@@ -18,17 +8,17 @@ module.exports = {
     content: String,
     ip: String,
     date: Date,
-    create_time: {
+    createTime: {
       type: Date,
       default: Date.now
     }, // 创建时间
-    update_time: {
+    updateTime: {
       type: Date,
       default: Date.now
     } // 修改时间
   },
   options: {
     versionKey: false,
-    timestamps: { createdAt: 'create_time', updatedAt: 'update_time' }
+    timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
   }
 }
