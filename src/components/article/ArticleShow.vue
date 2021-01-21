@@ -116,7 +116,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import { likeArticle } from '../../api/front'
 
 import Prism from 'prismjs'
 import VueQr from 'vue-qr'
@@ -193,10 +194,6 @@ export default {
     this.getOriginUrl()
   },
   methods: {
-    ...mapActions({
-      getArticle: 'GetArticle',
-      loveArticle: 'LoveArticle'
-    }),
     ...mapMutations({
       changeTitle: 'CHANGE_TITLE'
     }),
@@ -213,24 +210,17 @@ export default {
       // 如果登陆，继续操作
       // ...待实现
       if (this.lovedArr.indexOf(_id) === -1) {
-        this.loveArticle({
-          articleId: aid,
-          num: 1,
-          title: document.title
-        }).then((data) => {
-          if (data.code === 200) {
+        likeArticle(_id, 1, document.title).then((res) => {
+          if (res.code === 200) {
             // 更新并保存点赞的状态
             this.lovedArr.push(_id)
             localStorage.setItem('articleLoved', JSON.stringify(this.lovedArr))
           }
         })
       } else {
-        this.loveArticle({
-          articleId: aid,
-          num: -1,
-          title: document.title
-        }).then((data) => {
-          if (data.code === 200) {
+        likeArticle(_id, -1, document.title).then((res) => {
+          if (res.code === 200) {
+            // 更新并保存点赞的状态
             this.lovedArr.splice(this.lovedArr.indexOf(_id), 1)
             localStorage.setItem('articleLoved', JSON.stringify(this.lovedArr))
           }
