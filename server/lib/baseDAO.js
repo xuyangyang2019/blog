@@ -31,8 +31,8 @@ class BaseDAO {
    * @param {Object} condition 查询条件
    * @return {Array} 查询结果
    */
-  async findMany(condition, fields) {
-    const result = await this.model.find(condition, fields)
+  async findMany(condition, fields, sort = {_id: -1}) {
+    const result = await this.model.find(condition, fields).sort(sort)
     return result
   }
 
