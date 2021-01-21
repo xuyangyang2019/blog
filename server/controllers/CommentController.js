@@ -1,4 +1,6 @@
+const ArticleService = require('../services').ArticleService
 const CommentService = require('../services').CommentService
+
 // const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
@@ -15,7 +17,11 @@ module.exports = {
   },
   // 获取指定文章的评论
   'GET /api/getComments': async (ctx, next) => {
-    const result = await CommentService.findMany({ _id: ctx.query.id })
+    // console.log('获取指定文章的评论', ctx.query)
+    // console.log('getComments', ctx.request.query)
+    const { id } = ctx.request.query
+    const result = await CommentService.findMany({ articleId: id })
+    // console.log('获取指定文章的评论', result)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
@@ -32,26 +38,26 @@ module.exports = {
       ctx.error = '获取评论数量出错'
     }
     return next()
+  },
+  // 评论文章
+  'POST /api/commentArticle': async (ctx, next) => {
+    const result = await CommentService.save(ctx.request.body)
+    if (result._id) {
+      ctx.result = result
+      // 更新article
+      ArticleService.update({ _id: ctx.request.body.articleId }, { $inc: { commentNum: 1 } })
+      // 通知admin
+      // new db.newMsg({
+      // 	type: "comment",
+      // 	name: ctx.body.name,
+      // 	say: ctx.body.content,
+      // 	content: ctx.body.name + "在" + localTime(Date.now()) + "评论了你的文章--" + ctx.body.title
+      // }).save()
+    } else {
+      ctx.error = '评论文章失败'
+    }
+    return next()
   }
-  // // 保存评论
-  // 'POST /api/saveComment': async (ctx, next) => {
-  //   let newDoc = await db.comment.create(ctx.request.body)
-  //   if (newDoc._id) {
-  //     ctx.rest(newDoc)
-  //     // 更新article
-  //     db.article.update(
-  //       { articleId: ctx.body.articleId },
-  //       { $inc: { commentNum: 1 } },
-  //       (err, doc) => { })
-  //     // 通知admin
-  //     // new db.newMsg({
-  //     // 	type: "comment",
-  //     // 	name: ctx.body.name,
-  //     // 	say: ctx.body.content,
-  //     // 	content: ctx.body.name + "在" + localTime(Date.now()) + "评论了你的文章--" + ctx.body.title
-  //     // }).save()
-  //   }
-  // },
   // // 前后端文章评论回复（二级评论）
   // 'PATCH /api/addComment': async (ctx, next) => {
   //   let addInfo = {
@@ -105,19 +111,7 @@ module.exports = {
   //   }
   //   return next()
   // },
-  // 'POST /api/delComment': async (ctx, next) => {
-  //   const { _id } = ctx.request.body
-  //   if (!_id) {
-  //     throw new InvalidQueryError()
-  //   }
-  //   const result = await CommentService.deleteById(_id)
-  //   if (!result) {
-  //     ctx.error = '评论不存在'
-  //   } else {
-  //     ctx.result = result
-  //   }
-  //   return next()
-  // },
+
   // 'POST /api/postComment': async (ctx, next) => {
   //   const data = ctx.request.body
   //   if (!data) {
