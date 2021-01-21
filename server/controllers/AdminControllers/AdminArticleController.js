@@ -18,10 +18,10 @@ module.exports = {
     }
     data.state = 1
     const result = await ArticleService.save(data)
-    if (!result) {
-      ctx.error = '发布失败'
-    } else {
+    if (result._id) {
       ctx.result = result
+    } else {
+      ctx.error = '发布失败'
     }
     return next()
   },
@@ -52,7 +52,7 @@ module.exports = {
     // } else {
     //   ctx.result = ''
     // }
-    // return next()
+    return next()
   },
   // 上传图片
   'POST /api/uploadArticleImg': async (ctx, next) => {
