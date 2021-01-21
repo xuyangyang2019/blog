@@ -120,6 +120,7 @@ const actions = {
   // 获取文章评论
   GetComments({ commit }, payload) {
     const { id } = payload
+    console.log('获取文章评论', id)
     return getCommets(id).then((res) => {
       console.log(res)
       if (res.code === 200) {
@@ -127,13 +128,17 @@ const actions = {
       }
     })
   },
-  // // 查询用户名是否存在
-  // SearchUser({ commit }, payload) {
-  //   return api.get('/api/searchUser', payload)
+  // // 发表评论
+  // PostComment({ commit }, payload) {
+  //   return api.post('/api/saveComment', payload)
   // },
-  // // 保存用户
-  // SaveUser({ commit }, payload) {
-  //   return api.post('/api/saveDesignUser', payload)
+  // // 回复评论
+  // AddComment({ commit }, payload) {
+  //   return api.patch('/api/addComment', payload)
+  // }
+  // // 点赞评论
+  // AddLike({ commit }, payload) {
+  //   return api.patch('/api/addLike', payload)
   // },
 
   // ============================================================================
@@ -150,29 +155,13 @@ const actions = {
   SaveLeaveWords({ commit }, payload) {
     return api.post('/api/saveLeaveW', payload)
   },
-  // 点赞|取消点赞
-  LoveArticle({ commit }, payload) {
-    return api.patch('/api/loveArticle', payload)
-  },
+
   // 查询时间轴的文章
   TimeArticles({ commit, state }, payload) {
     api.get('/api/search', payload).then((data) => {
       commit('SET_ARTICLES_TIME', data)
       commit('PRODUCT_BG', data)
     })
-  },
-
-  // 发表评论
-  PostComment({ commit }, payload) {
-    return api.post('/api/saveComment', payload)
-  },
-  // 回复评论
-  AddComment({ commit }, payload) {
-    return api.patch('/api/addComment', payload)
-  },
-  // 点赞
-  AddLike({ commit }, payload) {
-    return api.patch('/api/addLike', payload)
   }
 }
 
