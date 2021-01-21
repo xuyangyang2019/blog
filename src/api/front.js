@@ -110,10 +110,36 @@ function likeArticle(id, number, title) {
   return fetch.patch('/api/likeArticle', { id: id, number: number, title: title })
 }
 
-// 点赞|取消点赞
-// LoveArticle({ commit }, payload) {
-//   return api.patch('/api/loveArticle', payload)
+/**
+ * 评论文章
+ * @param {*} name 用户名
+ * @param {*} avatar 用户头像
+ * @param {*} content 评论内容
+ * @param {*} articleId 文章id
+ * @param {*} articleTitle 文章标题
+ */
+function commentArticle(name, avatar, content, articleId, articleTitle) {
+  const parameters = {
+    name: name,
+    imgUrl: avatar,
+    content: content,
+    articleId: articleId,
+    title: articleTitle,
+    reply: [],
+    like: 0,
+    date: new Date().getTime()
+  }
+  return fetch.post('/api/commentArticle', parameters)
+}
+
+// // 发表评论
+// PostComment({ commit }, payload) {
+//   return api.post('/api/saveComment', payload)
 // },
+// // 回复评论
+// AddComment({ commit }, payload) {
+//   return api.patch('/api/addComment', payload)
+// }
 // // 点赞评论
 // AddLike({ commit }, payload) {
 //   return api.patch('/api/addLike', payload)
@@ -127,6 +153,7 @@ export {
   getArticlesCount,
   getArticle,
   likeArticle,
+  commentArticle,
   getMsgBoard,
   getMsgCount,
   getCommets,
