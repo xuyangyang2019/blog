@@ -27,7 +27,6 @@ module.exports = {
   },
   // 分页查询文章列表
   'GET /api/getArticleList': async (ctx, next) => {
-    console.log('分页查询文章列表', ctx.request.query)
     const { pageNum, pageSize, publish, tag } = ctx.request.query
     const condition = {}
     if (publish) {
@@ -131,6 +130,35 @@ module.exports = {
       ctx.error = '查不到文章'
     }
     return next()
+  },
+  // 更新文章的喜欢字段
+  'PATCH /api/likeArticle': async (ctx, next) => {
+    const { id, number, title } = ctx.request.body
+    const result = await ArticleService.update({ _id: id }, { $inc: { likeNum: number } })
+    if (result) {
+      ctx.result = result
+      // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx) }).then((data) => {
+      //     // 将点赞加入到新消息
+      //     if (ctx.body.num === "1") {
+      //         new db.newMsg({
+      //             ip: getIp(ctx),
+      //             type: "like",
+      //             title: ctx.body.title,
+      //             content: data.data.city + "网友 在" + localTime(Date.now()) + "赞了你的文章--" + ctx.body.title
+      //         }).save()
+      //     } else {
+      //         //取消赞则将新消息移除
+      //         db.newMsg.remove({ type: "like", ip: getIp(ctx), title: ctx.body.title }, (err) => {
+      //             if (err) {
+      //                 res.status(500).end()
+      //             }
+      //         })
+      //     }
+      // })
+    } else {
+      ctx.error = '点赞失败'
+    }
+    return next()
   }
   // =====================================================
 
@@ -152,35 +180,7 @@ module.exports = {
   //     .limit(1)
   //   ctx.rest({ pre: doc1, next: doc2 })
   // },
-  // // 更新文章的喜欢字段
-  // 'PATCH /loveArticle': async (ctx, next) => {
-  //   // ctx.request.body
-  //   let result = await db.article.update(
-  //     { articleId: ctx.request.body.articleId },
-  //     { $inc: { likeNum: ctx.request.body.num } },
-  //     (err, doc) => { })
-  //   if (result.ok) {
-  //     ctx.rest({ code: 200 })
-  //     // api.get("http://ip.taobao.com/service/getIpInfo.php", { ip: getIp(ctx) }).then((data) => {
-  //     //     // 将点赞加入到新消息
-  //     //     if (ctx.body.num === "1") {
-  //     //         new db.newMsg({
-  //     //             ip: getIp(ctx),
-  //     //             type: "like",
-  //     //             title: ctx.body.title,
-  //     //             content: data.data.city + "网友 在" + localTime(Date.now()) + "赞了你的文章--" + ctx.body.title
-  //     //         }).save()
-  //     //     } else {
-  //     //         //取消赞则将新消息移除
-  //     //         db.newMsg.remove({ type: "like", ip: getIp(ctx), title: ctx.body.title }, (err) => {
-  //     //             if (err) {
-  //     //                 res.status(500).end()
-  //     //             }
-  //     //         })
-  //     //     }
-  //     // })
-  //   }
-  // },
+
   // // 前台搜索文章
   // 'GET /search': async (ctx, next) => {
   //   let limit = 8
@@ -207,18 +207,5 @@ module.exports = {
   //       .limit(limit)
   //     ctx.rest(docs)
   //   }
-  // },
-  // 'POST /api/getArticle': async (ctx, next) => {
-  //   const { _id } = ctx.request.body
-  //   if (!_id) {
-  //     throw new InvalidQueryError()
-  //   }
-  //   const result = await ArticleService.findById(_id)
-  //   if (!result) {
-  //     ctx.error = '文章不存在'
-  //   } else {
-  //     ctx.result = result
-  //   }
-  //   return next()
   // },
 }
