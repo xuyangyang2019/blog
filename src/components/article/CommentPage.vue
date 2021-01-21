@@ -85,7 +85,7 @@
                       'icon-thumbsup': hasLiked.indexOf(reply._id) !== -1,
                       'icon-like': hasLiked.indexOf(reply._id) === -1
                     }"
-                    @click="like(item._id, reply._id)"
+                    @click="likeCommont(item._id, reply._id)"
                   ></span>
                   <span>{{ reply.like }}</span>
                 </div>
@@ -125,6 +125,7 @@ import Emoji from '@/components/base/Emoji.vue'
 import VistorLogin from '@/components/base/VistorLogin.vue'
 
 import emojiData from '@/assets/js/emoji-data'
+import { commentArticle } from '../../api/front'
 
 export default {
   components: {
@@ -139,7 +140,7 @@ export default {
       replyOthers: false,
       aite: '',
       loginType: '',
-      _id: '',
+      articleId: '',
       hasLiked: [],
       dialogErr: { show: false, info: '' }
     }
@@ -155,7 +156,7 @@ export default {
     $route() {
       const r = this.$route
       if (r.fullPath.indexOf('#anchor-comment') === -1) {
-        this.getComments({
+        this.GetComments({
           id: r.params.id
           // cache: false // 推荐模块切换文章重新抓取评论
         })
@@ -169,17 +170,17 @@ export default {
       this.hasLiked = JSON.parse(localStorage.getItem(key))
     }
     // 从服务端获取评论
-    this.getComments({
+    this.GetComments({
       id: this.$route.params.id
       // cache: false
     })
   },
   methods: {
     ...mapActions({
-      getComments: 'GetComments',
-      postComment: 'PostComment',
-      addComment: 'AddComment',
-      addLike: 'AddLike'
+      GetComments: 'GetComments'
+      // postComment: 'PostComment',
+      // addComment: 'AddComment',
+      // addLike: 'AddLike'
     }),
     ...mapMutations({
       SET_USER: 'SET_USER',
@@ -229,66 +230,8 @@ export default {
       this.sayWords += emojiCode
       this.emojiShow = false
     },
-
-    // 发表评论
-    publishComment: () => {
-      // 表单验证
-      if (this.validatePub()) {
-        return
-      }
-      const content = this.productContent()
-      const that = this
-      if (!this.replyOthers) {
-        // 直接回复文章，一级评论
-        this.$refs.pubButton.value = '发表中...'
-        this.postComment({
-          name: this.userInfo.name,
-          imgUrl: this.userInfo.imgUrl,
-          email: this.userInfo.email,
-          content: content,
-          reply: [],
-          like: 0,
-          articleId: this.$route.params.id,
-          title: this.articles.only[0].title,
-          date: Date.now()
-        }).then((data) => {
-          if (data._id) {
-            setTimeout(() => {
-              that.$refs.pubButton.value = '发表评论'
-              that.sayWords = ''
-              that.addLocalComments({ add: data, type: 1 })
-            }, 200)
-          }
-        })
-      } else {
-        // 回复他人,二级评论
-        this.$refs.pubButton.value = '发表中...'
-        const uif = this.userInfo
-        this.addComment({
-          _id: this._id,
-          name: uif.name,
-          imgUrl: uif.imgUrl,
-          email: uif.email,
-          aite: this.aite,
-          content: content,
-          like: 0,
-          articleId: this.$route.params.id,
-          date: Date.now()
-        }).then((data) => {
-          if (data._id) {
-            setTimeout(() => {
-              that.$refs.pubButton.value = '发表评论'
-              that.sayWords = ''
-              that.aite = ''
-              that.replyOthers = false
-              that.addLocalComments({ add: data, type: 2, _id: that._id })
-            }, 200)
-          }
-        })
-      }
-    },
     // 表单验证
-    validatePub: function () {
+    validatePub() {
       // 有用户信息
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.HANDLE_MASK(true)
@@ -322,19 +265,68 @@ export default {
       })
       return finStr
     },
+    // 发表评论
+    publishComment() {
+      // 表单验证
+      if (this.validatePub()) {
+        return
+      }
+      const content = this.productContent()
+      // const that = this
+      if (!this.replyOthers) {
+        // 直接回复文章，一级评论
+        this.$refs.pubButton.value = '发表中...'
+        const { name, imgUrl } = this.userInfo
+        commentArticle(name, imgUrl, content, this.$route.params.id, this.articles.only[0].title).then((res) => {
+          console.log('直接回复文章，一级评论', res)
+          if (res.code === 200) {
+            setTimeout(() => {
+              this.$refs.pubButton.value = '发表评论'
+              this.sayWords = ''
+              this.addLocalComments({ add: res.data, type: 1 })
+            }, 200)
+          }
+        })
+      } else {
+        // 回复他人,二级评论
+        this.$refs.pubButton.value = '发表中...'
+        const uif = this.userInfo
+        this.addComment({
+          _id: this.articleId,
+          name: uif.name,
+          imgUrl: uif.imgUrl,
+          email: uif.email,
+          aite: this.aite,
+          content: content,
+          like: 0,
+          articleId: this.$route.params.id,
+          date: Date.now()
+        }).then((data) => {
+          if (data._id) {
+            setTimeout(() => {
+              that.$refs.pubButton.value = '发表评论'
+              that.sayWords = ''
+              that.aite = ''
+              that.replyOthers = false
+              that.addLocalComments({ add: data, type: 2, _id: that._id })
+            }, 200)
+          }
+        })
+      }
+    },
     // 回复评论
     rep(_id, name) {
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.aite = name
         this.HANDLE_MASK(true)
       } else {
-        this._id = _id
+        this._id = this.articleId
         this.aite = name
         this.replyOthers = true
       }
     },
-    // 点赞
-    like(rev_id, rep_id) {
+    // 点赞|取消点赞
+    likeCommont(rev_id, rep_id) {
       if (rep_id) {
         this.handleLike(rev_id, rep_id, rep_id)
       } else {
