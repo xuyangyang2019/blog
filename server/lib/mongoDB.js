@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
-
+// 服务端的配置文件
 const config = require('../config').mongoDB
+// 日志
 const { logger } = require('../middlewares/logger')
 
 // const url = `mongodb://${config.user}:${config.pwd}@${config.host}:${config.port}/${config.db}?authSource=${config.authSource}`
