@@ -44,20 +44,14 @@ const getters = {
 const actions = {
   // 获取文章
   GetArticles({ commit }, payload) {
-    // let params = {}
-    // if (!payload.tag) {
     //   params = {
     //     publish: payload.publish,
     //     page: payload.page,
     //     cache: true
     //   }
-    // } else {
-    //   params = payload
-    // }
     // return api.get('/api/getArticleList', params).then((res) => {
     const { publish, tag, pageNum, pageSize } = payload
     return getArticleList(publish, tag, pageNum, pageSize).then((res) => {
-      console.log('文章列表:', res)
       if (res.code === 200) {
         if (!payload.tag) {
           commit('SET_ARTICLES_ALL', res.data.list)
@@ -77,7 +71,6 @@ const actions = {
   GetArticlesCount({ commit }, payload) {
     const { publish } = payload
     return getArticlesCount(publish).then((res) => {
-      console.log('文章数:', res)
       commit('SET_ARTICLES_SUM', res.data)
       commit('SET_PAGE_ARR', res.data || 0)
     })
@@ -102,7 +95,6 @@ const actions = {
     // const tag = payload.tag === undefined ? 'life' : payload.tag
     const { publish, tag, id } = payload
     getArticle(publish, tag, id).then((res) => {
-      console.log(res)
       if (res.code === 200) {
         // 页面title
         commit('CHANGE_TITLE', res.data.title)
@@ -120,27 +112,12 @@ const actions = {
   // 获取文章评论
   GetComments({ commit }, payload) {
     const { id } = payload
-    console.log('获取文章评论', id)
     return getCommets(id).then((res) => {
-      console.log(res)
       if (res.code === 200) {
         commit('SET_COMMENTS', res.data)
       }
     })
   },
-  // // 发表评论
-  // PostComment({ commit }, payload) {
-  //   return api.post('/api/saveComment', payload)
-  // },
-  // // 回复评论
-  // AddComment({ commit }, payload) {
-  //   return api.patch('/api/addComment', payload)
-  // }
-  // // 点赞评论
-  // AddLike({ commit }, payload) {
-  //   return api.patch('/api/addLike', payload)
-  // },
-
   // ============================================================================
 
   SearchArticles({ commit }, payload) {
