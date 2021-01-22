@@ -289,38 +289,43 @@ export default {
         })
       } else {
         // 回复他人,二级评论
-        this.$refs.pubButton.value = '发表中...'
-        const uif = this.userInfo
-        this.addComment({
-          _id: this.articleId,
-          name: uif.name,
-          imgUrl: uif.imgUrl,
-          email: uif.email,
-          aite: this.aite,
-          content: content,
-          like: 0,
-          articleId: this.$route.params.id,
-          date: Date.now()
-        }).then((data) => {
-          if (data._id) {
-            setTimeout(() => {
-              that.$refs.pubButton.value = '发表评论'
-              that.sayWords = ''
-              that.aite = ''
-              that.replyOthers = false
-              that.addLocalComments({ add: data, type: 2, _id: that._id })
-            }, 200)
-          }
-        })
+        console.log('回复他人,二级评论')
+        // this.$refs.pubButton.value = '发表中...'
+        // const uif = this.userInfo
+        // this.addComment({
+        //   _id: this.articleId,
+        //   name: uif.name,
+        //   imgUrl: uif.imgUrl,
+        //   email: uif.email,
+        //   aite: this.aite,
+        //   content: content,
+        //   like: 0,
+        //   articleId: this.$route.params.id,
+        //   date: Date.now()
+        // }).then((data) => {
+        //   if (data._id) {
+        //     setTimeout(() => {
+        //       that.$refs.pubButton.value = '发表评论'
+        //       that.sayWords = ''
+        //       that.aite = ''
+        //       that.replyOthers = false
+        //       that.addLocalComments({ add: data, type: 2, _id: that._id })
+        //     }, 200)
+        //   }
+        // })
       }
     },
     // 回复评论
     rep(_id, name) {
+      if (this.userInfo.name === name) {
+        this.dialogErr = { show: true, info: '不能回复自己的评论！' }
+        return
+      }
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.aite = name
         this.HANDLE_MASK(true)
       } else {
-        this._id = this.articleId
+        this.articleId = _id
         this.aite = name
         this.replyOthers = true
       }
