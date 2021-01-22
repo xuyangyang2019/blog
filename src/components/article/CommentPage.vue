@@ -125,7 +125,7 @@ import Emoji from '@/components/base/Emoji.vue'
 import VistorLogin from '@/components/base/VistorLogin.vue'
 
 import emojiData from '@/assets/js/emoji-data'
-import { commentArticle } from '../../api/front'
+import { commentArticle, vistorReplyComment } from '../../api/front'
 
 export default {
   components: {
@@ -178,9 +178,6 @@ export default {
   methods: {
     ...mapActions({
       GetComments: 'GetComments'
-      // postComment: 'PostComment',
-      // addComment: 'AddComment',
-      // addLike: 'AddLike'
     }),
     ...mapMutations({
       SET_USER: 'SET_USER',
@@ -289,30 +286,19 @@ export default {
         })
       } else {
         // 回复他人,二级评论
-        console.log('回复他人,二级评论')
-        // this.$refs.pubButton.value = '发表中...'
-        // const uif = this.userInfo
-        // this.addComment({
-        //   _id: this.articleId,
-        //   name: uif.name,
-        //   imgUrl: uif.imgUrl,
-        //   email: uif.email,
-        //   aite: this.aite,
-        //   content: content,
-        //   like: 0,
-        //   articleId: this.$route.params.id,
-        //   date: Date.now()
-        // }).then((data) => {
-        //   if (data._id) {
-        //     setTimeout(() => {
-        //       that.$refs.pubButton.value = '发表评论'
-        //       that.sayWords = ''
-        //       that.aite = ''
-        //       that.replyOthers = false
-        //       that.addLocalComments({ add: data, type: 2, _id: that._id })
-        //     }, 200)
-        //   }
-        // })
+        this.$refs.pubButton.value = '发表中...'
+        const { name, imgUrl } = this.userInfo
+        vistorReplyComment(this.articleId, name, imgUrl, this.aite, content).then((res) => {
+          if (res.code === 200) {
+            setTimeout(() => {
+              this.$refs.pubButton.value = '发表评论'
+              this.sayWords = ''
+              this.aite = ''
+              this.replyOthers = false
+              this.addLocalComments({ add: res.data, type: 2, _id: this.articleId })
+            }, 200)
+          }
+        })
       }
     },
     // 回复评论
