@@ -132,14 +132,27 @@ function commentArticle(name, avatar, content, articleId, articleTitle) {
   return fetch.post('/api/commentArticle', parameters)
 }
 
-// // 发表评论
-// PostComment({ commit }, payload) {
-//   return api.post('/api/saveComment', payload)
-// },
-// // 回复评论
-// AddComment({ commit }, payload) {
-//   return api.patch('/api/addComment', payload)
-// }
+/**
+ * 回复评论
+ * @param {String} commentId 评论id
+ * @param {String} name 评论的人
+ * @param {String} avatar 头像
+ * @param {String} aite 被评论的人
+ * @param {String} content 评论的内容
+ */
+function vistorReplyComment(commentId, name, avatar, aite, content) {
+  const parameters = {
+    id: commentId,
+    name: name,
+    aite: aite,
+    content: content,
+    imgUrl: avatar,
+    like: 0,
+    date: new Date().getTime()
+  }
+  return fetch.patch('/api/vistorReplyComment', parameters)
+}
+
 // // 点赞评论
 // AddLike({ commit }, payload) {
 //   return api.patch('/api/addLike', payload)
@@ -157,6 +170,7 @@ export {
   getMsgBoard,
   getMsgCount,
   getCommets,
+  vistorReplyComment,
   vistorLogin,
   vistorRegister
 }
