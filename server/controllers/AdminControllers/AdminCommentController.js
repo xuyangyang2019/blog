@@ -2,29 +2,22 @@ const CommentService = require('../../services').CommentService
 const { InvalidQueryError } = require('../../lib/error')
 
 module.exports = {
-  // // 回复留言
-  // 'PATCH /api/replyMsgBoard': async (ctx, next) => {
-  //   const { id, name, aite, imgUrl, content, date } = ctx.request.body
-  //   // 参数不对抛出异常
-  //   if (!id || !name || !aite || !imgUrl || !content || !date) {
-  //     throw new InvalidQueryError()
-  //   }
-  //   const reply = {
-  //     name: name,
-  //     imgUrl: imgUrl,
-  //     // email: email,
-  //     content: content,
-  //     date: date,
-  //     aite: aite
-  //   }
-  //   const result = await MsgBoardService.updateById({ _id: id }, { $push: { reply: reply } }, { new: true })
-  //   if (result) {
-  //     ctx.result = result
-  //   } else {
-  //     ctx.error = '回复失败'
-  //   }
-  //   return next()
-  // },
+  // 回复评论
+  'PATCH /api/replyComment': async (ctx, next) => {
+    const { id, name, aite, imgUrl, content, date, like } = ctx.request.body
+    // 参数不对抛出异常
+    if (!id || !name || !aite || !imgUrl || !content || !date || typeof like === 'undefined') {
+      throw new InvalidQueryError()
+    }
+    const result = await CommentService.updateById({ _id: id }, { $push: { reply: ctx.request.body } }, { new: true })
+    console.log('回复留言', result)
+    if (result._id) {
+      ctx.result = result
+    } else {
+      ctx.error = '回复失败'
+    }
+    return next()
+  },
   // 删除评论
   'DELETE /api/deleteComments': async (ctx, next) => {
     const ids = ctx.query.ids
