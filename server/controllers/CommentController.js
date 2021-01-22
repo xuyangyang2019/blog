@@ -1,7 +1,7 @@
 const ArticleService = require('../services').ArticleService
 const CommentService = require('../services').CommentService
 
-// const { InvalidQueryError } = require('../lib/error')
+const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
   // 分页获取评论
@@ -17,11 +17,8 @@ module.exports = {
   },
   // 获取指定文章的评论
   'GET /api/getComments': async (ctx, next) => {
-    // console.log('获取指定文章的评论', ctx.query)
-    // console.log('getComments', ctx.request.query)
     const { id } = ctx.request.query
     const result = await CommentService.findMany({ articleId: id })
-    // console.log('获取指定文章的评论', result)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
@@ -57,26 +54,22 @@ module.exports = {
       ctx.error = '评论文章失败'
     }
     return next()
+  },
+  // 前端回复评论（二级评论）
+  'PATCH /api/vistorReplyComment': async (ctx, next) => {
+    const { id, name, aite, imgUrl, content, date, like } = ctx.request.body
+    // 参数不对抛出异常
+    if (!id || !name || !aite || !imgUrl || !content || !date || typeof like === 'undefined') {
+      throw new InvalidQueryError()
+    }
+    const result = await CommentService.updateById({ _id: id }, { $push: { reply: ctx.request.body } }, { new: true })
+    if (result._id) {
+      ctx.result = result
+    } else {
+      ctx.error = '回复评论失败'
+    }
+    return next()
   }
-  // // 前后端文章评论回复（二级评论）
-  // 'PATCH /api/addComment': async (ctx, next) => {
-  //   let addInfo = {
-  //     name: ctx.request.body.name,
-  //     imgUrl: ctx.request.body.imgUrl,
-  //     email: ctx.request.body.email,
-  //     aite: ctx.request.body.aite,
-  //     content: ctx.request.body.content,
-  //     like: ctx.request.body.like,
-  //     date: ctx.request.body.date
-  //   }
-  //   let doc = await db.comment.findByIdAndUpdate(
-  //     { _id: ctx.request.body._id },
-  //     { $push: { reply: addInfo } },
-  //     { new: true })
-  //   if (doc._id) {
-  //     ctx.rest(doc)
-  //   }
-  // },
   // // 前端文章点赞
   // 'PATCH /api/addLike': async (ctx, next) => {
   //   //是否为二级评论
