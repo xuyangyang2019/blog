@@ -10,7 +10,6 @@ module.exports = {
       throw new InvalidQueryError()
     }
     const result = await CommentService.updateById({ _id: id }, { $push: { reply: ctx.request.body } }, { new: true })
-    console.log('回复留言', result)
     if (result._id) {
       ctx.result = result
     } else {
@@ -26,25 +25,24 @@ module.exports = {
     }
     const result = await CommentService.delete({ _id: { $in: ids } })
     if (result && result.ok) {
-      console.log(result)
       ctx.result = result
     } else {
       ctx.error = '删除评论失败！'
     }
     return next()
+  },
+  // 删除二级留言
+  'PATCH /api/updateComment': async (ctx, next) => {
+    const { commentId, replyId } = ctx.request.body
+    if (!commentId || !replyId) {
+      throw new InvalidQueryError()
+    }
+    const result = await CommentService.update({ _id: commentId }, { $pull: { reply: { _id: replyId } } })
+    if (result.ok) {
+      ctx.result = result
+    } else {
+      ctx.error = '删除二级留言失败！'
+    }
+    return next()
   }
-  // // 删除二级留言
-  // 'PATCH /api/updateMsgBoard': async (ctx, next) => {
-  //   const { msgId, replyId } = ctx.request.body
-  //   if (!msgId || !replyId) {
-  //     throw new InvalidQueryError()
-  //   }
-  //   const result = await MsgBoardService.update({ _id: msgId }, { $pull: { reply: { _id: replyId } } })
-  //   if (!result) {
-  //     ctx.error = '删除二级留言失败！'
-  //   } else {
-  //     ctx.result = result
-  //   }
-  //   return next()
-  // }
 }
