@@ -161,42 +161,21 @@ module.exports = {
     return next()
   },
   // 前台搜索文章
-  'GET /api/search': async (ctx, next) => {
-    // let limit = 8
-    // let skip = ctx.query.page * limit - limit
+  'GET /api/searchArticle': async (ctx, next) => {
     const { publish, keyword, startTime, endTime, pageNum, pageSize } = ctx.request.query
-    const docs = await ArticleService.findByPage({publish: publish, title: {}}, pageNum, pageSize)
-    // .find({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: 'i' } }, { content: 0 })
-    // .sort({ _id: -1 })
-    // .skip(skip)
-    // .limit(limit)
-    // ctx.rest(docs)
-    console.log(docs)
-
+    const condition = { publish: publish }
+    if (keyword) {
+      condition.title = { $regex: keyword, $options: 'i' }
+    }
+    if (startTime && endTime) {
+      condition.date = { $gte: startTime, $lte: endTime }
+    }
+    const docs = await ArticleService.findManyByPage(condition, { content: 0 }, pageNum, pageSize)
     if (docs) {
       ctx.result = docs
     } else {
       ctx.error = '搜索文章出错！'
     }
-
-    // if (ctx.query.according === 'key') {
-    // let docs = await db.article
-    //   .find({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: 'i' } }, { content: 0 })
-    //   .sort({ _id: -1 })
-    //   .skip(skip)
-    //   .limit(limit)
-    // ctx.rest(docs)
-    // } else {
-    // 前台时间轴根据时间范围搜索
-    // let start = new Date(parseInt(ctx.query.start))
-    // let end = new Date(parseInt(ctx.query.end))
-    // let docs = await db.article
-    //   .find({ publish: ctx.query.publish, date: { $gte: start, $lte: end } }, { content: 0 })
-    //   .sort({ _id: -1 })
-    //   .skip(skip)
-    //   .limit(limit)
-    // ctx.rest(docs)
-    // }
     return next()
   }
   // =====================================================
