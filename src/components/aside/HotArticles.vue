@@ -41,7 +41,7 @@ export default {
       if (item.tag[0] === 'life') {
         this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
       } else {
-        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
+        this.$router.push({ name: 'articleShow', params: { tag: item.tag[0], id: item._id } })
       }
     }
   }
