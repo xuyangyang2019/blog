@@ -61,7 +61,19 @@ export default {
       }
       date = year + '-' + month + '-' + '01' + 'to' + year + '-' + month + '-' + endDay
       // return '/placeOnFile/' + date
-      this.$router.push({ name: 'placeOnFile', params: { time: date } })
+      // this.$router.push({ name: 'placeOnFile', params: { time: date } })
+      const a = document.createElement('a')
+      a.setAttribute('href', '/placeOnFile/' + date)
+      a.setAttribute('target', '_blank')
+      a.setAttribute('id', 'js_time_line_a')
+      // 防止反复添加
+      if (document.getElementById('js_time_line_a')) {
+        document.body.removeChild(document.getElementById('js_time_line_a'))
+      }
+      a.style.display = 'none'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(document.getElementById('js_time_line_a'))
     }
   }
 }
