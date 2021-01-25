@@ -36,7 +36,15 @@ class BaseDAO {
     return result
   }
 
-  async findManyByPage(condition, fields, pageNum, pageSize, sort = {_id: -1}) {
+  /**
+   * 按条件分页查询数据
+   * @param {Object} condition 查询条件
+   * @param {Object} fields 返回的字段
+   * @param {Number} pageNum
+   * @param {Number} pageSize
+   * @param {Object} sort 排序条件
+   */
+  async findManyByPage(condition = {}, fields = {}, pageNum = 1, pageSize = 10, sort = {_id: -1}) {
     const count = await this.model.countDocuments(condition)
     const list = await this.model
       .find(condition, fields)
