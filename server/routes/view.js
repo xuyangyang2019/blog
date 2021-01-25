@@ -19,13 +19,13 @@ router.get(
     '/',
     '/home',
     '/article',
-    '/article/:articleList',
-    '/article/:articleList/:id',
+    '/article/:tag',
+    '/article/:tag/:id',
     '/life',
     '/life/:id',
     '/msgBoard',
     '/search/:searchKey',
-    '/timeLine/:time',
+    '/placeOnFile/:time',
     '/login_qq'
   ],
   async (ctx) => {

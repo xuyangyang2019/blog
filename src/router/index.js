@@ -75,8 +75,8 @@ function createRouter() {
     },
     // 时间轴
     {
-      path: '/timeLine/:time',
-      name: 'timeLine',
+      path: '/placeOnFile/:time',
+      name: 'placeOnFile',
       component: () => import(/* webpackChunkName: "article" */ '../components/article/TimeLine.vue')
     }
     // {
