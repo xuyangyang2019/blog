@@ -76,7 +76,7 @@ export default {
       if (item === 'life') {
         this.$router.push({ name: 'life' })
       } else {
-        this.$router.push({ name: 'techincal', params: { articleList: item } })
+        this.$router.push({ name: 'techincal', params: { tag: item } })
       }
     }
   }

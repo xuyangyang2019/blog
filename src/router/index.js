@@ -40,7 +40,7 @@ function createRouter() {
     // article的子路由
     // 标签
     {
-      path: '/article/:articleList',
+      path: '/article/:tag',
       name: 'techincal',
       component: () => import(/* webpackChunkName: "article" */ '../components/article/Techincal.vue')
     },
