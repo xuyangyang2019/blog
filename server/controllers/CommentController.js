@@ -69,66 +69,26 @@ module.exports = {
       ctx.error = '回复评论失败'
     }
     return next()
+  },
+  // 前端 点赞评论
+  'PATCH /api/likeComment': async (ctx, next) => {
+    const { commentId, replyId, addOrDel } = ctx.request.body
+    // 是否为二级评论
+    let result = ''
+    if (replyId) {
+      result = await CommentService.update(
+        { _id: commentId, 'reply._id': replyId },
+        { $inc: { 'reply.$.like': addOrDel } },
+        { new: true }
+      )
+    } else {
+      result = await CommentService.updateById({ _id: commentId }, { $inc: { like: addOrDel } }, { new: true })
+    }
+    if (result) {
+      ctx.result = result
+    } else {
+      ctx.error = '点赞失败'
+    }
+    return next()
   }
-  // // 前端文章点赞
-  // 'PATCH /api/addLike': async (ctx, next) => {
-  //   //是否为二级评论
-  //   if (ctx.request.body.repId) {
-  //     let ur = await db.comment.update(
-  //       { _id: ctx.request.body.revId, "reply._id": ctx.request.body.repId },
-  //       { $inc: { "reply.$.like": ctx.request.body.addOrDel } },
-  //       (err, doc) => { })
-  //     if (ur) {
-  //       ctx.rest({ code: 200 })
-  //     }
-  //   } else {
-  //     let ur = await db.comment.update(
-  //       { _id: ctx.request.body.revId },
-  //       { $inc: { "like": ctx.request.body.addOrDel } },
-  //       (err, doc) => { })
-  //     if (ur) {
-  //       ctx.rest({ code: 200 })
-  //     }
-  //   }
-  // },
-  // 'POST /api/getComment': async (ctx, next) => {
-  //   const { article_id } = ctx.request.body
-  //   if (!article_id) {
-  //     throw new InvalidQueryError()
-  //   }
-  //   const result = await CommentService.findMany({ article_id })
-  //   if (!result) {
-  //     ctx.error = '获取评论失败'
-  //   } else {
-  //     ctx.result = result
-  //   }
-  //   return next()
-  // },
-
-  // 'POST /api/postComment': async (ctx, next) => {
-  //   const data = ctx.request.body
-  //   if (!data) {
-  //     throw new InvalidQueryError()
-  //   }
-  //   const result = await CommentService.save(data)
-  //   if (!result) {
-  //     ctx.error = '发布失败'
-  //   } else {
-  //     ctx.result = ''
-  //   }
-  //   return next()
-  // },
-  // 'POST /api/modifyComment': async (ctx, next) => {
-  //   const data = ctx.request.body
-  //   if (!data || !data._id) {
-  //     throw new InvalidQueryError()
-  //   }
-  //   const result = await CommentService.updateById(data._id, data)
-  //   if (!result) {
-  //     ctx.error = '保存更改失败'
-  //   } else {
-  //     ctx.result = ''
-  //   }
-  //   return next()
-  // },
 }
