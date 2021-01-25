@@ -59,7 +59,7 @@
                   'icon-thumbsup': hasLiked.indexOf(item._id) !== -1,
                   'icon-like': hasLiked.indexOf(item._id) === -1
                 }"
-                @click="like(item._id)"
+                @click="loveComment(item._id)"
               ></span>
               <span>{{ item.like }}</span>
             </div>
@@ -85,7 +85,7 @@
                       'icon-thumbsup': hasLiked.indexOf(reply._id) !== -1,
                       'icon-like': hasLiked.indexOf(reply._id) === -1
                     }"
-                    @click="likeCommont(item._id, reply._id)"
+                    @click="loveComment(item._id, reply._id)"
                   ></span>
                   <span>{{ reply.like }}</span>
                 </div>
@@ -125,7 +125,7 @@ import Emoji from '@/components/base/Emoji.vue'
 import VistorLogin from '@/components/base/VistorLogin.vue'
 
 import emojiData from '@/assets/js/emoji-data'
-import { commentArticle, vistorReplyComment } from '../../api/front'
+import { commentArticle, vistorReplyComment, likeComment } from '../../api/front'
 
 export default {
   components: {
@@ -182,8 +182,8 @@ export default {
     ...mapMutations({
       SET_USER: 'SET_USER',
       HANDLE_MASK: 'HANDLE_MASK',
-      addLocalComments: 'ADD_LOCAL_COMMENTS',
-      addLocalCommentsLike: 'ADD_LOCAL_COMMENTS_LIKE'
+      ADD_LOCAL_COMMENTS: 'ADD_LOCAL_COMMENTS',
+      ADD_LOCAL_COMMENTS_LIKE: 'ADD_LOCAL_COMMENTS_LIKE'
     }),
     // 用户退出登陆
     userLogOut() {
@@ -280,7 +280,7 @@ export default {
             setTimeout(() => {
               this.$refs.pubButton.value = '发表评论'
               this.sayWords = ''
-              this.addLocalComments({ add: res.data, type: 1 })
+              this.ADD_LOCAL_COMMENTS({ add: res.data, type: 1 })
             }, 200)
           }
         })
@@ -295,7 +295,7 @@ export default {
               this.sayWords = ''
               this.aite = ''
               this.replyOthers = false
-              this.addLocalComments({ add: res.data, type: 2, _id: this.articleId })
+              this.ADD_LOCAL_COMMENTS({ add: res.data, type: 2, _id: this.articleId })
             }, 200)
           }
         })
@@ -317,37 +317,32 @@ export default {
       }
     },
     // 点赞|取消点赞
-    likeCommont(rev_id, rep_id) {
-      if (rep_id) {
-        this.handleLike(rev_id, rep_id, rep_id)
+    loveComment(commentId, replyId) {
+      if (replyId) {
+        this.handleLike(commentId, replyId, replyId)
       } else {
-        this.handleLike(rev_id, undefined, rev_id)
+        this.handleLike(commentId, undefined, commentId)
       }
     },
     // 点赞
-    handleLike(rev_id, rep_id, saveLocal) {
-      const that = this
+    handleLike(commentId, replyId, saveLocal) {
       if (this.hasLiked.indexOf(saveLocal) === -1) {
         // 点赞
-        this.addLike({
-          revId: rev_id,
-          repId: rep_id,
-          addOrDel: 1
-        }).then(() => {
-          that.hasLiked.push(saveLocal)
-          localStorage.setItem('articleId_comment' + that.$route.params.id, JSON.stringify(that.hasLiked))
-          that.addLocalCommentsLike({ type: 1, rev_id: rev_id, rep_id: rep_id })
+        likeComment(commentId, replyId, 1).then((res) => {
+          if (res.code === 200) {
+            this.hasLiked.push(saveLocal)
+            localStorage.setItem('articleId_comment' + this.$route.params.id, JSON.stringify(this.hasLiked))
+            this.ADD_LOCAL_COMMENTS_LIKE({ type: 1, commentId: commentId, replyId: replyId })
+          }
         })
       } else {
         // 取消赞
-        this.addLike({
-          revId: rev_id,
-          repId: rep_id,
-          addOrDel: -1
-        }).then(() => {
-          that.hasLiked.splice(that.hasLiked.indexOf(saveLocal), 1)
-          localStorage.setItem('articleId_comment' + that.$route.params.id, JSON.stringify(that.hasLiked))
-          that.addLocalCommentsLike({ type: -1, rev_id: rev_id, rep_id: rep_id })
+        likeComment(commentId, replyId, -1).then((res) => {
+          if (res.code === 200) {
+            this.hasLiked.splice(this.hasLiked.indexOf(saveLocal), 1)
+            localStorage.setItem('articleId_comment' + this.$route.params.id, JSON.stringify(this.hasLiked))
+            this.ADD_LOCAL_COMMENTS_LIKE({ type: -1, commentId: commentId, replyId: replyId })
+          }
         })
       }
     }
