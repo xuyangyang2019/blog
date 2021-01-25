@@ -27,6 +27,7 @@ const state = {
       next: []
     }
   },
+  placeOnFile: [], // 归档的数据
   msgBoardArr: [], // 留言信息
   userInfo: { name: '', imgUrl: '', email: '' }, // 用户信息
   pageArr: [], // 分页
@@ -127,13 +128,6 @@ const actions = {
   // 添加留言
   SaveLeaveWords({ commit }, payload) {
     return api.post('/api/saveLeaveW', payload)
-  },
-  // 查询时间轴的文章
-  TimeArticles({ commit, state }, payload) {
-    api.get('/api/search', payload).then((data) => {
-      commit('SET_ARTICLES_TIME', data)
-      commit('PRODUCT_BG', data)
-    })
   }
 }
 
@@ -144,6 +138,10 @@ const mutations = {
     state.articles.hot = data
   },
   // 设置归档数据
+  SET_PLACE_ON_FILE(state, data) {
+    state.placeOnFile = data
+  },
+  // 设置指定时间段的文章
   SET_ARTICLES_TIME(state, data) {
     state.articles.time = data
   },
