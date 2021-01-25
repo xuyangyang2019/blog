@@ -76,11 +76,13 @@ class BaseDAO {
 
   /**
    * id更新
-   * @param {String} id
+   * @param {Object} condition 条件
+   * @param {Object} data 数据
+   * @param {Object} options 配置项
    * @return {Object} 查询结果
    */
-  async updateById(id, data, options) {
-    const result = await this.model.findByIdAndUpdate(id, data, options)
+  async updateById(condition, data, options) {
+    const result = await this.model.findByIdAndUpdate(condition, data, options)
     return result
   }
 
