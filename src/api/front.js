@@ -153,10 +153,15 @@ function vistorReplyComment(commentId, name, avatar, aite, content) {
   return fetch.patch('/api/vistorReplyComment', parameters)
 }
 
-// // 点赞评论
-// AddLike({ commit }, payload) {
-//   return api.patch('/api/addLike', payload)
-// },
+/**
+ * 点赞评论或回复的评论
+ * @param {String} commentId 评论id
+ * @param {String} replyId 回复id
+ * @param {Number} addOrDel 点赞 1 取消点赞 -1
+ */
+function likeComment(commentId, replyId, addOrDel) {
+  return fetch.patch('/api/likeComment', { commentId: commentId, replyId: replyId, addOrDel: addOrDel })
+}
 
 export {
   getTags,
@@ -171,6 +176,7 @@ export {
   getMsgCount,
   getCommets,
   vistorReplyComment,
+  likeComment,
   vistorLogin,
   vistorRegister
 }
