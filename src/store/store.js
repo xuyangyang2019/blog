@@ -274,11 +274,11 @@ const mutations = {
     }
   },
   ADD_LOCAL_COMMENTS_LIKE(state, info) {
-    if (info.rep_id) {
+    if (info.replyId) {
       state.comments.forEach((item) => {
-        if (item._id === info.rev_id) {
+        if (item._id === info.commentId) {
           item.reply.forEach((_item) => {
-            if (_item._id === info.rep_id) {
+            if (_item._id === info.replyId) {
               _item.like += info.type
               return
             }
@@ -287,7 +287,7 @@ const mutations = {
       })
     } else {
       state.comments.forEach((item) => {
-        if (item._id === info.rev_id) {
+        if (item._id === info.commentId) {
           item.like += info.type
           return
         }
