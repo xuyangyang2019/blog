@@ -84,22 +84,22 @@ module.exports = {
     let result = {}
     // 首页请求
     if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
-      result = await ArticleService.getArticlesCount({ publish: publish })
+      result = await ArticleService.count({ publish: publish })
     }
     // 通过文章标签请求
     if (ctx.query.tag) {
       const tag = ctx.query.tag
-      result = await ArticleService.getArticlesCount({ publish: publish, tag: tag })
+      result = await ArticleService.count({ publish: publish, tag: tag })
     }
     // 前台后台时间范围请求
     if (ctx.query.start) {
       const start = new Date(parseInt(ctx.query.start, 10))
       const end = new Date(parseInt(ctx.query.end, 10))
-      result = await ArticleService.getArticlesCount({ publish: ctx.query.publish, date: { $gte: start, $lte: end } })
+      result = await ArticleService.count({ publish: ctx.query.publish, date: { $gte: start, $lte: end } })
     }
     // 前台后台关键词搜索请求
     if (ctx.query.key) {
-      await ArticleService.getArticlesCount({
+      await ArticleService.count({
         publish: ctx.query.publish,
         title: { $regex: ctx.query.key, $options: 'i' }
       })
@@ -159,6 +159,45 @@ module.exports = {
       ctx.error = '点赞失败'
     }
     return next()
+  },
+  // 前台搜索文章
+  'GET /api/search': async (ctx, next) => {
+    // let limit = 8
+    // let skip = ctx.query.page * limit - limit
+    const { publish, keyword, startTime, endTime, pageNum, pageSize } = ctx.request.query
+    const docs = await ArticleService.findByPage({publish: publish, title: {}}, pageNum, pageSize)
+    // .find({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: 'i' } }, { content: 0 })
+    // .sort({ _id: -1 })
+    // .skip(skip)
+    // .limit(limit)
+    // ctx.rest(docs)
+    console.log(docs)
+
+    if (docs) {
+      ctx.result = docs
+    } else {
+      ctx.error = '搜索文章出错！'
+    }
+
+    // if (ctx.query.according === 'key') {
+    // let docs = await db.article
+    //   .find({ publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: 'i' } }, { content: 0 })
+    //   .sort({ _id: -1 })
+    //   .skip(skip)
+    //   .limit(limit)
+    // ctx.rest(docs)
+    // } else {
+    // 前台时间轴根据时间范围搜索
+    // let start = new Date(parseInt(ctx.query.start))
+    // let end = new Date(parseInt(ctx.query.end))
+    // let docs = await db.article
+    //   .find({ publish: ctx.query.publish, date: { $gte: start, $lte: end } }, { content: 0 })
+    //   .sort({ _id: -1 })
+    //   .skip(skip)
+    //   .limit(limit)
+    // ctx.rest(docs)
+    // }
+    return next()
   }
   // =====================================================
 
@@ -179,33 +218,5 @@ module.exports = {
   //       { articleId: 1, title: 1, tag: 1 }, (err, doc2) => { })
   //     .limit(1)
   //   ctx.rest({ pre: doc1, next: doc2 })
-  // },
-
-  // // 前台搜索文章
-  // 'GET /search': async (ctx, next) => {
-  //   let limit = 8
-  //   let skip = ctx.query.page * limit - limit
-  //   if (ctx.query.according === "key") {
-  //     let docs = await db.article
-  //       .find(
-  //         { publish: ctx.query.publish, title: { $regex: ctx.query.key, $options: "i" } },
-  //         { content: 0 })
-  //       .sort({ "_id": -1 })
-  //       .skip(skip)
-  //       .limit(limit)
-  //     ctx.rest(docs)
-  //   } else {
-  //     // 前台时间轴根据时间范围搜索
-  //     let start = new Date(parseInt(ctx.query.start))
-  //     let end = new Date(parseInt(ctx.query.end))
-  //     let docs = await db.article
-  //       .find(
-  //         { publish: ctx.query.publish, date: { "$gte": start, "$lte": end } },
-  //         { content: 0 })
-  //       .sort({ "_id": -1 })
-  //       .skip(skip)
-  //       .limit(limit)
-  //     ctx.rest(docs)
-  //   }
   // },
 }

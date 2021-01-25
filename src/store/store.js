@@ -71,8 +71,8 @@ const actions = {
   GetArticlesCount({ commit }, payload) {
     const { publish } = payload
     return getArticlesCount(publish).then((res) => {
-      commit('SET_ARTICLES_SUM', res.data)
-      commit('SET_PAGE_ARR', res.data || 0)
+      commit('SET_ARTICLES_SUM', res.data.count)
+      commit('SET_PAGE_ARR', res.data.count || 0)
     })
   },
   // 获取留言
@@ -120,10 +120,6 @@ const actions = {
   },
   // ============================================================================
 
-  SearchArticles({ commit }, payload) {
-    return api.get('/api/search', payload)
-  },
-
   // 回复留言
   AddLeaveWords({ commit }, payload) {
     return api.patch('/api/addReply', payload)
@@ -132,7 +128,6 @@ const actions = {
   SaveLeaveWords({ commit }, payload) {
     return api.post('/api/saveLeaveW', payload)
   },
-
   // 查询时间轴的文章
   TimeArticles({ commit, state }, payload) {
     api.get('/api/search', payload).then((data) => {

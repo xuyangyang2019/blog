@@ -12,11 +12,6 @@ class ArticleService extends BaseDAO {
       .limit(5)
     return result
   }
-
-  async getArticlesCount(condition) {
-    const count = await this.model.countDocuments(condition)
-    return count
-  }
 }
 
 module.exports = new ArticleService(Article)
