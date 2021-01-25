@@ -9,23 +9,16 @@
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
 
-import articleList from '@/components/article/ArticleList'
-import loading from '@/components/base/Loading'
+import ArticleList from '@/components/article/ArticleList'
+import Loading from '@/components/base/Loading'
 
 export default {
   components: {
-    articleList,
-    loading
+    ArticleList,
+    Loading
   },
-  //   metaInfo() {
-  //     let title = this.$route.params.articleList
-  //     return {
-  //       title: title + "文章 -mapblog小站",
-  //       meta: [{ vmid: "description", name: "description", content: title + "文章 -mapblog小站" }]
-  //     }
-  //   },
   beforeRouteLeave(to, from, next) {
-    this.clear() // 清除页码数组
+    this.CLEAR_PAGE() // 清除页码数组
     next()
   },
   // 传送门模块切换时复用此组件，故重新获取数据
@@ -38,22 +31,34 @@ export default {
     next()
   },
   asyncData({ store, route }) {
-    return Promise.all([
-      store.dispatch('GetArticles', {
-        publish: true,
-        page: 1,
-        tag: route.params.articleList,
-        cache: true
-      }),
-      store.dispatch('GetArticlesCount', {
-        publish: true,
-        page: 1,
-        tag: route.params.articleList,
-        cache: true
-      })
-    ]).then(() => {
-      store.commit('CHANGE_CODE', 200)
+    return store.dispatch('GetArticles', {
+      publish: true,
+      pageNum: 1,
+      pageSize: 10,
+      tag: route.params.tag
+      // cache: true
     })
+    // .then((res) => {
+    //   if (res.code === 200) {
+    //     store.commit('CHANGE_CODE', 200)
+    //   }
+    // })
+    // return Promise.all([
+    //   store.dispatch('GetArticles', {
+    //     publish: true,
+    //     page: 1,
+    //     tag: route.params.articleList,
+    //     cache: true
+    //   }),
+    //   store.dispatch('GetArticlesCount', {
+    //     publish: true,
+    //     page: 1,
+    //     tag: route.params.articleList,
+    //     cache: true
+    //   })
+    // ]).then(() => {
+    //   store.commit('CHANGE_CODE', 200)
+    // })
   },
   computed: {
     ...mapState({
@@ -66,8 +71,7 @@ export default {
       getArticlesCount: 'GetArticlesCount'
     }),
     ...mapMutations({
-      clear: 'CLEAR_PAGE',
-      changeCode: 'CHANGE_CODE'
+      CLEAR_PAGE: 'CLEAR_PAGE'
     })
   }
 }
