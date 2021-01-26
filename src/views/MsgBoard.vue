@@ -72,7 +72,7 @@
                     <span class="icon-clock"></span>
                     <span class="board-content-details-time">{{ rep.date | reviseTime }}</span>
                     <a href="#anchor-msgBoard" class="board-details-reply">
-                      <span @click="reply(item._id, rep.name)">回复</span>
+                      <span @click="replyMsg(item._id, rep.name)">回复</span>
                     </a>
                   </div>
                 </div>
@@ -110,9 +110,10 @@
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
+import { leavingMessage } from '../api/front'
 
-import page from '@/components/base/Page'
+import Page from '@/components/base/Page'
 import Emoji from '@/components/base/Emoji'
 import VistorLogin from '@/components/base/VistorLogin'
 
@@ -122,7 +123,7 @@ import headMixin from '@/mixins/head-mixin'
 export default {
   name: 'MsgBoard',
   components: {
-    page,
+    Page,
     Emoji,
     VistorLogin
   },
@@ -166,14 +167,10 @@ export default {
     })
   },
   methods: {
-    ...mapActions({
-      addLeaveWords: 'AddLeaveWords',
-      saveLeaveWords: 'SaveLeaveWords'
-    }),
     ...mapMutations({
       set_user: 'SET_USER',
       handleMask: 'HANDLE_MASK',
-      addLocalWords: 'ADD_LOCAL_WORDS'
+      ADD_LOCAL_WORDS: 'ADD_LOCAL_WORDS'
     }),
     // 展示登陆框
     showLogin() {
@@ -212,41 +209,39 @@ export default {
       const ui = this.userInfo
       this.$refs.pubButton.value = '发表中...'
       if (this.replyInfo.firstLevel) {
-        this.saveLeaveWords({
-          name: ui.name,
-          imgUrl: ui.imgUrl,
-          email: ui.email,
-          content: content,
-          date: Date.now()
-        }).then((res) => {
-          if (res.data && res.data._id) {
+        console.log('一级留言')
+        const { name, imgUrl, email } = ui
+        leavingMessage(name, content, imgUrl, email, Date.now()).then((res) => {
+          console.log(res)
+          if (res.code === 200) {
             setTimeout(() => {
               this.$refs.pubButton.value = '留言'
               this.sayWords = ''
-              this.addLocalWords({ add: res.data, type: 1 })
+              this.ADD_LOCAL_WORDS({ add: res.data, type: 1 })
             }, 200)
           }
         })
       } else {
-        this.addLeaveWords({
-          id: this.replyInfo._id,
-          name: ui.name,
-          aite: this.replyInfo.aite,
-          imgUrl: ui.imgUrl,
-          email: ui.email,
-          content: content,
-          date: Date.now()
-        }).then((res) => {
-          if (res.data && res.data._id) {
-            this.$refs.pubButton.value = '留言'
-            this.sayWords = ''
-            this.addLocalWords({ add: res.data, type: 2, _id: this.replyInfo._id })
-          }
-        })
+        console.log('二级留言')
+        // this.AddLeaveWords({
+        //   id: this.replyInfo._id,
+        //   name: ui.name,
+        //   aite: this.replyInfo.aite,
+        //   imgUrl: ui.imgUrl,
+        //   email: ui.email,
+        //   content: content,
+        //   date: Date.now()
+        // }).then((res) => {
+        //   if (res.data && res.data._id) {
+        //     this.$refs.pubButton.value = '留言'
+        //     this.sayWords = ''
+        //     this.ADD_LOCAL_WORDS({ add: res.data, type: 2, _id: this.replyInfo._id })
+        //   }
+        // })
       }
     },
     // 回复留言
-    reply(_id, name) {
+    replyMsg(_id, name) {
       this.replyInfo = {
         _id: _id,
         firstLevel: false,
