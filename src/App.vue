@@ -262,8 +262,7 @@ export default {
 </script>
 
 <style lang="scss">
-// @import "./styles/reset.scss";
-// @import "./styles/normalize.scss";
+@import "./styles/normalize.css";
 // @import "./styles/common.scss";
 // @import "./styles/qqface.scss";
 // @import "~@/assets/iconfont/iconfont.css";
@@ -384,6 +383,7 @@ a {
     margin-top: 0;
   }
 }
+
 //平板
 @media screen and (min-width: 768px) {
   .fix-bg {
