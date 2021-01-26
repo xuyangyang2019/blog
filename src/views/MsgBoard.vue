@@ -111,7 +111,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import { leavingMessage } from '../api/front'
+import { leavingMessage, replyMessage } from '../api/front'
 
 import Page from '@/components/base/Page'
 import Emoji from '@/components/base/Emoji'
@@ -174,8 +174,6 @@ export default {
     }),
     // 展示登陆框
     showLogin() {
-      console.log('展示登陆框')
-      console.log(this.userInfo)
       if (!this.userInfo.name && !this.userInfo.imgUrl) {
         this.handleMask(true)
       }
@@ -209,10 +207,8 @@ export default {
       const ui = this.userInfo
       this.$refs.pubButton.value = '发表中...'
       if (this.replyInfo.firstLevel) {
-        console.log('一级留言')
         const { name, imgUrl, email } = ui
         leavingMessage(name, content, imgUrl, email, Date.now()).then((res) => {
-          console.log(res)
           if (res.code === 200) {
             setTimeout(() => {
               this.$refs.pubButton.value = '留言'
@@ -222,22 +218,13 @@ export default {
           }
         })
       } else {
-        console.log('二级留言')
-        // this.AddLeaveWords({
-        //   id: this.replyInfo._id,
-        //   name: ui.name,
-        //   aite: this.replyInfo.aite,
-        //   imgUrl: ui.imgUrl,
-        //   email: ui.email,
-        //   content: content,
-        //   date: Date.now()
-        // }).then((res) => {
-        //   if (res.data && res.data._id) {
-        //     this.$refs.pubButton.value = '留言'
-        //     this.sayWords = ''
-        //     this.ADD_LOCAL_WORDS({ add: res.data, type: 2, _id: this.replyInfo._id })
-        //   }
-        // })
+        replyMessage(this.replyInfo._id, ui.name, this.replyInfo.aite, content, ui.imgUrl, ui.email).then((res) => {
+          if (res.code === 200) {
+            this.$refs.pubButton.value = '留言'
+            this.sayWords = ''
+            this.ADD_LOCAL_WORDS({ add: res.data, type: 2, _id: this.replyInfo._id })
+          }
+        })
       }
     },
     // 回复留言

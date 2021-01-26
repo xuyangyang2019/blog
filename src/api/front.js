@@ -110,7 +110,7 @@ function getMsgCount() {
  * @param {String} name 昵称
  * @param {String} content 内容
  * @param {String} avatar 头像
- * @param {String} email 内容
+ * @param {String} email 邮件
  */
 function leavingMessage(name, content, avatar, email) {
   const parameters = {
@@ -122,14 +122,28 @@ function leavingMessage(name, content, avatar, email) {
   }
   return fetch.post('/api/leavingMessage', parameters)
 }
-// saveLeaveWords({ commit }, payload) {
-//   return api.post('/api/saveLeaveW', payload)
-// }
 
-// 回复留言
-// AddLeaveWords({ commit }, payload) {
-//   return api.patch('/api/addReply', payload)
-// },
+/**
+ * 回复留言
+ * @param {*} messageId 留言id
+ * @param {*} name 名称
+ * @param {*} aite 要回复的留言的昵称
+ * @param {*} content 回复的内容
+ * @param {*} avatar 头像
+ * @param {*} email 邮件
+ */
+function replyMessage(messageId, name, aite, content, avatar, email) {
+  const parameters = {
+    id: messageId,
+    name: name,
+    aite: aite,
+    content: content,
+    imgUrl: avatar,
+    email: email,
+    date: Date.now()
+  }
+  return fetch.patch('/api/replyMessage', parameters)
+}
 
 /**
  * 获取指定文章的评论
@@ -233,6 +247,7 @@ export {
   getMsgBoard,
   getMsgCount,
   leavingMessage,
+  replyMessage,
   getCommets,
   vistorReplyComment,
   likeComment,
