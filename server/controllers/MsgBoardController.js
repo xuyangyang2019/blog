@@ -1,5 +1,5 @@
 const MsgBoardService = require('../services').MsgBoardService
-// const { InvalidQueryError } = require('../lib/error')
+const { InvalidQueryError } = require('../lib/error')
 
 module.exports = {
   // 获取留言
@@ -47,23 +47,28 @@ module.exports = {
       ctx.error = '留言失败'
     }
     return next()
+  },
+  // 回复留言
+  'PATCH /api/replyMessage': async (ctx, next) => {
+    const { id, name, aite, imgUrl, content, date } = ctx.request.body
+    // 参数不对抛出异常
+    if (!id || !name || !aite || !imgUrl || !content || !date) {
+      throw new InvalidQueryError()
+    }
+    const reply = {
+      name: name,
+      imgUrl: imgUrl,
+      // email: email,
+      content: content,
+      date: date,
+      aite: aite
+    }
+    const result = await MsgBoardService.updateById({ _id: id }, { $push: { reply: reply } }, { new: true })
+    if (result) {
+      ctx.result = result
+    } else {
+      ctx.error = '回复失败'
+    }
+    return next()
   }
-  // // 回复留言
-  // 'PATCH /addReply': async (ctx, next) => {
-  //   let reply = {
-  //     name: ctx.request.body.name,
-  //     imgUrl: ctx.request.body.imgUrl,
-  //     email: ctx.request.body.email,
-  //     content: ctx.request.body.content,
-  //     date: ctx.request.body.date,
-  //     aite: ctx.request.body.aite
-  //   }
-  //   let doc = await db.msgBoard.findByIdAndUpdate(
-  //     { "_id": ctx.request.body.id },
-  //     { $push: { reply: reply } },
-  //     { new: true })
-  //   if (doc._id) {
-  //     ctx.rest(doc)
-  //   }
-  // }
 }
