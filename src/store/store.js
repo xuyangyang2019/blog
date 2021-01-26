@@ -2,9 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
 
-import api from './api'
-
-// 通用 API（请忽略此 API 具体实现细节）
 import { getArticleList, getArticlesCount, getArticle, getMsgBoard, getMsgCount, getCommets } from '../api/front'
 
 // state
@@ -118,16 +115,6 @@ const actions = {
         commit('SET_COMMENTS', res.data)
       }
     })
-  },
-  // ============================================================================
-
-  // 回复留言
-  AddLeaveWords({ commit }, payload) {
-    return api.patch('/api/addReply', payload)
-  },
-  // 添加留言
-  SaveLeaveWords({ commit }, payload) {
-    return api.post('/api/saveLeaveW', payload)
   }
 }
 
