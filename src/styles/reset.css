@@ -1,0 +1,138 @@
+ /* 默认色彩 */
+html {
+  color: #000;
+  background: #fff;
+}
+ padding和margin
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+p,
+blockquote,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+ /* 边框 */
+fieldset,
+img {
+  border: 0;
+}
+ /* 外边框(outline) */
+:focus {
+  outline: 0;
+}
+ /* 字体样式(font style/weight/size/variant) */
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+strong,
+th,
+var,
+optgroup {
+  font-style: inherit;
+  font-weight: inherit;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+abbr,
+acronym {
+  border: 0;
+  font-variant: normal;
+}
+input,
+button,
+textarea,
+select,
+optgroup,
+option {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+}
+/*@purpose To enable resizing for IE */
+/*@branch For IE6-Win, IE7-Win */
+input,
+button,
+textarea,
+select {
+  *font-size: 100%;
+}
+ /* 行高(line-height) */
+body {
+  line-height: 1.5;
+}
+ /* 列表样式 */
+ol,
+ul {
+  list-style: none;
+}
+
+ /* 表格元素 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+ /* 复制内容到剪贴板代码 */
+caption,
+th {
+  text-align: left;
+}
+ /* 上下标以及baseline */
+sup,
+sub {
+  font-size: 100%;
+  vertical-align: baseline;
+}
+ /* 插入和删除(ins/del) */
+ins {
+  text-decoration: none;
+}
+ /* 引用元素的引号 */
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+ /* 链接 */
+:link,
+:visited {
+  text-decoration: none;
+}
