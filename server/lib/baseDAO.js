@@ -21,8 +21,10 @@ class BaseDAO {
     * @param {Object} condition 查询条件
     * @return {Object | null} 查询结果,为空时返回null
     */
-  async findOne(condition) {
-    const result = await this.model.findOne(condition)
+  async findOne(condition, fields = {}, sort = {_id: -1}, limit = 1) {
+    const result = await this.model.findOne(condition, fields)
+      .sort(sort)
+      .limit(limit)
     return result
   }
 

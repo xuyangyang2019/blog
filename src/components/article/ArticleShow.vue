@@ -95,16 +95,16 @@
         </div>
 
         <div class="pre-next">
-          <div v-if="articles.pre_next.pre.length" class="pre">
+          <div v-if="articles.pre_next.pre" class="pre">
             <h6>上一篇：</h6>
-            <a v-for="(preItem, preIndex) in articles.pre_next.pre" :key="preIndex" href="javascript: void(0)">
-              <span @click="jumpPn(preItem)">{{ preItem.title }}</span>
+            <a href="javascript: void(0)">
+              <span @click="jumpPn(articles.pre_next.pre)">{{ articles.pre_next.pre.title }}</span>
             </a>
           </div>
-          <div v-if="articles.pre_next.next.length" class="next">
+          <div v-if="articles.pre_next.next" class="next">
             <h6>下一篇：</h6>
-            <a v-for="(nexItem, nexIndex) in articles.pre_next.next" :key="nexIndex" href="javascript: void(0)">
-              <span @click="jumpPn(nexItem)">{{ nexItem.title }}</span>
+            <a href="javascript: void(0)">
+              <span @click="jumpPn(articles.pre_next.next)">{{ articles.pre_next.next.title }}</span>
             </a>
           </div>
         </div>
@@ -231,10 +231,11 @@ export default {
     },
     // 跳转页面
     jumpPn(item) {
+      console.log('跳转页面', item)
       if (item.tag[0] === 'life') {
-        this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
+        this.$router.push({ name: 'lifeShow', params: { id: item._id } })
       } else {
-        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
+        this.$router.push({ name: 'articleShow', params: { tag: item.tag[0], id: item._id } })
       }
     },
     // 分享
