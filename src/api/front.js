@@ -87,6 +87,8 @@ function getArticlesCount(publish) {
   return fetch.get('/api/getArticlesCount', { publish: publish })
 }
 
+// ===========================================================================
+
 /**
  * 获取留言
  * @param {Number} pageNum
@@ -102,6 +104,32 @@ function getMsgBoard(pageNum, pageSize) {
 function getMsgCount() {
   return fetch.get('/api/getMsgCount')
 }
+
+/**
+ * 添加留言
+ * @param {String} name 昵称
+ * @param {String} content 内容
+ * @param {String} avatar 头像
+ * @param {String} email 内容
+ */
+function leavingMessage(name, content, avatar, email) {
+  const parameters = {
+    name: name,
+    imgUrl: avatar,
+    content: content,
+    email: email,
+    date: new Date().getTime()
+  }
+  return fetch.post('/api/leavingMessage', parameters)
+}
+// saveLeaveWords({ commit }, payload) {
+//   return api.post('/api/saveLeaveW', payload)
+// }
+
+// 回复留言
+// AddLeaveWords({ commit }, payload) {
+//   return api.patch('/api/addReply', payload)
+// },
 
 /**
  * 获取指定文章的评论
@@ -204,6 +232,7 @@ export {
   commentArticle,
   getMsgBoard,
   getMsgCount,
+  leavingMessage,
   getCommets,
   vistorReplyComment,
   likeComment,
