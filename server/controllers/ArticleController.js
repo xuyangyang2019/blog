@@ -182,16 +182,19 @@ module.exports = {
   },
   // 获得上一篇文章和下一篇文章
   'GET /api/preAndNext': async (ctx, next) => {
+    const result = {}
+    const date = ctx.query.date
+    const fields = { _id: 1, title: 1, tag: 1 }
     // pre使用倒序查询，否则只会显示第一条数据，因为他是最早的
-    // let doc1 = await db.article
-    //   .find({ publish: true, date: { $lt: ctx.query.date } }, { articleId: 1, title: 1, tag: 1 }, (err, doc1) => {})
-    //   .sort({ _id: -1 })
-    //   .limit(1)
-    // next
-    // let doc2 = await db.article
-    //   .find({ publish: true, date: { $gt: ctx.query.date } }, { articleId: 1, title: 1, tag: 1 }, (err, doc2) => {})
-    //   .limit(1)
-    // ctx.rest({ pre: doc1, next: doc2 })
+    const preArticle = await ArticleService.findOne({ publish: true, date: { $lt: date } }, fields, { _id: -1 }, 1)
+    if (preArticle) {
+      result.pre = preArticle
+    }
+    const nextArticle = await ArticleService.findOne({ publish: true, date: { $gt: date } }, fields, { _id: 1 }, 1)
+    if (nextArticle) {
+      result.next = nextArticle
+    }
+    ctx.result = result
     return next()
   }
 }

@@ -2,7 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
 
-import { getArticleList, getArticlesCount, getArticle, getMsgBoard, getMsgCount, getCommets } from '../api/front'
+import {
+  getArticleList,
+  getArticlesCount,
+  getArticle,
+  getMsgBoard,
+  getMsgCount,
+  getCommets,
+  queryPreNext
+} from '../api/front'
 
 // state
 const state = {
@@ -92,19 +100,21 @@ const actions = {
     // life目录下路由参数只有ID，无tag参数
     // const tag = payload.tag === undefined ? 'life' : payload.tag
     const { publish, tag, id } = payload
-    getArticle(publish, tag, id).then((res) => {
+    return getArticle(publish, tag, id).then((res) => {
       if (res.code === 200) {
         // 页面title
         commit('CHANGE_TITLE', res.data.title)
         // 文章
         commit('SET_ARTICLES_ONLY', res.data)
+        // 查询上篇文章|下篇文章
+        if (res.data && res.data.date) {
+          queryPreNext(res.data.date).then((res2) => {
+            if (res2.code === 200) {
+              commit('SET_PRE_NEXT', res2.data)
+            }
+          })
+        }
       }
-      // 查询上篇文章|下篇文章
-      // if (data.length) {
-      //   api.get('/api/preAndNext', { date: data[0].date, cache: true }).then((data1) => {
-      //     commit('SET_PRE_NEXT', data1)
-      //   })
-      // }
     })
   },
   // 获取文章评论
