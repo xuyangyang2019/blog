@@ -1,53 +1,48 @@
 <template>
   <div id="app">
+    <!-- 标签 -->
+    <page-header></page-header>
+
     <!-- 主要内容 -->
     <div class="main">
-      <div id="anchor"></div>
-      <div class="body-content">
-        <!-- 标签 -->
-        <tab></tab>
-        <!-- 主要内容 -->
-        <div class="container">
-          <section class="section">
-            <!-- 文章 -->
-            <div class="content">
-              <!-- 导航按钮 -->
-              <div v-show="$route.name !== 'home'" class="nav-location">
-                <span>当前位置：</span>
-                <a href="javascript: void(0)" @click="backHome">首页</a>
-                <div v-for="(item, index) in location" :key="index">
-                  ->
-                  <a href="javascript: void(0)" @click="back(item)">{{ item.showName }}</a>
-                </div>
-              </div>
-
-              <!-- 页面再这里展示 -->
-              <keep-alive v-if="$route.meta.keepAlive">
-                <router-view />
-              </keep-alive>
-              <router-view v-if="!$route.meta.keepAlive"></router-view>
+      <!-- <div id="anchor"></div> -->
+      <div class="container-wrap">
+        <section class="contenter">
+          <!-- 导航按钮 -->
+          <div v-show="$route.name !== 'home'" class="nav-location">
+            <span>当前位置：</span>
+            <a href="javascript: void(0)" @click="backHome">首页</a>
+            <div v-for="(item, index) in location" :key="index">
+              ->
+              <a href="javascript: void(0)" @click="back(item)">{{ item.showName }}</a>
             </div>
+          </div>
 
-            <!-- 右边栏 -->
-            <div class="r-slide">
-              <div class="r-slide-content">
-                <!-- 关于本站 -->
-                <about-me></about-me>
-                <!-- 推荐 -->
-                <hot-articles></hot-articles>
-                <!-- 标签 -->
-                <article-tags></article-tags>
-                <!-- 时间轴 -->
-                <place-on-file></place-on-file>
-              </div>
-            </div>
-          </section>
-        </div>
+          <!-- 页面再这里展示 -->
+          <keep-alive v-if="$route.meta.keepAlive">
+            <router-view />
+          </keep-alive>
+          <router-view v-if="!$route.meta.keepAlive"></router-view>
+        </section>
+
+        <!-- 右边栏 -->
+        <section class="side-bar-right">
+          <div class="r-slide-content">
+            <!-- 关于本站 -->
+            <about-me></about-me>
+            <!-- 推荐 -->
+            <hot-articles></hot-articles>
+            <!-- 标签 -->
+            <article-tags></article-tags>
+            <!-- 时间轴 -->
+            <place-on-file></place-on-file>
+          </div>
+        </section>
       </div>
     </div>
 
     <!-- 页脚 -->
-    <foot></foot>
+    <page-footer></page-footer>
 
     <!-- 动画效果 -->
     <transition name="fade">
@@ -64,8 +59,8 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 
-import Tab from './components/base/Tab.vue'
-import Foot from './components/base/Foot.vue'
+import PageHeader from './components/base/PageHeader.vue'
+import PageFooter from './components/base/PageFooter.vue'
 
 import AboutMe from './components/aside/AboutMe.vue'
 import ArticleTags from './components/aside/ArticleTags.vue'
@@ -79,8 +74,8 @@ import PlaceOnFile from './components/aside/PlaceOnFile.vue'
 
 export default {
   components: {
-    Tab,
-    Foot,
+    PageHeader,
+    PageFooter,
     AboutMe,
     ArticleTags,
     HotArticles,
@@ -115,9 +110,9 @@ export default {
       // 修改title
       if (val) document.title = `${val} -xyy的小站`
       // 修改meta
-      // if (head.author) document.querySelector('meta[name="author"]').setAttribute('content', `${head.author}`)
-      // if (head.keywords) document.querySelector('meta[name="keywords"]').setAttribute('content', head.keywords)
-      // if (head.description) document.querySelector('meta[name="description"]').setAttribute('content', head.description)
+      // if (head.author) document.querySelector('meta[name="author"]').setAttribute('contenter', `${head.author}`)
+      // if (head.keywords) document.querySelector('meta[name="keywords"]').setAttribute('contenter', head.keywords)
+      // if (head.description) document.querySelector('meta[name="description"]').setAttribute('contenter', head.description)
     }
   },
   mounted() {
@@ -262,75 +257,74 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./styles/normalize.css";
-// @import "./styles/common.scss";
-// @import "./styles/qqface.scss";
-// @import "~@/assets/iconfont/iconfont.css";
-// @import "~@/assets/font-awesome/css/font-awesome.css";
+// 自定义的reset
+@import './styles/reset.css';
+// 排版样式
+// @import './styles/typo.css';
+// 适应不同浏览器
+// @import './styles/normalize.css';
 
+// 公共的css
+@import './styles/common.scss';
+
+// qq表情
+// @import "./styles/qqface.scss";
+// 代码高亮
 // @import "./assets/css/prism.css";
+
+// ====== 第三方图标方案 ======
+// 阿里的iconfont
+// @import "~@/assets/iconfont/iconfont.css";
+// font-awesome
+// @import "~@/assets/font-awesome/css/font-awesome.css";
+// iconmoon图标
 @import './assets/icomoon/style.css';
 @import './assets/css/emoji-sprite.css';
 
-* {
-  margin: 0;
-  padding: 0;
-}
-
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
 body {
   font: 400 16px/20px Arial, Helvetica, Tahoma, '华文细黑', 'Microsoft YaHei', '微软雅黑', sans-serif;
-  color: #000;
+  // color: #000;
 }
 
 #app {
   margin: 50px 0 0 0;
-  height: 100%;
+  // height: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .main {
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
+  flex: 1 1 auto;
 }
 
-a {
-  text-decoration: none;
-}
-
-.body-content,
-.container {
+.container-wrap {
   position: relative;
-}
-
-.nav-location {
-  background: #faf7f7;
-  margin-top: 10px;
-  padding: 10px;
-  font-size: 14px;
-  a {
-    color: #16a085;
-  }
-  div {
-    display: inline;
-  }
-}
-
-.section {
   display: flex;
   margin-left: auto;
   margin-right: auto;
-}
 
-.content {
-  width: 68%;
-}
+  .contenter {
+    width: 68%;
+    .nav-location {
+      background: #faf7f7;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 14px;
+      a {
+        color: #16a085;
+      }
+      div {
+        display: inline;
+      }
+    }
+  }
 
-.r-slide {
-  width: 32%;
+  .side-bar-right {
+    width: 32%;
+  }
 }
 
 .rocket {
@@ -371,16 +365,16 @@ a {
   .fix-bg {
     background: #f4f4f4;
   }
-  .section {
+  .container-wrap {
     flex-wrap: wrap;
-    // padding: 10px 15px;
-  }
-  .section .content,
-  .r-slide {
-    width: 100%;
-  }
-  .nav-location {
-    margin-top: 0;
+    padding: 10px 15px;
+    .contenter,
+    .side-bar-right {
+      width: 100%;
+      .nav-location {
+        margin-top: 0;
+      }
+    }
   }
 }
 
@@ -390,47 +384,47 @@ a {
     background: url('../public/img/mainBg2.jpg') 0 0 no-repeat;
     background-size: 100% 100%;
   }
-  .section {
+  .container-wrap {
     max-width: 760px;
     padding: 10px 30px;
+    .side-bar-right {
+      margin-left: 25px;
+      margin-top: 10px;
+    }
   }
-  .navbar {
-    max-width: 820px;
-  }
-  .search {
-    padding: 0 30px;
-  }
-  .nav-header {
-    padding: 0 20px 0 35px;
-  }
-  .r-slide {
-    margin-left: 25px;
-    margin-top: 10px;
-  }
+  // .navbar {
+  //   max-width: 820px;
+  // }
+  // .search {
+  //   padding: 0 30px;
+  // }
+  // .nav-header {
+  //   padding: 0 20px 0 35px;
+  // }
 }
 
 //小屏幕pc端
 @media screen and (min-width: 992px) {
-  .section {
+  .container-wrap {
     max-width: 970px;
     padding: 10px 30px;
   }
-  .navbar {
-    max-width: 1030px;
-  }
+  // .navbar {
+  //   max-width: 1030px;
+  // }
 }
 
 //大屏幕pc端
 @media screen and (min-width: 1200px) {
-  .section {
+  .container-wrap {
     max-width: 1140px;
     padding: 20px 30px;
+    .side-bar-right {
+      margin-left: 30px;
+    }
   }
-  .r-slide {
-    margin-left: 30px;
-  }
-  .navbar {
-    max-width: 1200px;
-  }
+  // .navbar {
+  //   max-width: 1200px;
+  // }
 }
 </style>
