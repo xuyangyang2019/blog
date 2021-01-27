@@ -102,7 +102,6 @@ export default {
   background: #faf7f7;
   padding: 10px;
   li {
-    list-style: none;
     border-radius: 5px;
     margin: 5px;
     float: left;

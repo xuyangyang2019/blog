@@ -79,7 +79,6 @@ export default {
     overflow: hidden;
     margin-bottom: 0;
     li {
-      list-style: none;
       float: left;
       width: 65px;
       font-size: 12px;

@@ -107,7 +107,6 @@ export default {
   border-radius: 3px;
   // background: #F7EDED;
   background: #faf7f7;
-  list-style: none;
   h2 {
     padding: 10px 0;
     a {

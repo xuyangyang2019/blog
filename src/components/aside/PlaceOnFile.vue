@@ -91,7 +91,6 @@ export default {
   .timeLine-content {
     padding: 5px 10px 35px;
     li {
-      list-style: none;
       cursor: pointer;
       width: 120px;
       padding: 10px;

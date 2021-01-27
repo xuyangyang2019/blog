@@ -185,7 +185,6 @@ export default {
   li {
     transition: all ease 1s;
     opacity: 0;
-    list-style: none;
     position: absolute;
     top: 0;
     left: 0;

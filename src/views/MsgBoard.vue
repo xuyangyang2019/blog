@@ -313,9 +313,6 @@ export default {
   color: #5bc0de;
   cursor: pointer;
 }
-li {
-  list-style: none;
-}
 h2 {
   margin-left: 10px;
 }

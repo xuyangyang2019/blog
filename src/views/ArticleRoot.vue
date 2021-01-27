@@ -317,7 +317,6 @@ export default {
     margin: 20px 0 30px 0;
   }
   li {
-    list-style: none;
     padding: 5px;
     width: 100%;
     a {

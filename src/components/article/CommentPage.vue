@@ -355,9 +355,6 @@ export default {
   position: relative;
   top: -55px;
 }
-li {
-  list-style: none;
-}
 h2 {
   margin-left: 10px;
 }
