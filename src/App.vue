@@ -109,10 +109,6 @@ export default {
       this.backTop()
       // 修改title
       if (val) document.title = `${val} -xyy的小站`
-      // 修改meta
-      // if (head.author) document.querySelector('meta[name="author"]').setAttribute('contenter', `${head.author}`)
-      // if (head.keywords) document.querySelector('meta[name="keywords"]').setAttribute('contenter', head.keywords)
-      // if (head.description) document.querySelector('meta[name="description"]').setAttribute('contenter', head.description)
     }
   },
   mounted() {
@@ -392,15 +388,6 @@ body {
       margin-top: 10px;
     }
   }
-  // .navbar {
-  //   max-width: 820px;
-  // }
-  // .search {
-  //   padding: 0 30px;
-  // }
-  // .nav-header {
-  //   padding: 0 20px 0 35px;
-  // }
 }
 
 //小屏幕pc端
@@ -409,9 +396,6 @@ body {
     max-width: 970px;
     padding: 10px 30px;
   }
-  // .navbar {
-  //   max-width: 1030px;
-  // }
 }
 
 //大屏幕pc端
@@ -423,8 +407,5 @@ body {
       margin-left: 30px;
     }
   }
-  // .navbar {
-  //   max-width: 1200px;
-  // }
 }
 </style>
