@@ -24,15 +24,16 @@
       </button>
 
       <!-- 导航栏 -->
-      <ul v-show="false" class="level-nav" :class="{ heightZero: show }">
-        <li v-for="(item, index) in tabs" :key="index">
-          <!-- <router-link :to="{ name: item.name }" tag="div"> -->
-          <span class="bg-box" @click.stop="goAnchor(item.name, index)">
-            <span class="span-box">
-              <span :class="item.icon" class="icon-rt"></span>
-              <span class="r-t">{{ item.render }}</span>
-            </span>
-          </span>
+      <ul class="ul-nav" :class="{ heightZero: show }">
+        <li
+          v-for="(item, index) in tabs"
+          :key="index"
+          class="li-nav"
+          :class="{ currentRoute: item.name === $route.name }"
+          @click="goAnchor(item.name, index)"
+        >
+          <span class="nav-icon" :class="item.icon" style="margin-right: 10px"></span>
+          <span v-text="item.render"></span>
         </li>
       </ul>
     </div>
@@ -121,7 +122,10 @@ export default {
     },
     // 锚点动态跳转
     goAnchor(name) {
-      this.show = !this.show
+      console.log('跳转到', name)
+      // console.log(this.show)
+      // this.show = !this.show
+      this.show = false
       // 重复的路由不处理
       if (this.$route.name === name) return
       this.routeName = name
@@ -162,6 +166,7 @@ export default {
   -o-box-sizing: border-box; /*Opera9.6*/
   -ms-box-sizing: border-box; /*IE8*/
   box-sizing: border-box;
+  position: relative;
 
   display: flex;
   display: -webkit-flex;
@@ -222,56 +227,12 @@ export default {
   .toggle-open {
     background: #1a1a1a;
   }
-
-  .level-nav {
-    display: none;
-    position: absolute;
-    margin-top: 53px;
-    width: 100%;
-    li {
-      height: 50px;
-    }
-    div {
-      height: 0;
-    }
-    .bg-box {
-      position: relative;
-      cursor: pointer;
-      display: inline-block;
-      height: 50px;
-      width: 100%;
-    }
-    .span-box {
-      cursor: pointer;
-      position: absolute;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      line-height: 50px;
-      min-width: 60px;
-      margin-left: -30px;
-      left: 50%;
-    }
-    a {
-      display: inline-block;
-      box-sizing: border-box;
-      padding: 14px 20px;
-      width: 100%;
-      transition: all ease 0.5s;
-      text-align: center;
-    }
-  }
 }
 
 @media screen and(max-width: 767px) {
   .page-header {
     background: rgba(0, 0, 0, 0.6);
   }
-  /* .page-header .router-link-active,
-  .router-link-active .bg-box {
-    background: orange;
-    color: #eee;
-  } */
   .page-header-wrap {
     padding: 0 15px;
     .search-box {
@@ -279,22 +240,38 @@ export default {
       min-width: 134px;
       max-width: 70%;
     }
-  }
-  /* .toggle-btn {
-    display: block;
-  } */
-
-  /* .level-nav {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.6);
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    transition: all ease 0.4s;
-  } */
-  .heightZero {
-    width: 100%;
-    height: 300px; /*必须有确切高度 否则触发不了动画*/
+    .ul-nav {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 0;
+      height: 0;
+      background: rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      transition: all ease 0.4s;
+      .li-nav {
+        height: 50px;
+        line-height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        &:hover {
+          background: rgba(0, 0, 0, 0.5);
+        }
+      }
+      .currentRoute {
+        background: orange;
+        color: #eee;
+        &:hover {
+          background: orange;
+        }
+      }
+    }
+    .heightZero {
+      width: 100%;
+      height: 300px; /*必须有确切高度 否则触发不了动画*/
+    }
   }
 }
 
@@ -302,6 +279,7 @@ export default {
   .page-header-wrap {
     max-width: 820px;
     padding: 0 30px;
+
     .search-box {
       display: flex;
       justify-content: flex-end;
@@ -315,55 +293,50 @@ export default {
     .toggle-btn {
       display: none;
     }
-  }
-  /* .level-nav {
-    height: 50px;
-    li {
-      display: inline-block;
-      margin-left: 20px;
-      width: 55px;
-      height: 50px;
-      div {
-        transition: all ease 0.5s;
+    .ul-nav {
+      order: 2;
+      display: flex;
+      position: absolute;
+      top: 0;
+      left: 100px;
+      .li-nav {
         position: relative;
-        .span-box .r-t {
-          font-size: 18px;
-          display: inline-block;
-          width: 55px;
-          height: 50px;
-          line-height: 50px;
-          text-align: center;
-          position: absolute;
-          cursor: pointer;
-        }
-        .span-box span:hover {
-          color: #faaf2e;
-        }
-        .icon-rt {
+        margin-right: 15px;
+        padding: 0 10px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        font-size: 18px;
+        width: 50;
+        cursor: pointer;
+        .nav-icon {
           display: none;
         }
-        .span-box span:before,
-        .span-box span:after {
-          content: '';
-          position: absolute;
-          top: 100%;
-          left: 0;
-          margin-top: -3px;
-          width: 100%;
-          height: 3px;
-          background: #eee;
-          transition: all ease 0.3s;
-          transform: translateZ(0);
-        }
-        .span-box span:hover:before {
-          transform: translateY(-47px) scale(1.2);
-        }
-        .span-box span:hover:after {
-          transform: scale(1.2);
-        }
+      }
+      .currentRoute {
+        color: orange;
+      }
+      .li-nav :before,
+      .li-nav :after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: -3px;
+        width: 100%;
+        height: 3px;
+        background: #eee;
+        transition: all ease 0.3s;
+        transform: translateZ(0);
+      }
+      .li-nav :hover:before {
+        transform: translateY(-47px) scale(1.2);
+      }
+      .li-nav :hover:after {
+        transform: scale(1.2);
       }
     }
-  } */
+  }
 }
 
 @media screen and (min-width: 992px) {
