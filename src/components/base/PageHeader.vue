@@ -1,40 +1,46 @@
 <template>
-  <div id="tab" ref="tab" class="tab" :class="{ 'tab-bg': tabBg }">
-    <nav class="navbar">
-      <div class="nav-header">
-        <div class="logo">
-          <img src="/img/logo.png" alt="" />
-        </div>
+  <header class="page-header" :class="{ 'tab-bg': tabBg }">
+    <div class="page-header-wrap">
+      <!-- logo -->
+      <img class="logo-img" src="/img/logo.png" alt="" />
+      <div class="nav-search">
         <!-- 小屏幕下的导航按钮 -->
         <button class="navbar-toggle" :class="{ 'toggle-click': show }" @click="navShow">
           <div class="line"></div>
           <div class="line"></div>
           <div class="line"></div>
         </button>
-      </div>
-      <div class="nav-body" :class="{ heightZero: show }">
-        <ul class="nav-list">
-          <li v-for="(item, index) in tabs" :key="index">
-            <router-link :to="{ name: item.name }" tag="div">
-              <span class="bg-box" @click.stop="goAnchor(item.name, index)">
-                <!-- <span class="bg-box"> -->
-                <span class="span-box">
-                  <!-- 导航的图标 -->
-                  <span :class="item.icon" class="icon-rt"></span>
-                  <!-- 导航的名称 -->
-                  <span class="r-t">{{ item.render }}</span>
+        <!-- 水平导航栏 -->
+        <nav :class="[{ 'level-nav': show }, { heightZero: show }]">
+          <ul class="nav-list">
+            <li v-for="(item, index) in tabs" :key="index">
+              <router-link :to="{ name: item.name }" tag="div">
+                <span class="bg-box" @click.stop="goAnchor(item.name, index)">
+                  <span class="span-box">
+                    <span :class="item.icon" class="icon-rt"></span>
+                    <span class="r-t">{{ item.render }}</span>
+                  </span>
                 </span>
-              </span>
-            </router-link>
-          </li>
-        </ul>
-        <div class="search">
-          <input v-model="searchKey" type="text" placeholder="请输入关键词" @keyup.enter="searchArticle" />
+              </router-link>
+            </li>
+          </ul>
+        </nav>
+        <!-- 搜索栏 -->
+        <div class="search-box">
+          <input
+            v-model="searchKey"
+            class="search-input"
+            type="text"
+            placeholder="请输入关键词"
+            @keyup.enter="searchArticle"
+          />
           <span class="icon-search search-article" @click="searchArticle"></span>
         </div>
+        <!-- <div class="nav-search" :class="{ heightZero: show }">
+        </div> -->
       </div>
-    </nav>
-  </div>
+    </div>
+  </header>
 </template>
 
 <script>
@@ -53,13 +59,12 @@ export default {
       // scrollFlag: 0,
       routeName: '', // 路由name
       intervalId: '',
-      // 导航列表
       tabs: [
         { name: 'home', render: '首页', icon: 'icon-home' },
         { name: 'article', render: '文章', icon: 'icon-book' },
         { name: 'life', render: '生活', icon: 'icon-images' },
         { name: 'msgboard', render: '留言', icon: 'icon-messages' }
-      ]
+      ] // 导航列表
     }
   },
   computed: {
@@ -130,8 +135,8 @@ export default {
 }
 </script>
 
-<style lang = "scss">
-.tab {
+<style lang = "scss" scoped>
+.page-header {
   position: fixed;
   top: 0;
   left: 0;
@@ -139,21 +144,12 @@ export default {
   width: 100%;
   color: #fff;
   background: rgba(0, 0, 0, 0.9);
-  /*background: rgba(2,61,105,.8);*/
   transition: all ease 0.5s;
   transform: translateZ(
     0px
   ); /*开启GPU硬件加速，提高性能和流畅的动画效果,否则其他元素有css动画时，fixed的nav有异常抖动*/
-  li {
-    list-style: none;
-  }
 }
-.tab .router-link-active {
-  color: orange;
-}
-.tab .no-active {
-  color: #eee;
-}
+
 .tab-bg {
   background: rgba(0, 0, 0, 0.7);
   span:before,
@@ -161,26 +157,39 @@ export default {
     height: 0 !important;
   }
 }
-.nav-body {
+
+.page-header-wrap {
   height: 50px;
+  margin: 0 auto;
+  -moz-box-sizing: border-box; /*Firefox3.5+*/
+  -webkit-box-sizing: border-box; /*Safari3.2+*/
+  -o-box-sizing: border-box; /*Opera9.6*/
+  -ms-box-sizing: border-box; /*IE8*/
+  box-sizing: border-box;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
 }
-.logo {
-  float: left;
-  height: 46px;
-  padding-top: 4px;
-  img {
-    width: 45px;
-    height: 45px;
-  }
+
+.logo-img {
+  width: 42px;
+  height: 42px;
 }
+
+.nav-search {
+  flex: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .navbar-toggle {
   outline: none;
   cursor: pointer;
   background: rgba(0, 0, 0, 0);
-  margin: 8px 15px 7px 0;
+  margin: 8px 0 7px 0;
   padding: 9px 10px;
   border: 1px solid #333;
-  float: right;
   border-radius: 4px;
   transition: all ease 0.5s;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -191,67 +200,69 @@ export default {
     margin-top: 3px;
     border-radius: 1px;
   }
+  order: 3;
 }
-.toggle-click {
-  background: #1a1a1a;
-}
-.search {
+
+.search-box {
+  order: 1;
+  margin: 10px;
   position: relative;
-  input {
-    border: none;
-    border: 1px solid #eee;
-    outline: none;
-    width: 134px;
-    height: 20px;
-    padding: 6px 28px 6px 12px;
-    margin: 8px 0;
-    color: #1a1a1a;
-    border-radius: 17px;
-    background: #eee;
-    transition: all ease 0.3s;
-    transform: translateZ(0px);
-  }
 }
+
+.search-input {
+  box-sizing: border-box;
+  border: 1px solid #eee;
+  /* outline: none; */
+  /* width: 134px; */
+  height: 30px;
+  width: 100%;
+  border-radius: 15px;
+  padding-left: 15px;
+  /* padding: 6px 28px 6px 12px; */
+  /* margin: 8px 0; */
+  /* color: #1a1a1a; */
+  background: #eee;
+  transition: all ease 0.3s;
+  transform: translateZ(0px);
+  /* border: solid red 1px; */
+}
+
 .icon-search {
+  font-size: 16px;
   position: absolute;
-  top: 18px;
-  right: 42px;
-  display: inline-block;
+  top: 50%;
+  right: 0;
+  transform: translate(-50%, -50%);
   color: #1a1a1a;
-}
-.search-article {
   cursor: pointer;
 }
 
-.nav-header:after,
-.navbar:after,
-.nav-body:after {
-  clear: both;
-  content: '.';
-  display: block;
-  height: 0;
-  line-height: 0;
-  visibility: hidden;
+.toggle-click {
+  background: #1a1a1a;
 }
+
 @media screen and(max-width: 767px) {
-  .logo {
-    padding-left: 20px;
+  .page-header {
+    background: rgba(0, 0, 0, 0.6);
   }
-  .icon-search {
-    right: 16px;
+  .page-header .router-link-active,
+  .router-link-active .bg-box {
+    background: orange;
+    color: #eee;
   }
-  .search {
-    border-top: 1px solid #262626;
-    border-bottom: 1px solid #262626;
-    width: 100%;
-    input {
-      box-sizing: border-box;
-      height: 36px;
-      padding-right: 34px;
-      width: 100%;
-    }
+  .page-header-wrap {
+    padding: 0 15px;
   }
-  .nav-body {
+  .navbar-toggle {
+    display: block;
+  }
+  .search-box {
+    flex-grow: 1;
+    min-width: 134px;
+    max-width: 70%;
+  }
+
+  .level-nav {
     position: absolute;
     background: rgba(0, 0, 0, 0.6);
     width: 0;
@@ -262,14 +273,6 @@ export default {
   .heightZero {
     width: 100%;
     height: 300px; /*必须有确切高度 否则触发不了动画*/
-  }
-  .tab {
-    background: rgba(0, 0, 0, 0.6);
-  }
-  .tab .router-link-active,
-  .router-link-active .bg-box {
-    background: orange;
-    color: #eee;
   }
   .nav-list {
     position: absolute;
@@ -308,18 +311,17 @@ export default {
       text-align: center;
     }
   }
-  .navbar-toggle {
-    display: block;
-  }
 }
+
 @media screen and (min-width: 768px) {
-  .navbar {
-    margin-left: auto;
-    margin-right: auto;
+  .page-header-wrap {
+    max-width: 820px;
+    padding: 0 30px;
+  }
+  .navbar-toggle {
+    display: none;
   }
   .nav-list {
-    float: left;
-    margin-left: 1px;
     height: 50px;
     li {
       display: inline-block;
@@ -367,17 +369,27 @@ export default {
       }
     }
   }
-  .nav-header {
-    float: left;
-  }
-  .navbar-toggle {
-    display: none;
-  }
-  .search {
-    float: right;
-    input:focus {
+  .search-box {
+    display: flex;
+    justify-content: flex-end;
+    .search-input {
       width: 200px;
+      &:focus {
+        width: 300px;
+      }
     }
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .page-header-wrap {
+    max-width: 1030px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .page-header-wrap {
+    max-width: 1200px;
   }
 }
 </style>
