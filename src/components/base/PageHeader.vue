@@ -1,44 +1,40 @@
 <template>
   <header class="page-header" :class="{ 'tab-bg': tabBg }">
     <div class="page-header-wrap">
-      <!-- logo -->
+      <!-- logo图片 -->
       <img class="logo-img" src="/img/logo.png" alt="" />
-      <div class="nav-search">
-        <!-- 小屏幕下的导航按钮 -->
-        <button class="navbar-toggle" :class="{ 'toggle-click': show }" @click="navShow">
-          <div class="line"></div>
-          <div class="line"></div>
-          <div class="line"></div>
-        </button>
-        <!-- 水平导航栏 -->
-        <nav :class="[{ 'level-nav': show }, { heightZero: show }]">
-          <ul class="nav-list">
-            <li v-for="(item, index) in tabs" :key="index">
-              <router-link :to="{ name: item.name }" tag="div">
-                <span class="bg-box" @click.stop="goAnchor(item.name, index)">
-                  <span class="span-box">
-                    <span :class="item.icon" class="icon-rt"></span>
-                    <span class="r-t">{{ item.render }}</span>
-                  </span>
-                </span>
-              </router-link>
-            </li>
-          </ul>
-        </nav>
-        <!-- 搜索栏 -->
-        <div class="search-box">
-          <input
-            v-model="searchKey"
-            class="search-input"
-            type="text"
-            placeholder="请输入关键词"
-            @keyup.enter="searchArticle"
-          />
-          <span class="icon-search search-article" @click="searchArticle"></span>
-        </div>
-        <!-- <div class="nav-search" :class="{ heightZero: show }">
-        </div> -->
+
+      <!-- 搜索栏 -->
+      <div class="search-box">
+        <input
+          v-model="searchKey"
+          class="search-input"
+          type="text"
+          placeholder="请输入关键词"
+          @keyup.enter="searchArticle"
+        />
+        <span class="icon-search search-article" @click="searchArticle"></span>
       </div>
+
+      <!-- 小屏幕下的导航按钮 -->
+      <button class="toggle-btn" :class="{ 'toggle-open': show }" @click="navShow">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </button>
+
+      <!-- 导航栏 -->
+      <ul v-show="false" class="level-nav" :class="{ heightZero: show }">
+        <li v-for="(item, index) in tabs" :key="index">
+          <!-- <router-link :to="{ name: item.name }" tag="div"> -->
+          <span class="bg-box" @click.stop="goAnchor(item.name, index)">
+            <span class="span-box">
+              <span :class="item.icon" class="icon-rt"></span>
+              <span class="r-t">{{ item.render }}</span>
+            </span>
+          </span>
+        </li>
+      </ul>
     </div>
   </header>
 </template>
@@ -166,115 +162,69 @@ export default {
   -o-box-sizing: border-box; /*Opera9.6*/
   -ms-box-sizing: border-box; /*IE8*/
   box-sizing: border-box;
+
   display: flex;
   display: -webkit-flex;
-  align-items: center;
-}
-
-.logo-img {
-  width: 42px;
-  height: 42px;
-}
-
-.nav-search {
-  flex: auto;
-  display: flex;
-  align-items: center;
   justify-content: space-between;
-}
+  align-items: center;
 
-.navbar-toggle {
-  outline: none;
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0);
-  margin: 8px 0 7px 0;
-  padding: 9px 10px;
-  border: 1px solid #333;
-  border-radius: 4px;
-  transition: all ease 0.5s;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  .line {
-    height: 2px;
-    width: 22px;
-    background: #fff;
-    margin-top: 3px;
-    border-radius: 1px;
+  .logo-img {
+    order: 1;
+    width: 42px;
+    height: 42px;
   }
-  order: 3;
-}
 
-.search-box {
-  order: 1;
-  margin: 10px;
-  position: relative;
-}
-
-.search-input {
-  box-sizing: border-box;
-  border: 1px solid #eee;
-  /* outline: none; */
-  /* width: 134px; */
-  height: 30px;
-  width: 100%;
-  border-radius: 15px;
-  padding-left: 15px;
-  /* padding: 6px 28px 6px 12px; */
-  /* margin: 8px 0; */
-  /* color: #1a1a1a; */
-  background: #eee;
-  transition: all ease 0.3s;
-  transform: translateZ(0px);
-  /* border: solid red 1px; */
-}
-
-.icon-search {
-  font-size: 16px;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translate(-50%, -50%);
-  color: #1a1a1a;
-  cursor: pointer;
-}
-
-.toggle-click {
-  background: #1a1a1a;
-}
-
-@media screen and(max-width: 767px) {
-  .page-header {
-    background: rgba(0, 0, 0, 0.6);
-  }
-  .page-header .router-link-active,
-  .router-link-active .bg-box {
-    background: orange;
-    color: #eee;
-  }
-  .page-header-wrap {
-    padding: 0 15px;
-  }
-  .navbar-toggle {
-    display: block;
-  }
   .search-box {
-    flex-grow: 1;
-    min-width: 134px;
-    max-width: 70%;
+    order: 3;
+    margin: 10px;
+    position: relative;
+    .search-input {
+      box-sizing: border-box;
+      border: 1px solid #eee;
+      height: 30px;
+      width: 100%;
+      border-radius: 15px;
+      padding-left: 15px;
+      /* outline: none; */
+      /* color: #1a1a1a; */
+      background: #eee;
+      transition: all ease 0.3s;
+      transform: translateZ(0px);
+    }
+    .icon-search {
+      font-size: 16px;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translate(-50%, -50%);
+      color: #1a1a1a;
+      cursor: pointer;
+    }
+  }
+
+  .toggle-btn {
+    order: 5;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0);
+    padding: 9px 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    transition: all ease 0.5s;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    .line {
+      height: 2px;
+      width: 22px;
+      background: #fff;
+      margin-top: 3px;
+      border-radius: 1px;
+    }
+  }
+  .toggle-open {
+    background: #1a1a1a;
   }
 
   .level-nav {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.6);
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    transition: all ease 0.4s;
-  }
-  .heightZero {
-    width: 100%;
-    height: 300px; /*必须有确切高度 否则触发不了动画*/
-  }
-  .nav-list {
+    display: none;
     position: absolute;
     margin-top: 53px;
     width: 100%;
@@ -313,15 +263,60 @@ export default {
   }
 }
 
+@media screen and(max-width: 767px) {
+  .page-header {
+    background: rgba(0, 0, 0, 0.6);
+  }
+  /* .page-header .router-link-active,
+  .router-link-active .bg-box {
+    background: orange;
+    color: #eee;
+  } */
+  .page-header-wrap {
+    padding: 0 15px;
+    .search-box {
+      flex-grow: 1;
+      min-width: 134px;
+      max-width: 70%;
+    }
+  }
+  /* .toggle-btn {
+    display: block;
+  } */
+
+  /* .level-nav {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.6);
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all ease 0.4s;
+  } */
+  .heightZero {
+    width: 100%;
+    height: 300px; /*必须有确切高度 否则触发不了动画*/
+  }
+}
+
 @media screen and (min-width: 768px) {
   .page-header-wrap {
     max-width: 820px;
     padding: 0 30px;
+    .search-box {
+      display: flex;
+      justify-content: flex-end;
+      .search-input {
+        width: 200px;
+        &:focus {
+          width: 300px;
+        }
+      }
+    }
+    .toggle-btn {
+      display: none;
+    }
   }
-  .navbar-toggle {
-    display: none;
-  }
-  .nav-list {
+  /* .level-nav {
     height: 50px;
     li {
       display: inline-block;
@@ -368,17 +363,7 @@ export default {
         }
       }
     }
-  }
-  .search-box {
-    display: flex;
-    justify-content: flex-end;
-    .search-input {
-      width: 200px;
-      &:focus {
-        width: 300px;
-      }
-    }
-  }
+  } */
 }
 
 @media screen and (min-width: 992px) {
