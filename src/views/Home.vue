@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <!-- <banner></banner> -->
+    <banner></banner>
     <loading v-if="code === 404"></loading>
     <h3 v-if="articles.all.length === 0 && code === 200" class="none-article">还没有文章，敬请期待···</h3>
     <article-list :articleList="articles.all"></article-list>
@@ -10,7 +10,7 @@
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
 
-// import banner from "@/components/home/Banner"
+import Banner from '@/components/home/Banner'
 import Loading from '@/components/base/Loading.vue'
 import ArticleList from '@/components/article/ArticleList.vue'
 import headMixin from '@/mixins/head-mixin'
@@ -18,7 +18,7 @@ import headMixin from '@/mixins/head-mixin'
 export default {
   name: 'Home',
   components: {
-    // banner,
+    Banner,
     Loading,
     ArticleList
   },
