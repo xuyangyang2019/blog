@@ -283,16 +283,12 @@ body {
 }
 
 #app {
-  margin: 50px 0 0 0;
-  // height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .main {
-  // width: 100%;
-  // height: 100%;
   flex: 1 1 auto;
 }
 
@@ -363,7 +359,7 @@ body {
   }
   .container-wrap {
     flex-wrap: wrap;
-    padding: 10px 15px;
+    padding: 0;
     .contenter,
     .side-bar-right {
       width: 100%;
@@ -376,6 +372,9 @@ body {
 
 //平板
 @media screen and (min-width: 768px) {
+  #app{
+    margin-top: 50px;
+  }
   .fix-bg {
     background: url('../public/img/mainBg2.jpg') 0 0 no-repeat;
     background-size: 100% 100%;
@@ -385,7 +384,6 @@ body {
     padding: 10px 30px;
     .side-bar-right {
       margin-left: 25px;
-      margin-top: 10px;
     }
   }
 }

@@ -192,7 +192,7 @@ export default {
       padding-left: 15px;
       /* outline: none; */
       /* color: #1a1a1a; */
-      background: #eee;
+      /* background: #eee; */
       transition: all ease 0.3s;
       transform: translateZ(0px);
     }
