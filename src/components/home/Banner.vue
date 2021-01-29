@@ -1,10 +1,8 @@
 <template>
   <!-- 给图片加遮罩层 -->
-  <div ref="banner" class="banner">
+  <div ref="banner" class="page-banner">
+    <!-- 图片 -->
     <ul>
-      <!-- 此处transition有bug,离开当前标签，再次返回后，图片会消失，直到轮播到下一张图片 -->
-      <!-- <transition-group name="slider-fade" tag="div"> -->
-      <!-- transition-group中v-for若有index，则必须绑定key值，否则报错 -->
       <li
         v-for="(item, index) in bannerData"
         :key="'banner' + index"
@@ -22,11 +20,10 @@
           </div>
         </div>
       </li>
-      <!-- </transition-group> -->
     </ul>
-
-    <div class="circle">
-      <div v-for="(item, _index) in bannerData">
+    <!-- 圆点 -->
+    <div class="circle-box">
+      <div v-for="(item, _index) in bannerData" :key="_index">
         <span
           :class="{ 'current-circle': _index === currentIndex }"
           @click="chosePic(_index)"
@@ -47,7 +44,6 @@ export default {
       currentIndex: 0, // 当前的banner
       startPos: { x: '', y: '', date: '' },
       move: { x: '', y: '' },
-      // banner信息
       bannerData: [
         {
           url: '/img/banner/one.jpeg',
@@ -76,7 +72,7 @@ export default {
             '我要纵身跳入时代的奔走，我要纵身跳入时代的年轮：苦痛，欢乐，失败，成功，我都不问，男儿的事业原本要昼夜不停。',
           person: '歌德'
         }
-      ]
+      ] // banner信息
     }
   },
   mounted() {
@@ -85,9 +81,9 @@ export default {
   methods: {
     // 实现图片懒加载
     lazyLoad() {
-      this.$refs.img.forEach((item, index, arr) => {
+      this.$refs.img.forEach((item, index) => {
         if (index === this.currentIndex) {
-          // 清]除定时器，防止图片还没加载完成就轮播到下一张
+          // 清除定时器，防止图片还没加载完成就轮播到下一张
           clearInterval(this.timer)
           const img = new Image()
           img.src = item.dataset.src
@@ -99,7 +95,7 @@ export default {
       })
     },
     // 滑动
-    slider(index) {
+    slider() {
       this.timer = setInterval(() => {
         if (this.currentIndex < this.bannerData.length - 1) {
           this.currentIndex++
@@ -136,7 +132,7 @@ export default {
       const touch = event.targetTouches[0] // touches数组对象获得屏幕上所有的touch，取第一个touch
       this.startPos = { x: touch.pageX, y: touch.pageY, date: +new Date() } // 取第一个touch的坐标值
     },
-    touchMove: function (event, index) {
+    touchMove: function (event) {
       // 防止滚屏
       event.preventDefault()
       if (event.targetTouches.length > 1 || (event.scale && event.scale !== 1)) return
@@ -144,8 +140,8 @@ export default {
       this.move.x = touch.pageX - this.startPos.x
       this.move.y = touch.pageY - this.startPos.y
     },
-    touchEnd(event) {
-      const ted = event.targetTouches[0] // touches数组对象获得屏幕上所有的touch，取第一个touch
+    touchEnd() {
+      // const ted = event.targetTouches[0] // touches数组对象获得屏幕上所有的touch，取第一个touch
       const moveDate = +new Date() - this.startPos.date
       if (Math.abs(this.move.x) > Math.abs(this.move.y) && moveDate < 1000 && this.move.x < -150) {
         if (this.currentIndex < this.bannerData.length - 1) {
@@ -172,11 +168,11 @@ export default {
 </script>
 
 <style lang="scss">
-.banner {
-  transition: all ease 0.5s;
-  position: relative;
-  margin-top: 10px;
+.page-banner {
   height: 250px;
+  position: relative;
+  transition: all ease 0.5s;
+
   ul,
   ul > div {
     width: 100%;
@@ -195,7 +191,38 @@ export default {
     width: 100%;
     height: 100%;
   }
+
+  .circle-box {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 0);
+    // z-index: 250;
+    border: solid red 1px;
+    div {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+    }
+    span {
+      display: inline-block;
+      transition: all ease-in 0.5s;
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background: #eee;
+      cursor: pointer;
+    }
+    .current-circle {
+      width: 20px;
+      height: 8px;
+      border-radius: 4px;
+      background: orange;
+    }
+  }
 }
+
 .img-shadow {
   position: absolute;
   top: 0;
@@ -222,6 +249,7 @@ export default {
 .show-opacity {
   opacity: 1 !important;
 }
+
 .slider-fade-enter,
 .slider-fade-leave-to {
   opacity: 0;
@@ -230,40 +258,14 @@ export default {
 .slider-fade-leave-active {
   transition: all ease 0.5s;
 }
+
 .current-relative {
   position: relative !important;
 }
-.circle {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  margin-left: -60px;
-  z-index: 250;
-  div {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    text-align: center;
-  }
-  span {
-    display: inline-block;
-    transition: all ease-in 0.5s;
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    background: #eee;
-    cursor: pointer;
-  }
-}
-.banner .circle .current-circle {
-  width: 20px;
-  height: 8px;
-  border-radius: 4px;
-  background: orange;
-}
+
 @media screen and (max-width: 768px) {
-  .banner {
-    margin-top: -50px;
-  }
+  // .banner {
+  //   margin-top: -50px;
+  // }
 }
 </style>
