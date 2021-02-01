@@ -1,33 +1,34 @@
 <template>
   <!-- 给图片加遮罩层 -->
-  <div ref="banner" class="page-banner">
+  <div class="page-banner">
     <!-- 图片 -->
-    <ul>
+    <ul class="banner-list">
       <li
         v-for="(item, index) in bannerData"
-        :key="'banner' + index"
+        :key="index"
+        class="banner-item"
         :class="{ 'show-opacity': index === currentIndex }"
         @touchmove.stop="touchMove($event, index)"
         @touchstart.stop="touchStart($event)"
         @touchend.stop="touchEnd($event)"
       >
-        <img ref="img" :data-src="item.url" alt="" src="/img/pic-loading.gif" />
-        <div class="img-shadow">
+        <img ref="img" class="banner-img" :data-src="item.url" alt="" src="/img/pic-loading.gif" />
+        <div class="banner-words">
           <div class="wellknown">
-            <div>{{ item.word }}</div>
+            <p>{{ item.word }}</p>
             <br />
-            <div>---- {{ item.person }}</div>
+            <p>---- {{ item.person }}</p>
           </div>
         </div>
       </li>
     </ul>
     <!-- 圆点 -->
     <div class="circle-btns">
-      <div v-for="(item, _index) in bannerData" :key="_index" class="circle-btn">
+      <div v-for="(item, index2) in bannerData" :key="index2" class="circle-btn">
         <span
           class="circle"
-          :class="{ 'current-circle': _index === currentIndex }"
-          @click="chosePic(_index)"
+          :class="{ 'current-circle': index2 === currentIndex }"
+          @click="chosePic(index2)"
           @mouseover="stopSlider_cpt"
           @mouseleave="startSlider"
           @touchstart="stopSlider"
@@ -174,24 +175,50 @@ export default {
   position: relative;
   transition: all ease 0.5s;
 
-  ul,
-  ul > div {
+  .banner-list {
     width: 100%;
     height: 100%;
+    .banner-item {
+      transition: all ease 1s;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      .banner-img {
+        width: 100%;
+        height: 100%;
+      }
+      .banner-words {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        .wellknown {
+          box-sizing: border-box;
+          width: 100%;
+          color: #eee;
+          padding: 0 25px;
+          line-height: 1.5;
+          text-align: center;
+          position: absolute;
+          top: 50%;
+          left: 0;
+          transform: translateY(-50%);
+        }
+      }
+    }
+    .show-opacity {
+      opacity: 1 !important;
+    }
   }
-  li {
-    transition: all ease 1s;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  img {
-    width: 100%;
-    height: 100%;
-  }
+
+  // .headerHeight {
+  //   height: 0 !important;
+  // }
 
   .circle-btns {
     position: absolute;
@@ -223,45 +250,18 @@ export default {
   }
 }
 
-.img-shadow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-}
-.wellknown {
-  box-sizing: border-box;
-  line-height: 1.5;
-  color: #eee;
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  padding: 0 25px;
-  transform: translateY(-50%);
-  width: 100%;
-}
-.headerHeight {
-  height: 0 !important;
-}
-.show-opacity {
-  opacity: 1 !important;
-}
+// .slider-fade-enter,
+// .slider-fade-leave-to {
+//   opacity: 0;
+// }
+// .slider-fade-enter-active,
+// .slider-fade-leave-active {
+//   transition: all ease 0.5s;
+// }
 
-.slider-fade-enter,
-.slider-fade-leave-to {
-  opacity: 0;
-}
-.slider-fade-enter-active,
-.slider-fade-leave-active {
-  transition: all ease 0.5s;
-}
-
-.current-relative {
-  position: relative !important;
-}
+// .current-relative {
+//   position: relative !important;
+// }
 
 @media screen and (max-width: 768px) {
   // .banner {
