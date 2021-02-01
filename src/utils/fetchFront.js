@@ -9,6 +9,16 @@ const qs = require('qs')
 const axios = require('axios')
 // 引入路由
 import router from '../router'
+// 缓存
+const LRU = require('lru-cache')
+import md5 from 'md5'
+
+// 缓存api数据
+const cached = LRU({
+  max: 1000,
+  maxAge: 1000 * 60 * 15
+})
+
 // 引入vuex
 // import store from '../store'
 // ui
@@ -183,7 +193,7 @@ httpInstance.interceptors.response.use(
   }
 )
 
-function apiAxios(method, url, params) {
+function apiAxios(method, url, params, options) {
   return new Promise((resolve, reject) => {
     httpInstance({
       url: url,
@@ -197,6 +207,9 @@ function apiAxios(method, url, params) {
       data: method !== 'GET' && method !== 'DELETE' ? qs.stringify(params) : null
     })
       .then((res) => {
+        if (method === 'GET' && cached && options.cache) {
+          cached.set(options.key, res.data)
+        }
         resolve(res.data)
       })
       .catch((err) => {
@@ -206,13 +219,21 @@ function apiAxios(method, url, params) {
 }
 
 export default {
-  get: function(url, params) {
-    return apiAxios('GET', url, params)
+  get: function (url, params, options = {}) {
+    const key = md5(url + JSON.stringify({ ...params, ...options }))
+    // 如果缓存中有数据
+    if (cached && cached.has(key)) {
+      return Promise.resolve(cached.get(key))
+    }
+    if (options.cache) {
+      options.key = key
+    }
+    return apiAxios('GET', url, params, options)
   },
-  post: function(url, params) {
+  post: function (url, params) {
     return apiAxios('POST', url, params)
   },
-  postJson: function(url, params) {
+  postJson: function (url, params) {
     return new Promise((resolve, reject) => {
       httpInstance({
         url: url,
@@ -230,13 +251,13 @@ export default {
         })
     })
   },
-  put: function(url, params) {
+  put: function (url, params) {
     return apiAxios('PUT', url, params)
   },
-  patch: function(url, params) {
+  patch: function (url, params) {
     return apiAxios('PATCH', url, params)
   },
-  delete: function(url, params) {
+  delete: function (url, params) {
     return apiAxios('DELETE', url, params)
   }
 }
