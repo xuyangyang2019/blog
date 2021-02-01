@@ -3,7 +3,7 @@ export function siblings(ele) {
   const ele_par = ele.parentNode
   const children = ele_par.childNodes
   for (let i = 0; i < children.length; i++) {
-    if (children[i].nodeType == 1 && children[i] !== ele) {
+    if (children[i].nodeType === 1 && children[i] !== ele) {
       arr_siblings.push(children[i])
     }
   }
