@@ -22,9 +22,10 @@
       </li>
     </ul>
     <!-- 圆点 -->
-    <div class="circle-box">
-      <div v-for="(item, _index) in bannerData" :key="_index">
+    <div class="circle-btns">
+      <div v-for="(item, _index) in bannerData" :key="_index" class="circle-btn">
         <span
+          class="circle"
           :class="{ 'current-circle': _index === currentIndex }"
           @click="chosePic(_index)"
           @mouseover="stopSlider_cpt"
@@ -192,33 +193,32 @@ export default {
     height: 100%;
   }
 
-  .circle-box {
+  .circle-btns {
     position: absolute;
     left: 50%;
     bottom: 0;
     transform: translate(-50%, 0);
-    // z-index: 250;
-    border: solid red 1px;
-    div {
+    z-index: 250;
+    .circle-btn {
       display: inline-block;
       width: 20px;
       height: 20px;
       text-align: center;
-    }
-    span {
-      display: inline-block;
-      transition: all ease-in 0.5s;
-      width: 8px;
-      height: 8px;
-      border-radius: 4px;
-      background: #eee;
-      cursor: pointer;
-    }
-    .current-circle {
-      width: 20px;
-      height: 8px;
-      border-radius: 4px;
-      background: orange;
+      .circle {
+        display: inline-block;
+        transition: all ease-in 0.5s;
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        background: #eee;
+        cursor: pointer;
+      }
+      .current-circle {
+        width: 20px;
+        height: 8px;
+        border-radius: 4px;
+        background: orange;
+      }
     }
   }
 }
