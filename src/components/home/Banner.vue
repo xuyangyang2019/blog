@@ -3,26 +3,27 @@
   <div class="page-banner">
     <!-- 图片 -->
     <ul class="banner-list">
-      <li
-        v-for="(item, index) in bannerData"
-        :key="index"
-        class="banner-item"
-        :class="{ 'show-opacity': index === currentIndex }"
-        @touchmove.stop="touchMove($event, index)"
-        @touchstart.stop="touchStart($event)"
-        @touchend.stop="touchEnd($event)"
-      >
-        <!-- <img ref="img" class="banner-img" :data-src="item.url" alt="" src="/img/pic-loading.gif" /> -->
-        <img v-show="currentIndex === index" class="banner-img" :src="item.url" />
-
-        <div class="banner-words">
-          <div class="wellknown">
-            <p>{{ item.word }}</p>
-            <br />
-            <p>---- {{ item.person }}</p>
+      <transition-group tag="ul" name="slider">
+        <li
+          v-for="(item, index) in bannerData"
+          v-show="currentIndex === index"
+          :key="index"
+          class="banner-item"
+          @touchmove.stop="touchMove($event, index)"
+          @touchstart.stop="touchStart($event)"
+          @touchend.stop="touchEnd($event)"
+        >
+          <!-- <img ref="img" class="banner-img" :data-src="item.url" alt="" src="/img/pic-loading.gif" /> -->
+          <img class="banner-img" :src="item.url" />
+          <div class="banner-words">
+            <div class="wellknown">
+              <p>{{ item.word }}</p>
+              <br />
+              <p>---- {{ item.person }}</p>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
+      </transition-group>
     </ul>
     <!-- 圆点 -->
     <div class="circle-btns">
@@ -146,7 +147,6 @@ export default {
       this.move.y = touch.pageY - this.startPos.y
     },
     touchEnd() {
-      console.log(this.move)
       const changeX = this.move.x
       const changeY = this.move.y
       const changeDate = new Date().getTime() - this.startPos.date
@@ -187,36 +187,35 @@ export default {
       this.move = { x: 0, y: 0, date: '' }
       // 开始轮播
       this.play()
-    },
+    }
     // ============================= 另外的方法实现轮播 ==================================
     // 实现图片懒加载
-    lazyLoad() {
-      // this.$refs.img.forEach((item, index) => {
-      //   if (index === this.currentIndex) {
-      //     // 清除定时器，防止图片还没加载完成就轮播到下一张
-      //     clearInterval(this.timer)
-      //     const img = new Image()
-      //     img.src = item.dataset.src
-      //     img.onload = () => {
-      //       item.src = img.src
-      //       this.slider()
-      //     }
-      //   }
-      // })
-    },
+    // lazyLoad() {
+    // this.$refs.img.forEach((item, index) => {
+    //   if (index === this.currentIndex) {
+    //     // 清除定时器，防止图片还没加载完成就轮播到下一张
+    //     clearInterval(this.timer)
+    //     const img = new Image()
+    //     img.src = item.dataset.src
+    //     img.onload = () => {
+    //       item.src = img.src
+    //       this.slider()
+    //     }
+    //   }
+    // })
+    // },
     // 滑动
-    slider() {
-      console.log('滑动')
-      // this.timer = setInterval(() => {
-      //   if (this.currentIndex < this.bannerData.length - 1) {
-      //     this.currentIndex++
-      //     this.lazyLoad()
-      //   } else {
-      //     this.currentIndex = 0
-      //     this.lazyLoad()
-      //   }
-      // }, 5000)
-    }
+    // slider() {
+    // this.timer = setInterval(() => {
+    //   if (this.currentIndex < this.bannerData.length - 1) {
+    //     this.currentIndex++
+    //     this.lazyLoad()
+    //   } else {
+    //     this.currentIndex = 0
+    //     this.lazyLoad()
+    //   }
+    // }, 5000)
+    // }
   }
 }
 </script>
@@ -225,14 +224,10 @@ export default {
 .page-banner {
   height: 250px;
   position: relative;
-  transition: all ease 0.5s;
-
   .banner-list {
     width: 100%;
     height: 100%;
     .banner-item {
-      transition: all ease 1s;
-      opacity: 0;
       position: absolute;
       top: 0;
       left: 0;
@@ -263,14 +258,7 @@ export default {
         }
       }
     }
-    .show-opacity {
-      opacity: 1 !important;
-    }
   }
-
-  // .headerHeight {
-  //   height: 0 !important;
-  // }
 
   .circle-btns {
     position: absolute;
@@ -302,18 +290,15 @@ export default {
   }
 }
 
-// .slider-fade-enter,
-// .slider-fade-leave-to {
-//   opacity: 0;
-// }
-// .slider-fade-enter-active,
-// .slider-fade-leave-active {
-//   transition: all ease 0.5s;
-// }
+.slider-enter,
+.slider-leave-to {
+  opacity: 0;
+}
 
-// .current-relative {
-//   position: relative !important;
-// }
+.slider-enter-active,
+.slider-leave-active {
+  transition: all ease 0.5s;
+}
 
 @media screen and (max-width: 768px) {
   // .banner {
