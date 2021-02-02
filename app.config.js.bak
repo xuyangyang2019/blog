@@ -3,7 +3,7 @@
  */
 
 const path = require('path')
-const constants = require('./constants')
+const constants = require('./constants.js.bak')
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {

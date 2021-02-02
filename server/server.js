@@ -30,8 +30,7 @@ const setUpDevServer = require('../build/setup.dev.server.js')
 const isProd = process.env.NODE_ENV === 'production'
 // 获取本地ip
 const currentIP = require('ip').address()
-const appConfig = require('../app.config')
-const uri = `http://${currentIP}:${appConfig.appPort}`
+const uri = `http://${currentIP}:8098`
 
 function resolve(dir) {
   return path.resolve(process.cwd(), dir)
@@ -144,8 +143,7 @@ backendApp.on('error', (err) => {
   console.error('Server error: \n%s\n%s ', err.stack || '')
 })
 
-backendApp.listen(appConfig.appPort, () => {
-  // console.log('服务器端渲染地址： http://localhost:3000')
+backendApp.listen(8098, () => {
   console.log(`\n> Starting server... ${uri} \n`)
 })
 
