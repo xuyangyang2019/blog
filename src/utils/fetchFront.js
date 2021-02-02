@@ -19,6 +19,8 @@ const cached = LRU({
   maxAge: 1000 * 60 * 15
 })
 
+const currentIP = require('ip').address()
+const baseUrl = `http://${currentIP}:8098`
 // 引入vuex
 // import store from '../store'
 // ui
@@ -198,8 +200,8 @@ function apiAxios(method, url, params, options) {
     httpInstance({
       url: url,
       method: method,
-      // baseURL: 'http://192.168.0.115:10010', // 开发模式下vue-cli已经配置了请求转发，所以不用基础路径即可
-      baseURL: 'http://192.168.0.111:8098',
+      // baseURL: 'http://192.168.0.111:8098',
+      baseURL: baseUrl,
       params: method === 'GET' || method === 'DELETE' ? params : null,
       paramsSerializer: (params) => {
         return qs.stringify(params, { indices: false })
