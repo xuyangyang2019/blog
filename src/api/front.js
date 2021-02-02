@@ -10,7 +10,7 @@ import fetch from '../utils/fetchFront'
  * 获取热门文章
  */
 function getHotArticles() {
-  return fetch.get('/api/getArticlesByPv')
+  return fetch.get('/api/getArticlesByPv', { cache: true })
 }
 
 /**
@@ -18,7 +18,7 @@ function getHotArticles() {
  * @param {Boolean} publish 是否已发布 true or false
  */
 function getArticlesByTime(publish) {
-  return fetch.get('/api/getArticlesByTime', { publish: publish })
+  return fetch.get('/api/getArticlesByTime', { publish: publish }, { cache: true })
 }
 
 /**
@@ -26,7 +26,7 @@ function getArticlesByTime(publish) {
  * @param {Boolean} publish 是否已发布 true or false
  */
 function getTags(publish) {
-  return fetch.get('/api/tags', { publish: publish })
+  return fetch.get('/api/tags', { publish: publish }, { cache: true })
 }
 
 /**
@@ -37,7 +37,11 @@ function getTags(publish) {
  * @param {Number} pageSize 每页数据量
  */
 function getArticleList(publish, tag, pageNum, pageSize) {
-  return fetch.get('/api/getArticleList', { publish: publish, tag: tag, pageNum: pageNum, pageSize: pageSize })
+  return fetch.get(
+    '/api/getArticleList',
+    { publish: publish, tag: tag, pageNum: pageNum, pageSize: pageSize },
+    { cache: true }
+  )
 }
 
 /**
@@ -66,7 +70,7 @@ function searchArticle(publish, pageNum, pageSize, keyword, startTime, endTime, 
   if (sort) {
     parameters.sort = sort
   }
-  return fetch.get('/api/searchArticle', parameters)
+  return fetch.get('/api/searchArticle', parameters, { cache: true })
 }
 
 /**
@@ -76,7 +80,7 @@ function searchArticle(publish, pageNum, pageSize, keyword, startTime, endTime, 
  * @param {String} id 文章的内部id
  */
 function getArticle(publish, tag, id) {
-  return fetch.get('/api/getArticle', { publish: publish, tag: tag, id: id })
+  return fetch.get('/api/getArticle', { publish: publish, tag: tag, id: id }, { cache: true })
 }
 
 /**
