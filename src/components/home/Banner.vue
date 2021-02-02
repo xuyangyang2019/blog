@@ -7,7 +7,7 @@
         <li
           v-for="(item, index) in bannerData"
           v-show="currentIndex === index"
-          :key="index"
+          :key="'banner' + index"
           class="banner-item"
           @touchmove.stop="touchMove($event, index)"
           @touchstart.stop="touchStart($event)"
@@ -49,28 +49,28 @@ export default {
       currentIndex: 0, // 当前的banner
       bannerData: [
         {
-          url: 'http://192.168.0.111:8098/img/banner/one.jpeg',
+          url: '/img/banner/one.jpeg',
           word: 'Success is not final, failure is not fatal. It is the courage to continue that counts.',
           person: 'Winston Churchill'
         },
         {
-          url: 'http://192.168.0.111:8098/img/banner/two.jpeg',
+          url: '/img/banner/two.jpeg',
           word:
             '生命中最伟大的光辉不在于永不坠落，而是坠落后总能再度升起。我欣赏这种有弹性的生命状态，快乐地经历风雨，笑对人生。',
           person: '曼德拉'
         },
         {
-          url: 'http://192.168.0.111:8098/img/banner/three.jpeg',
+          url: '/img/banner/three.jpeg',
           word: '时间是一只藏在黑暗中的温柔的手，在你一出神一恍惚之间，物走星移。',
           person: '龙应台'
         },
         {
-          url: 'http://192.168.0.111:8098/img/banner/four.jpeg',
+          url: '/img/banner/four.jpeg',
           word: '一个人可以被毁灭，但不能被打败。',
           person: '海明威'
         },
         {
-          url: 'http://192.168.0.111:8098/img/banner/five.jpeg',
+          url: '/img/banner/five.jpeg',
           word:
             '我要纵身跳入时代的奔走，我要纵身跳入时代的年轮：苦痛，欢乐，失败，成功，我都不问，男儿的事业原本要昼夜不停。',
           person: '歌德'
