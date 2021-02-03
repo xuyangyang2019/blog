@@ -19,8 +19,6 @@ const cached = LRU({
   maxAge: 1000 * 60 * 15
 })
 
-const currentIP = require('ip').address()
-const baseUrl = `http://${currentIP}:8098`
 // 引入vuex
 // import store from '../store'
 // ui
@@ -97,16 +95,14 @@ const errorHandle = (status, errData) => {
 
 // axios全局配置
 axios.defaults.timeout = 10000 // 请求超时时间
-
 // 环境的切换
-// if (process.env.NODE_ENV === 'development') {
-//   axios.defaults.baseURL = 'http://localhost:8080'
-// } else if (process.env.NODE_ENV === 'debug') {
-//   axios.defaults.baseURL = ''
-// } else if (process.env.NODE_ENV === 'production') {
-//   axios.defaults.baseURL = 'http://localhost:8080'
-// }
-
+if (process.env.NODE_ENV === 'development') {
+  axios.defaults.baseURL = 'http://localhost:8098'
+} else if (process.env.NODE_ENV === 'debug') {
+  axios.defaults.baseURL = 'http://localhost:8098'
+} else if (process.env.NODE_ENV === 'production') {
+  axios.defaults.baseURL = 'http://localhost:8098'
+}
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
 
@@ -200,8 +196,7 @@ function apiAxios(method, url, params, options) {
     httpInstance({
       url: url,
       method: method,
-      // baseURL: 'http://192.168.0.111:8098',
-      baseURL: baseUrl,
+      // baseURL: 'http://localhost:8098',
       params: method === 'GET' || method === 'DELETE' ? params : null,
       paramsSerializer: (params) => {
         return qs.stringify(params, { indices: false })
