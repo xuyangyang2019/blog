@@ -18,25 +18,32 @@ const koaBody = require('koa-body')
 const jsonp = require('koa-jsonp')
 // rest中间件
 // const rest = require('./middlewares/rest')
-
+// 错误处理 和 返回处理
+const { errorHandler, responseHandler } = require('./middlewares/response')
+// 路由
 const viewRouter = require('./routes/view')
 const publicRouter = require('./routes/public')
 const privateRouter = require('./routes/private')
-const { errorHandler, responseHandler } = require('./middlewares/response')
-
 // 开发环境配置
 const setUpDevServer = require('../build/setup.dev.server.js')
 // 开发环境
 const isProd = process.env.NODE_ENV === 'production'
+
+// eslint-disable-next-line no-unused-vars
+const { serverPort, devHost, prodHost } = require('./config')
 // 获取本地ip
-const currentIP = require('ip').address()
-const uri = `http://${currentIP}:8098`
+const uri = `http://localhost:${serverPort}`
+// let uri = `http://${devHost}:${serverPort}`
+// if (isProd) {
+//   uri = `http://${prodHost}:${serverPort}`
+// }
 
 function resolve(dir) {
   return path.resolve(process.cwd(), dir)
 }
 
-// 后端Server
+// =================== 后端Server ===================
+
 // 创建一个Koa对象表示web app本身:
 const backendApp = new Koa()
 
@@ -143,9 +150,8 @@ backendApp.on('error', (err) => {
   console.error('Server error: \n%s\n%s ', err.stack || '')
 })
 
-backendApp.listen(8098, () => {
-  console.log(`\n> Starting server... ${uri} \n`)
-})
+backendApp.listen(serverPort)
+console.log('[demo] start-quick is starting at ', uri)
 
 // 前端Server
 // const frontendApp = new Koa()
