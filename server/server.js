@@ -29,14 +29,10 @@ const setUpDevServer = require('../build/setup.dev.server.js')
 // 开发环境
 const isProd = process.env.NODE_ENV === 'production'
 
-// eslint-disable-next-line no-unused-vars
 const { serverPort, devHost, prodHost } = require('./config')
 // 获取本地ip
-const uri = `http://localhost:${serverPort}`
-// let uri = `http://${devHost}:${serverPort}`
-// if (isProd) {
-//   uri = `http://${prodHost}:${serverPort}`
-// }
+const serverHost = isProd ? prodHost : devHost
+const uri = `http://${serverHost}:${serverPort}`
 
 function resolve(dir) {
   return path.resolve(process.cwd(), dir)
@@ -50,7 +46,11 @@ const backendApp = new Koa()
 // Logger
 backendApp.use(
   Koa_Logger((str) => {
-    console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
+    if (isProd) {
+      console.log(str)
+    } else {
+      console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
+    }
   })
 )
 
@@ -150,7 +150,7 @@ backendApp.on('error', (err) => {
   console.error('Server error: \n%s\n%s ', err.stack || '')
 })
 
-backendApp.listen(serverPort)
+backendApp.listen(serverPort, serverHost)
 console.log('[demo] start-quick is starting at ', uri)
 
 // 前端Server
