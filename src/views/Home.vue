@@ -40,9 +40,8 @@ export default {
 
     return store.dispatch('GetArticles', {
       publish: true,
-      pageNo: 1,
+      pageNum: 1,
       pageSize: 10
-      // cache: true
     })
   },
   head() {

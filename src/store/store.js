@@ -50,12 +50,6 @@ const getters = {
 const actions = {
   // 获取文章
   GetArticles({ commit }, payload) {
-    //   params = {
-    //     publish: payload.publish,
-    //     page: payload.page,
-    //     cache: true
-    //   }
-    // return api.get('/api/getArticleList', params).then((res) => {
     const { publish, tag, pageNum, pageSize } = payload
     return getArticleList(publish, tag, pageNum, pageSize).then((res) => {
       if (res.code === 200) {
