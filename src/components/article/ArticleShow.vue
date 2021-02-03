@@ -121,7 +121,7 @@ import { likeArticle } from '../../api/front'
 
 import Prism from 'prismjs'
 import VueQr from 'vue-qr'
-import headMixin from '@/mixins/head-mixin'
+import headMixin from '@/mixins/headMixin'
 import CommentPage from './CommentPage.vue'
 
 const qrLogo = require('../../../public/img/defaultUser.jpg')

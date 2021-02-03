@@ -40,7 +40,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import { getBrowserInfo } from '@/utils/getBrowserInfo.js'
-import headMixin from '@/mixins/head-mixin'
+import headMixin from '@/mixins/headMixin'
 
 export default {
   name: 'ArticleRoot',

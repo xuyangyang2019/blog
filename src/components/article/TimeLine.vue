@@ -11,7 +11,7 @@ import { searchArticle } from '../../api/front'
 
 import ArticleList from '@/components/article/ArticleList'
 import Loading from '@/components/base/Loading'
-import headMixin from '@/mixins/head-mixin'
+import headMixin from '@/mixins/headMixin'
 
 export default {
   name: 'TimeLine',

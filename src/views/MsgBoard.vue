@@ -118,7 +118,7 @@ import Emoji from '@/components/base/Emoji'
 import VistorLogin from '@/components/base/VistorLogin'
 
 import emojiData from '@/assets/js/emoji-data'
-import headMixin from '@/mixins/head-mixin'
+import headMixin from '@/mixins/headMixin'
 
 export default {
   name: 'MsgBoard',

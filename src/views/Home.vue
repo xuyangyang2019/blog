@@ -13,7 +13,7 @@ import { mapActions, mapState, mapMutations } from 'vuex'
 import Banner from '@/components/home/Banner'
 import Loading from '@/components/base/Loading.vue'
 import ArticleList from '@/components/article/ArticleList.vue'
-import headMixin from '@/mixins/head-mixin'
+import headMixin from '@/mixins/headMixin'
 
 export default {
   name: 'Home',

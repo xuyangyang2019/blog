@@ -11,7 +11,7 @@ import { mapMutations, mapState } from 'vuex'
 
 import loading from '@/components/base/Loading'
 import articleList from '@/components/article/ArticleList'
-import headMixin from '@/mixins/head-mixin'
+import headMixin from '@/mixins/headMixin'
 
 export default {
   name: 'Life',

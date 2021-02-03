@@ -16,7 +16,7 @@ Object.keys(filters).forEach((filterName) => {
 // Vue.use(ElementUI)
 
 // // 全局引入 Mixin
-// import headMixin from './mixins/head-mixin'
+// import headMixin from './mixins/headMixin'
 // Vue.mixin(headMixin)
 
 // 匹配要渲染的视图后，再获取数据
