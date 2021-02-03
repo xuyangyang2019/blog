@@ -101,7 +101,8 @@ if (process.env.NODE_ENV === 'development') {
 } else if (process.env.NODE_ENV === 'debug') {
   axios.defaults.baseURL = 'http://localhost:8098'
 } else if (process.env.NODE_ENV === 'production') {
-  axios.defaults.baseURL = 'http://localhost:8098'
+  axios.defaults.baseURL = 'http://192.168.0.111:8098'
+  // axios.defaults.baseURL = 'http://182.92.221.114:8098'
 }
 // post请求头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
