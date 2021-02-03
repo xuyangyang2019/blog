@@ -1,28 +1,43 @@
 <template>
   <footer class="page-footer">
-    <div class="copyright">
-      <div>
-        Copyright © 2020&nbsp;
+    <ul class="copyright">
+      <li class="copyright-item">
+        <img class="bei-an-img" src="/img/beian.png" alt="beian" />
+        <a href="http://www.beian.gov.cn/" target="_blank">京公网安备11040102700068号</a>
+      </li>
+      <li class="copyright-item">
+        <a href="http://beian.miit.gov.cn" target="_blank">京ICP备04000001号</a>
+      </li>
+      <li class="copyright-item">
+        ©{{ currentYear }}&nbsp;
         <a href="http://www.xyy.life">xyy.life &nbsp;</a>
-      </div>
-      <div>
-        Powered by Vue
-        <span>|</span>
-      </div>
-      <div>
+      </li>
+      <li class="copyright-item">
+        |
         <a href="http://localhost:6180/login" target="_blank">&nbsp;管理员</a>
-      </div>
-    </div>
+      </li>
+    </ul>
   </footer>
 </template>
 
-<script></script>
+<script>
+export default {
+  data() {
+    return {
+      currentYear: new Date().getFullYear()
+    }
+  }
+}
+</script>
 
 <style lang = "scss">
 .page-footer {
   color: #ccc;
   background: #2e3033;
   padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 
   .copyright {
     display: flex;
@@ -30,6 +45,18 @@
     justify-content: center;
     align-items: center;
     font-family: HeiTi;
+
+    .copyright-item {
+      padding: 0 5px;
+      display: flex;
+      align-items: center;
+      .bei-an-img {
+        width: 20px;
+        height: 20px;
+        /* margin-top: 5px; */
+        margin-right: 5px;
+      }
+    }
   }
 }
 
