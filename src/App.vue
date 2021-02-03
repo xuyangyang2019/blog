@@ -302,7 +302,6 @@ body {
     width: 68%;
     .nav-location {
       background: #faf7f7;
-      margin-top: 10px;
       padding: 10px;
       font-size: 14px;
       a {
@@ -372,7 +371,7 @@ body {
 
 //平板
 @media screen and (min-width: 768px) {
-  #app{
+  #app {
     margin-top: 50px;
   }
   .fix-bg {
