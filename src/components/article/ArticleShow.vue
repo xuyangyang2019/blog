@@ -91,7 +91,14 @@
             <span>微信扫一扫分享到朋友圈</span>
             <span class="exit-qrcode" @click="qrShow = false">X</span>
           </p>
-          <vue-qr v-show="qrShow" backgroundColor="#ccc" :logoSrc="qrLogo" :text="qrText" :size="200"></vue-qr>
+          <!-- <vue-qr v-show="qrShow" backgroundColor="#ccc" :logoSrc="qrLogo" :text="qrText" :size="200"></vue-qr> -->
+          <vue-qr
+            v-show="qrShow"
+            backgroundColor="#ccc"
+            logoSrc="/img/defaultUser.jpg"
+            :text="qrText"
+            :size="200"
+          ></vue-qr>
         </div>
 
         <div class="pre-next">
@@ -124,8 +131,6 @@ import VueQr from 'vue-qr'
 import headMixin from '@/mixins/headMixin'
 import CommentPage from './CommentPage.vue'
 
-const qrLogo = require('../../../public/img/defaultUser.jpg')
-
 export default {
   name: 'ArticleShow',
   components: {
@@ -138,7 +143,6 @@ export default {
       publish: true,
       tag: route.params.tag,
       id: route.params.id
-      // cache: true
     })
   },
   data() {
@@ -147,7 +151,6 @@ export default {
       loveText: '赞', // 点赞文字
       lovedArr: [], // 电站的id集合
       fullPath: '', // 完整的path
-      qrLogo: qrLogo, // 二维码的log
       qrText: '' // 二维码的地址
     }
   },
