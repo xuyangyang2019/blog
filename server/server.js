@@ -29,10 +29,10 @@ const setUpDevServer = require('../build/setup.dev.server.js')
 // 开发环境
 const isProd = process.env.NODE_ENV === 'production'
 
-const { serverPort, devHost, prodHost } = require('./config')
 // 获取本地ip
-const serverHost = isProd ? prodHost : devHost
-const uri = `http://${serverHost}:${serverPort}`
+const { serverPort, defaultHost } = require('./config')
+// const serverHost = isProd ? prodHost : devHost
+const uri = `http://${defaultHost}:${serverPort}`
 
 function resolve(dir) {
   return path.resolve(process.cwd(), dir)
@@ -150,7 +150,7 @@ backendApp.on('error', (err) => {
   console.error('Server error: \n%s\n%s ', err.stack || '')
 })
 
-backendApp.listen(serverPort, serverHost)
+backendApp.listen(serverPort)
 console.log('[demo] start-quick is starting at ', uri)
 
 // 前端Server
