@@ -47,11 +47,11 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import page from '@/components/base/Page'
+import Page from '@/components/base/Page'
 
 export default {
   components: {
-    page
+    Page
   },
   props: {
     articleList: {

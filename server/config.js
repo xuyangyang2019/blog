@@ -4,7 +4,7 @@ const currentIP = require('ip').address()
 module.exports = {
   devHost: 'localhost', // 开发时的host
   prodHost: currentIP, // 线上的host
-  serverPort: 8098, // 服务器端口
+  serverPort: 3000, // 服务器端口
   mongoDB: {
     host: '127.0.0.1',
     port: 27017,

@@ -17,7 +17,7 @@ const webpackHotMiddleware = require('koa-webpack-hot-middleware')
 
 const readFile = (fs, file) => fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8')
 
-module.exports = function setupDevServer(app, uri = 'http://localhost:8098', cb) {
+module.exports = function setupDevServer(app, uri = 'http://localhost:3000', cb) {
   let bundle
   let template
 
