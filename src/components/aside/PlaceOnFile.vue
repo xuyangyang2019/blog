@@ -1,13 +1,15 @@
 <template>
-  <div class="timeLine">
-    <h1 class="timeLine-header">归档</h1>
-    <ul class="timeLine-content">
-      <li v-for="(item, index) in placeOnFile" :key="index" class="time-line" @click="jumpTime(item.time)">
-        {{ item.time }} ({{ item.num }})
-        <!-- <a href="jacascript: void(0)" @click="jumpTime(item.time)"> {{ item.time }}({{ item.num }})</a> -->
-        <!-- <a :href="jumpTime(item.time)" target="_blank">{{ item.time }}({{ item.num }})</a> -->
-      </li>
-    </ul>
+  <div class="time-line">
+    <h1 class="time-line-header">归档</h1>
+    <div class="time-line-content">
+      <ul>
+        <li v-for="(item, index) in placeOnFile" :key="index" class="time-line-item" @click="jumpTime(item.time)">
+          {{ item.time }} ({{ item.num }})
+          <!-- <a href="jacascript: void(0)" @click="jumpTime(item.time)"> {{ item.time }}({{ item.num }})</a> -->
+          <!-- <a :href="jumpTime(item.time)" target="_blank">{{ item.time }}({{ item.num }})</a> -->
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -80,35 +82,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.timeLine {
-  background: #faf7f7;
-  .timeLine-header {
+.time-line {
+  .time-line-header {
     text-align: center;
     padding: 15px;
     color: #eee;
     background: #2e3033;
   }
-  .timeLine-content {
-    padding: 5px 10px 35px;
-    li {
-      cursor: pointer;
-      width: 120px;
-      padding: 10px;
-      margin: 0 auto;
-      color: #16a085;
-      border-bottom: 1px solid #ddd;
+  .time-line-content {
+    padding: 15px;
+    font-size: 14px;
+    color: #1a1a1a;
+    background: #faf7f7;
+    ul {
+      .time-line-item {
+        cursor: pointer;
+        width: 120px;
+        padding: 10px 0;
+        text-align: center;
+        margin: 0 auto;
+        border-bottom: 1px solid #ddd;
+        &:hover {
+          color: #16a085;
+        }
+      }
     }
-    // a {
-    //   display: block;
-    //   justify-content: space-between;
-    //   width: 120px;
-    //   padding: 10px;
-    //   margin: 0 auto;
-    //   color: #16a085;
-    // }
-    // a:hover {
-    //   text-decoration: underline;
-    // }
   }
 }
 </style>

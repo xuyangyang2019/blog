@@ -1,11 +1,11 @@
 <template>
-  <div class="hot">
+  <div class="hot-articles">
     <h2 class="hot-header">推荐</h2>
     <div class="hot-content">
       <ul>
         <li v-for="(item, index) in articles.hot" :key="index" class="hot-item">
           <span>{{ index + 1 }}.</span>
-          <span class="article-title" :title="item.title" @click="jumpHot(item)" v-text="item.title"></span>
+          <span :title="item.title" @click="jumpHot(item)" v-text="item.title"></span>
         </li>
       </ul>
     </div>
@@ -49,29 +49,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.hot {
-  background: #faf7f7;
-
+.hot-articles {
   .hot-header {
     text-align: center;
     padding: 15px;
     color: #eee;
     background: #2e3033;
   }
-
   .hot-content {
-    .hot-item {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 14px;
-      color: #16a085;
-      border-bottom: 1px solid #ddd;
-      margin-left: 15px;
-      padding: 10px;
-      cursor: pointer;
-      .article-title:hover {
-        border-bottom: solid 1px black;
+    padding: 15px;
+    font-size: 14px;
+    color: #1a1a1a;
+    background: #faf7f7;
+    ul {
+      .hot-item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+        cursor: pointer;
+        &:hover {
+          color: #16a085;
+        }
       }
     }
   }

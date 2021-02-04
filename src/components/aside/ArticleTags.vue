@@ -1,9 +1,9 @@
 <template>
-  <div class="gateway">
-    <h2 class="gateway-header">标签</h2>
-    <div class="gateway-content">
+  <div class="tags">
+    <h2 class="tags-header">标签</h2>
+    <div class="tags-content">
       <ul>
-        <li v-for="(item, index) in tags" :key="index">
+        <li v-for="(item, index) in tags" :key="index" class="tags-item">
           <a ref="tag" href="javascript: void(0)" @click="jumpGate(item.tag)">
             <span>{{ item.tag | changeLife }}</span>
             <span v-if="item.num" v-text="' ' + item.num + '篇'"></span>
@@ -84,38 +84,39 @@ export default {
 </script>
 
 <style lang = "scss" scoped>
-.gateway-header {
-  text-align: center;
-  padding: 15px;
-  color: #eee;
-  background: #2e3033;
-}
-.gateway-content:after {
-  display: block;
-  content: '';
-  clear: both;
-  line-height: 0;
-  height: 0;
-  visibility: hidden;
-}
-.gateway-content {
-  background: #faf7f7;
-  padding: 10px;
-  li {
-    border-radius: 5px;
-    margin: 5px;
-    float: left;
-    overflow: hidden;
-    a {
-      font-size: 14px;
-      display: inline-block;
-      padding: 6px 15px;
-      border-radius: 5px;
-      color: #eee;
-      transition: all ease 0.5s;
-    }
-    a:hover {
-      transform: scale(1.5);
+.tags {
+  .tags-header {
+    text-align: center;
+    padding: 15px;
+    color: #eee;
+    background: #2e3033;
+  }
+
+  .tags-content {
+    padding: 15px;
+    font-size: 14px;
+    color: #1a1a1a;
+    background: #faf7f7;
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      .tags-item {
+        border-radius: 5px;
+        margin: 5px;
+        overflow: hidden;
+        a {
+          font-size: 14px;
+          display: inline-block;
+          padding: 6px 15px;
+          border-radius: 5px;
+          color: #eee;
+          transition: all ease 0.5s;
+        }
+        a:hover {
+          transform: scale(1.5);
+        }
+      }
     }
   }
 }

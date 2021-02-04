@@ -27,16 +27,14 @@
 
         <!-- 右边栏 -->
         <section class="side-bar-right">
-          <div class="r-slide-content">
-            <!-- 关于本站 -->
-            <about-me></about-me>
-            <!-- 推荐 -->
-            <hot-articles></hot-articles>
-            <!-- 标签 -->
-            <article-tags></article-tags>
-            <!-- 时间轴 -->
-            <place-on-file></place-on-file>
-          </div>
+          <!-- 关于本站 -->
+          <about-me></about-me>
+          <!-- 推荐 -->
+          <hot-articles></hot-articles>
+          <!-- 标签 -->
+          <article-tags></article-tags>
+          <!-- 时间轴 -->
+          <place-on-file></place-on-file>
         </section>
       </div>
     </div>
@@ -362,9 +360,6 @@ body {
     .contenter,
     .side-bar-right {
       width: 100%;
-      .nav-location {
-        margin-top: 0;
-      }
     }
   }
 }
