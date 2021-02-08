@@ -3,31 +3,33 @@ const nunjucks = require('nunjucks')
 
 /**
  * 创建Nunjucks的env对象
- * @param {*} path 模板的路径 
+ * @param {*} path 模板的路径
  * @param {*} opts 模板的参数
  */
 function createEnv(path, opts) {
-    let autoescape = opts.autoescape === undefined ? true : opts.autoescape
-    let noCache = opts.noCache || false // 在开发环境下，可以关闭cache，这样每次重新加载模板，便于实时修改模板
-    let watch = opts.watch || false
-    let throwOnUndefined = opts.throwOnUndefined || false
+  const autoescape = opts.autoescape === undefined ? true : opts.autoescape
+  const noCache = opts.noCache || false // 在开发环境下，可以关闭cache，这样每次重新加载模板，便于实时修改模板
+  const watch = opts.watch || false
+  const throwOnUndefined = opts.throwOnUndefined || false
 
-    let env = new nunjucks.Environment(
-        new nunjucks.FileSystemLoader(path || 'views', {
-            noCache: noCache,
-            watch: watch,
-        }), {
-        autoescape: autoescape,
-        throwOnUndefined: throwOnUndefined
-    })
-
-    if (opts.filters) {
-        for (var f in opts.filters) {
-            env.addFilter(f, opts.filters[f])
-        }
+  const env = new nunjucks.Environment(
+    new nunjucks.FileSystemLoader(path || 'views', {
+      noCache: noCache,
+      watch: watch
+    }),
+    {
+      autoescape: autoescape,
+      throwOnUndefined: throwOnUndefined
     }
+  )
 
-    return env
+  if (opts.filters) {
+    for (const f in opts.filters) {
+      env.addFilter(f, opts.filters[f])
+    }
+  }
+
+  return env
 }
 
 // async中间件的形式调用
@@ -49,12 +51,12 @@ function createEnv(path, opts) {
 
 // 加载到app.context
 function templating(path, opts, app) {
-    let env = createEnv(path, opts)
-    //app.context为ctx的原型
-    app.context.render = function (view, model) {
-        this.response.body = env.render(view, Object.assign({}, this.state || {}, model || {}))
-        this.response.type = 'text/html'
-    }
+  const env = createEnv(path, opts)
+  // app.context为ctx的原型
+  app.context.render = function (view, model) {
+    this.response.body = env.render(view, Object.assign({}, this.state || {}, model || {}))
+    this.response.type = 'text/html'
+  }
 }
 
 module.exports = templating

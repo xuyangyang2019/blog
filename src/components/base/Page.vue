@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <button @click="prePage" :disabled="preDisabled" class="changebtn"><</button>
+    <button :disabled="preDisabled" class="changebtn" @click="prePage">&lg;</button>
     <button
       v-for="(page, index) in pageArr"
       :key="index"
@@ -10,35 +10,18 @@
     >
       {{ page }}
     </button>
-    <button @click="nextPage" :disabled="nextDisabled" class="changebtn">></button>
+    <button :disabled="nextDisabled" class="changebtn" @click="nextPage">></button>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex"
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
       currentPage: 1, // 当前页
       preDisabled: true, // 上一页可用
-      nextDisabled: false, // 下一些可用
-    }
-  },
-  watch: {
-    currentPage: function () {
-      let cpg = this.currentPage
-      //按钮锁定
-      if (cpg === 1) {
-        this.preDisabled = true
-      } else if (cpg > 1) {
-        this.preDisabled = false
-      }
-      //后退按钮锁定
-      if (cpg < this.pageArr.length) {
-        this.nextDisabled = false
-      } else if (cpg === this.pageArr.length) {
-        this.nextDisabled = true
-      }
+      nextDisabled: false // 下一些可用
     }
   },
   computed: {
@@ -46,12 +29,30 @@ export default {
       pageArr: 'pageArr'
     })
   },
+  watch: {
+    currentPage: function () {
+      const cpg = this.currentPage
+      // 按钮锁定
+      if (cpg === 1) {
+        this.preDisabled = true
+      } else if (cpg > 1) {
+        this.preDisabled = false
+      }
+      // 后退按钮锁定
+      if (cpg < this.pageArr.length) {
+        this.nextDisabled = false
+      } else if (cpg === this.pageArr.length) {
+        this.nextDisabled = true
+      }
+    }
+  },
+
   methods: {
     ...mapActions({
       search: 'search',
       getArticles: 'GetArticles',
       timeArticles: 'timeArticles',
-      getLeaveWords: 'GetLeaveWords',
+      gerMsgBoard: 'GetMsgBoard'
     }),
     // 上一页
     prePage() {
@@ -69,38 +70,39 @@ export default {
     },
     // 跳转页
     changePage(page) {
-      let payload = {}
-      let tag = ""
+      let tag = ''
       this.currentPage = page
+      const timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
+      // utc时间0点起
+      const startTime = new Date(Date.parse(timeArr[0])).getTime()
+      // utc时间24点
+      const endTime = new Date(Date.parse(timeArr[1])).getTime() + 1000 * 60 * 60 * 24
+      let params = {}
       switch (this.$route.name) {
-        case "home":
+        case 'home':
           this.getArticles({
             publish: true,
             page: page,
             tag: false
           })
           break
-        case "techincal":
+        case 'techincal':
           this.getArticles({
             publish: true,
             page: page,
             tag: this.$route.params.articleList
           })
           break
-        case "life": tag = "life"
+        case 'life':
+          tag = 'life'
           this.getArticles({
             publish: true,
             page: page,
             tag: tag
           })
           break
-        case "timeLine":
-          let timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
-          //utc时间0点起
-          let startTime = new Date(Date.parse(timeArr[0])).getTime()
-          //utc时间24点
-          let endTime = new Date(Date.parse(timeArr[1])).getTime() + 1000 * 60 * 60 * 24
-          let params = {
+        case 'timeLine':
+          params = {
             publish: true,
             page: page,
             start: startTime,
@@ -108,15 +110,15 @@ export default {
           }
           this.timeArticles(params)
           break
-        case "msgboard":
-          this.getLeaveWords({ pageNum: page })
+        case 'msgboard':
+          this.gerMsgBoard({ pageNum: page })
           break
-        case "search":
+        case 'search':
           this.search({
             publish: true,
             page: page,
             key: this.$route.params.searchKey,
-            according: "key"
+            according: 'key'
           })
       }
     }

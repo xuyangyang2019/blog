@@ -42,9 +42,9 @@ module.exports = merge(baseConfig, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
-      'process.env.VUE_ENV': '"server"'
+      'process.env.VUE_ENV': JSON.stringify('server')
     }),
-    new VueSSRServerPlugin(),
+    new VueSSRServerPlugin()
     // new HtmlWebpackPlugin({
     //     template: path.resolve(__dirname, '../src/index.ssr.html'),
     //     filename: 'index.ssr.html',

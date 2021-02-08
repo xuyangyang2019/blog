@@ -4,14 +4,14 @@
 
 const path = require('path')
 const webpack = require('webpack')
-const appConfig = require('../app.config')
+// const appConfig = require('../app.config.js.bak')
 // this is a rewrite of VueLoaderPlugin to solve the compatibility with webpack5
 const vueLoaderPlugin = require('vue-loader/lib/plugin')
 
 // 该插件将为你生成一个 HTML5 文件， 其中包括使用 script 标签的 body 中的所有 webpack 包
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 // 自动提取css文件
-const ExtractCssChunks = require("extract-css-chunks-webpack-plugin")
+const ExtractCssChunks = require('extract-css-chunks-webpack-plugin')
 // 识别某些类别的webpack错误，并清理，聚合和优先级，以提供更好的开发人员体验
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 // 用于优化\最小化CSS
@@ -19,7 +19,6 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 // 区分大小写的路径
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-
 
 // 开发环境
 const isProd = process.env.NODE_ENV === 'production'
@@ -52,10 +51,12 @@ module.exports = function () {
       // 补充扩展名
       extensions: ['.js', '.vue', '.json'],
       // 别名，可以直接使用别名来代表设定的路径以及其他
-      alias: Object.assign({}, appConfig.webpack.resolveAlias, {
-        // 'vue': 'vue/dist/vue.esm.js',
-        '@': resolve('src'),
-      })
+      alias: {
+        '@': resolve('src')
+      }
+      // Object.assign({}, appConfig.webpack.resolveAlias, {
+      //   '@': resolve('src')
+      // })
     },
     module: {
       rules: [
@@ -68,7 +69,7 @@ module.exports = function () {
         {
           test: /\.(js|jsx)$/,
           use: ['babel-loader'],
-          exclude: /node_modules/,
+          exclude: /node_modules/
         },
         {
           test: /\.css$/,
@@ -76,11 +77,14 @@ module.exports = function () {
         },
         {
           test: /\.(styl|stylus)$/,
-          use: [isProd ? ExtractCssChunks.loader : 'vue-style-loader', 'css-loader', 'postcss-loader',
-          {
-            loader: 'stylus-loader',
-            options: isProd ? {} : { sourceMap: 'inline' }
-          }
+          use: [
+            isProd ? ExtractCssChunks.loader : 'vue-style-loader',
+            'css-loader',
+            'postcss-loader',
+            {
+              loader: 'stylus-loader',
+              options: isProd ? {} : { sourceMap: 'inline' }
+            }
           ]
         },
         {
@@ -102,33 +106,38 @@ module.exports = function () {
         // },
         {
           test: /\.json$/,
-          use: 'json-loader',
+          use: 'json-loader'
         },
         // 图片资源 gif|jpg|jpeg|png|bmp|svg|ico
         {
           test: /\.(gif|jpg|jpeg|png|bmp|svg|ico)(\?.*)?$/,
-          use: [{
-            loader: 'url-loader',
-            options: {
-              limit: 8192,
-              name: 'assets/images/[name].[hash:8].[ext]',
-            },
-          }],
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 8192,
+                name: 'assets/images/[name].[hash:8].[ext]'
+              }
+            }
+          ]
         },
         // 字体文件 woff|woff2|eot|ttf
         {
           test: /\.(woff|woff2|eot|ttf)(\?.*)?$/,
-          use: [{
-            loader: 'url-loader',
-            options: {
-              // 小于8912字节的文件,返回dataurl
-              limit: 8912,
-              // 生成的文件名,[name]为原始文件名,[hash:8]为根据文件内容生成8位md5值,[ext]为原始文件扩展名
-              name: 'assets/font/[name].[hash:8].[ext]',
-            },
-          }],
-        },
-      ].concat(appConfig.webpack.rules || []),
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                // 小于8912字节的文件,返回dataurl
+                limit: 8912,
+                // 生成的文件名,[name]为原始文件名,[hash:8]为根据文件内容生成8位md5值,[ext]为原始文件扩展名
+                name: 'assets/font/[name].[hash:8].[ext]'
+              }
+            }
+          ]
+        }
+      ]
+      // .concat(appConfig.webpack.rules || []),
     },
     performance: {
       maxEntrypointSize: 300000,
@@ -143,7 +152,7 @@ module.exports = function () {
         favicon,
         filename: 'index.ssr.html',
         template: path.join(process.cwd(), './src/index.ssr.html'),
-        inject: !isProd,
+        inject: !isProd
       }),
       new FriendlyErrorsPlugin(),
       new vueLoaderPlugin(),
@@ -155,36 +164,34 @@ module.exports = function () {
           from: path.resolve(__dirname, '../public/404.html'),
           to: path.resolve(__dirname, '../dist'),
           ignore: ['.*']
-        },
+        }
         // {
         //   from: path.resolve(__dirname, '../public/img'),
         //   to: path.resolve(__dirname, '../dist/img'),
         //   ignore: ['.*']
         // },
       ])
-    ],
+    ]
   }
   if (isProd) {
     config.plugins = (config.plugins || []).concat([
       // 分离css文件
       new ExtractCssChunks({
         filename: 'css/[name].[chunkhash:8].css',
-        chunkFilename: 'css/[id].[chunkhash:8].css',
+        chunkFilename: 'css/[id].[chunkhash:8].css'
       }),
       // 限制文件最小KB
       new webpack.optimize.MinChunkSizePlugin({
         minChunkSize: 20000
       }),
-      new OptimizeCssAssetsPlugin(
-        {
-          cssProcessor: require('cssnano'),
-          cssProcessorOptions: {
-            // postcss那边已经处理过autoprefixer了，这里把它关掉，否则会导致浏览器前缀兼容范围问题
-            autoprefixer: false,
-            discardComments: { removeAll: true }
-          },
+      new OptimizeCssAssetsPlugin({
+        cssProcessor: require('cssnano'),
+        cssProcessorOptions: {
+          // postcss那边已经处理过autoprefixer了，这里把它关掉，否则会导致浏览器前缀兼容范围问题
+          autoprefixer: false,
+          discardComments: { removeAll: true }
         }
-      ),
+      })
     ])
   }
   return config

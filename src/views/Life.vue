@@ -7,58 +7,63 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex"
+import { mapMutations, mapState } from 'vuex'
 
-import loading from "@/components/base/Loading"
-import articleList from "@/components/article/ArticleList"
-import headMixin from '@/mixins/head-mixin'
-
+import loading from '@/components/base/Loading'
+import articleList from '@/components/article/ArticleList'
+import headMixin from '@/mixins/headMixin'
 
 export default {
-  head() {
-    return {
-      title: '生活文章',
-    }
-  },
-  asyncData({ store, route }) {
-    return Promise.all([
-      store.dispatch("GetArticles", {
-        publish: true,
-        page: 1,
-        tag: "life",
-        cache: true
-      }),
-      store.dispatch("GetArticlesCount", {
-        publish: true,
-        page: 1,
-        tag: "life",
-        cache: true
-      })
-    ]).then(() => {
-      store.commit("CHANGE_CODE", 200)
-    })
-  },
   name: 'Life',
-  mixins: [headMixin],
   components: {
     articleList,
     loading
   },
+  mixins: [headMixin],
+  beforeRouteLeave(to, from, next) {
+    this.clear()
+    next()
+  },
+  asyncData({ store }) {
+    return store.dispatch('GetArticles', {
+      publish: true,
+      tag: 'life',
+      pageNum: 1,
+      pageSize: 10
+    })
+    // return Promise.all([
+    //   store.dispatch('GetArticles', {
+    //     publish: true,
+    //     page: 1,
+    //     tag: 'life',
+    //     cache: true
+    //   }),
+    //   store.dispatch('GetArticlesCount', {
+    //     publish: true,
+    //     page: 1,
+    //     tag: 'life',
+    //     cache: true
+    //   })
+    // ]).then(() => {
+    //   store.commit('CHANGE_CODE', 200)
+    // })
+  },
+  head() {
+    return {
+      title: '生活文章'
+    }
+  },
   computed: {
     ...mapState({
       code: 'code',
-      articles: 'articles',
+      articles: 'articles'
     })
   },
   methods: {
     ...mapMutations({
       clear: 'CLEAR_PAGE'
     })
-  },
-  beforeRouteLeave(to, from, next) {
-    this.clear()
-    next()
-  },
+  }
 }
 </script>
 

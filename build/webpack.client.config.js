@@ -9,12 +9,11 @@ const baseConfig = require('./webpack.base.config')()
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 // const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-
 const isProd = process.env.NODE_ENV === 'production'
 
 const config = merge(baseConfig, {
   entry: {
-    app: path.join(process.cwd(), 'src/entry-client.js'),
+    app: path.join(process.cwd(), 'src/entry-client.js')
     // vendors: ['axios', "@/assets/js/prism.js"],
     // vues: ['vue', 'vuex', 'vue-router']
   },
@@ -30,10 +29,10 @@ const config = merge(baseConfig, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
-      'process.env.VUE_ENV': '"client"'
+      'process.env.VUE_ENV': JSON.stringify('client')
     }),
     // 此插件在输出目录中,生成 `vue-ssr-client-manifest.json`。
-    new VueSSRClientPlugin(),
+    new VueSSRClientPlugin()
     // 此插件在输出目录中,生成 index.html,用来演示spa
     // new HtmlWebpackPlugin({
     //   template: path.resolve(__dirname, '../src/index.html'),

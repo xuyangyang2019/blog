@@ -1,9 +1,9 @@
 export function siblings(ele) {
-  let arr_siblings = []
-  let ele_par = ele.parentNode
-  let children = ele_par.childNodes
+  const arr_siblings = []
+  const ele_par = ele.parentNode
+  const children = ele_par.childNodes
   for (let i = 0; i < children.length; i++) {
-    if (children[i].nodeType == 1 && children[i] !== ele) {
+    if (children[i].nodeType === 1 && children[i] !== ele) {
       arr_siblings.push(children[i])
     }
   }

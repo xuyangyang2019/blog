@@ -6,21 +6,21 @@
 // })
 
 module.exports = {
-    name: "counter",
-    schema: {
-        _id: String,
-        seq: Number,
-        create_time: {
-            type: Date,
-            default: Date.now
-        }, // 创建时间
-        update_time: {
-            type: Date,
-            default: Date.now
-        }, // 修改时间
-    },
-    options: {
-        versionKey: false,
-        timestamps: { createdAt: 'create_time', updatedAt: 'update_time' }
-    }
+  name: 'counter',
+  schema: {
+    _id: String,
+    seq: Number,
+    createTime: {
+      type: Date,
+      default: Date.now
+    }, // 创建时间
+    updateTime: {
+      type: Date,
+      default: Date.now
+    } // 修改时间
+  },
+  options: {
+    versionKey: false,
+    timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }
+  }
 }

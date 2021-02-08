@@ -10,14 +10,14 @@
 <script>
 export default {
   // 由于此函数会在组件实例化之前调用，所以它无法访问 this
-  asyncData({ store, route }) {
+  asyncData({ store }) {
     // 触发 action 后，会返回 Promise
     // return store.dispatch('fetchItem', route.params.id)
     return store.dispatch('fetchBar')
   },
-  methods: {
-    onHandleClick() {
-      alert('bar')
+  computed: {
+    msg() {
+      return this.$store.state.bar
     }
   },
   mounted() {
@@ -25,9 +25,9 @@ export default {
     // 所以把调用 Ajax 初始化数据也写在这里，是为了供单独浏览器渲染使用
     this.$store.dispatch('fetchBar')
   },
-  computed: {
-    msg() {
-      return this.$store.state.bar
+  methods: {
+    onHandleClick() {
+      alert('bar')
     }
   }
 }

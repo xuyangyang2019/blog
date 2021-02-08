@@ -2,16 +2,16 @@
   <div class="article-list">
     <!-- 文章列表 -->
     <ul>
-      <li v-for="(item, index) in articleList" class="article-item">
+      <li v-for="(item, index) in articleList" :key="index" class="article-item">
         <!-- title -->
         <h2 class="article-title">
-          <a href="javascript: void(0)" @click="jump(item)"> {{ item.title }} </a>
+          <a href="javascript: void(0)" @click="jump(item)">{{ item.title }}</a>
         </h2>
         <div class="article-msg">
           <!-- 标签 -->
           <span class="icon-tag-stroke"></span>
           <span class="article-msg-tag">
-            <span v-for="tag in item.tag"> {{ tag | changeLife }} </span>
+            <span v-for="(tag, tagIndex) in item.tag" :key="tagIndex">{{ tag | changeLife }}</span>
           </span>
           <!-- 时间 -->
           <span class="icon-clock"></span>
@@ -45,13 +45,13 @@
   </div>
 </template>
 
-<script> 	
-import { mapState, mapMutations } from "vuex"
-import page from "@/components/base/Page"
+<script>
+import { mapState, mapMutations } from 'vuex'
+import Page from '@/components/base/Page'
 
 export default {
   components: {
-    page
+    Page
   },
   props: {
     articleList: {
@@ -74,13 +74,13 @@ export default {
     // 跳转到文章
     jump(item) {
       this.changeTitle(item.title)
-      if (item.tag[0] === "life") {
+      if (item.tag[0] === 'life') {
         this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
       } else {
-        this.$router.push({ name: 'articleShow', params: { articleList: item.tag[0], id: item.articleId } })
+        this.$router.push({ name: 'articleShow', params: { tag: item.tag[0], id: item._id } })
       }
     }
-  },
+  }
 }
 </script>
 
@@ -107,7 +107,6 @@ export default {
   border-radius: 3px;
   // background: #F7EDED;
   background: #faf7f7;
-  list-style: none;
   h2 {
     padding: 10px 0;
     a {

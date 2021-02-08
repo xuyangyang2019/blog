@@ -25,7 +25,7 @@ const responseHandler = (ctx) => {
 // 这个middleware处理在其它middleware中出现的异常
 // 并将异常消息回传给客户端：{ code: '错误代码', msg: '错误信息' }
 const errorHandler = (ctx, next) => {
-  return next().catch(err => {
+  return next().catch((err) => {
     if (err.name === 'UnauthorizedError') {
       // 身份验证失败返回 401
       ctx.status = 401
@@ -39,7 +39,7 @@ const errorHandler = (ctx, next) => {
       ctx.body = {
         code: err.code || -1,
         data: null,
-        msg: err.message.trim()
+        msg: err.message ? err.message.trim() : err
       }
     }
     return Promise.resolve()

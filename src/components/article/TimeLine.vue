@@ -6,24 +6,28 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex"
+import { mapActions, mapState, mapMutations } from 'vuex'
+import { searchArticle } from '../../api/front'
 
-import articleList from "@/components/article/ArticleList"
-import loading from "@/components/base/Loading"
-import headMixin from '@/mixins/head-mixin'
-
+import ArticleList from '@/components/article/ArticleList'
+import Loading from '@/components/base/Loading'
+import headMixin from '@/mixins/headMixin'
 
 export default {
+  name: 'TimeLine',
+  components: {
+    ArticleList,
+    Loading
+  },
+  mixins: [headMixin],
+  beforeRouteLeave(to, from, next) {
+    this.clear()
+    next()
+  },
   head() {
     return {
-      title: "时间轴"
+      title: '时间轴'
     }
-  },
-  name: 'TimeLine',
-  mixins: [headMixin],
-  components: {
-    articleList,
-    loading
   },
   computed: {
     ...mapState({
@@ -32,40 +36,44 @@ export default {
   },
   watch: {
     $route() {
-      this.time_arts()
+      this.queryArticlesByTime()
     }
+  },
+
+  created() {
+    this.queryArticlesByTime()
   },
   methods: {
     ...mapActions({
-      getArticlesCount: 'GetArticlesCount',
+      GetArticlesCount: 'GetArticlesCount',
       timeArticles: 'TimeArticles'
     }),
     ...mapMutations({
-      clear: 'CLEAR_PAGE'
+      clear: 'CLEAR_PAGE',
+      SET_ARTICLES_TIME: 'SET_ARTICLES_TIME',
+      PRODUCT_BG: 'PRODUCT_BG',
+      SET_ARTICLES_SUM: 'SET_ARTICLES_SUM',
+      SET_PAGE_ARR: 'SET_PAGE_ARR'
     }),
-    time_arts() {
-      let timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
+    queryArticlesByTime() {
+      const timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
       // utc时间0点起
-      let startTime = new Date(Date.parse(timeArr[0])).getTime()
+      const startTime = new Date(Date.parse(timeArr[0])).getTime()
       // utc时间24点
-      let endTime = new Date(Date.parse(timeArr[1])).getTime() + 1000 * 60 * 60 * 24
-      let params = {
-        publish: true,
-        page: 1,
-        start: startTime,
-        end: endTime,
-        according: "time"
-      }
-      this.timeArticles(params)
-      this.getArticlesCount(params)
+      const endTime = new Date(Date.parse(timeArr[1])).getTime() + 1000 * 60 * 60 * 24
+
+      searchArticle(true, 1, 10, null, startTime, endTime).then((res) => {
+        console.log(res)
+        if (res.code === 200) {
+          const articles = res.data.list
+          const articlesCount = res.data.count
+          this.SET_ARTICLES_TIME(articles)
+          this.PRODUCT_BG(articles)
+          this.SET_ARTICLES_SUM(articlesCount)
+          this.SET_PAGE_ARR(articlesCount)
+        }
+      })
     }
-  },
-  beforeRouteLeave(to, from, next) {
-    this.clear()
-    next()
-  },
-  created() {
-    this.time_arts()
   }
 }
 </script>

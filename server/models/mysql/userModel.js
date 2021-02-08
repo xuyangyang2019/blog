@@ -7,15 +7,15 @@ const user = {
    * @return {object|null}        查找结果
    */
   async queryAllUser(options) {
-    let _sql = `select * from user;`
-    let result = await dbUtils.query(_sql)
+    const _sql = `select * from user;`
+    const result = await dbUtils.query(_sql)
     // if (Array.isArray(result) && result.length > 0) {
     //   result = result[0]
     // } else {
     //   result = null
     // }
     return result
-  },
+  }
   // /**
   //  * 数据库创建用户
   //  * @param  {object} model 用户数据模型
@@ -73,7 +73,7 @@ const user = {
 
   //   let result = await dbUtils.select(
   //     'user_info',
-  //     ['id', 'email', 'name', 'detail_info', 'create_time', 'modified_time', 'modified_time'])
+  //     ['id', 'email', 'name', 'detail_info', 'createTime', 'modified_time', 'modified_time'])
   //   if (Array.isArray(result) && result.length > 0) {
   //     result = result[0]
   //   } else {
@@ -82,6 +82,5 @@ const user = {
   //   return result
   // },
 }
-
 
 module.exports = user

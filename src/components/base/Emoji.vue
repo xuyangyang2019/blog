@@ -2,7 +2,14 @@
   <div class="emoji">
     <!-- 分类 -->
     <ul class="emoji-controller">
-      <li v-for="(pannel, index) in pannels" @click="changeActive(index)" :class="{ active: index === activeIndex }">{{ pannel }}</li>
+      <li
+        v-for="(pannel, index) in pannels"
+        :key="index"
+        :class="{ active: index === activeIndex }"
+        @click="changeActive(index)"
+      >
+        {{ pannel }}
+      </li>
     </ul>
     <!-- emoji 列表 -->
     <ul class="emoji-container">
@@ -12,7 +19,7 @@
         </a>
       </li> -->
       <li style="padding: 0">
-        <a href="javascript:;" v-for="(emoji, index) in emojis[activeIndex]" :key="index" @click="selectItem(emoji)">
+        <a v-for="(emoji, index) in emojis[activeIndex]" :key="index" href="javascript:;" @click="selectItem(emoji)">
           <span class="emoji-item" :title="emoji" :class="'sprite-' + getPureName(emoji)"></span>
         </a>
       </li>
@@ -32,6 +39,14 @@ export default {
       activeIndex: 0 // 当前pannel
     }
   },
+  computed: {
+    // 返回所有emoji的键值组成的数组
+    emojis() {
+      return this.pannels.map((item) => {
+        return Object.keys(this.emojiData[item])
+      })
+    }
+  },
   methods: {
     // 改变emoji类别
     changeActive(index) {
@@ -45,14 +60,6 @@ export default {
     selectItem(emoji) {
       // console.log("子元素触发")
       this.$emit('select', emoji)
-    }
-  },
-  computed: {
-    // 返回所有emoji的键值组成的数组
-    emojis() {
-      return this.pannels.map(item => {
-        return Object.keys(this.emojiData[item])
-      })
     }
   }
 }
@@ -72,7 +79,6 @@ export default {
     overflow: hidden;
     margin-bottom: 0;
     li {
-      list-style: none;
       float: left;
       width: 65px;
       font-size: 12px;
@@ -81,7 +87,7 @@ export default {
       text-align: center;
       position: relative;
       &.active::after {
-        content: "";
+        content: '';
         width: 100%;
         height: 1px;
         background: #0689dd;

@@ -12,29 +12,22 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from "vuex"
+import { mapState, mapMutations } from 'vuex'
+import { searchArticle } from '../../api/front'
 
-import articleList from "@/components/article/ArticleList"
-import loading from "@/components/base/Loading"
+import ArticleList from '@/components/article/ArticleList'
+import Loading from '@/components/base/Loading'
 
 export default {
+  components: {
+    ArticleList,
+    Loading
+  },
   data() {
     return {
-      searchTips: "",
+      searchTips: '',
       code: 404
     }
-  },
-  metaInfo() {
-    return {
-      title: "搜索 -mapblog小站"
-    }
-  },
-  created() {
-    this.startSearch()
-  },
-  components: {
-    articleList,
-    loading
   },
   computed: {
     ...mapState({
@@ -46,34 +39,35 @@ export default {
       this.startSearch()
     }
   },
+  created() {
+    this.startSearch()
+    document.title = '搜索 -mapblog小站'
+  },
   methods: {
-    ...mapActions({
-      search: 'SearchArticles',
-      getArticlesCount: 'GetArticlesCount'
-    }),
     ...mapMutations({
-      clear: 'CLEAR_PAGE'
+      SET_ARTICLES_SEARCH: 'SET_ARTICLES_SEARCH',
+      PRODUCT_BG: 'PRODUCT_BG',
+      SET_ARTICLES_SUM: 'SET_ARTICLES_SUM',
+      SET_PAGE_ARR: 'SET_PAGE_ARR'
     }),
     startSearch() {
-      this.search({
-        publish: true,
-        page: 1,
-        key: this.$route.params.searchKey,
-        according: "key"
-      }).then((data) => {
-        this.$store.commit("SET_ARTICLES_SEARCH", data)
-        this.$store.commit("PRODUCT_BG", data)
-        if (data.length) {
-          this.searchTips = "以下是为您搜索到的内容："
-        } else {
-          this.searchTips = "杯具啊(┬┬﹏┬┬)啥也没找到···"
+      const keyword = this.$route.params.searchKey
+      searchArticle(true, 1, 10, keyword).then((res) => {
+        console.log(res)
+        if (res.code === 200) {
+          const articles = res.data.list
+          const articlesCount = res.data.count || 0
+          this.SET_ARTICLES_SEARCH(articles)
+          this.PRODUCT_BG(articles)
+          this.SET_ARTICLES_SUM(articlesCount)
+          this.SET_PAGE_ARR(articlesCount)
+          if (articles.length) {
+            this.searchTips = '以下是为您搜索到的内容：'
+          } else {
+            this.searchTips = '杯具啊(┬┬﹏┬┬)啥也没找到···'
+          }
+          this.code = 200
         }
-        this.code = 200
-      })
-      // 文章总数
-      this.getArticlesCount({
-        publish: true,
-        key: this.$route.params.searchKey,
       })
     }
   }

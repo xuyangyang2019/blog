@@ -15,6 +15,7 @@ module.exports = {
       super(message, 403)
     }
   },
+
   /**
    * 无效的参数构造函数
    */
@@ -23,9 +24,10 @@ module.exports = {
       super(message, 400)
     }
   },
-/**
- * 资源未找到构造函数
- */
+
+  /**
+   * 资源未找到构造函数
+  */
   NotFoundError: class NotFoundError extends CommonError {
     constructor(message = '资源未找到') {
       super(message, 404)
