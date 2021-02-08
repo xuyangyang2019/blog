@@ -46,11 +46,12 @@ const backendApp = new Koa()
 
 // Logger
 if (!isProd) {
-backendApp.use(
-  Koa_Logger((str) => {
+  backendApp.use(
+    Koa_Logger((str) => {
       console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
-  })
-)
+    })
+  )
+}
 // backendApp.use(loggerMiddleware)
 
 // Error Handler
@@ -95,7 +96,7 @@ function createRenderer(bundle, options) {
   return createBundleRenderer(
     bundle,
     Object.assign(options, {
-      cache: LRU({
+      cache: new LRU({
         max: 1000,
         maxAge: 1000 * 60 * 15
       }),
