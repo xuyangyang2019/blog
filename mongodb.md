@@ -36,14 +36,28 @@ mongo admin -u xuyy -p
 ```bash
 mongo
 use admin
-db.createUser({user:"root",pwd:"123456",roles:[{role:"userAdminAnyDatabase",db:"admin"},{role:"__system",db:"admin"}]})
+db.createUser({user:"root",pwd:"password",roles:["root"]})
+
+db.createUser(  
+  {  
+    user: "admin",  
+    pwd: "password",  
+    roles: [{role: "userAdminAnyDatabase", db: "admin"}]  
+  }  
+)
 ```
 
 ### 创建管理员
 
 ```bash
-use test
-db.createUser({user:"xuyy",pwd:"1234509876",roles:[{role:"userAdminAnyDatabase",db:"test"}]})
+use admin
+db.auth("admin","password");
+use ballmatch
+db.createUser({
+    user: "football",
+    pwd: "password",
+    roles: [{role: "readWrite",db: "ballmatch"}]
+})
 ```
 
 ### mongodb 有哪些权限:

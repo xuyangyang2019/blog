@@ -51,21 +51,25 @@ const actions = {
   // 获取文章
   GetArticles({ commit }, payload) {
     const { publish, tag, pageNum, pageSize } = payload
-    return getArticleList(publish, tag, pageNum, pageSize).then((res) => {
-      if (res.code === 200) {
-        if (!payload.tag) {
-          commit('SET_ARTICLES_ALL', res.data.list)
-        } else if (payload.tag === 'life') {
-          commit('SET_ARTICLES_LIFE', res.data.list)
-        } else {
-          commit('SET_ARTICLES_TECH', res.data.list)
+    return getArticleList(publish, tag, pageNum, pageSize)
+      .then((res) => {
+        if (res.code === 200) {
+          if (!payload.tag) {
+            commit('SET_ARTICLES_ALL', res.data.list)
+          } else if (payload.tag === 'life') {
+            commit('SET_ARTICLES_LIFE', res.data.list)
+          } else {
+            commit('SET_ARTICLES_TECH', res.data.list)
+          }
+          commit('PRODUCT_BG', res.data.list)
+          commit('SET_ARTICLES_SUM', res.data.count)
+          commit('SET_PAGE_ARR', res.data.count)
+          commit('CHANGE_CODE', 200)
         }
-        commit('PRODUCT_BG', res.data.list)
-        commit('SET_ARTICLES_SUM', res.data.count)
-        commit('SET_PAGE_ARR', res.data.count)
-        commit('CHANGE_CODE', 200)
-      }
-    })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   },
   // 获取对应模块的文章总数，为分页按钮个数提供支持
   GetArticlesCount({ commit }, payload) {

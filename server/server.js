@@ -8,6 +8,7 @@ const Koa = require('koa')
 const Koa_Logger = require('koa-logger')
 const Moment = require('moment')
 // const { loggerMiddleware } = require('./middlewares/logger')
+
 // 数据压缩
 const KoaCompress = require('koa-compress')()
 // 解析静态资源
@@ -20,6 +21,7 @@ const jsonp = require('koa-jsonp')
 // const rest = require('./middlewares/rest')
 // 错误处理 和 返回处理
 const { errorHandler, responseHandler } = require('./middlewares/response')
+
 // 路由
 const viewRouter = require('./routes/view')
 const publicRouter = require('./routes/public')
@@ -31,7 +33,6 @@ const isProd = process.env.NODE_ENV === 'production'
 
 // 获取本地ip
 const { serverPort, defaultHost } = require('./config')
-// const serverHost = isProd ? prodHost : devHost
 const uri = `http://${defaultHost}:${serverPort}`
 
 function resolve(dir) {
@@ -44,15 +45,14 @@ function resolve(dir) {
 const backendApp = new Koa()
 
 // Logger
-backendApp.use(
-  Koa_Logger((str) => {
-    if (isProd) {
-      console.log(str)
-    } else {
+if (!isProd) {
+  backendApp.use(
+    Koa_Logger((str) => {
       console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
-    }
-  })
-)
+    })
+  )
+}
+// backendApp.use(loggerMiddleware)
 
 // Error Handler
 backendApp.use(errorHandler)
@@ -64,9 +64,17 @@ backendApp.use(KoaCompress)
 backendApp.use(koaBody())
 
 // 处理静态文件
-backendApp.use(Koa_Static(resolve('dist'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
-backendApp.use(Koa_Static(resolve('dist-admin'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
-backendApp.use(Koa_Static(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+// 生产环境下，静态文件是由部署在最前面的反向代理服务器（如Nginx）处理的，Node程序不需要处理静态文件。
+// 而在开发环境下，我们希望koa能顺带处理静态文件，否则，就必须手动配置一个反向代理服务器，这样会导致开发环境非常复杂。
+if (!isProd) {
+  // 原生的实现方式
+  // let staticFiles = require('./middlewares/static-files');
+  // app.use(staticFiles('/static/', __dirname + '/static'));
+  // app.use(staticFiles('/dist/', __dirname + '/dist'));
+  backendApp.use(Koa_Static(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+  backendApp.use(Koa_Static(resolve('dist'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+  // backendApp.use(Koa_Static(resolve('dist-admin'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+}
 
 // // Helmet
 // backendApp.use(helmet())
@@ -88,7 +96,7 @@ function createRenderer(bundle, options) {
   return createBundleRenderer(
     bundle,
     Object.assign(options, {
-      cache: LRU({
+      cache: new LRU({
         max: 1000,
         maxAge: 1000 * 60 * 15
       }),
