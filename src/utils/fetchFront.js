@@ -102,7 +102,9 @@ if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL = 'http://192.168.0.111:3000'
 } else if (process.env.NODE_ENV === 'production') {
   // PM2部署的时候改成服务器地址
-  axios.defaults.baseURL = 'http://182.92.221.114:3000'
+  // axios.defaults.baseURL = 'http://182.92.221.114:3000'
+  // 使用nginx代理
+  axios.defaults.baseURL = 'http://xyy.life'
 }
 
 // post请求头
