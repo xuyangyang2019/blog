@@ -109,8 +109,8 @@ if (process.env.NODE_ENV === 'development') {
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
 
 // // axios配置
-axios.defaults.withCredentials = true // 携带cookie
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest' // 判断是否为ajax请求
+// axios.defaults.withCredentials = true // 携带cookie
+// axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest' // 判断是否为ajax请求
 
 // 创建axios实例
 // 如果需要访问多个服务地址，而这些服务请求和响应的结构也可能都完全不同
