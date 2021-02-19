@@ -30,7 +30,7 @@ function resolve(dir) {
 }
 
 // 网站图标
-const favicon = path.join(process.cwd(), '/public/icon/xyy.ico')
+// const favicon = path.join(process.cwd(), '/public/icon/xyy.ico')
 
 module.exports = function () {
   const config = {
@@ -149,7 +149,7 @@ module.exports = function () {
       // 读取HTML模板文件，并输出HTML文件，开发环境实际输出到内存中
       new HtmlWebpackPlugin({
         // appVersion,
-        favicon,
+        // favicon,
         filename: 'index.ssr.html',
         template: path.join(process.cwd(), './src/index.ssr.html'),
         inject: !isProd
