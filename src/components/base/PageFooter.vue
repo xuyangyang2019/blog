@@ -3,7 +3,7 @@
     <ul class="copyright">
       <li class="copyright-item">
         <img class="bei-an-img" src="/img/beian.png" alt="beian" />
-        <a href="http://www.beian.gov.cn/" target="_blank">浙公网安备...号</a>
+        <a href="http://www.beian.gov.cn/" target="_blank">浙公网安备33010402004522号</a>
       </li>
       <li class="copyright-item">
         <a href="http://beian.miit.gov.cn" target="_blank">浙ICP备2021004304号-1</a>
