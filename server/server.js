@@ -16,7 +16,7 @@ const Koa_Static = require('koa-static')
 // 解析POST请求
 const koaBody = require('koa-body')
 // ajax 跨域问题
-const jsonp = require('koa-jsonp')
+const cors = require('koa2-cors')
 // rest中间件
 // const rest = require('./middlewares/rest')
 // 错误处理 和 返回处理
@@ -83,7 +83,7 @@ if (!isProd) {
 // backendApp.use(rest.restify())
 
 // Cors
-backendApp.use(jsonp())
+backendApp.use(cors())
 
 // // View
 // backendApp.use(views(config.viewsDir))
