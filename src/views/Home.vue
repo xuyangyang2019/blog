@@ -62,15 +62,6 @@ export default {
     // this.$nextTick(function () {
     //   Prism.highlightAll()
     // })
-  },
-  methods: {
-    ...mapActions({
-      getArticles: 'GetArticles'
-      // getArticlesCount: 'GetArticlesCount'
-    }),
-    ...mapMutations({
-      clear: 'CLEAR_PAGE'
-    })
   }
 }
 </script>
