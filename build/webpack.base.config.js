@@ -23,14 +23,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 // 开发环境
 const isProd = process.env.NODE_ENV === 'production'
 // 版本号
-const appVersion = new Date().getTime()
+// const appVersion = new Date().getTime()
 
 function resolve(dir) {
   return path.resolve(process.cwd(), dir)
 }
 
 // 网站图标
-const favicon = path.join(process.cwd(), 'favicon.ico')
+const favicon = path.join(process.cwd(), '/public/icon/xyy.ico')
 
 module.exports = function () {
   const config = {
@@ -148,7 +148,7 @@ module.exports = function () {
       new CaseSensitivePathsPlugin(),
       // 读取HTML模板文件，并输出HTML文件，开发环境实际输出到内存中
       new HtmlWebpackPlugin({
-        appVersion,
+        // appVersion,
         favicon,
         filename: 'index.ssr.html',
         template: path.join(process.cwd(), './src/index.ssr.html'),

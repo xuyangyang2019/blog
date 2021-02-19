@@ -2,7 +2,7 @@
   <header class="page-header" :class="{ 'tab-bg': tabBg }">
     <div class="page-header-wrap">
       <!-- logo图片 -->
-      <img class="logo-img" src="/img/logo.png" alt="" />
+      <img class="logo-img" src="/icon/xyy3.png" alt="" />
 
       <!-- 搜索栏 -->
       <div class="search-box">
