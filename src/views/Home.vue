@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
 import Banner from '@/components/home/Banner'
 import Loading from '@/components/base/Loading.vue'
