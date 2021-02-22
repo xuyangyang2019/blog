@@ -45,7 +45,8 @@
     <!-- 回到top -->
     <transition name="fade">
       <div v-show="showBackTop" class="rocket">
-        <a href="javascript: void(0)" @click="backTop"></a>
+        <!-- <a href="javascript: void(0)" @click="backTop"></a> -->
+        <i class="fa fa-rocket" aria-hidden="true"></i>
       </div>
     </transition>
 
@@ -272,9 +273,10 @@ export default {
 // 阿里的iconfont
 // @import "~@/assets/iconfont/iconfont.css";
 // font-awesome
-// @import "~@/assets/font-awesome/css/font-awesome.css";
+@import "./assets/font-awesome-4.7.0/css/font-awesome.min.css";
 // iconmoon图标
 @import './assets/icomoon/style.css';
+// emoji雪碧图
 @import './assets/css/emoji-sprite.css';
 
 body {
@@ -326,7 +328,8 @@ body {
 .rocket {
   position: fixed;
   right: 10px;
-  bottom: 60px;
+  bottom: 50px;
+  border: solid red 1px;
   a {
     display: inline-block;
     width: 50px;
@@ -356,6 +359,9 @@ body {
     .side-bar-right {
       width: 100%;
     }
+  }
+  .rocket{
+    bottom: 60px;
   }
 }
 
