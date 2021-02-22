@@ -5,7 +5,7 @@
 
     <!-- 主要内容 -->
     <div class="main">
-      <!-- <div id="anchor"></div> -->
+      <div id="anchor"></div>
       <div class="container-wrap">
         <section class="contenter">
           <!-- 导航按钮 -->
@@ -44,9 +44,9 @@
 
     <!-- 回到top -->
     <transition name="fade">
-      <div v-show="showBackTop" class="rocket">
+      <div v-show="showBackTop" class="back-top" @click="backTop">
+        <i class="fa fa-rocket fa-2x" aria-hidden="true"></i>
         <!-- <a href="javascript: void(0)" @click="backTop"></a> -->
-        <i class="fa fa-rocket" aria-hidden="true"></i>
       </div>
     </transition>
 
@@ -273,7 +273,8 @@ export default {
 // 阿里的iconfont
 // @import "~@/assets/iconfont/iconfont.css";
 // font-awesome
-@import "./assets/font-awesome-4.7.0/css/font-awesome.min.css";
+// @import './assets/font-awesome-4.7.0/css/font-awesome.min.css';
+@import './assets/font-awesome-4.7.0/css/font-awesome.css';
 // iconmoon图标
 @import './assets/icomoon/style.css';
 // emoji雪碧图
@@ -325,19 +326,17 @@ body {
   }
 }
 
-.rocket {
+.back-top {
   position: fixed;
-  right: 10px;
+  right: 20px;
   bottom: 50px;
-  border: solid red 1px;
-  a {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    background: url('/img/backTop.png') 0 0 no-repeat;
+  color: #909399;
+  .fa-rocket {
+    transform: rotate(315deg);
   }
-  a:hover {
-    background-position: -50px 0;
+  &:hover {
+    cursor: pointer;
+    color: #c0c4cc;
   }
 }
 
@@ -360,9 +359,6 @@ body {
       width: 100%;
     }
   }
-  .rocket{
-    bottom: 60px;
-  }
 }
 
 //平板
@@ -376,9 +372,6 @@ body {
     .side-bar-right {
       margin-left: 25px;
     }
-  }
-  .rocket{
-    bottom: 50px;
   }
 }
 
