@@ -44,10 +44,10 @@
 
     <!-- 回到top -->
     <transition name="fade">
-      <div v-show="showBackTop" class="back-top" @click="backTop">
+      <to-top></to-top>
+      <!-- <div v-show="showBackTop" class="back-top" @click="backTop">
         <i class="fa fa-rocket fa-2x" aria-hidden="true"></i>
-        <!-- <a href="javascript: void(0)" @click="backTop"></a> -->
-      </div>
+      </div> -->
     </transition>
 
     <!-- 背景 -->
@@ -60,6 +60,7 @@ import { mapState, mapMutations } from 'vuex'
 
 import PageHeader from './components/base/PageHeader.vue'
 import PageFooter from './components/base/PageFooter.vue'
+import ToTop from './components/base/ToTop.vue'
 import StarBg from './components/outside/StarBg.vue'
 
 import AboutMe from './components/aside/AboutMe.vue'
@@ -80,12 +81,13 @@ export default {
     ArticleTags,
     HotArticles,
     PlaceOnFile,
-    StarBg
+    StarBg,
+    ToTop
   },
   data() {
     return {
-      location: [],
-      timer: '',
+      location: [], // 导航
+      timer: '', // 定时器
       showBackTop: true // 展示回到top的按钮
     }
   },
@@ -166,9 +168,6 @@ export default {
         this.addTabBg(false)
       }
       // 计算路由改变需要滚动的距离
-      // let tabOffsetTop = getElementTop(this.$refs.container) - 50
-      // let move = Math.abs(getScrollTop() - tabOffsetTop)
-      // this.positionTop({ top: tabOffsetTop, move: move })
       this.positionTop({ top: 0, move: htmlTop })
     },
     // 跳转路由
