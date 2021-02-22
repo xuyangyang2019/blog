@@ -4,7 +4,7 @@
     <page-header></page-header>
 
     <!-- 主要内容 -->
-    <div class="main">
+    <div class="main scroll">
       <!-- <div id="anchor"></div> -->
       <div class="container-wrap">
         <section class="contenter">
@@ -42,7 +42,7 @@
     <!-- 页脚 -->
     <page-footer></page-footer>
 
-    <!-- 动画效果 -->
+    <!-- 回到top -->
     <transition name="fade">
       <div v-show="showBackTop" class="rocket">
         <a href="javascript: void(0)" @click="backTop"></a>
@@ -50,7 +50,8 @@
     </transition>
 
     <!-- 背景 -->
-    <div class="fix-bg"></div>
+    <!-- <div class="fix-bg"></div> -->
+    <star-bg></star-bg>
   </div>
 </template>
 
@@ -59,6 +60,7 @@ import { mapState, mapMutations } from 'vuex'
 
 import PageHeader from './components/base/PageHeader.vue'
 import PageFooter from './components/base/PageFooter.vue'
+import StarBg from './components/outside/StarBg.vue'
 
 import AboutMe from './components/aside/AboutMe.vue'
 import ArticleTags from './components/aside/ArticleTags.vue'
@@ -77,7 +79,8 @@ export default {
     AboutMe,
     ArticleTags,
     HotArticles,
-    PlaceOnFile
+    PlaceOnFile,
+    StarBg
   },
   data() {
     return {
@@ -277,17 +280,19 @@ export default {
 
 body {
   font: 400 16px/20px Arial, Helvetica, Tahoma, '华文细黑', 'Microsoft YaHei', '微软雅黑', sans-serif;
-  // color: #000;
 }
 
 #app {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .main {
   flex: 1 1 auto;
+  margin-top: 50px;
+  overflow-y: scroll;
 }
 
 .container-wrap {
@@ -295,6 +300,9 @@ body {
   display: flex;
   margin-left: auto;
   margin-right: auto;
+  // height: 100%;
+  flex: 1 1 auto;
+  // overflow: scroll;
 
   .contenter {
     width: 68%;
@@ -366,9 +374,9 @@ body {
 
 //平板
 @media screen and (min-width: 768px) {
-  #app {
-    margin-top: 50px;
-  }
+  // #app {
+    // margin-top: 50px;
+  // }
   .fix-bg {
     background: url('../public/img/mainBg2.jpg') 0 0 no-repeat;
     background-size: 100% 100%;
