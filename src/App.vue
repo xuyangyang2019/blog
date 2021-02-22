@@ -4,7 +4,7 @@
     <page-header></page-header>
 
     <!-- 主要内容 -->
-    <div class="main scroll">
+    <div class="main">
       <!-- <div id="anchor"></div> -->
       <div class="container-wrap">
         <section class="contenter">
@@ -50,8 +50,7 @@
     </transition>
 
     <!-- 背景 -->
-    <!-- <div class="fix-bg"></div> -->
-    <star-bg></star-bg>
+    <star-bg v-show="false"></star-bg>
   </div>
 </template>
 
@@ -283,16 +282,18 @@ body {
 }
 
 #app {
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  // height: 100%;
+  // overflow: hidden;
+  // overflow-y: scroll;
+  // border: solid red 1px;
 }
 
 .main {
   flex: 1 1 auto;
   margin-top: 50px;
-  overflow-y: scroll;
+  // overflow-y: scroll;
 }
 
 .container-wrap {
@@ -300,9 +301,7 @@ body {
   display: flex;
   margin-left: auto;
   margin-right: auto;
-  // height: 100%;
   flex: 1 1 auto;
-  // overflow: scroll;
 
   .contenter {
     width: 68%;
@@ -327,7 +326,7 @@ body {
 .rocket {
   position: fixed;
   right: 10px;
-  bottom: 10px;
+  bottom: 60px;
   a {
     display: inline-block;
     width: 50px;
@@ -348,20 +347,8 @@ body {
   transition: all ease 0.5s;
 }
 
-.fix-bg {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
 //手机端
 @media screen and (max-width: 767px) {
-  .fix-bg {
-    background: #f4f4f4;
-  }
   .container-wrap {
     flex-wrap: wrap;
     padding: 0;
@@ -375,18 +362,17 @@ body {
 //平板
 @media screen and (min-width: 768px) {
   // #app {
-    // margin-top: 50px;
+  // margin-top: 50px;
   // }
-  .fix-bg {
-    background: url('../public/img/mainBg2.jpg') 0 0 no-repeat;
-    background-size: 100% 100%;
-  }
   .container-wrap {
     max-width: 760px;
     padding: 10px 30px;
     .side-bar-right {
       margin-left: 25px;
     }
+  }
+  .rocket{
+    bottom: 50px;
   }
 }
 
