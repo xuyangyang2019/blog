@@ -34,7 +34,7 @@ export default {
 .page-footer {
   color: #ccc;
   background: #2e3033;
-  padding: 10px 0;
+  padding: 5px 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -47,9 +47,10 @@ export default {
     font-family: HeiTi;
 
     .copyright-item {
-      padding: 0 5px;
+      padding: 5px;
       display: flex;
       align-items: center;
+      /* border: solid red 1px; */
       .bei-an-img {
         width: 20px;
         height: 20px;
@@ -63,9 +64,6 @@ export default {
 @media screen and(max-width: 767px) {
   .page-footer {
     font-size: 14px;
-    .copyright span {
-      display: none;
-    }
   }
 }
 </style>
