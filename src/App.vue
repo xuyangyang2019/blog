@@ -43,12 +43,7 @@
     <page-footer></page-footer>
 
     <!-- 回到top -->
-    <transition name="fade">
-      <to-top></to-top>
-      <!-- <div v-show="showBackTop" class="back-top" @click="backTop">
-        <i class="fa fa-rocket fa-2x" aria-hidden="true"></i>
-      </div> -->
-    </transition>
+    <to-top></to-top>
 
     <!-- 背景 -->
     <star-bg v-show="false"></star-bg>
@@ -87,8 +82,7 @@ export default {
   data() {
     return {
       location: [], // 导航
-      timer: '', // 定时器
-      showBackTop: true // 展示回到top的按钮
+      timer: '' // 定时器
     }
   },
   computed: {
@@ -108,10 +102,10 @@ export default {
     currentTitle(val) {
       // 刷新当前位置的文章标题，防止当前文章显示上一篇文章的标题
       this.currentLocation(this.$route)
-      // 返回顶部
-      this.backTop()
       // 修改title
       if (val) document.title = `${val} -xyy的小站`
+      // 返回顶部
+      // this.backTop()
     }
   },
   mounted() {
@@ -155,12 +149,6 @@ export default {
     getTop() {
       // html的scrollTop
       const htmlTop = document.documentElement ? document.documentElement.scrollTop : 0
-      // 如果往下滚动了 就显示回到top的按钮
-      if (htmlTop > 0) {
-        this.showBackTop = true
-      } else {
-        this.showBackTop = false
-      }
       // 如果导航栏遮挡了 container的内容 就把tab的背景设为透明
       if (htmlTop > 50) {
         this.addTabBg(true)
@@ -169,6 +157,11 @@ export default {
       }
       // 计算路由改变需要滚动的距离
       this.positionTop({ top: 0, move: htmlTop })
+    },
+    // 回到顶部
+    backTop() {
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
     },
     // 跳转路由
     back(item) {
@@ -182,11 +175,6 @@ export default {
       } else {
         this.$router.push({ name: name })
       }
-    },
-    // 回到顶部
-    backTop() {
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
     },
     // 返回首页
     backHome() {
@@ -323,29 +311,6 @@ body {
   .side-bar-right {
     width: 32%;
   }
-}
-
-.back-top {
-  position: fixed;
-  right: 20px;
-  bottom: 50px;
-  color: #909399;
-  .fa-rocket {
-    transform: rotate(315deg);
-  }
-  &:hover {
-    cursor: pointer;
-    color: #c0c4cc;
-  }
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: all ease 0.5s;
 }
 
 //手机端
