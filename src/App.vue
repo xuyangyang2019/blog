@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
 import PageHeader from './components/base/PageHeader.vue'
 import PageFooter from './components/base/PageFooter.vue'
@@ -111,58 +111,33 @@ export default {
   mounted() {
     // 计算当前的面包屑导航
     this.currentLocation(this.$route)
-    // 监听页面大小和scroll事件
-    this.scrollCotainer()
-    // 页面重载计算锚点距离并判断tab的背景样式
-    this.getTop()
+    //   // 改变窗口大小后对导航栏状态重新进行确认
+    //   window.addEventListener('resize', this.scrollResize)
   },
   methods: {
-    ...mapMutations({
-      addTabBg: 'AddTabBg',
-      positionTop: 'PositionTop'
-    }),
-    // 监听滚动和窗口
-    scrollCotainer() {
-      // 监听滚动
-      window.addEventListener('scroll', this.scrollResize)
-      // 改变窗口大小后对导航栏状态重新进行确认
-      window.addEventListener('resize', this.scrollResize)
-    },
     // 重新获取scrollTop
-    scrollResize() {
-      this.debounce(this.getTop, 500)
-    },
+    // scrollResize() {
+    //   this.debounce(this.getTop, 500)
+    // },
     // 函数去抖，防止scroll和resize频繁触发
-    debounce: function (func, delay) {
-      // const context = this
-      const args = arguments
-      // 如果有定时器 先清除
-      if (this.timer) {
-        clearTimeout(this.timer)
-      }
-      // 设置timer
-      this.timer = setTimeout(function () {
-        func.apply(this, args)
-      }, delay)
-    },
-    // 获取基准点
-    getTop() {
-      // html的scrollTop
-      const htmlTop = document.documentElement ? document.documentElement.scrollTop : 0
-      // 如果导航栏遮挡了 container的内容 就把tab的背景设为透明
-      if (htmlTop > 50) {
-        this.addTabBg(true)
-      } else {
-        this.addTabBg(false)
-      }
-      // 计算路由改变需要滚动的距离
-      this.positionTop({ top: 0, move: htmlTop })
-    },
+    // debounce: function (func, delay) {
+    //   // const context = this
+    //   const args = arguments
+    //   // 如果有定时器 先清除
+    //   if (this.timer) {
+    //     clearTimeout(this.timer)
+    //   }
+    //   // 设置timer
+    //   this.timer = setTimeout(function () {
+    //     func.apply(this, args)
+    //   }, delay)
+    // },
     // 回到顶部
     backTop() {
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
     },
+
     // 跳转路由
     back(item) {
       const name = item.pathName
