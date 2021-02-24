@@ -30,7 +30,7 @@
           :key="index"
           class="li-nav"
           :class="{ currentRoute: item.name === $route.name }"
-          @click="goAnchor(item.name, index)"
+          @click="toggleNav(item.name, index)"
         >
           <span class="nav-icon" :class="item.icon" style="margin-right: 10px"></span>
           <span v-text="item.render"></span>
@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 // import { getScrollTop } from "@/utils/getScrollTop"
 // js动画 解决css3无法实现的动画
 import { requestAnimation } from '@/utils/requestAnimation'
@@ -52,9 +50,12 @@ export default {
     return {
       show: false, // 展示导航栏
       searchKey: '', // 搜索的关键词
-      // fixed: false,
-      // scrollFlag: 0,
       routeName: '', // 路由name
+      tabBg: false, // 导航栏背景是否透明
+      scrollPosition: {
+        top: 0, // 要回到的位置
+        move: 0 // 当前的移动的位置
+      }, // 记录scroll位置
       intervalId: '',
       tabs: [
         { name: 'home', render: '首页', icon: 'icon-home' },
@@ -64,14 +65,12 @@ export default {
       ] // 导航列表
     }
   },
-  computed: {
-    ...mapState({
-      tabBg: 'tabBg',
-      anchorScroll: 'anchorScroll'
-    })
-  },
   mounted() {
     requestAnimation()
+    // 页面刷新后重新计算nav的背景和html的scrollTop
+    this.getTop()
+    // 监听html滚动的滚动
+    window.addEventListener('scroll', this.scrollResize)
   },
   methods: {
     // 显示或隐藏 navs
@@ -87,14 +86,22 @@ export default {
         this.$router.push({ name: 'search', params: { searchKey: this.searchKey } })
       }
     },
+    // 切换导航
+    toggleNav(name) {
+      this.show = false
+      // 重复的路由不处理
+      if (this.$route.name === name) return
+      this.routeName = name
+      this.intervalId = window.requestAnimationFrame(this.toTop)
+    },
     // 平缓滑动到top
-    callback() {
+    toTop() {
       // html的scrollTop
       const htmlTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop
       // 每次移动的px
-      const movepx = Math.ceil((this.anchorScroll.move / 250) * (1000 / 60))
+      const movepx = Math.ceil((this.scrollPosition.move / 250) * (1000 / 60))
       // 要到的基准点
-      const bsetTop = this.anchorScroll.top
+      const bsetTop = this.scrollPosition.top
       if (htmlTop < bsetTop) {
         if (document.documentElement) {
           document.documentElement.scrollTop = Math.min(htmlTop + movepx, bsetTop)
@@ -106,7 +113,7 @@ export default {
           this.$router.push({ name: this.routeName })
           window.cancelAnimationFrame(this.intervalId)
         } else {
-          window.requestAnimationFrame(this.callback)
+          window.requestAnimationFrame(this.toTop)
         }
       } else if (htmlTop > bsetTop) {
         if (document.documentElement) {
@@ -114,22 +121,28 @@ export default {
         } else {
           document.body.scrollTop = Math.max(htmlTop - movepx, bsetTop)
         }
-        window.requestAnimationFrame(this.callback)
+        window.requestAnimationFrame(this.toTop)
       } else {
         window.cancelAnimationFrame(this.intervalId)
         this.$router.push({ name: this.routeName })
       }
     },
-    // 锚点动态跳转
-    goAnchor(name) {
-      console.log('跳转到', name)
-      // console.log(this.show)
-      // this.show = !this.show
-      this.show = false
-      // 重复的路由不处理
-      if (this.$route.name === name) return
-      this.routeName = name
-      this.intervalId = window.requestAnimationFrame(this.callback)
+    // 监听屏幕滑动
+    scrollResize() {
+      // 函数去抖，防止scroll和resize频繁触发
+      clearTimeout(this.tiemID)
+      this.tiemID = setTimeout(() => {
+        this.getTop()
+      }, 500)
+    },
+    // 修改背景透明度 及 记录滚动的距离
+    getTop() {
+      // html的scrollTop
+      const htmlTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop
+      // 如果导航栏遮挡了 container的内容 就把tab的背景设为透明
+      this.tabBg = !!(htmlTop > 50)
+      // 计算路由改变需要滚动的距离
+      this.scrollPosition = { top: 0, move: htmlTop }
     }
   }
 }
@@ -151,11 +164,7 @@ export default {
 }
 
 .tab-bg {
-  background: rgba(0, 0, 0, 0.7);
-  span:before,
-  span:after {
-    height: 0 !important;
-  }
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .page-header-wrap {
@@ -230,9 +239,6 @@ export default {
 }
 
 @media screen and(max-width: 767px) {
-  .page-header {
-    background: rgba(0, 0, 0, 0.6);
-  }
   .page-header-wrap {
     padding: 0 15px;
     .search-box {
