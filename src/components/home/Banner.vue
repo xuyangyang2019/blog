@@ -14,7 +14,8 @@
           @touchend.stop="touchEnd($event)"
         >
           <!-- <img ref="img" class="banner-img" :data-src="item.url" alt="" src="/img/pic-loading.gif" /> -->
-          <img class="banner-img" :src="item.url" />
+          <img ref="img" class="banner-img" alt="" :src="item.url" />
+          <!-- <img class="banner-img" :src="item.url" /> -->
           <div class="banner-words">
             <div class="wellknown">
               <p>{{ item.word }}</p>
@@ -50,27 +51,32 @@ export default {
       bannerData: [
         {
           url: '/img/banner/one.jpeg',
+          dataUrl: '/img/banner/one.jpeg',
           word: 'Success is not final, failure is not fatal. It is the courage to continue that counts.',
           person: 'Winston Churchill'
         },
         {
-          url: '/img/banner/two.jpeg',
+          url: '/img/pic-loading.gif',
+          dataUrl: '/img/banner/two.jpeg',
           word:
             '生命中最伟大的光辉不在于永不坠落，而是坠落后总能再度升起。我欣赏这种有弹性的生命状态，快乐地经历风雨，笑对人生。',
           person: '曼德拉'
         },
         {
-          url: '/img/banner/three.jpeg',
+          url: '/img/pic-loading.gif',
+          dataUrl: '/img/banner/three.jpeg',
           word: '时间是一只藏在黑暗中的温柔的手，在你一出神一恍惚之间，物走星移。',
           person: '龙应台'
         },
         {
-          url: '/img/banner/four.jpeg',
+          url: '/img/pic-loading.gif',
+          dataUrl: '/img/banner/four.jpeg',
           word: '一个人可以被毁灭，但不能被打败。',
           person: '海明威'
         },
         {
-          url: '/img/banner/five.jpeg',
+          url: '/img/pic-loading.gif',
+          dataUrl: '/img/banner/five.jpeg',
           word:
             '我要纵身跳入时代的奔走，我要纵身跳入时代的年轮：苦痛，欢乐，失败，成功，我都不问，男儿的事业原本要昼夜不停。',
           person: '歌德'
@@ -104,6 +110,12 @@ export default {
         }
         if (this.currentIndex < 0) {
           this.currentIndex = this.bannerData.length
+        }
+        // 图片懒加载
+        const imgDom = this.bannerData[this.currentIndex]
+        if (imgDom.url !== imgDom.dataUrl) {
+          this.$refs.img[this.currentIndex].src = imgDom.dataUrl
+          imgDom.url = imgDom.dataUrl
         }
       }, 5000)
     },
@@ -187,35 +199,35 @@ export default {
       this.move = { x: 0, y: 0, date: '' }
       // 开始轮播
       this.play()
-    }
+    },
     // ============================= 另外的方法实现轮播 ==================================
     // 实现图片懒加载
-    // lazyLoad() {
-    // this.$refs.img.forEach((item, index) => {
-    //   if (index === this.currentIndex) {
-    //     // 清除定时器，防止图片还没加载完成就轮播到下一张
-    //     clearInterval(this.timer)
-    //     const img = new Image()
-    //     img.src = item.dataset.src
-    //     img.onload = () => {
-    //       item.src = img.src
-    //       this.slider()
-    //     }
-    //   }
-    // })
-    // },
+    lazyLoad() {
+      this.$refs.img.forEach((item, index) => {
+        if (index === this.currentIndex) {
+          // 清除定时器，防止图片还没加载完成就轮播到下一张
+          clearInterval(this.timer)
+          const img = new Image()
+          img.src = item.dataset.src
+          img.onload = () => {
+            item.src = img.src
+            this.slider()
+          }
+        }
+      })
+    },
     // 滑动
-    // slider() {
-    // this.timer = setInterval(() => {
-    //   if (this.currentIndex < this.bannerData.length - 1) {
-    //     this.currentIndex++
-    //     this.lazyLoad()
-    //   } else {
-    //     this.currentIndex = 0
-    //     this.lazyLoad()
-    //   }
-    // }, 5000)
-    // }
+    slider() {
+      this.timer = setInterval(() => {
+        if (this.currentIndex < this.bannerData.length - 1) {
+          this.currentIndex++
+          this.lazyLoad()
+        } else {
+          this.currentIndex = 0
+          this.lazyLoad()
+        }
+      }, 5000)
+    }
   }
 }
 </script>
