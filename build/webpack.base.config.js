@@ -115,7 +115,7 @@ module.exports = function () {
             {
               loader: 'url-loader',
               options: {
-                limit: 1000,
+                limit: 8192,
                 name: 'assets/images/[name].[hash:8].[ext]'
               }
             }
@@ -129,7 +129,7 @@ module.exports = function () {
               loader: 'url-loader',
               options: {
                 // 小于8912字节的文件,返回dataurl
-                limit: 1000,
+                limit: 8912,
                 // 生成的文件名,[name]为原始文件名,[hash:8]为根据文件内容生成8位md5值,[ext]为原始文件扩展名
                 name: 'assets/font/[name].[hash:8].[ext]'
               }
