@@ -14,8 +14,6 @@ import {
 
 // state
 const state = {
-  tabBg: false, // tab页是否有background
-  anchorScroll: { top: 0, move: 0 }, // 记录scroll位置
   currentTitle: '', // 当前页面的title
   code: 404, // 页面响应
   articles: {
@@ -228,14 +226,6 @@ const mutations = {
   },
   SET_MSG_BOARD_ARR(state, data) {
     state.msgBoardArr = data
-  },
-  // 添加背景
-  AddTabBg(state, bool) {
-    state.tabBg = bool
-  },
-  // 设置top的参数
-  PositionTop(state, payload) {
-    state.anchorScroll = { top: payload.top, move: payload.move }
   },
   CHANGE_TITLE(state, title) {
     state.currentTitle = title
