@@ -111,26 +111,17 @@ export default {
   mounted() {
     // 计算当前的面包屑导航
     this.currentLocation(this.$route)
-    //   // 改变窗口大小后对导航栏状态重新进行确认
-    //   window.addEventListener('resize', this.scrollResize)
+    // 改变窗口大小后对导航栏状态重新进行确认
+    // window.addEventListener('resize', this.windowResize)
   },
   methods: {
-    // 重新获取scrollTop
-    // scrollResize() {
-    //   this.debounce(this.getTop, 500)
-    // },
-    // 函数去抖，防止scroll和resize频繁触发
-    // debounce: function (func, delay) {
-    //   // const context = this
-    //   const args = arguments
-    //   // 如果有定时器 先清除
-    //   if (this.timer) {
-    //     clearTimeout(this.timer)
-    //   }
-    //   // 设置timer
-    //   this.timer = setTimeout(function () {
-    //     func.apply(this, args)
-    //   }, delay)
+    // 窗口大小重置
+    // windowResize() {
+    //   clearTimeout(this.windowResizeTimer)
+    //   this.windowResizeTimer = setTimeout(() => {
+    //     console.log('窗口大小重置')
+    //     // 处理函数
+    //   }, 500)
     // },
     // 回到顶部
     backTop() {

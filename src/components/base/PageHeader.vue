@@ -41,7 +41,6 @@
 </template>
 
 <script>
-// import { getScrollTop } from "@/utils/getScrollTop"
 // js动画 解决css3无法实现的动画
 import { requestAnimation } from '@/utils/requestAnimation'
 
@@ -56,7 +55,6 @@ export default {
         top: 0, // 要回到的位置
         move: 0 // 当前的移动的位置
       }, // 记录scroll位置
-      intervalId: '',
       tabs: [
         { name: 'home', render: '首页', icon: 'icon-home' },
         { name: 'article', render: '文章', icon: 'icon-book' },
@@ -92,36 +90,36 @@ export default {
       // 重复的路由不处理
       if (this.$route.name === name) return
       this.routeName = name
-      this.intervalId = window.requestAnimationFrame(this.toTop)
+      this.intervalId = window.requestAnimationFrame(this.toTargerTop)
     },
-    // 平缓滑动到top
-    toTop() {
+    // 平缓滑动到指定的top
+    toTargerTop() {
       // html的scrollTop
       const htmlTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop
       // 每次移动的px
       const movepx = Math.ceil((this.scrollPosition.move / 250) * (1000 / 60))
       // 要到的基准点
-      const bsetTop = this.scrollPosition.top
-      if (htmlTop < bsetTop) {
+      const baseTop = this.scrollPosition.top
+      if (htmlTop < baseTop) {
         if (document.documentElement) {
-          document.documentElement.scrollTop = Math.min(htmlTop + movepx, bsetTop)
+          document.documentElement.scrollTop = Math.min(htmlTop + movepx, baseTop)
         } else {
-          document.body.scrollTop = Math.min(htmlTop + movepx, bsetTop)
+          document.body.scrollTop = Math.min(htmlTop + movepx, baseTop)
         }
         // 当页面不够长使container滚动不到页面顶端时，清除定时器(适合container上方有其他元素时)
-        if (bsetTop === htmlTop) {
+        if (baseTop === htmlTop) {
           this.$router.push({ name: this.routeName })
           window.cancelAnimationFrame(this.intervalId)
         } else {
-          window.requestAnimationFrame(this.toTop)
+          window.requestAnimationFrame(this.toTargerTop)
         }
-      } else if (htmlTop > bsetTop) {
+      } else if (htmlTop > baseTop) {
         if (document.documentElement) {
-          document.documentElement.scrollTop = Math.max(htmlTop - movepx, bsetTop)
+          document.documentElement.scrollTop = Math.max(htmlTop - movepx, baseTop)
         } else {
-          document.body.scrollTop = Math.max(htmlTop - movepx, bsetTop)
+          document.body.scrollTop = Math.max(htmlTop - movepx, baseTop)
         }
-        window.requestAnimationFrame(this.toTop)
+        window.requestAnimationFrame(this.toTargerTop)
       } else {
         window.cancelAnimationFrame(this.intervalId)
         this.$router.push({ name: this.routeName })
@@ -137,6 +135,7 @@ export default {
     },
     // 修改背景透明度 及 记录滚动的距离
     getTop() {
+      console.log('getTop')
       // html的scrollTop
       const htmlTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop
       // 如果导航栏遮挡了 container的内容 就把tab的背景设为透明
