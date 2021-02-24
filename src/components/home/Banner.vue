@@ -50,7 +50,7 @@ export default {
       currentIndex: 0, // 当前的banner
       bannerData: [
         {
-          url: '/img/banner/one.jpeg',
+          url: '/img/pic-loading.gif',
           dataUrl: '/img/banner/one.jpeg',
           word: 'Success is not final, failure is not fatal. It is the courage to continue that counts.',
           person: 'Winston Churchill'
@@ -88,6 +88,12 @@ export default {
   },
   mounted() {
     this.play()
+    // 页面加载之后 获取第一个banner图
+    const imgDom = this.bannerData[0]
+    if (imgDom.url !== imgDom.dataUrl) {
+      this.$refs.img[0].src = imgDom.dataUrl
+      imgDom.url = imgDom.dataUrl
+    }
   },
   beforeDestroy() {
     // 清除定时器
