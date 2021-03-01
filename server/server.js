@@ -170,7 +170,7 @@ backendApp.use(responseHandler)
 
 // 错误处理
 backendApp.on('error', (err) => {
-  console.error('Server error: \n%s\n%s ', err.stack || '')
+  console.error('没有处理的错误: \n%s\n%s ', err.stack || '')
 })
 
 backendApp.listen(serverPort)

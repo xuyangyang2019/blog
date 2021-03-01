@@ -55,34 +55,32 @@ module.exports = {
     if (!ctx.headers.authorization) {
       // 如果不指定状态码，默认为 500。
       // 5xx 类错误 expose 默认为 false ，即不会将错误信息返回到 response
-      ctx.throw(401, 'UnauthorizedError')
-      // ctx.throw(401, 'UnauthorizedError', { code: 0, msg: '没有token', data: null })
+      ctx.throw(401, 'NoToken', { code: 0, data: null })
     } else {
       const token = ctx.headers.authorization.split(' ')[1]
-      const decoded = jwt.verify(token, secret.jwtSecret)
-      if (decoded) {
+      try {
+        const decoded = jwt.verify(token, secret.jwtSecret)
         ctx.result = decoded
         return next()
-      } else {
-        ctx.throw(401, 'UnauthorizedError')
+      } catch (error) {
+        ctx.throw(403, 'TokenError', { code: 0, data: null })
       }
     }
   },
-  // 路由闯入编辑器页面进行token验证
-  'POST /api/getUserInfo': async (ctx, next) => {
+  // 获取admin的信息
+  'GET /api/getUserInfo': async (ctx, next) => {
     if (!ctx.headers.authorization) {
-      // 如果不指定状态码，默认为 500。
-      // 5xx 类错误 expose 默认为 false ，即不会将错误信息返回到 response
-      ctx.throw(401, 'UnauthorizedError')
-      // ctx.throw(401, 'UnauthorizedError', { code: 0, msg: '没有token', data: null })
+      ctx.throw(401, 'NoToken', { code: 0, data: null })
     } else {
       const token = ctx.headers.authorization.split(' ')[1]
-      const decoded = jwt.verify(token, secret.jwtSecret)
-      if (decoded) {
+      try {
+        // 鉴权
+        jwt.verify(token, secret.jwtSecret)
+        // 查询admin的信息
         ctx.result = await UserService.findOne({ username: 'admin' }, { nickname: 1, username: 1, last_login_time: 1 })
         return next()
-      } else {
-        ctx.throw(401, 'UnauthorizedError')
+      } catch (error) {
+        ctx.throw(403, 'TokenError', { code: 0, data: null })
       }
     }
   }
