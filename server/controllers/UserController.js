@@ -59,15 +59,31 @@ module.exports = {
       // ctx.throw(401, 'UnauthorizedError', { code: 0, msg: '没有token', data: null })
     } else {
       const token = ctx.headers.authorization.split(' ')[1]
-      jwt.verify(token, secret.jwtSecret, function (err, decoded) {
-        if (err) {
-          console.log(err)
-          ctx.throw(401, 'UnauthorizedError')
-        } else {
-          ctx.result = decoded
-        }
-      })
+      const decoded = jwt.verify(token, secret.jwtSecret)
+      if (decoded) {
+        ctx.result = decoded
+        return next()
+      } else {
+        ctx.throw(401, 'UnauthorizedError')
+      }
     }
-    return next()
+  },
+  // 路由闯入编辑器页面进行token验证
+  'POST /api/getUserInfo': async (ctx, next) => {
+    if (!ctx.headers.authorization) {
+      // 如果不指定状态码，默认为 500。
+      // 5xx 类错误 expose 默认为 false ，即不会将错误信息返回到 response
+      ctx.throw(401, 'UnauthorizedError')
+      // ctx.throw(401, 'UnauthorizedError', { code: 0, msg: '没有token', data: null })
+    } else {
+      const token = ctx.headers.authorization.split(' ')[1]
+      const decoded = jwt.verify(token, secret.jwtSecret)
+      if (decoded) {
+        ctx.result = await UserService.findOne({ username: 'admin' }, { nickname: 1, username: 1, last_login_time: 1 })
+        return next()
+      } else {
+        ctx.throw(401, 'UnauthorizedError')
+      }
+    }
   }
 }
