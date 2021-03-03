@@ -16,7 +16,7 @@ module.exports = {
     if (!data) {
       throw new InvalidQueryError()
     }
-    data.state = 1
+    // data.state = 1
     const result = await ArticleService.save(data)
     if (result._id) {
       ctx.result = result
@@ -64,6 +64,20 @@ module.exports = {
 
     const imgUploadService = new ImgUploadService(uploadPath)
     imgUploadService.execute(ctx)
+    return next()
+  },
+  // 获取文章信息
+  'GET /api/admin/getArticle': async (ctx, next) => {
+    const { id } = ctx.request.query
+    if (!id) {
+      throw new InvalidQueryError()
+    }
+    const doc = await ArticleService.findById({ _id: id })
+    if (doc) {
+      ctx.result = doc
+    } else {
+      ctx.error = '查不到文章'
+    }
     return next()
   },
   // 'POST /api/saveDraft': async (ctx, next) => {
