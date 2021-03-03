@@ -17,7 +17,7 @@ module.exports = {
     commentNum: Number,
     likeNum: Number,
     pv: Number,
-    date: Date,
+    // date: Date,
     createTime: {
       type: Date,
       default: Date.now
