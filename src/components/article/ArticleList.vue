@@ -15,7 +15,7 @@
           </span>
           <!-- 时间 -->
           <span class="icon-clock"></span>
-          <span class="article-msg-time">{{ item.date | reviseTime }}</span>
+          <span class="article-msg-time">{{ item.updateTime | reviseTime }}</span>
         </div>
         <div class="article-review">
           <!-- 图片 -->
