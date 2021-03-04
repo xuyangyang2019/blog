@@ -11,7 +11,7 @@ module.exports = {
   //   return next()
   // },
   // 添加文章
-  'POST /api/addArticle': async (ctx, next) => {
+  'POST /api/admin/addArticle': async (ctx, next) => {
     const data = ctx.request.body
     if (!data) {
       throw new InvalidQueryError()
@@ -26,7 +26,7 @@ module.exports = {
     return next()
   },
   // 删除文章
-  'DELETE /api/deleteArticles': async (ctx, next) => {
+  'DELETE /api/admin/deleteArticles': async (ctx, next) => {
     const ids = ctx.query.ids
     if (!ids) {
       throw new InvalidQueryError()
@@ -40,18 +40,17 @@ module.exports = {
     return next()
   },
   // 更新文章
-  'PATCH /api/updateArticle': async (ctx, next) => {
-    console.log('更新文章')
-    // const data = ctx.request.body
-    // if (!data || !data._id) {
-    //   throw new InvalidQueryError()
-    // }
-    // const result = await ArticleService.updateById(data._id, data)
-    // if (!result) {
-    //   ctx.error = '保存更改失败'
-    // } else {
-    //   ctx.result = ''
-    // }
+  'PATCH /api/admin/updateArticle': async (ctx, next) => {
+    const data = ctx.request.body
+    if (!data || !data.articleId) {
+      throw new InvalidQueryError()
+    }
+    const result = await ArticleService.updateById(data.articleId, data)
+    if (!result) {
+      ctx.error = '保存更改失败'
+    } else {
+      ctx.result = result
+    }
     return next()
   },
   // 上传图片
