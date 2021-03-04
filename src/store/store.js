@@ -46,7 +46,7 @@ const getters = {
 
 // actions
 const actions = {
-  // 获取文章
+  // 获取文章列表
   GetArticles({ commit }, payload) {
     const { publish, tag, pageNum, pageSize } = payload
     return getArticleList(publish, tag, pageNum, pageSize)

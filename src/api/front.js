@@ -40,7 +40,7 @@ function getArticleList(publish, tag, pageNum, pageSize) {
   return fetch.get(
     '/api/getArticleList',
     { publish: publish, tag: tag, pageNum: pageNum, pageSize: pageSize },
-    { cache: true }
+    { cache: false }
   )
 }
 
