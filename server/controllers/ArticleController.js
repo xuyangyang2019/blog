@@ -58,12 +58,12 @@ module.exports = {
     const publish = !!ctx.query.publish
     const timeArr = []
     const timeMap = {}
-    const docs = await ArticleService.findMany({ publish: publish }, { date: 1 })
+    const docs = await ArticleService.findMany({ publish: publish }, { createTime: 1 })
     if (!docs) {
       ctx.error = '查询出错'
     } else {
       docs.forEach((item) => {
-        const yearMonth = new Date(item.date).getFullYear() + '年' + (new Date(item.date).getMonth() + 1) + '月'
+        const yearMonth = new Date(item.createTime).getFullYear() + '年' + (new Date(item.createTime).getMonth() + 1) + '月'
         timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
       })
       for (const key in timeMap) {
