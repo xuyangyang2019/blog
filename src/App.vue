@@ -46,7 +46,8 @@
     <to-top></to-top>
 
     <!-- 背景 -->
-    <star-bg v-show="false"></star-bg>
+    <star-bg></star-bg>
+    <div class="star-bg-my"></div>
   </div>
 </template>
 
@@ -240,16 +241,19 @@ body {
 #app {
   display: flex;
   flex-direction: column;
-  // height: 100%;
-  // overflow: hidden;
-  // overflow-y: scroll;
-  // border: solid red 1px;
+  position: relative;
+  .star-bg-my{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: black;
+    z-index: -2;
+  }
 }
 
 .main {
   flex: 1 1 auto;
   margin-top: 50px;
-  // overflow-y: scroll;
 }
 
 .container-wrap {

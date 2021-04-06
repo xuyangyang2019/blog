@@ -69,7 +69,6 @@ export default {
 .none-article {
   padding: 20px;
   color: black;
-  /*background: #F7EDED;*/
   background: #faf7f7;
   margin-top: 10px;
 }

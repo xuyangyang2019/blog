@@ -13,14 +13,14 @@
         <g id="moon-group">
           <!-- 创建蒙版，显示月牙部分 -->
           <mask id="moon-mask">
-            <circle cx="-250" cy="-125" r="60" fill="white" />
-            <circle cx="-210" cy="-140" r="60" fill="black" />
+            <circle cx="-320" cy="-125" r="30" fill="white" />
+            <circle cx="-305" cy="-135" r="30" fill="black" />
           </mask>
           <!-- 月亮 -->
-          <circle cx="-250" cy="-125" r="60" fill="yellow" mask="url(#moon-mask)" />
+          <circle cx="-320" cy="-125" r="30" fill="yellow" mask="url(#moon-mask)" />
         </g>
         <!-- 灯塔部分 -->
-        <g id="light-tower" transform="translate(250,0)">
+        <g id="light-tower" transform="translate(350,0)">
           <defs>
             <!-- 灯塔的颜色，线性渐变 -->
             <linearGradient id="tower" x1="0" y1="0" x2="1" y2="0">
@@ -114,13 +114,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.star-bg{
-  height: 100%;
+.star-bg {
+  box-sizing: border-box;
   width: 100%;
-  z-index: -1;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: -1;
   background: black;
 }
 </style>
