@@ -13,11 +13,11 @@
         <g id="moon-group">
           <!-- 创建蒙版，显示月牙部分 -->
           <mask id="moon-mask">
-            <circle cx="-320" cy="-125" r="30" fill="white" />
-            <circle cx="-305" cy="-135" r="30" fill="black" />
+            <circle cx="-320" cy="-225" r="30" fill="white" />
+            <circle cx="-305" cy="-235" r="30" fill="black" />
           </mask>
           <!-- 月亮 -->
-          <circle cx="-320" cy="-125" r="30" fill="yellow" mask="url(#moon-mask)" />
+          <circle cx="-320" cy="-225" r="30" fill="yellow" mask="url(#moon-mask)" />
         </g>
         <!-- 灯塔部分 -->
         <g id="light-tower" transform="translate(350,0)">
@@ -34,29 +34,29 @@
             </radialGradient>
             <!-- 光圈三角形路径 -->
             <clipPath id="light-clip">
-              <polygon points="0 0 -400 -15 -400 15" fill="rgba(255,0,0,.5)">
+              <polygon points="0,-50 -400,-65 -400,-35" fill="rgba(255,0,0,.5)">
                 <animateTransform
                   attributeName="transform"
                   attributeType="XML"
                   type="rotate"
-                  from="0"
-                  to="360"
+                  from="0 0 -50"
+                  to="360 0 -50"
                   dur="10s"
                   repeatCount="indefinite"
                 />
               </polygon>
-              <!-- 灯光发射点 -->
-              <circle cx="0" cy="0" r="2" />
             </clipPath>
           </defs>
+          <!-- 灯光发射点 -->
+          <circle cx="0" cy="-50" r="2" fill="white" />
           <!-- 灯塔 -->
-          <polygon points="0 0 5 50 -5 50" fill="url(#tower)" />
+          <polygon points="0,-50 5,0 -5,0" fill="url(#tower)" />
           <!-- 灯光 -->
-          <ellipse cx="0" cy="0" rx="300" ry="100" fill="url(#light)" clip-path="url(#light-clip)" />
+          <ellipse cx="0" cy="-50" rx="300" ry="100" fill="url(#light)" clip-path="url(#light-clip)" />
         </g>
       </g>
       <!-- 绘制反射,倒影部分 -->
-      <g id="reflact" transform="translate(0,50)" mask="url(#fading)">
+      <g id="reflact" transform="translate(0,0)" mask="url(#fading)">
         <defs>
           <!-- 倒影的颜色，线性渐变 -->
           <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
@@ -65,10 +65,10 @@
           </linearGradient>
           <mask id="fading">
             <!-- 倒影 -->
-            <rect x="-400" y="0" width="800" height="300" fill="url(#fade)" />
+            <rect x="-400" y="0" width="800" height="600" fill="url(#fade)" />
           </mask>
         </defs>
-        <use xlink:href="#real" transform="scale(1,-1) translate(0,-50)" />
+        <use xlink:href="#real" transform="scale(1,-1) " />
         <line x1="-400" y1="0" x2="400" y2="0" stroke="white" />
       </g>
     </svg>
@@ -101,10 +101,10 @@ export default {
       while (starCount--) {
         star = use(starRef)
         // 改变透明度，位置和大小
-        star.setAttribute('opacity', random(0.1, 0.4))
+        star.setAttribute('opacity', random(0.3, 0.6))
         star.setAttribute(
           'transform',
-          'translate(' + random(-400, 400) + ',' + random(-300, 300) + ')' + 'scale(' + random(0.1, 0.6) + ')'
+          'translate(' + random(-400, 400) + ',' + random(-300, 0) + ')' + 'scale(' + random(0.1, 0.6) + ')'
         )
         starGroup.appendChild(star) // 添加星星
       }
