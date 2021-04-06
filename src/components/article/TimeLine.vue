@@ -39,7 +39,6 @@ export default {
       this.queryArticlesByTime()
     }
   },
-
   created() {
     this.queryArticlesByTime()
   },
@@ -55,13 +54,13 @@ export default {
       SET_ARTICLES_SUM: 'SET_ARTICLES_SUM',
       SET_PAGE_ARR: 'SET_PAGE_ARR'
     }),
+    // 查询归档的文章
     queryArticlesByTime() {
       const timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
       // utc时间0点起
       const startTime = new Date(Date.parse(timeArr[0])).getTime()
       // utc时间24点
       const endTime = new Date(Date.parse(timeArr[1])).getTime() + 1000 * 60 * 60 * 24
-
       searchArticle(true, 1, 10, null, startTime, endTime).then((res) => {
         console.log(res)
         if (res.code === 200) {

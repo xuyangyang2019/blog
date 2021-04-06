@@ -63,7 +63,8 @@ module.exports = {
       ctx.error = '查询出错'
     } else {
       docs.forEach((item) => {
-        const yearMonth = new Date(item.createTime).getFullYear() + '年' + (new Date(item.createTime).getMonth() + 1) + '月'
+        const yearMonth =
+          new Date(item.createTime).getFullYear() + '年' + (new Date(item.createTime).getMonth() + 1) + '月'
         timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
       })
       for (const key in timeMap) {
@@ -170,7 +171,7 @@ module.exports = {
     if (startTime && endTime) {
       const start = new Date(parseInt(startTime, 10))
       const end = new Date(parseInt(endTime, 10))
-      condition.date = { $gte: start, $lte: end }
+      condition.createTime = { $gte: start, $lte: end }
     }
     const docs = await ArticleService.findManyByPage(condition, { content: 0 }, pageNum, pageSize)
     if (docs) {
