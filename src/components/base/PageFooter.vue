@@ -14,7 +14,7 @@
       </li>
       <li class="copyright-item">
         |
-        <a href="http://182.92.221.114:3000/admin" target="_blank">&nbsp;管理员</a>
+        <a href="http://xyy.life/admin" target="_blank">&nbsp;管理员</a>
       </li>
     </ul>
   </footer>
