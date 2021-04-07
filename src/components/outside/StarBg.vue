@@ -117,10 +117,12 @@ export default {
 .star-bg {
   box-sizing: border-box;
   width: 100%;
+  max-height: 100%;
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
   background: black;
+  overflow: hidden;
 }
 </style>
