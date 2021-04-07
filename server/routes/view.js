@@ -30,10 +30,10 @@ router.get(
   ],
   async (ctx) => {
     // console.log('前端页面')
-    // if (!renderer) {
-    //   ctx.type = 'html'
-    //   return ctx.body = 'waiting for compilation... refresh in a moment.'
-    // }
+    if (!ctx.renderData) {
+      ctx.type = 'html'
+      return (ctx.body = 'waiting for compilation... refresh in a moment.')
+    }
     let html
     let status
     try {
@@ -55,9 +55,9 @@ router.get(
 )
 
 // 后台页面
-router.get(['/admin', '/admin/*', '/login'], async (ctx) => {
-  const html = fs.readFileSync(path.join(__dirname, '../../dist-admin/index.html'), 'utf-8')
-  ctx.body = html
-})
+// router.get(['/admin', '/admin/*', '/login'], async (ctx) => {
+//   const html = fs.readFileSync(path.join(__dirname, '../../dist-admin/index.html'), 'utf-8')
+//   ctx.body = html
+// })
 
 module.exports = router
