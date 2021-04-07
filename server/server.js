@@ -72,8 +72,6 @@ if (!isProd) {
   // app.use(staticFiles('/static/', __dirname + '/static'));
   // app.use(staticFiles('/dist/', __dirname + '/dist'));
   backendApp.use(Koa_Static(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
-  backendApp.use(Koa_Static(resolve('dist'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
-  // backendApp.use(Koa_Static(resolve('dist-admin'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
 }
 
 // // Helmet
