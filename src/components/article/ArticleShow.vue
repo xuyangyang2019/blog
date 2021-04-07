@@ -16,7 +16,7 @@
             <!-- 发布时间 -->
             <div class="time">
               <span class="icon-clock i-p"></span>
-              <span>{{ item.date | reviseTime }} 发表</span>
+              <span>{{ item.createTime | reviseTime }} 发表</span>
             </div>
             <!-- 阅读数|评论数|点赞数 -->
             <div class="pv-c-l">
