@@ -242,13 +242,7 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  .star-bg-my{
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background: black;
-    z-index: -2;
-  }
+  min-height: 100%;
 }
 
 .main {
@@ -281,6 +275,14 @@ body {
   .side-bar-right {
     width: 32%;
   }
+}
+
+.star-bg-my {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: black;
+  z-index: -2;
 }
 
 //手机端
