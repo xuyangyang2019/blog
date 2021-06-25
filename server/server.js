@@ -23,9 +23,9 @@ const cors = require('koa2-cors')
 const { errorHandler, responseHandler } = require('./middlewares/response')
 
 // 路由
-const viewRouter = require('./routes/view')
-const publicRouter = require('./routes/public')
-const privateRouter = require('./routes/private')
+const viewRouter = require('./routers/view')
+const publicRouter = require('./routers/public')
+const privateRouter = require('./routers/private')
 // 开发环境配置
 const setUpDevServer = require('../build/setup.dev.server.js')
 // 开发环境
