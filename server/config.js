@@ -14,12 +14,11 @@ module.exports = {
     db: 'blog',
     authSource: 'admin'
   }, // mongodb配置文件
-  // =====================================
   tokenConfig: {
     secret: 'havana',
     expired: 60 * 60 * 24 // 1h
-  },
-  publicDir: path.resolve(__dirname, './public'),
-  // viewsDir: path.resolve(__dirname, './views'),
-  logPath: path.resolve(__dirname, './logs/koa-server')
+  }, // 加密配置
+  publicDir: path.resolve(__dirname, './public'), // 静态文件路径
+  viewsDir: path.resolve(__dirname, './views'), // 页面文件
+  logPath: path.resolve(__dirname, './logs/koa-server') // 日志文件
 }
