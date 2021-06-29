@@ -26,14 +26,14 @@ const { errorHandler, responseHandler } = require('./middlewares/response')
 const viewRouter = require('./routers/view')
 const publicRouter = require('./routers/public')
 const privateRouter = require('./routers/private')
-// 开发环境配置
-const setUpDevServer = require('../build/setup.dev.server.js')
+
 // 开发环境
 const isProd = process.env.NODE_ENV === 'production'
 
 // 获取本地ip
-const { serverPort, defaultHost } = require('./config')
-const uri = `http://${defaultHost}:${serverPort}`
+const { serverPort } = require('./config')
+const currentIP = require('ip').address()
+const uri = `http://${currentIP}:${serverPort}`
 
 function resolve(dir) {
   return path.resolve(process.cwd(), dir)
@@ -45,16 +45,14 @@ function resolve(dir) {
 const backendApp = new Koa()
 
 // Logger
-if (!isProd) {
-  // 使用koa-logger
-  backendApp.use(
-    Koa_Logger((str) => {
-      console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
-    })
-  )
-  // 自己写日志中间件
-  // backendApp.use(loggerMiddleware)
-}
+// 使用koa-logger
+backendApp.use(
+  Koa_Logger((str) => {
+    console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
+  })
+)
+// 自己写日志中间件
+// backendApp.use(loggerMiddleware)
 
 // Error Handler
 backendApp.use(errorHandler)
@@ -104,61 +102,67 @@ backendApp.use(
 // backendApp.use(views(config.viewsDir))
 // backendApp.use(static(config.viewsDir))
 
-// ssr
-const LRU = require('lru-cache')
-const { createBundleRenderer } = require('vue-server-renderer')
-function createRenderer(bundle, options) {
-  return createBundleRenderer(
-    bundle,
-    Object.assign(options, {
-      cache: new LRU({
-        max: 1000,
-        maxAge: 1000 * 60 * 15
-      }),
-      runInNewContext: false // 推荐
-    })
-  )
-}
-let renderer
-if (isProd) {
-  // 生产环境,从打包好的文件夹读取bundle和manifest
-  const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
-  // ssr
-  const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
-  const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
-  renderer = createRenderer(serverBundle, {
-    template: template, // （可选）页面模板
-    clientManifest: clientManifest // （可选）客户端构建 manifest
-  })
-} else {
-  // 开发环境,从内存中读取bundle和manifest
-  setUpDevServer(backendApp, uri, (bundle, options) => {
-    try {
-      renderer = createRenderer(bundle, options)
-    } catch (e) {
-      console.log('\nbundle error', e)
-    }
-  })
-}
-// 把renderData添加在app.context上
-backendApp.context.renderData = function (ctx) {
-  const context = {
-    url: ctx.url,
-    title: '首页 -xyy的小站', // 默认title
-    author: 'xyy', // 默认author
-    keywords: 'xyy', // 默认keywords
-    description: 'xyy的blog', // 默认description
-    cookies: ctx.request.headers.cookie
-  }
-  return new Promise((resolve, reject) => {
-    renderer.renderToString(context, (err, html) => {
-      if (err) {
-        return reject(err)
-      }
-      resolve(html)
-    })
-  })
-}
+// vue ssr处理
+const vueKoaSSR = require('./vue.koa.ssr')
+vueKoaSSR(backendApp, uri)
+
+// // ssr
+// const setUpDevServer = require('../build/setup.dev.server.js')
+// const LRU = require('lru-cache')
+// const { createBundleRenderer } = require('vue-server-renderer')
+// function createRenderer(bundle, options) {
+//   return createBundleRenderer(
+//     bundle,
+//     Object.assign(options, {
+//       cache: new LRU({
+//         max: 1000,
+//         maxAge: 1000 * 60 * 15
+//       }),
+//       runInNewContext: false // 推荐
+//     })
+//   )
+// }
+
+// let renderer
+// if (isProd) {
+//   // 生产环境,从打包好的文件夹读取bundle和manifest
+//   const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
+//   // ssr
+//   const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
+//   const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
+//   renderer = createRenderer(serverBundle, {
+//     template: template, // （可选）页面模板
+//     clientManifest: clientManifest // （可选）客户端构建 manifest
+//   })
+// } else {
+//   // 开发环境,从内存中读取bundle和manifest
+//   setUpDevServer(backendApp, uri, (bundle, options) => {
+//     try {
+//       renderer = createRenderer(bundle, options)
+//     } catch (e) {
+//       console.log('\nbundle error', e)
+//     }
+//   })
+// }
+// // 把renderData添加在app.context上
+// backendApp.context.renderData = function (ctx) {
+//   const context = {
+//     url: ctx.url,
+//     title: '首页 -xyy的小站', // 默认title
+//     author: 'xyy', // 默认author
+//     keywords: 'xyy', // 默认keywords
+//     description: 'xyy的blog', // 默认description
+//     cookies: ctx.request.headers.cookie
+//   }
+//   return new Promise((resolve, reject) => {
+//     renderer.renderToString(context, (err, html) => {
+//       if (err) {
+//         return reject(err)
+//       }
+//       resolve(html)
+//     })
+//   })
+// }
 
 // Routes
 backendApp.use(viewRouter.routes(), viewRouter.allowedMethods())
