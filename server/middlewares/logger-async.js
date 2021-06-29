@@ -6,7 +6,7 @@ function log(ctx) {
 
 module.exports = function () {
   return async function (ctx, next) {
-    let start = new Date().getTime()
+    const start = new Date().getTime()
     let execTime = 0
     log(ctx)
     await next()

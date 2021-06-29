@@ -19,7 +19,7 @@ module.exports = function () {
     const url = ctx.url
     // logger.info(`Request '${url}'`)
     let proxyTarget
-    let proxyConfig = appConfig.proxy
+    const proxyConfig = appConfig.proxy
     // 在appConfig.proxy中寻找匹配前缀的代理
     for (const [prefix, target] of Object.entries(proxyConfig)) {
       if (url.startsWith(prefix)) {
@@ -82,9 +82,14 @@ module.exports = function () {
         async userResDecorator(proxyRes, proxyResData, ctx) {
           // logger.info('ProxyRes headers:', '\n', JSON.stringify(ctx.response.headers, null, 2))
           const location = `${ctx._proxyTarget}${ctx.url}`
-          logger.info(`Proxy request '${location}' completed(${proxyRes.statusCode}), costing ${Date.now() - ctx._proxyStartTime}ms.`)
+          logger.info(
+            `Proxy request '${location}' completed(${proxyRes.statusCode}), costing ${
+              Date.now() - ctx._proxyStartTime
+            }ms.`
+          )
           return proxyResData
-        },
-      }),
+        }
+      }
+    )
   ])
 }

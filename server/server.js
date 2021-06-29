@@ -46,13 +46,15 @@ const backendApp = new Koa()
 
 // Logger
 if (!isProd) {
+  // 使用koa-logger
   backendApp.use(
     Koa_Logger((str) => {
       console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
     })
   )
+  // 自己写日志中间件
+  // backendApp.use(loggerMiddleware)
 }
-// backendApp.use(loggerMiddleware)
 
 // Error Handler
 backendApp.use(errorHandler)
