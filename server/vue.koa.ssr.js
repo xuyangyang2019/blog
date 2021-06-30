@@ -8,7 +8,6 @@ const LRU = require('lru-cache')
 const isProd = process.env.NODE_ENV === 'production'
 const setUpDevServer = require('../build/setup.dev.server.js')
 const { createBundleRenderer } = require('vue-server-renderer')
-// const proxyConfig = require('./../app.config').proxy
 
 module.exports = function (app, uri) {
   const renderData = (ctx, renderer) => {
@@ -51,7 +50,9 @@ module.exports = function (app, uri) {
   if (isProd) {
     // 生产环境,从打包好的文件夹读取bundle和manifest
     const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
+    // eslint-disable-next-line global-require
     const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
+    // eslint-disable-next-line global-require
     const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
     renderer = createRenderer(serverBundle, {
       template: template, // （可选）页面模板
@@ -73,9 +74,10 @@ module.exports = function (app, uri) {
       ctx.type = 'html'
       return (ctx.body = 'waiting for compilation... refresh in a moment.')
     }
-    // if (Object.keys(proxyConfig).findIndex((vl) => ctx.url.startsWith(vl)) > -1) {
-    //   return next()
-    // }
+    // 处理api
+    if (ctx.url.startsWith('/api') > -1) {
+      return next()
+    }
     let html, status
     try {
       status = 200
