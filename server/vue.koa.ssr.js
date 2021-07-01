@@ -10,25 +10,6 @@ const setUpDevServer = require('../build/setup.dev.server.js')
 const { createBundleRenderer } = require('vue-server-renderer')
 
 module.exports = function (app, uri) {
-  const renderData = (ctx, renderer) => {
-    const context = {
-      url: ctx.url,
-      title: '首页 -xyy的小站', // 默认title
-      author: 'xyy', // 默认author
-      keywords: 'xyy', // 默认keywords
-      description: 'xyy的blog', // 默认description
-      cookies: ctx.request.headers.cookie
-    }
-    return new Promise((resolve, reject) => {
-      renderer.renderToString(context, (err, html) => {
-        if (err) {
-          return reject(err)
-        }
-        resolve(html)
-      })
-    })
-  }
-
   function createRenderer(bundle, options) {
     return createBundleRenderer(
       bundle,
@@ -69,31 +50,23 @@ module.exports = function (app, uri) {
     })
   }
 
-  app.use(async (ctx, next) => {
-    if (!renderer) {
-      ctx.type = 'html'
-      return (ctx.body = 'waiting for compilation... refresh in a moment.')
+  // 如果路由要拆分home 需要把renderData添加在app.context上
+  app.context.renderData = function (ctx) {
+    const context = {
+      url: ctx.url,
+      title: '首页 -xyy的小站', // 默认title
+      author: 'xyy', // 默认author
+      keywords: 'xyy', // 默认keywords
+      description: 'xyy的blog', // 默认description
+      cookies: ctx.request.headers.cookie
     }
-    // 处理api
-    if (ctx.url.startsWith('/api') > -1) {
-      return next()
-    }
-    let html, status
-    try {
-      status = 200
-      html = await renderData(ctx, renderer)
-    } catch (e) {
-      console.log('\ne', e)
-      if (e.code === 404) {
-        status = 404
-        html = '404 | Not Found'
-      } else {
-        status = 500
-        html = '500 | Internal Server Error'
-      }
-    }
-    ctx.type = 'html'
-    ctx.status = status || ctx.status
-    ctx.body = html
-  })
+    return new Promise((resolve, reject) => {
+      renderer.renderToString(context, (err, html) => {
+        if (err) {
+          return reject(err)
+        }
+        resolve(html)
+      })
+    })
+  }
 }
