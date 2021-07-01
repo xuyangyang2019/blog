@@ -1,15 +1,21 @@
 const fs = require('fs')
 const path = require('path')
 const Koa = require('koa') // 导入koa，和koa 1.x不同，在koa2中，我们导入的是一个class，因此用大写的Koa表示
+
 const Koa_Logger = require('koa-logger') // 日志中间件
 const Moment = require('moment') // 日期工具
 // const { loggerMiddleware } = require('./middlewares/logger')
+
 const KoaCompress = require('koa-compress')() // 数据压缩
 const Koa_Static = require('koa-static') // 解析静态资源
 const koaBody = require('koa-body') // 解析POST请求
 const cors = require('koa2-cors') // ajax 跨域问题
-// const rest = require('./middlewares/rest') // rest中间件
+
+const rest = require('./middlewares/rest') // rest中间件
+const controller = require('./middlewares/controller')
+const routers = require('./routers/index') // 路由
 const { errorHandler, responseHandler } = require('./middlewares/response') // 错误处理 和 返回处理
+
 const isProd = process.env.NODE_ENV === 'production' // 开发环境
 // 获取本地ip
 const { serverPort } = require('./config')
@@ -57,9 +63,6 @@ if (!isProd) {
 // // Helmet
 // app.use(helmet())
 
-// // rest
-// app.use(rest.restify())
-
 // 处理跨域
 app.use(
   cors({
@@ -78,142 +81,22 @@ app.use(
   })
 )
 
-// // View
+// View模板渲染
 // app.use(views(config.viewsDir))
 // app.use(static(config.viewsDir))
 
-// api请求
-
 // vue ssr处理
-// const vueKoaSSR = require('./vue.koa.ssr')
-// vueKoaSSR(app, uri)
-const LRU = require('lru-cache')
-const setUpDevServer = require('../build/setup.dev.server.js')
-const { createBundleRenderer } = require('vue-server-renderer')
-const renderData = (ctx, renderer) => {
-  const context = {
-    url: ctx.url,
-    title: '首页 -xyy的小站', // 默认title
-    author: 'xyy', // 默认author
-    keywords: 'xyy', // 默认keywords
-    description: 'xyy的blog', // 默认description
-    cookies: ctx.request.headers.cookie
-  }
-  return new Promise((resolve, reject) => {
-    renderer.renderToString(context, (err, html) => {
-      if (err) {
-        return reject(err)
-      }
-      resolve(html)
-    })
-  })
-}
-function createRenderer(bundle, options) {
-  return createBundleRenderer(
-    bundle,
-    Object.assign(options, {
-      cache: LRU({
-        max: 1000,
-        maxAge: 1000 * 60 * 15
-      }),
-      runInNewContext: false
-    })
-  )
-}
-let renderer
-if (isProd) {
-  // 生产环境,从打包好的文件夹读取bundle和manifest
-  const template = fs.readFileSync(resolve('dist/index.ssr.html'), 'utf-8')
-  // eslint-disable-next-line global-require
-  const serverBundle = require(resolve('dist/vue-ssr-server-bundle.json'))
-  // eslint-disable-next-line global-require
-  const clientManifest = require(resolve('dist/vue-ssr-client-manifest.json'))
-  renderer = createRenderer(serverBundle, {
-    template: template, // （可选）页面模板
-    clientManifest: clientManifest // （可选）客户端构建 manifest
-  })
-} else {
-  // 开发环境,从内存中读取bundle和manifest
-  setUpDevServer(app, uri, (bundle, options) => {
-    try {
-      renderer = createRenderer(bundle, options)
-    } catch (e) {
-      console.log('\nbundle error', e)
-    }
-  })
-}
+const vueKoaSSR = require('./vue.koa.ssr')
+vueKoaSSR(app, uri)
 
-const router = require('koa-router')()
-// 客户端页面
-router.get(
-  [
-    '/',
-    '/home',
-    '/article',
-    '/article/:tag',
-    '/article/:tag/:id',
-    '/life',
-    '/life/:id',
-    '/msgBoard',
-    '/search/:searchKey',
-    '/placeOnFile/:time',
-    '/login_qq'
-  ],
-  async (ctx) => {
-    // console.log('前端页面')
-    if (!renderer) {
-      ctx.type = 'html'
-      return (ctx.body = 'waiting for compilation... refresh in a moment.')
-    }
-    let html
-    let status
-    try {
-      status = 200
-      html = await renderData(ctx, renderer)
-    } catch (e) {
-      if (e.code === 404) {
-        status = 404
-        html = '404 | Not Found'
-      } else {
-        status = 500
-        html = '500 | Internal Server Error'
-      }
-    }
-    ctx.type = 'html'
-    ctx.status = status || ctx.status
-    ctx.body = html
-  }
-)
-// 管理端页面
-router.get(['/admin', '/admin/*', '/login'], async (ctx) => {
-  // const html = fs.readFileSync(path.join(__dirname, '../../dist-admin/index.html'), 'utf-8')
-  const html = 'admin'
-  ctx.body = html
-})
-app.use(router.routes(), router.allowedMethods())
+// // bind .rest() for ctx:
+// app.use(rest.restify())
 
-// // 如果路由要拆分home 需要把renderData添加在app.context上
-// app.context.renderData = function (ctx) {
-//   const context = {
-//     url: ctx.url,
-//     title: '首页 -xyy的小站', // 默认title
-//     author: 'xyy', // 默认author
-//     keywords: 'xyy', // 默认keywords
-//     description: 'xyy的blog', // 默认description
-//     cookies: ctx.request.headers.cookie
-//   }
-//   return new Promise((resolve, reject) => {
-//     renderer.renderToString(context, (err, html) => {
-//       if (err) {
-//         return reject(err)
-//       }
-//       resolve(html)
-//     })
-//   })
-// }
-// const routers = require('./routers/index')
-// // 初始化路由中间件
-// app.use(routers.routes(), routers.allowedMethods())
+// // add controllers:
+// app.use(controller())
+
+// 初始化路由中间件
+app.use(routers.routes(), routers.allowedMethods())
 
 // Response
 // app.use(responseHandler)
