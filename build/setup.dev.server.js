@@ -3,17 +3,16 @@
  */
 
 const path = require('path') // 解析文件路径
-const webpack = require('webpack') // 读取配置文件进行打包
+const convert = require('koa-convert') // generater转async 
+
 const MFS = require('memory-fs') // 使用内存文件系统更快，文件生成在内存中而非真实文件
+const open = require('open') // Open stuff like URLs, files, executables. Cross-platform.
+const webpackDevMiddleware = require('koa-webpack-dev-middleware') // 饲服
+const webpackHotMiddleware = require('koa-webpack-hot-middleware') // 热更新
 
-const clientConfig = require('./webpack.client.config.js')
-const serverConfig = require('./webpack.server.config.js')
-
-// Open stuff like URLs, files, executables. Cross-platform.
-const open = require('open')
-const convert = require('koa-convert')
-const webpackDevMiddleware = require('koa-webpack-dev-middleware')
-const webpackHotMiddleware = require('koa-webpack-hot-middleware')
+const webpack = require('webpack') // 读取配置文件进行打包
+const clientConfig = require('./webpack.client.config.js') // 前台配置文件
+const serverConfig = require('./webpack.server.config.js') // 后台配置文件
 
 const readFile = (fs, file) => fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8')
 
