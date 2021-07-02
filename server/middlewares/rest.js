@@ -9,7 +9,6 @@ module.exports = {
     return async (ctx, next) => {
       // 是否是REST API前缀?
       if (ctx.request.path.startsWith(pathPrefix)) {
-        console.log('api请求', ctx.request)
         // 绑定rest()方法:
         ctx.rest = (data) => {
           ctx.response.type = 'application/json'
