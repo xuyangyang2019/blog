@@ -89,8 +89,8 @@ app.use(
 const vueKoaSSR = require('./vue.koa.ssr')
 vueKoaSSR(app, uri)
 
-// // bind .rest() for ctx:
-// app.use(rest.restify())
+// bind .rest() for ctx:
+app.use(rest.restify())
 
 // // add controllers:
 // app.use(controller())
