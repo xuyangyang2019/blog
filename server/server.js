@@ -11,9 +11,10 @@ const Koa_Static = require('koa-static') // 解析静态资源
 const koaBody = require('koa-body') // 解析POST请求
 const cors = require('koa2-cors') // ajax 跨域问题
 
-const rest = require('./middlewares/rest') // rest中间件
-// const controller = require('./middlewares/controller')
+// const controller = require('./middlewares/controller') // rest api
 const routers = require('./routers/index') // 路由
+
+const rest = require('./middlewares/rest') // rest中间件
 // const { errorHandler, responseHandler } = require('./middlewares/response') // 错误处理 和 返回处理
 
 const isProd = process.env.NODE_ENV === 'production' // 开发环境

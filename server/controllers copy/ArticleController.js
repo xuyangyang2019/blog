@@ -134,6 +134,7 @@ module.exports = {
   },
   // 更新文章的喜欢字段
   'PATCH /api/likeArticle': async (ctx, next) => {
+    // eslint-disable-next-line no-unused-vars
     const { id, number, title } = ctx.request.body
     const result = await ArticleService.update({ _id: id }, { $inc: { likeNum: number } })
     if (result) {
