@@ -23,6 +23,9 @@ function addMapping(router, mapping) {
       const path = url.substring(4)
       router.put(path, mapping[url])
       console.log(`register URL mapping: PUT ${path}`)
+    } else if (url.startsWith('PATCH ')) {
+      const path = url.substring(6)
+      router.patch(path, mapping[url])
     } else if (url.startsWith('DELETE ')) {
       const path = url.substring(7)
       router.del(path, mapping[url])
@@ -58,5 +61,5 @@ module.exports = function (dirName = 'controllers') {
   const controllersPath = path.resolve(__dirname, `../${dirName}`)
   addControllers(router, controllersPath)
   return router.routes()
-//   return router
+  //   return router
 }
