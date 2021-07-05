@@ -28,10 +28,6 @@ const errorHandler = async (ctx, next) => {
   try {
     await next()
   } catch (err) {
-    // console.log('errorHandler', err.name)
-    // console.log('errorHandler', err.code)
-    // console.log('errorHandler', err.status)
-    // console.log('errorHandler', err.message)
     ctx.response.status = err.statusCode || err.status || 500
     ctx.response.body = {
       message: err.message

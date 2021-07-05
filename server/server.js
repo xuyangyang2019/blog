@@ -40,7 +40,7 @@ app.use(
 ) // 使用koa-logger
 // app.use(loggerMiddleware) // 自己写日志中间件
 
-// Error Handler
+// Error Handler 如果用了rest 就不用这个了
 // app.use(errorHandler)
 
 // gzip
@@ -90,16 +90,11 @@ app.use(
 const vueKoaSSR = require('./vue.koa.ssr')
 vueKoaSSR(app, uri)
 
-// bind .rest() for ctx:
-app.use(rest.restify())
+app.use(rest.restify()) // restfy
+// app.use(controller()) // rest api
+app.use(routers.routes(), routers.allowedMethods()) // 路由拆分
 
-// // add controllers:
-// app.use(controller())
-
-// 初始化路由中间件
-app.use(routers.routes(), routers.allowedMethods())
-
-// Response
+// Response 如果用了rest 就不用这个了
 // app.use(responseHandler)
 
 // 错误处理
