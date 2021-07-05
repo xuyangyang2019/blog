@@ -1,10 +1,10 @@
-const fs = require('fs')
+// const fs = require('fs')
 const path = require('path')
 const Koa = require('koa') // 导入koa，和koa 1.x不同，在koa2中，我们导入的是一个class，因此用大写的Koa表示
 
 const Koa_Logger = require('koa-logger') // 日志中间件
 const Moment = require('moment') // 日期工具
-// const { loggerMiddleware } = require('./middlewares/logger')
+// const { loggerMiddleware } = require('./middlewares/logger') // 自己写日志中间件
 
 const KoaCompress = require('koa-compress')() // 数据压缩
 const Koa_Static = require('koa-static') // 解析静态资源
@@ -12,9 +12,9 @@ const koaBody = require('koa-body') // 解析POST请求
 const cors = require('koa2-cors') // ajax 跨域问题
 
 const rest = require('./middlewares/rest') // rest中间件
-const controller = require('./middlewares/controller')
+// const controller = require('./middlewares/controller')
 const routers = require('./routers/index') // 路由
-const { errorHandler, responseHandler } = require('./middlewares/response') // 错误处理 和 返回处理
+// const { errorHandler, responseHandler } = require('./middlewares/response') // 错误处理 和 返回处理
 
 const isProd = process.env.NODE_ENV === 'production' // 开发环境
 // 获取本地ip
@@ -40,7 +40,7 @@ app.use(
 // app.use(loggerMiddleware) // 自己写日志中间件
 
 // Error Handler
-app.use(errorHandler)
+// app.use(errorHandler)
 
 // gzip
 app.use(KoaCompress)
