@@ -12,7 +12,11 @@ module.exports = {
         // 绑定rest()方法:
         ctx.rest = (data) => {
           ctx.response.type = 'application/json'
-          ctx.response.body = data
+          ctx.response.body = {
+            code: ctx.code || 200,
+            msg: ctx.msg || 'success',
+            data: data
+          }
         }
         try {
           await next()
