@@ -35,23 +35,24 @@ function addMapping(router, mapping) {
  * @param {*} router 路由的实列
  * @param {*} controllers_dir js文件夹
  */
-function addControllers(router) {
+function addControllers(router, controllersPath) {
+  // 先导入fs模块，然后用readdirSync列出文件
   // 这里可以用sync是因为启动时只运行一次，不存在性能问题:
-  const controllers_path = path.resolve(__dirname, '../api')
-  const files = fs.readdirSync(controllers_path)
-  // 过滤出.js文件:
-  const js_files = files.filter((f) => {
-    return f.endsWith('.js')
-  })
-  // 处理每个js文件:
-  for (const f of js_files) {
-    // 导入js文件
-    const mapping = require(`${controllers_path}/` + f)
-    addMapping(router, mapping)
-  }
+  fs.readdirSync(controllersPath)
+    .filter((f) => {
+      return f.endsWith('.js')
+    })
+    .forEach((f) => {
+      console.log(`process controller: ${f}...`)
+      // eslint-disable-next-line global-require
+      const mapping = require(`${controllersPath}/` + f)
+      addMapping(router, mapping)
+    })
 }
 
-module.exports = function () {
-  addControllers(router)
+module.exports = function (dirName = 'api') {
+  // 如果不传参数，扫描目录默认为'controllers'
+  const controllersPath = path.resolve(__dirname, `../${dirName}`)
+  addControllers(router, controllersPath)
   return router
 }
