@@ -15,7 +15,7 @@ module.exports = {
     }
   },
   // 获取指定文章的评论
-  'GET /api/comments/itme': async (ctx) => {
+  'GET /api/comments/item': async (ctx) => {
     const { id } = ctx.request.query
     const result = await CommentService.findMany({ articleId: id })
     if (!result) {

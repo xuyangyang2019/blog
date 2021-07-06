@@ -162,7 +162,7 @@ function replyMessage(messageId, name, aite, content, avatar, email) {
  * @param {String} id 文章的_id
  */
 function getCommets(id) {
-  return fetch.get('/api/getComments', { id: id })
+  return fetch.get('/api/comments/item', { id: id })
 }
 
 /**
@@ -212,7 +212,7 @@ function commentArticle(name, avatar, content, articleId, articleTitle) {
     like: 0,
     date: new Date().getTime()
   }
-  return fetch.post('/api/commentArticle', parameters)
+  return fetch.post('/api/comments/comment', parameters)
 }
 
 /**
@@ -233,7 +233,7 @@ function vistorReplyComment(commentId, name, avatar, aite, content) {
     like: 0,
     date: new Date().getTime()
   }
-  return fetch.patch('/api/vistorReplyComment', parameters)
+  return fetch.patch('/api/comments/reply', parameters)
 }
 
 /**
@@ -243,7 +243,7 @@ function vistorReplyComment(commentId, name, avatar, aite, content) {
  * @param {Number} addOrDel 点赞 1 取消点赞 -1
  */
 function likeComment(commentId, replyId, addOrDel) {
-  return fetch.patch('/api/likeComment', { commentId: commentId, replyId: replyId, addOrDel: addOrDel })
+  return fetch.patch('/api/comments/like', { commentId: commentId, replyId: replyId, addOrDel: addOrDel })
 }
 
 export {
