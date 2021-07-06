@@ -107,14 +107,14 @@ function queryPreNext(date) {
  * @param {Number} pageSize
  */
 function getMsgBoard(pageNum, pageSize) {
-  return fetch.get('/api/getMsgBoard', { pageNum: pageNum, pageSize: pageSize })
+  return fetch.get('/api/messages/list', { pageNum: pageNum, pageSize: pageSize })
 }
 
 /**
  * 获取留言总数
  */
 function getMsgCount() {
-  return fetch.get('/api/getMsgCount')
+  return fetch.get('/api/messages/total')
 }
 
 /**
@@ -132,7 +132,7 @@ function leavingMessage(name, content, avatar, email) {
     email: email,
     date: new Date().getTime()
   }
-  return fetch.post('/api/leavingMessage', parameters)
+  return fetch.post('/api/messages/save', parameters)
 }
 
 /**
@@ -154,7 +154,7 @@ function replyMessage(messageId, name, aite, content, avatar, email) {
     email: email,
     date: Date.now()
   }
-  return fetch.patch('/api/replyMessage', parameters)
+  return fetch.patch('/api/messages/reply', parameters)
 }
 
 /**
