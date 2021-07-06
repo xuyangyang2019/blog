@@ -80,10 +80,15 @@ const actions = {
   // 获取留言
   GetMsgBoard({ commit }, payload) {
     const { pageNum, pageSize } = payload
-    return getMsgBoard(pageNum, pageSize).then((res) => {
-      commit('SET_MSG_BOARD_ARR', res.data.list)
-      commit('SET_PAGE_ARR', res.data.count || 0)
-    })
+    return getMsgBoard(pageNum, pageSize)
+      .then((res) => {
+        commit('SET_MSG_BOARD_ARR', res.data.list)
+        commit('SET_PAGE_ARR', res.data.count || 0)
+      })
+      .catch(() => {
+        commit('SET_MSG_BOARD_ARR', [])
+        commit('SET_PAGE_ARR', 0)
+      })
   },
   // 获取留言数量
   GetMsgCount({ commit }) {
