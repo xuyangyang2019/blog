@@ -10,7 +10,7 @@ import fetch from '../utils/fetchFront'
  * 获取热门文章
  */
 function getHotArticles() {
-  return fetch.get('/api/getArticlesByPv', { cache: true })
+  return fetch.get('/api/articles/pv', { cache: true })
 }
 
 /**
@@ -18,7 +18,7 @@ function getHotArticles() {
  * @param {Boolean} publish 是否已发布 true or false
  */
 function getArticlesByTime(publish) {
-  return fetch.get('/api/getArticlesByTime', { publish: publish }, { cache: true })
+  return fetch.get('/api/articles/categories', { publish: publish }, { cache: true })
 }
 
 /**
@@ -38,7 +38,7 @@ function getTags(publish) {
  */
 function getArticleList(publish, tag, pageNum, pageSize) {
   return fetch.get(
-    '/api/getArticleList',
+    '/api/articles/list',
     { publish: publish, tag: tag, pageNum: pageNum, pageSize: pageSize },
     { cache: false }
   )
@@ -70,7 +70,7 @@ function searchArticle(publish, pageNum, pageSize, keyword, startTime, endTime, 
   if (sort) {
     parameters.sort = sort
   }
-  return fetch.get('/api/searchArticle', parameters, { cache: true })
+  return fetch.get('/api/articles/search', parameters, { cache: true })
 }
 
 /**
@@ -80,7 +80,7 @@ function searchArticle(publish, pageNum, pageSize, keyword, startTime, endTime, 
  * @param {String} id 文章的内部id
  */
 function getArticle(publish, tag, id) {
-  return fetch.get('/api/getArticle', { publish: publish, tag: tag, id: id }, { cache: true })
+  return fetch.get('/api/articles/item', { publish: publish, tag: tag, id: id }, { cache: true })
 }
 
 /**
@@ -88,7 +88,7 @@ function getArticle(publish, tag, id) {
  * @param {Boolean} publish 是否发表
  */
 function getArticlesCount(publish) {
-  return fetch.get('/api/getArticlesCount', { publish: publish })
+  return fetch.get('/api/articles/total', { publish: publish })
 }
 
 /**
@@ -190,7 +190,7 @@ function vistorRegister(userName, password) {
  * @param {String} title 文章的标题
  */
 function likeArticle(id, number, title) {
-  return fetch.patch('/api/likeArticle', { id: id, number: number, title: title })
+  return fetch.patch('/api/articles/like', { id: id, number: number, title: title })
 }
 
 /**

@@ -28,7 +28,7 @@ module.exports = {
     // return next()
   },
   // 分页查询文章列表
-  'GET /api/getArticleList': async (ctx) => {
+  'GET /api/articles/list': async (ctx) => {
     const { pageNum, pageSize, publish, tag } = ctx.request.query
     const condition = {}
     if (publish) {
@@ -45,7 +45,7 @@ module.exports = {
     }
   },
   // 获取推荐文章
-  'GET /api/getArticlesByPv': async (ctx) => {
+  'GET /api/articles/pv': async (ctx) => {
     const result = await ArticleService.getArticlesByPv()
     if (!result) {
       ctx.error = '文章不存在'
@@ -54,7 +54,7 @@ module.exports = {
     }
   },
   // 文章归档
-  'GET /api/getArticlesByTime': async (ctx) => {
+  'GET /api/articles/categories': async (ctx) => {
     const publish = !!ctx.query.publish
     const timeArr = []
     const timeMap = {}
@@ -79,7 +79,7 @@ module.exports = {
     }
   },
   // 获取文章数量 暂时不用
-  'GET /api/getArticlesCount': async (ctx) => {
+  'GET /api/articles/total': async (ctx) => {
     const publish = !!ctx.query.publish
     let result = {}
     // 首页请求
@@ -107,7 +107,7 @@ module.exports = {
     ctx.rest(result)
   },
   // 抓取单一文章
-  'GET /api/getArticle': async (ctx) => {
+  'GET /api/articles/item': async (ctx) => {
     const { id } = ctx.request.query
     if (!id) {
       throw new InvalidQueryError()
@@ -131,7 +131,7 @@ module.exports = {
     }
   },
   // 更新文章的喜欢字段
-  'PATCH /api/likeArticle': async (ctx) => {
+  'PATCH /api/articles/like': async (ctx) => {
     // eslint-disable-next-line no-unused-vars
     const { id, number, title } = ctx.request.body
     const result = await ArticleService.update({ _id: id }, { $inc: { likeNum: number } })
@@ -160,7 +160,7 @@ module.exports = {
     }
   },
   // 前台搜索文章
-  'GET /api/searchArticle': async (ctx) => {
+  'GET /api/articles/search': async (ctx) => {
     const { publish, keyword, startTime, endTime, pageNum, pageSize } = ctx.request.query
     const condition = { publish: publish }
     if (keyword) {
