@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- 标签 -->
-    <page-header></page-header>
+    <PageHeader />
 
     <!-- 主要内容 -->
     <div class="main">
@@ -28,25 +28,25 @@
         <!-- 右边栏 -->
         <section class="side-bar-right">
           <!-- 关于本站 -->
-          <about-me></about-me>
-          <!-- 推荐 -->
-          <hot-articles></hot-articles>
+          <AboutMe />
+          <!-- 热门文章 -->
+          <HotArticles />
           <!-- 标签 -->
-          <article-tags></article-tags>
-          <!-- 时间轴 -->
-          <place-on-file></place-on-file>
+          <ArticleTags />
+          <!-- 归档 -->
+          <PlaceOnFile />
         </section>
       </div>
     </div>
 
     <!-- 页脚 -->
-    <page-footer></page-footer>
+    <PageFooter />
 
     <!-- 回到top -->
-    <to-top></to-top>
+    <ToTop />
 
     <!-- 背景 -->
-    <star-bg></star-bg>
+    <StarBg />
     <div class="star-bg-my"></div>
   </div>
 </template>
