@@ -171,7 +171,7 @@ function getCommets(id) {
  * @param {String} password 密码
  */
 function vistorLogin(userName, password) {
-  return fetch.post('/api/vistorLogin', { userName: userName, password: password })
+  return fetch.post('/api/vistor/login', { userName: userName, password: password })
 }
 
 /**
@@ -180,7 +180,7 @@ function vistorLogin(userName, password) {
  * @param {String} password 密码
  */
 function vistorRegister(userName, password) {
-  return fetch.post('/api/vistorRegister', { userName: userName, password: password })
+  return fetch.post('/api/vistor/register', { userName: userName, password: password })
 }
 
 /**
