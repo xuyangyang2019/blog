@@ -168,12 +168,6 @@ httpInstance.interceptors.response.use(
     } else {
       return Promise.reject(response)
     }
-    // 如果需要统一处理错误msg
-    // if (response.status && response.status === 200 && response.data.code === -1) {
-    //   Message.error({ message: response.data.msg })
-    //   // return
-    // }
-    // return response
   },
   (error) => {
     // 服务器状态码不是2开头的的情况
