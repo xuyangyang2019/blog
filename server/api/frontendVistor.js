@@ -3,6 +3,7 @@
 
 const VistorService = require('../services').VistorService
 const { InvalidQueryError } = require('../lib/error')
+const APIError = require('../middlewares/rest').APIError
 
 module.exports = {
   // 游客登陆
@@ -13,11 +14,8 @@ module.exports = {
       throw new InvalidQueryError()
     }
     const vistor = await VistorService.findOne({ name: userName })
-    if (!vistor) {
-      ctx.error = '用户不存在'
-      ctx.code = 0
-    } else if (vistor.password !== password) {
-      ctx.error = '密码错误'
+    if (!vistor || vistor.password !== password) {
+      throw new APIError('vistor:not_found', '用户名或密码错误')
     } else {
       ctx.rest(vistor)
     }
