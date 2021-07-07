@@ -113,6 +113,7 @@ class BaseDAO {
    * @return {Object} 新增的数据
    */
   async save(data) {
+    // eslint-disable-next-line new-cap
     const instance = new this.model(data)
     const result = await instance.save()
     return result
