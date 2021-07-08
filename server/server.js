@@ -14,8 +14,8 @@ const cors = require('koa2-cors') // ajax 跨域问题
 // const controller = require('./middlewares/controller') // rest api
 const routers = require('./routers/index') // 路由
 
-const rest = require('./middlewares/rest') // rest中间件
-// const { errorHandler, responseHandler } = require('./middlewares/response') // 错误处理 和 返回处理
+const restify = require('./middlewares/rest') // rest中间件
+const { errorHandler } = require('./middlewares/response') // 错误处理 和 返回处理
 
 const isProd = process.env.NODE_ENV === 'production' // 开发环境
 // 获取本地ip
@@ -41,7 +41,7 @@ app.use(
 // app.use(loggerMiddleware) // 自己写日志中间件
 
 // Error Handler 如果用了rest 就不用这个了
-// app.use(errorHandler)
+app.use(errorHandler)
 
 // gzip
 app.use(KoaCompress)
@@ -90,11 +90,10 @@ app.use(
 const vueKoaSSR = require('./vue.koa.ssr')
 vueKoaSSR(app, uri)
 
-app.use(rest.restify()) // restfy
-// app.use(controller()) // rest api
+app.use(restify()) // 给ctx添加一个rest()方法
+
 app.use(routers.routes(), routers.allowedMethods()) // 路由拆分
 
-// Response 如果用了rest 就不用这个了
 // app.use(responseHandler)
 
 // 错误处理

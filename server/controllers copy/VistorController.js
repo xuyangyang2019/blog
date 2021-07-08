@@ -15,7 +15,7 @@ module.exports = {
     const vistor = await VistorService.findOne({ name: userName })
     if (!vistor) {
       ctx.error = '用户不存在'
-      ctx.code = 0
+      ctx.code = -1
     } else if (vistor.password !== password) {
       ctx.error = '密码错误'
     } else {
