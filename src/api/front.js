@@ -175,6 +175,14 @@ function vistorLogin(userName, password) {
 }
 
 /**
+ * 查询用户是否存在
+ * @param {String} userName 用户名
+ */
+function vistorSearch(userName) {
+  return fetch.post('/api/vistor/search', { userName: userName })
+}
+
+/**
  * 游客注册
  * @param {String} userName 用户名
  * @param {String} password 密码
@@ -265,5 +273,6 @@ export {
   vistorReplyComment,
   likeComment,
   vistorLogin,
+  vistorSearch,
   vistorRegister
 }
