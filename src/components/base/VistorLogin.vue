@@ -174,35 +174,30 @@ export default {
       } else {
         this.passwordErr = ''
       }
-      // if (dEmail.length === 0) {
-      //   this.passwordErr = '请填写邮箱'
-      // } else if (!eReg.test(dEmail)) {
-      //   this.passwordErr = '请填写正确的邮箱格式'
-      // } else {
-      //   this.passwordErr = ''
-      // }
     },
     // 用户登陆
     vistorLogin() {
       this.validateReg()
       // 如果没有错误信息
       if (!this.userNameErr && !this.passwordErr) {
-        vistorLogin(this.userName, this.password).then((res) => {
-          console.log(res)
-          if (res.code === 200) {
-            console.log('登陆成功')
-            const userInfo = {
-              name: this.userName,
-              imgUrl: '/img/defaultUser.jpg',
-              password: this.password
+        vistorLogin(this.userName, this.password)
+          .then((res) => {
+            if (res.code === 200) {
+              const userInfo = {
+                name: this.userName,
+                imgUrl: '/img/defaultUser.jpg',
+                password: this.password
+              }
+              this.set_user(userInfo)
+              this.setLocal(userInfo)
+              this.exitMask()
+            } else {
+              this.passwordErr = res.message
             }
-            this.set_user(userInfo)
-            this.setLocal(userInfo)
-            this.exitMask()
-          } else {
-            console.log('登陆失败')
-          }
-        })
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       }
     },
     // 用户注册
