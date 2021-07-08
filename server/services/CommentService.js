@@ -2,9 +2,9 @@ const BaseDAO = require('../lib/baseDAO')
 const Comment = require('../models/mongodb').comment
 
 class CommentService extends BaseDAO {
-  constructor(model) {
-    super(model)
-  }
+  // constructor(model) {
+  //   super(model)
+  // }
 }
 
 module.exports = new CommentService(Comment)
