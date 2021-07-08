@@ -66,7 +66,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { vistorLogin, vistorRegister } from '../../api/front'
+import { vistorLogin, vistorSearch, vistorRegister } from '../../api/front'
 
 export default {
   data() {
@@ -206,37 +206,26 @@ export default {
       // 如果没有错误信息
       if (!this.userNameErr && !this.passwordErr) {
         // 查询用户是否存在
-        vistorRegister(this.userName, this.password).then((res) => {
+        vistorSearch(this.userName).then((res) => {
           console.log(res)
           if (res.code === 200) {
-            console.log('注册成功！')
+            vistorRegister(this.userName, this.password).then((res2) => {
+              console.log(res2)
+              if (res2.code === 200) {
+                const userInfo = {
+                  name: this.userName,
+                  imgUrl: '/img/defaultUser.jpg',
+                  email: this.password
+                }
+                this.set_user(userInfo)
+                this.setLocal(userInfo)
+                this.exitMask()
+              }
+            })
           } else {
-            console.log(res.msg)
+            this.userNameErr = '该用户名已存在，换一个试试？'
           }
         })
-        // this.searchUser({ name: this.userName }).then((data) => {
-        //   console.log(data)
-        //   if (data.exist === 'yes') {
-        //     this.userNameErr = '该用户名已存在，换一个试试？'
-        //   } else {
-        //     this.saveUser({
-        //       name: this.userName,
-        //       email: this.password
-        //     }).then((data) => {
-        //       console.log(data)
-        //       if (data.code === 200) {
-        //         const userInfo = {
-        //           name: this.userName,
-        //           imgUrl: '/img/defaultUser.jpg',
-        //           email: this.password
-        //         }
-        //         this.set_user(userInfo)
-        //         this.setLocal(userInfo)
-        //         this.exitMask()
-        //       }
-        //     })
-        //   }
-        // })
       }
     },
     // 退出登陆
