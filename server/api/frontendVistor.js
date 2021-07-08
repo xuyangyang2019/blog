@@ -1,30 +1,29 @@
 // const jwt = require('jsonwebtoken')
 // const tokenConfig = require('../config').tokenConfig
-
 const VistorService = require('../services').VistorService
-const { InvalidQueryError } = require('../lib/error')
-const APIError = require('../middlewares/rest').APIError
+// const { InvalidQueryError } = require('../lib/error')
+// const APIError = require('../middlewares/rest').APIError
 
 module.exports = {
   // 游客登陆
   'POST /api/vistor/login': async (ctx) => {
     const { userName, password } = ctx.request.body
-    console.log('vistorLogin', ctx.request.body)
     if (!userName || !password) {
-      throw new InvalidQueryError()
+      //   throw new APIError('vistor:invalid_query_parameter', '无效的参数')
+      //   throw new APIError('vistor:not_found', '用户名或密码错误')
     }
     const vistor = await VistorService.findOne({ name: userName })
     if (!vistor || vistor.password !== password) {
-      throw new APIError('vistor:not_found', '用户名或密码错误')
-    } else {
-      ctx.rest(vistor)
+      ctx.code = -1
+      ctx.message = '用户名或密码错误'
     }
+    ctx.rest(vistor)
   },
   // 游客注册
   'POST /api/vistor/register': async (ctx) => {
     const { userName, password } = ctx.request.body
     if (!userName || !password) {
-      throw new InvalidQueryError()
+      //   throw new InvalidQueryError()
     }
     if (await VistorService.findOne({ name: userName })) {
       ctx.error = '用户已存在'
