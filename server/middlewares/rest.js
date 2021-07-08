@@ -5,11 +5,11 @@ module.exports = function (pathPrefix) {
     // 是否是REST API前缀?
     if (ctx.request.path.startsWith(pathPrefix)) {
       // 绑定rest()方法:
-      ctx.rest = (data) => {
+      ctx.rest = (data, code, message) => {
         ctx.response.type = 'application/json'
         ctx.response.body = {
-          code: ctx.code || 200,
-          message: ctx.message || 'success',
+          code: code || 200,
+          message: message || 'success',
           data: data
         }
       }

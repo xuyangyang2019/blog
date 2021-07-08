@@ -9,43 +9,36 @@ module.exports = {
     const { userName, password } = ctx.request.body
     if (!userName || !password) {
       throw new InvalidQueryError()
-      //   throw new APIError('vistor:invalid_query_parameter', '无效的参数')
     }
     const vistor = await VistorService.findOne({ name: userName })
     if (!vistor || vistor.password !== password) {
-      ctx.code = -1
-      ctx.message = '用户名或密码错误'
+      ctx.rest(vistor, -1, '用户名或密码错误')
+    } else {
+      ctx.rest(vistor)
     }
-    ctx.rest(vistor)
+  },
+  // 游客查询
+  'POST /api/vistor/search': async (ctx) => {
+    const { userName } = ctx.request.body
+    console.log(ctx.request.body)
+    if (!userName) {
+      throw new InvalidQueryError()
+    }
+    const existUser = await VistorService.findOne({ name: userName })
+    if (existUser) {
+      ctx.rest(null, -1, '用户已经存在')
+    } else {
+      ctx.rest(null)
+    }
   },
   // 游客注册
   'POST /api/vistor/register': async (ctx) => {
     const { userName, password } = ctx.request.body
     if (!userName || !password) {
-      //   throw new InvalidQueryError()
+      throw new InvalidQueryError()
     }
-    if (await VistorService.findOne({ name: userName })) {
-      ctx.error = '用户已存在'
-    } else {
-      const result = await VistorService.save({ name: userName, password: password })
-      ctx.rest(result)
-      //   ctx.result = result
-      // {
-      // userInfo: {
-      //   id: user._id,
-      //   username: user.username,
-      //   nickname: user.nickname
-      // },
-      // token: jwt.sign(
-      //   {
-      //     data: user._id,
-      //     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3 // 设置 token 过期时间: 3d
-      //   },
-      //   tokenConfig.secret
-      // )
-      // }
-      //   return nextTick()
-    }
+    const result = await VistorService.save({ name: userName, password: password })
+    ctx.rest(result, '', '注册成功')
   }
   // //github登录
   // router.get("/api/getGithub",(req,res) => {
