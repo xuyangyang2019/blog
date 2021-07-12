@@ -1,5 +1,5 @@
-const MsgBoardService = require('../services').MsgBoardService
-const { InvalidQueryError } = require('../lib/error')
+const MsgBoardService = require('../../services').MsgBoardService
+const { InvalidQueryError } = require('../../lib/error')
 
 module.exports = {
   // 获取留言

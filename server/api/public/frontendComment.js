@@ -1,7 +1,7 @@
-const ArticleService = require('../services').ArticleService
-const CommentService = require('../services').CommentService
+const ArticleService = require('../../services').ArticleService
+const CommentService = require('../../services').CommentService
 
-const { InvalidQueryError } = require('../lib/error')
+const { InvalidQueryError } = require('../../lib/error')
 
 module.exports = {
   // 分页获取评论

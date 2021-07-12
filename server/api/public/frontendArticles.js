@@ -1,5 +1,5 @@
-const ArticleService = require('../services').ArticleService
-const { InvalidQueryError } = require('../lib/error')
+const ArticleService = require('../../services').ArticleService
+const { InvalidQueryError } = require('../../lib/error')
 // const APIError = require('../middlewares/rest').APIError
 
 module.exports = {

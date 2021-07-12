@@ -1,7 +1,7 @@
 // const jwt = require('jsonwebtoken')
 // const tokenConfig = require('../config').tokenConfig
-const VistorService = require('../services').VistorService
-const { InvalidQueryError } = require('../lib/error')
+const VistorService = require('../../services').VistorService
+const { InvalidQueryError } = require('../../lib/error')
 
 module.exports = {
   // 游客登陆
