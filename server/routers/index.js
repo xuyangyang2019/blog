@@ -5,7 +5,7 @@
 const router = require('koa-router')()
 
 // const api = require('./api')() // rest api
-const api = require('../api/index') // rest api
+const api = require('../api/public/index') // rest api
 const home = require('./home') // 客户端页面路由
 const admin = require('./admin') // 管理端页面路由
 

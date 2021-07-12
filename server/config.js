@@ -14,6 +14,7 @@ module.exports = {
     db: 'blog',
     authSource: 'admin'
   }, // mongodb配置文件
+  // ==========================================
   tokenConfig: {
     secret: 'havana',
     expired: 60 * 60 * 24 // 1h
