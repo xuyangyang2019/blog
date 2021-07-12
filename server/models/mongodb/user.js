@@ -10,11 +10,11 @@ module.exports = {
       required: true
     }, // 密码
     nickname: String, // 昵称
-    phone_num: String, // 电话号码
+    phoneNum: String, // 电话号码
     email: String, // 邮箱
     birthday: String, // 生日
     salt: String, // 盐
-    last_login_time: String, // 上次登录时间
+    lastLoginTime: String, // 上次登录时间
     createTime: {
       type: Date,
       default: Date.now

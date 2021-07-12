@@ -1,5 +1,6 @@
 const md5 = require('md5')
-const salt = require('../secret').salt
+const { randomStr } = require('../utils/random')
+const salt = randomStr(5)
 const localTime = require('../utils/reviseTime')
 
 const UserService = require('../services').UserService
@@ -11,9 +12,9 @@ async function initUser() {
       username: 'admin', // 用户名
       password: md5('123456' + salt), // 密码
       nickname: '羊羊羊', // 昵称
-      phone_num: '10086', // 电话号码
+      phoneNum: '10086', // 电话号码
       salt: salt, // 盐
-      last_login_time: localTime(Date.now()) // 上次登录时间
+      lastLoginTime: localTime(Date.now()) // 上次登录时间
     })
     if (user._id) {
       console.log(user)
