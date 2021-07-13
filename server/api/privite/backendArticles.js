@@ -4,12 +4,6 @@ const { InvalidQueryError } = require('../../lib/error')
 const ImgUploadService = require('../../services/fileService/ImgUploadService')
 
 module.exports = {
-  // // 路由闯入编辑器页面进行token验证
-  // 'GET /api/confirmToken': async (ctx, next) => {
-  //   console.log('鉴权')
-  //   ctx.result = '鉴权通过'
-  //   return next()
-  // },
   // 添加文章
   'POST /api/admin/addArticle': async (ctx) => {
     const data = ctx.request.body
@@ -74,6 +68,21 @@ module.exports = {
       ctx.rest('', -1, '查不到文章')
     }
   },
+  // 获取草稿箱里的文章
+  'GET /api/getDraft': async (ctx) => {
+    const result = await ArticleService.findOne({ state: 0 })
+    if (!result) {
+      ctx.rest('', -1, '无草稿')
+    } else {
+      ctx.rest(result)
+    }
+  }
+  // // 路由闯入编辑器页面进行token验证
+  // 'GET /api/confirmToken': async (ctx, next) => {
+  //   console.log('鉴权')
+  //   ctx.result = '鉴权通过'
+  //   return next()
+  // },
   // 'POST /api/saveDraft': async (ctx, next) => {
   //   const data = ctx.request.body
   //   if (!data) {
@@ -93,13 +102,4 @@ module.exports = {
   //   }
   //   return next()
   // },
-  // 获取草稿箱里的文章
-  'GET /api/getDraft': async (ctx) => {
-    const result = await ArticleService.findOne({ state: 0 })
-    if (!result) {
-      ctx.rest('', -1, '无草稿')
-    } else {
-      ctx.rest(result)
-    }
-  }
 }
