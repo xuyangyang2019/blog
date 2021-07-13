@@ -67,7 +67,7 @@ module.exports = {
     }
   },
   // 获取admin的信息
-  'GET /api/getUserInfo': async (ctx) => {
+  'GET /api/user/info': async (ctx) => {
     if (!ctx.headers.authorization) {
       ctx.throw(401, 'NoToken', { code: 0, data: null })
     } else {
