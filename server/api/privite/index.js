@@ -3,6 +3,12 @@ const router = require('koa-router')()
 
 // const { logger } = require('../middlewares/logger')
 
+const config = require('../secret')
+const koaJwt = require('koa-jwt')({ secret: config.jwtSecret })
+
+// 校验接口，进行登录验证后才能访问
+router.use(koaJwt)
+
 // 扫描当前文件夹下所有的js文件,除了index.js
 const files = fs.readdirSync(__dirname).filter((file) => file.endsWith('.js') && file !== 'index.js')
 
