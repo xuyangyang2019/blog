@@ -1,4 +1,4 @@
-const secret = require('../secret')
+const jwtSecret = require('../config').jwtSecret
 const jwt = require('jsonwebtoken')
 
 const confirmToken = (ctx, next) => {
@@ -6,7 +6,7 @@ const confirmToken = (ctx, next) => {
     ctx.body = { code: 401 }
   } else {
     const token = ctx.headers.authorization
-    jwt.verify(token, secret.jwtSecret, (err) => {
+    jwt.verify(token, jwtSecret, (err) => {
       if (err) {
         throw { code: 401, message: 'no authorization' }
       } else {

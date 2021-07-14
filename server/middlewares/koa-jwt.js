@@ -1,4 +1,4 @@
-const secret = require('../secret')
+const jwtSecret = require('../config').jwtSecret
 const jwt = require('jsonwebtoken')
 
 // koa-jwt 源码
@@ -7,7 +7,7 @@ module.exports = function (ctx) {
   try {
     if (typeof ctx.request.headers.authorization === 'string') {
       const token = ctx.request.headers.authorization.slice(7)
-      ctx.jwtData = jwt.verify(token, secret.jwtSecret)
+      ctx.jwtData = jwt.verify(token, jwtSecret)
     } else {
       throw { code: 401, message: 'no authorization' }
     }

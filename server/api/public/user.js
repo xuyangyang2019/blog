@@ -1,6 +1,6 @@
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
-const secret = require('../../secret')
+const jwtSecret = require('../../config').jwtSecret
 const localTime = require('../../utils/reviseTime')
 
 const { InvalidQueryError } = require('../../lib/error')
@@ -10,14 +10,14 @@ const UserService = require('../../services').UserService
 // 创建token
 const createToken = (user) => {
   // 方式一
-  // return jwt.sign({ id: user._id, username: user.user.username }, secret.jwtSecret, { expiresIn: "10h" })
+  // return jwt.sign({ id: user._id, username: user.user.username }, jwtSecret, { expiresIn: "10h" })
   // 方式二
   return jwt.sign(
     {
       data: user._id,
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3 // 3个小时
     },
-    secret.jwtSecret
+    jwtSecret
   )
 }
 
