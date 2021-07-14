@@ -5,7 +5,6 @@ npm-debug.log
 /dist*
 .vscode/
 admin.lock
-server/config/secret.js
 server/config/mpapp.js
 server/logs/*
 yarn-error.log
