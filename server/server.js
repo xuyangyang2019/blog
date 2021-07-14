@@ -15,7 +15,7 @@ const cors = require('koa2-cors') // ajax 跨域问题
 const routers = require('./routers/index') // 路由
 
 const restify = require('./middlewares/rest') // rest中间件
-const { errorHandler } = require('./middlewares/response') // 错误处理 和 返回处理
+const errorHandler = require('./middlewares/error') // 错误处理 和 返回处理
 
 const isProd = process.env.NODE_ENV === 'production' // 开发环境
 // 获取本地ip
@@ -93,8 +93,6 @@ vueKoaSSR(app, uri)
 app.use(restify()) // 给ctx添加一个rest()方法
 
 app.use(routers.routes(), routers.allowedMethods()) // 路由拆分
-
-// app.use(responseHandler)
 
 // 错误处理
 app.on('error', (err) => {

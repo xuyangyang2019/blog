@@ -8,7 +8,6 @@ module.exports = {
     if (!result) {
       ctx.rest('', -1, '文章不存在')
     } else {
-      console.log('getNews', result)
       ctx.rest(result)
     }
   }
