@@ -23,7 +23,7 @@ const createToken = (user) => {
 
 module.exports = {
   // 后端登陆
-  'POST /api/login': async (ctx) => {
+  'POST /api/user/login': async (ctx) => {
     const { username, password } = ctx.request.body
     // 参数不对抛出异常
     if (!username || !password) {
@@ -58,7 +58,7 @@ module.exports = {
     } else {
       const token = ctx.headers.authorization.split(' ')[1]
       try {
-        const decoded = jwt.verify(token, secret.jwtSecret)
+        const decoded = jwt.verify(token, jwtSecret)
         ctx.result = decoded
         return next()
       } catch (error) {
@@ -74,7 +74,7 @@ module.exports = {
       const token = ctx.headers.authorization.split(' ')[1]
       try {
         // 鉴权
-        jwt.verify(token, secret.jwtSecret)
+        jwt.verify(token, jwtSecret)
         // 查询admin的信息
         const result = await UserService.findOne(
           { username: 'admin' },
