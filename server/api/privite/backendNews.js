@@ -4,11 +4,11 @@ const NewsService = require('../../services').NewsService
 
 module.exports = {
   'GET /api/getNews': async (ctx) => {
-    console.log('getNews')
     const result = await NewsService.findMany({})
     if (!result) {
       ctx.rest('', -1, '文章不存在')
     } else {
+      console.log('getNews', result)
       ctx.rest(result)
     }
   }
