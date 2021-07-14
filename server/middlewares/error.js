@@ -1,27 +1,3 @@
-// const { logger } = require('./logger')
-
-// 这个middleware用于将ctx.result中的内容最终回传给客户端
-// 回传遵循这样的格式：{ code: 0, msg: string, data: any }
-const responseHandler = (ctx) => {
-  if (ctx.result !== undefined) {
-    // 处理成功
-    ctx.type = 'json'
-    ctx.body = {
-      code: ctx.code || 200,
-      msg: ctx.msg || 'success',
-      data: ctx.result
-    }
-  } else if (ctx.error !== undefined) {
-    // 处理失败
-    ctx.type = 'json'
-    ctx.body = {
-      code: ctx.code || -1,
-      msg: ctx.error,
-      data: null
-    }
-  }
-}
-
 // 这个middleware处理在其它middleware中出现的异常
 // 并将异常消息回传给客户端：{ code: '错误代码', msg: '错误信息' }
 const errorHandler = async (ctx, next) => {
@@ -57,7 +33,4 @@ const errorHandler = async (ctx, next) => {
   // })
 }
 
-module.exports = {
-  responseHandler,
-  errorHandler
-}
+module.exports = errorHandler
