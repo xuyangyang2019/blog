@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const db = require('../db/db')
 const getIp = require('../utils/getIp')
-const api = require('../http/server-api')
+const serverApi = require('../http/server-api')
 const localTime = require('../utils/reviseTime')
 const confirmToken = require('../middleware/confirmToken')
 
@@ -91,7 +91,7 @@ router.get('/api/onlyArticle', (req, res) => {
             res.status(500).end()
           }
         })
-        api.get('http://ip.taobao.com/service/getIpInfo.php', { ip: getIp(req) }).then((data) => {
+        serverApi.get('http://ip.taobao.com/service/getIpInfo.php', { ip: getIp(req) }).then((data) => {
           new db.newMsg({
             type: 'pv',
             content: data.data.city + '网友 在' + localTime(Date.now()) + '浏览了你的文章--' + doc[0].title
