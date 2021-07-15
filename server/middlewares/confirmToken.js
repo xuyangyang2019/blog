@@ -4,14 +4,10 @@ const jwtSecret = require('../config').jwtSecret
 const confirmToken = async (ctx, next) => {
   if (ctx.request.headers.authorization) {
     const token = ctx.request.headers.authorization.slice(7)
-    try {
-      jwt.verify(token, jwtSecret)
-      await next()
-    } catch (error) {
-      throw { code: 401, message: err.message }
-    }
+    jwt.verify(token, jwtSecret)
+    await next()
   } else {
-    throw { code: 401, message: 'no authorization' }
+    ctx.throw(401, 'NoToken', { code: 0, data: null })
   }
 }
 
