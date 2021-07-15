@@ -15,7 +15,8 @@ const createToken = (user) => {
   return jwt.sign(
     {
       data: user._id,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3 // 3个小时
+      exp: Math.floor(Date.now() / 1000) + 60 // 3个小时
+      // exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3 // 3个小时
     },
     jwtSecret
   )
@@ -30,7 +31,6 @@ module.exports = {
       throw new InvalidQueryError()
     }
     const user = await UserService.findOne({ username: username })
-    console.log(user)
     if (!user || user.password !== md5(password + user.salt)) {
       ctx.rest('', -1, '用户名或密码错误')
     } else {
@@ -65,25 +65,25 @@ module.exports = {
         ctx.throw(403, 'TokenError', { code: 0, data: null })
       }
     }
-  },
-  // 获取admin的信息
-  'GET /api/user/info': async (ctx) => {
-    if (!ctx.headers.authorization) {
-      ctx.throw(401, 'NoToken', { code: 0, data: null })
-    } else {
-      const token = ctx.headers.authorization.split(' ')[1]
-      try {
-        // 鉴权
-        jwt.verify(token, jwtSecret)
-        // 查询admin的信息
-        const result = await UserService.findOne(
-          { username: 'admin' },
-          { nickname: 1, username: 1, lastLoginTime: 1 }
-        )
-        ctx.rest(result)
-      } catch (error) {
-        ctx.throw(403, 'TokenError', { code: 0, data: null })
-      }
-    }
   }
+  // 获取admin的信息
+  // 'GET /api/user/info': async (ctx) => {
+  //   if (!ctx.headers.authorization) {
+  //     ctx.throw(401, 'NoToken', { code: 0, data: null })
+  //   } else {
+  //     const token = ctx.headers.authorization.split(' ')[1]
+  //     try {
+  //       // 鉴权
+  //       jwt.verify(token, jwtSecret)
+  //       // 查询admin的信息
+  //       const result = await UserService.findOne(
+  //         { username: 'admin' },
+  //         { nickname: 1, username: 1, lastLoginTime: 1 }
+  //       )
+  //       ctx.rest(result)
+  //     } catch (error) {
+  //       ctx.throw(403, 'TokenError', { code: 0, data: null })
+  //     }
+  //   }
+  // }
 }
