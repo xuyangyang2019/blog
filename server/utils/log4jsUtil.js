@@ -1,5 +1,5 @@
 const log4js = require('log4js')
-const logsConfig = require('../config/log4jsConfig.js')
+const logsConfig = require('../log4jsConfig.js')
 
 // 加载配置文件
 log4js.configure(logsConfig)

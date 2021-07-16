@@ -1,8 +1,6 @@
 const fs = require('fs')
 const router = require('koa-router')()
 
-// const { logger } = require('../middlewares/logger')
-
 // 扫描当前文件夹下所有的js文件,除了index.js
 const files = fs.readdirSync(__dirname).filter((file) => file.endsWith('.js') && file !== 'index.js')
 
