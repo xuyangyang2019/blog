@@ -2,12 +2,12 @@
 const path = require('path')
 const Koa = require('koa') // 导入koa，和koa 1.x不同，在koa2中，我们导入的是一个class，因此用大写的Koa表示
 
-const Koa_Logger = require('koa-logger') // 日志中间件
+const KoaLogger = require('koa-logger') // 日志中间件
 const Moment = require('moment') // 日期工具
 // const { loggerMiddleware } = require('./middlewares/logger') // 自己写日志中间件
 
 const KoaCompress = require('koa-compress')() // 数据压缩
-const Koa_Static = require('koa-static') // 解析静态资源
+const KoaStatic = require('koa-static') // 解析静态资源
 const koaBody = require('koa-body') // 解析POST请求
 const cors = require('koa2-cors') // ajax 跨域问题
 
@@ -34,20 +34,17 @@ const app = new Koa()
 
 // Logger
 app.use(
-  Koa_Logger((str) => {
+  KoaLogger((str) => {
     console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
   })
 ) // 使用koa-logger
 // app.use(loggerMiddleware) // 自己写日志中间件
 
-// Error Handler 如果用了rest 就不用这个了
-app.use(errorHandler)
+app.use(errorHandler) // Error Handler
 
-// gzip
-app.use(KoaCompress)
+app.use(KoaCompress) // gzip
 
-// 解析post请求
-app.use(koaBody())
+app.use(koaBody()) // 解析post请求
 
 // 处理静态文件
 // 生产环境下，静态文件是由部署在最前面的反向代理服务器（如Nginx）处理的，Node程序不需要处理静态文件。
@@ -58,11 +55,10 @@ if (!isProd) {
   // let staticFiles = require('./middlewares/static-files');
   // app.use(staticFiles('/static/', __dirname + '/static'));
   // app.use(staticFiles('/dist/', __dirname + '/dist'));
-  app.use(Koa_Static(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+  app.use(KoaStatic(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
 }
 
-// // Helmet
-// app.use(helmet())
+// app.use(helmet()) // Helmet
 
 // 处理跨域
 app.use(
@@ -96,7 +92,7 @@ app.use(routers.routes(), routers.allowedMethods()) // 路由拆分
 
 // 错误处理
 app.on('error', (err) => {
-  console.error('没有处理的错误: \n%s\n%s ', err.stack || '')
+  console.error('server error: \n%s\n%s ', err.stack || '')
 })
 
 app.listen(serverPort)
