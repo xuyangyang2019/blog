@@ -4,7 +4,7 @@ const Koa = require('koa') // 导入koa，和koa 1.x不同，在koa2中，我们
 
 const KoaLogger = require('koa-logger') // 日志中间件
 const Moment = require('moment') // 日期工具
-// const { loggerMiddleware } = require('./middlewares/logger') // 自己写日志中间件
+const loggerMiddleware = require('./middlewares/log4jsMiddleware') // 自己写日志中间件
 
 const KoaCompress = require('koa-compress')() // 数据压缩
 const KoaStatic = require('koa-static') // 解析静态资源
@@ -33,12 +33,12 @@ function resolve(dir) {
 const app = new Koa()
 
 // Logger
-app.use(
-  KoaLogger((str) => {
-    console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
-  })
-) // 使用koa-logger
-// app.use(loggerMiddleware) // 自己写日志中间件
+// app.use(
+//   KoaLogger((str) => {
+//     console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
+//   })
+// ) // 使用koa-logger
+app.use(loggerMiddleware) // 自己写日志中间件
 
 app.use(errorHandler) // Error Handler
 
