@@ -149,6 +149,8 @@ module.exports = {
   logError: function (ctx, error, resTime) {
     if (ctx && error) {
       errorLogger.error(formatText.error(ctx, error, resTime))
+    } else if (error) {
+      errorLogger.error(error)
     }
   }
 }
