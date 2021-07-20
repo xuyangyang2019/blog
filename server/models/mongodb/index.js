@@ -1,9 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const mongoose = require('mongoose')
-
 const mongo = require('../../lib/mongoDB')
-const { logger } = require('../../middlewares/logger')
+const { logInfo } = require('../../utils/log4js')
 
 const files = fs.readdirSync(__dirname).filter((file) => file.endsWith('.js') && file !== 'index.js')
 const Models = {}
@@ -18,6 +17,6 @@ files.forEach((file) => {
   Models[modelFile.name] = mongo.model(modelFile.name, schema)
 })
 
-logger.info(`Models created`)
+logInfo(`Models created`)
 
 module.exports = Models

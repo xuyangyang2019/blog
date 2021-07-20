@@ -1,10 +1,8 @@
 const fs = require('fs')
-const { logger } = require('../middlewares/logger')
+const { logInfo } = require('../utils/log4js')
 
 const files = fs.readdirSync(__dirname).filter(file => file.endsWith('js') && file !== 'index.js')
 const services = {}
-
-console.log(`process services ...`)
 
 for (const file of files) {
   // eslint-disable-next-line global-require
@@ -12,6 +10,6 @@ for (const file of files) {
   services[`${file.replace(/\.js/, '')}`] = service
 }
 
-logger.info('Services created')
+logInfo('Services created')
 
 module.exports = services
