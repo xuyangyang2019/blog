@@ -1,4 +1,4 @@
-const { logInfo } = require('../utils/log4jsUtil')
+const { logInfo } = require('../utils/log4js')
 
 /**
  * 获取客户端ip地址
