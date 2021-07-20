@@ -1,7 +1,7 @@
 const path = require('path')
 const log4js = require('log4js')
 
-const baseLogPath = path.resolve(__dirname, '../logs') // 日志根目录
+const baseLogPath = path.resolve(__dirname, '../../logs') // 日志根目录
 
 // log4js的输出级别6个: trace, debug, info, warn, error, fatal
 
