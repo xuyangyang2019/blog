@@ -1,24 +1,19 @@
 // const fs = require('fs')
 const path = require('path')
 const Koa = require('koa') // 导入koa，和koa 1.x不同，在koa2中，我们导入的是一个class，因此用大写的Koa表示
-
-const KoaLogger = require('koa-logger') // 日志中间件
-const Moment = require('moment') // 日期工具
-const logger = require('./middlewares/logger') // 自己写日志中间件
-const { logError } = require('./utils/log4js') // 自己写日志中间件
-
 const KoaCompress = require('koa-compress')() // 数据压缩
 const KoaStatic = require('koa-static') // 解析静态资源
 const koaBody = require('koa-body') // 解析POST请求
 const cors = require('koa2-cors') // ajax 跨域问题
 
-// const controller = require('./middlewares/controller') // rest api
-const routers = require('./routers/index') // 路由
-
-const restify = require('./middlewares/rest') // rest中间件
+const logger = require('./middlewares/logger') // 日志中间件
+const { logError } = require('./utils/log4js') // 保存错误日志
 const errorHandler = require('./middlewares/error') // 错误处理 和 返回处理
 
+const routers = require('./routers/index') // 路由
+const restify = require('./middlewares/rest') // rest中间件
 const isProd = process.env.NODE_ENV === 'production' // 开发环境
+
 // 获取本地ip
 const { serverPort } = require('./config')
 const currentIP = require('ip').address()
@@ -32,13 +27,6 @@ function resolve(dir) {
 
 // 创建一个Koa对象表示web app本身:
 const app = new Koa()
-
-// Logger
-app.use(
-  KoaLogger((str) => {
-    console.log(Moment().format('YYYY-MM-DD HH:mm:ss') + str)
-  })
-) // 使用koa-logger
 
 app.use(logger) // 自己写日志中间件
 
