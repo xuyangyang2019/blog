@@ -5,6 +5,7 @@ const Koa = require('koa') // 导入koa，和koa 1.x不同，在koa2中，我们
 const KoaLogger = require('koa-logger') // 日志中间件
 const Moment = require('moment') // 日期工具
 const logger = require('./middlewares/logger') // 自己写日志中间件
+const { logError } = require('./utils/log4js') // 自己写日志中间件
 
 const KoaCompress = require('koa-compress')() // 数据压缩
 const KoaStatic = require('koa-static') // 解析静态资源
@@ -92,7 +93,8 @@ app.use(restify()) // 给ctx添加一个rest()方法
 app.use(routers.routes(), routers.allowedMethods()) // 路由拆分
 
 // 错误处理
-app.on('error', (err) => {
+app.on('error', (err, ctx) => {
+  logError(ctx, err)
   console.error('server error: \n%s\n%s ', err.stack || '')
 })
 
