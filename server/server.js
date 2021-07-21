@@ -42,10 +42,8 @@ app.use(koaBody()) // 解析post请求
 // 否则，就必须手动配置一个反向代理服务器，这样会导致开发环境非常复杂。
 if (!isProd) {
   // 原生的实现方式
-  // let staticFiles = require('./middlewares/static-files');
-  // app.use(staticFiles('/static/', __dirname + '/static'));
-  // app.use(staticFiles('/dist/', __dirname + '/dist'));
-  app.use(KoaStatic(resolve('public'), { maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+  app.use(KoaStatic(resolve('public'), { index: false, maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+  app.use(KoaStatic(resolve('dist-admin'), { index: false, maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
 }
 
 // app.use(helmet()) // Helmet
