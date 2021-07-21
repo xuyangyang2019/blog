@@ -1,7 +1,7 @@
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
 const jwtSecret = require('../../config').jwtSecret
-const localTime = require('../../utils/reviseTime')
+const {reviseTime} = require('../../utils/common')
 
 const { InvalidQueryError } = require('../../lib/error')
 
@@ -15,8 +15,7 @@ const createToken = (user) => {
   return jwt.sign(
     {
       data: user._id,
-      exp: Math.floor(Date.now() / 1000) + 60 // 3个小时
-      // exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3 // 3个小时
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3 // 3个小时
     },
     jwtSecret
   )
@@ -46,7 +45,7 @@ module.exports = {
       }
       ctx.rest(resData)
       // 更新用户表的最近一次的登陆时间
-      UserService.updateById(user._id, { lastLoginTime: localTime(Date.now()) })
+      UserService.updateById(user._id, { lastLoginTime: reviseTime(Date.now()) })
     }
   },
   // 路由闯入编辑器页面进行token验证

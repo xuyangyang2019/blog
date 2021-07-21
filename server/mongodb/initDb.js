@@ -1,7 +1,7 @@
 const md5 = require('md5')
 const { randomStr } = require('../utils/random')
 const salt = randomStr(5)
-const localTime = require('../utils/reviseTime')
+const { reviseTime } = require('../utils/common')
 
 const UserService = require('../services').UserService
 
@@ -14,7 +14,7 @@ async function initUser() {
       nickname: '羊羊羊', // 昵称
       phoneNum: '10086', // 电话号码
       salt: salt, // 盐
-      lastLoginTime: localTime(Date.now()) // 上次登录时间
+      lastLoginTime: reviseTime(Date.now()) // 上次登录时间
     })
     if (user._id) {
       console.log(user)

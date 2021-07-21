@@ -7,7 +7,7 @@ const fs = require('fs')
 const util = require('util')
 const path = require('path')
 const archiver = require('archiver')
-const { deleteFile, deleteFolder } = require('../../utils/deleteFile')
+const { deleteFile, deleteFolder } = require('../../utils/common')
 const exec = util.promisify(require('child_process').exec)
 
 module.exports = {
