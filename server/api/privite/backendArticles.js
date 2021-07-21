@@ -5,7 +5,7 @@ const ImgUploadService = require('../../services/fileService/ImgUploadService')
 
 module.exports = {
   // 添加文章
-  'POST /api/admin/addArticle': async (ctx) => {
+  'POST /api/article': async (ctx) => {
     const data = ctx.request.body
     if (!data) {
       throw new InvalidQueryError()
@@ -20,7 +20,7 @@ module.exports = {
     }
   },
   // 删除文章
-  'DELETE /api/admin/deleteArticles': async (ctx) => {
+  'DELETE /api/articles': async (ctx) => {
     const ids = ctx.query.ids
     if (!ids) {
       throw new InvalidQueryError()
@@ -33,7 +33,7 @@ module.exports = {
     }
   },
   // 更新文章
-  'PATCH /api/admin/updateArticle': async (ctx) => {
+  'PATCH /api/article': async (ctx) => {
     const data = ctx.request.body
     if (!data || !data.articleId) {
       throw new InvalidQueryError()
@@ -69,7 +69,7 @@ module.exports = {
     }
   },
   // 获取草稿箱里的文章
-  'GET /api/getDraft': async (ctx) => {
+  'GET /api/articles/draft': async (ctx) => {
     const result = await ArticleService.findOne({ state: 0 })
     if (!result) {
       ctx.rest('', -1, '无草稿')
@@ -77,29 +77,4 @@ module.exports = {
       ctx.rest(result)
     }
   }
-  // // 路由闯入编辑器页面进行token验证
-  // 'GET /api/confirmToken': async (ctx, next) => {
-  //   console.log('鉴权')
-  //   ctx.result = '鉴权通过'
-  //   return next()
-  // },
-  // 'POST /api/saveDraft': async (ctx, next) => {
-  //   const data = ctx.request.body
-  //   if (!data) {
-  //     throw new InvalidQueryError()
-  //   }
-  //   data.state = 0
-  //   let result = null
-  //   if (data._id) {
-  //     result = await ArticleService.updateById(data._id, data)
-  //   } else {
-  //     result = await ArticleService.save(data)
-  //   }
-  //   if (!result) {
-  //     ctx.error = '保存失败'
-  //   } else {
-  //     ctx.result = ''
-  //   }
-  //   return next()
-  // },
 }
