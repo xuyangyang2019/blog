@@ -7,8 +7,8 @@ module.exports = {
       // cwd:'', // 应用程序所在的目录
       script: './server/server.js', // 要运行的脚本的路径。
       log_date_format: 'YYYY-MM-DD HH:mm:ss', // 指定日志日期格式，如YYYY-MM-DD HH：mm：ss
-      error_file: './log/error.log', // 自定义应用程序的错误日志文件，代码错误可在此文件查找
-      out_file: './log/out.log', // 自定义应用程序日志文件，如应用打印大量的标准输出，会导致pm2日志过大
+      error_file: './pm2log/error.log', // 自定义应用程序的错误日志文件，代码错误可在此文件查找
+      out_file: './pm2log/out.log', // 自定义应用程序日志文件，如应用打印大量的标准输出，会导致pm2日志过大
       // pid_file: './log/out.log', // 自定义应用程序的pid文件
       // interpreter: '', // 指定的脚本解释器
       // interpreter_args: '', // 传递给解释器的参数
