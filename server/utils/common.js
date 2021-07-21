@@ -42,7 +42,17 @@ function deleteFile(url) {
   }
 }
 
+// 获取ip
+function getIp(req) {
+  let ip = req.get('X-Real-IP') || req.get('X-Forwarded-For') || req.ip
+  if (ip.split(',').length > 0) {
+    ip = ip.split(',')[0]
+  }
+  return ip
+}
+
 module.exports = {
   deleteFolder,
-  deleteFile
+  deleteFile,
+  getIp
 }
