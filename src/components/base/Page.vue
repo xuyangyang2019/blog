@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <button :disabled="preDisabled" class="changebtn" @click="prePage">&lg;</button>
+    <button :disabled="preDisabled" class="change-btn" @click="prePage"><i class="fa fa-lg fa-angle-left"></i></button>
     <button
       v-for="(page, index) in pageArr"
       :key="index"
@@ -10,7 +10,7 @@
     >
       {{ page }}
     </button>
-    <button :disabled="nextDisabled" class="changebtn" @click="nextPage">></button>
+    <button :disabled="nextDisabled" class="change-btn" @click="nextPage"><i class="fa fa-lg fa-angle-right"></i></button>
   </div>
 </template>
 
@@ -126,32 +126,36 @@ export default {
 }
 </script>
 
-<style lang = "scss">
+<style lang = "scss" scoped>
 .page {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 5px;
-}
-.page button {
-  color: #646464;
-  border: 1px solid #85b9c8;
-  border-radius: 3px;
-  cursor: pointer;
-  background: #ffffff;
-  display: inline-block;
-  width: 30px;
-  height: 28px;
-  margin: 2px;
-  outline: none;
-}
-.page button[disabled] {
-  cursor: not-allowed;
-}
-.page .btn-bg {
-  background: #c6eaf5 !important;
-}
-.page .changebtn {
-  width: 30px;
+
+  button {
+    color: #646464;
+    border: 1px solid #85b9c8;
+    border-radius: 3px;
+    cursor: pointer;
+    background: #ffffff;
+    display: inline-block;
+    width: 30px;
+    height: 28px;
+    margin: 2px;
+    outline: none;
+  }
+
+  button[disabled] {
+    cursor: not-allowed;
+  }
+
+  .btn-bg {
+    background: #c6eaf5 !important;
+  }
+
+  .change-btn {
+    width: 30px;
+  }
 }
 </style>
