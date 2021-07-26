@@ -40,7 +40,7 @@
     </ul>
     <!-- 分页 -->
     <transition name="fade" mode="out-in">
-      <page v-if="pageArr.length > 1"></page>
+      <Page v-if="pageArr.length > 1" />
     </transition>
   </div>
 </template>
