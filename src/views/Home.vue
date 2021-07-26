@@ -1,9 +1,9 @@
 <template>
   <div class="home">
-    <banner></banner>
-    <loading v-if="code === 404"></loading>
+    <Banner />
+    <Loading v-if="code === 404" />
     <h3 v-if="articles.all.length === 0 && code === 200" class="none-article">还没有文章，敬请期待···</h3>
-    <article-list :articleList="articles.all"></article-list>
+    <ArticleList :articleList="articles.all" />
   </div>
 </template>
 
