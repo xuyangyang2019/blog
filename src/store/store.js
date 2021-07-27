@@ -100,6 +100,9 @@ const mutations = {
   SET_ARTICLES_LIST: (state, data) => {
     state.articlesList = data
   },
+  SET_ARTICLES_TAG: (state, data) => {
+    state.articlesTag = data
+  },
   // ===================================
   // 设置热门文章
   SET_ARTICLES_HOT(state, data) {
