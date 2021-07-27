@@ -26,7 +26,7 @@ const log4jsMiddleware = async (ctx, next) => {
   const start = new Date() // 响应开始时间
   const ip = getClientIp(ctx) // 请求的ip
   const userAgent = isMobile(ctx.request.headers['user-agent']) // 电脑还是手机
-  const referer = ctx.request.headers['referer'] // 推荐人
+  // const referer = ctx.request.headers['referer'] // 推荐人
   // const path = ctx.request.path // path
   // const reqText = `<-- ${ip} ${userAgent} ${referer} ${ctx.request.method} ${ctx.request.url}`
   // logInfo(reqText)
@@ -34,7 +34,7 @@ const log4jsMiddleware = async (ctx, next) => {
   const execTime = new Date() - start + 'ms' // 响应间隔时间
   // const rspText = `--> ${ctx.request.method} ${ctx.request.url} ${ctx.status} ${execTime}`
   // logInfo(rspText)
-  const logText = `${ip} ${userAgent} ${referer} ${ctx.request.method} ${ctx.request.url} ${ctx.status} ${execTime}`
+  const logText = `${ip} ${userAgent} ${ctx.request.method} ${ctx.request.url} ${ctx.status} ${execTime}`
   // 控制台输出日志
   logInfo(logText)
 }
