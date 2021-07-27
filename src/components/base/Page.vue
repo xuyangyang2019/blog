@@ -73,8 +73,6 @@ export default {
     // 跳转页
     changePage(page) {
       this.currentPage = page
-      console.log(page)
-      console.log(this.pageArr)
       // let tag = ''
       // const timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
       // utc时间0点起
@@ -87,6 +85,9 @@ export default {
           getArticleList('', page, 10).then((res) => {
             this.$store.commit('SET_ARTICLES_LIST', res.data)
             this.$store.commit('PRODUCT_BG', res.data)
+            setTimeout(() => {
+              document.getElementsByClassName('back-to-top')[0].click()
+            }, 100)
           })
           break
         // case 'techincal':
