@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
 
-import { getArticle, getMsgBoard, getMsgCount, getCommets, queryPreNext } from '../api/front'
+import { getArticle, getCommets, queryPreNext } from '../api/front'
 
 // state
 const state = {
@@ -10,6 +10,10 @@ const state = {
   code: 404, // 页面响应
   articlesList: [], // 文章列表
   articlesTag: [], // 指定标签的文章
+  pageArr: [], // 分页
+  tags: [], // 标签
+  placeOnFile: [], // 归档的数据
+  msgBoardArr: [], // 留言信息
 
   // =======================================
   articles: {
@@ -26,11 +30,7 @@ const state = {
       next: []
     }
   },
-  placeOnFile: [], // 归档的数据
-  msgBoardArr: [], // 留言信息
   userInfo: { name: '', imgUrl: '', email: '' }, // 用户信息
-  pageArr: [], // 分页
-  tags: [], // 标签
   maskShow: false, // 展示登陆框
   comments: [] // 文章评论
 }
@@ -43,25 +43,6 @@ const getters = {
 // actions
 const actions = {
   // ============================================================
-  // 获取留言
-  GetMsgBoard({ commit }, payload) {
-    const { pageNum, pageSize } = payload
-    return getMsgBoard(pageNum, pageSize)
-      .then((res) => {
-        commit('SET_MSG_BOARD_ARR', res.data.list)
-        commit('SET_PAGE_ARR', res.data.count || 0)
-      })
-      .catch(() => {
-        commit('SET_MSG_BOARD_ARR', [])
-        commit('SET_PAGE_ARR', 0)
-      })
-  },
-  // 获取留言数量
-  GetMsgCount({ commit }) {
-    return getMsgCount().then((res) => {
-      commit('SET_PAGE_ARR', res.data.count || 0)
-    })
-  },
   // 精准获取文章
   GetArticle({ commit }, payload) {
     // life目录下路由参数只有ID，无tag参数
