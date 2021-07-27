@@ -6,15 +6,16 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import { getArticleList, getArticlesCount } from '../../api/front'
 
-import ArticleList from '@/components/article/ArticleList'
 import Loading from '@/components/base/Loading'
+import ArticleList from '@/components/article/ArticleList'
 
 export default {
   components: {
-    ArticleList,
-    Loading
+    Loading,
+    ArticleList
   },
   beforeRouteLeave(to, from, next) {
     this.CLEAR_PAGE() // 清除页码数组
@@ -22,41 +23,37 @@ export default {
   },
   // 传送门模块切换时复用此组件，故重新获取数据
   beforeRouteUpdate(to, from, next) {
-    this.getArticlesCount({
-      publish: true,
-      page: 1,
-      tag: to.params.articleList
-    })
+    // this.getArticlesCount({
+    //   publish: true,
+    //   page: 1,
+    //   tag: to.params.articleList
+    // })
+    // getArticlesCount().then((res) => {
+    //   store.commit('SET_ARTICLES_SUM', res.data.count)
+    //   store.commit('SET_PAGE_ARR', res.data.count || 0)
+    // })
     next()
   },
   asyncData({ store, route }) {
-    // return Promise.all([
-    //   store.dispatch('GetArticles', {
-    //     publish: true,
-    //     page: 1,
-    //     tag: route.params.articleList,
-    //     cache: true
-    //   }),
-    //   store.dispatch('GetArticlesCount', {
-    //     publish: true,
-    //     page: 1,
-    //     tag: route.params.articleList,
-    //     cache: true
-    //   })
-    // ]).then(() => {
-    //   store.commit('CHANGE_CODE', 200)
-    // })
+    return Promise.all([
+      getArticlesCount(route.params.tag).then((res) => {
+        store.commit('SET_PAGE_ARR', res.data.count || 0)
+      }),
+      getArticleList(route.params.tag).then((res) => {
+        store.commit('SET_ARTICLES_TAG', res.data)
+        store.commit('PRODUCT_BG', res.data)
+      })
+    ]).then(() => {
+      store.commit('CHANGE_CODE', 200)
+    })
   },
   computed: {
     ...mapState({
-      articlesTag: 'articlesTag',
-      code: 'code'
+      code: 'code',
+      articlesTag: 'articlesTag'
     })
   },
   methods: {
-    ...mapActions({
-      getArticlesCount: 'GetArticlesCount'
-    }),
     ...mapMutations({
       CLEAR_PAGE: 'CLEAR_PAGE'
     })
