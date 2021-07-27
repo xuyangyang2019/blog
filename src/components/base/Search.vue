@@ -1,13 +1,13 @@
 <template>
   <div class="search-abstract">
     <!-- 如果没有文章 -->
-    <loading v-if="articles.all.length == 0 && code === 404"></loading>
+    <Loading v-if="articles.all.length == 0 && code === 404" />
     <!-- 提示 -->
     <div class="search-tips">
       <h3>{{ searchTips }}</h3>
     </div>
     <!-- 搜索结果 -->
-    <article-list :articleList="articles.search"></article-list>
+    <ArticleList :articleList="articles.search" />
   </div>
 </template>
 

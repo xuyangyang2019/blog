@@ -1,7 +1,7 @@
 <template>
   <div class="timeLine">
-    <loading v-if="articles.time.length === 0"></loading>
-    <article-list :articleList="articles.time"></article-list>
+    <Loading v-if="articles.time.length === 0" />
+    <ArticleList :articleList="articles.time" />
   </div>
 </template>
 
