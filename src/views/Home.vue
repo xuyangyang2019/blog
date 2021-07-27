@@ -26,7 +26,6 @@ export default {
   asyncData({ store }) {
     return Promise.all([
       getArticlesCount().then((res) => {
-        store.commit('SET_ARTICLES_SUM', res.data.count)
         store.commit('SET_PAGE_ARR', res.data.count || 0)
       }),
       getArticleList().then((res) => {

@@ -9,7 +9,6 @@ const state = {
   currentTitle: '', // 当前页面的title
   code: 404, // 页面响应
   articlesList: [], // 文章列表
-  allArticlesCount: 0, // 已发表的文章总数
   articlesTag: [], // 指定标签的文章
 
   // =======================================
@@ -101,9 +100,6 @@ const mutations = {
   SET_ARTICLES_LIST: (state, data) => {
     state.articlesList = data
   },
-  SET_ALL_ARTICLES_COUNT: (state, count) => {
-    state.allArticlesCount = count
-  },
   // ===================================
   // 设置热门文章
   SET_ARTICLES_HOT(state, data) {
@@ -182,7 +178,6 @@ const mutations = {
       }
     })
   },
-
   SET_USER(state, info) {
     state.userInfo = info
   },
@@ -208,7 +203,6 @@ const mutations = {
   CHANGE_TITLE(state, title) {
     state.currentTitle = title
   },
-
   // 设置上|下页
   SET_PRE_NEXT(state, pn) {
     state.articles.pre_next = pn
