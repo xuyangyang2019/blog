@@ -3,6 +3,51 @@ const { InvalidQueryError } = require('../../lib/error')
 // const APIError = require('../middlewares/rest').APIError
 
 module.exports = {
+  // 获取文章数量
+  'GET /api/articles/total': async (ctx) => {
+    const result = await ArticleService.count({ publish: true })
+    // const publish = !!ctx.query.publish
+    // let result = {}
+    // 首页请求
+    // if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
+    //   result = await ArticleService.count({ publish: publish })
+    // }
+    // // 通过文章标签请求
+    // if (ctx.query.tag) {
+    //   const tag = ctx.query.tag
+    //   result = await ArticleService.count({ publish: publish, tag: tag })
+    // }
+    // // 前台后台时间范围请求
+    // if (ctx.query.start) {
+    //   const start = new Date(parseInt(ctx.query.start, 10))
+    //   const end = new Date(parseInt(ctx.query.end, 10))
+    //   result = await ArticleService.count({ publish: ctx.query.publish, date: { $gte: start, $lte: end } })
+    // }
+    // // 前台后台关键词搜索请求
+    // if (ctx.query.key) {
+    //   await ArticleService.count({
+    //     publish: ctx.query.publish,
+    //     title: { $regex: ctx.query.key, $options: 'i' }
+    //   })
+    // }
+    ctx.rest(result)
+  },
+  // 分页查询文章列表
+  'GET /api/articles/list': async (ctx) => {
+    const { publish, tag, pageNum, pageSize } = ctx.request.query
+    const condition = {}
+    if (publish) {
+      condition.publish = publish
+    }
+    if (tag) {
+      condition.tag = tag
+    }
+    const result = await ArticleService.findManyByPage(condition, {}, pageNum, pageSize)
+    ctx.rest(result)
+    // if (!result) {
+    //   ctx.rest ('获取列表失败')
+    // }
+  },
   // 获取标签
   'GET /api/tags': async (ctx) => {
     const publish = !!ctx.query.publish
@@ -26,23 +71,6 @@ module.exports = {
     ctx.rest(tagArr)
     // ctx.result = tagArr
     // return next()
-  },
-  // 分页查询文章列表
-  'GET /api/articles/list': async (ctx) => {
-    const { pageNum, pageSize, publish, tag } = ctx.request.query
-    const condition = {}
-    if (publish) {
-      condition.publish = publish
-    }
-    if (tag) {
-      condition.tag = tag
-    }
-    const result = await ArticleService.findByPage(condition, pageNum, pageSize)
-    if (!result) {
-      ctx.error = '获取列表失败'
-    } else {
-      ctx.rest(result)
-    }
   },
   // 获取推荐文章
   'GET /api/articles/pv': async (ctx) => {
@@ -77,34 +105,6 @@ module.exports = {
       }
       ctx.rest(timeArr)
     }
-  },
-  // 获取文章数量 暂时不用
-  'GET /api/articles/total': async (ctx) => {
-    const publish = !!ctx.query.publish
-    let result = {}
-    // 首页请求
-    if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
-      result = await ArticleService.count({ publish: publish })
-    }
-    // 通过文章标签请求
-    if (ctx.query.tag) {
-      const tag = ctx.query.tag
-      result = await ArticleService.count({ publish: publish, tag: tag })
-    }
-    // 前台后台时间范围请求
-    if (ctx.query.start) {
-      const start = new Date(parseInt(ctx.query.start, 10))
-      const end = new Date(parseInt(ctx.query.end, 10))
-      result = await ArticleService.count({ publish: ctx.query.publish, date: { $gte: start, $lte: end } })
-    }
-    // 前台后台关键词搜索请求
-    if (ctx.query.key) {
-      await ArticleService.count({
-        publish: ctx.query.publish,
-        title: { $regex: ctx.query.key, $options: 'i' }
-      })
-    }
-    ctx.rest(result)
   },
   // 抓取单一文章
   'GET /api/articles/item': async (ctx) => {
