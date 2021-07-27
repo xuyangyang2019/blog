@@ -31,15 +31,14 @@ function getTags(publish) {
 
 /**
  * 分页查询文章
- * @param {Boolean} publish 是否发布
  * @param {String} tag 标签
  * @param {Number} pageNum 页码
  * @param {Number} pageSize 每页数据量
  */
-function getArticleList(publish, tag, pageNum, pageSize) {
+function getArticleList(tag, pageNum, pageSize = 10) {
   return fetch.get(
     '/api/articles/list',
-    { publish: publish, tag: tag, pageNum: pageNum, pageSize: pageSize },
+    { publish: true, tag: tag, pageNum: pageNum, pageSize: pageSize },
     { cache: false }
   )
 }
@@ -84,11 +83,10 @@ function getArticle(publish, tag, id) {
 }
 
 /**
- * 获取文章总数
- * @param {Boolean} publish 是否发表
+ * 获取已发表的文章总数
  */
-function getArticlesCount(publish) {
-  return fetch.get('/api/articles/total', { publish: publish })
+function getArticlesCount() {
+  return fetch.get('/api/articles/total')
 }
 
 /**
