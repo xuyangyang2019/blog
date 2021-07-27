@@ -10,12 +10,16 @@
     >
       {{ page }}
     </button>
-    <button :disabled="nextDisabled" class="change-btn" @click="nextPage"><i class="fa fa-lg fa-angle-right"></i></button>
+    <button :disabled="nextDisabled" class="change-btn" @click="nextPage">
+      <i class="fa fa-lg fa-angle-right"></i>
+    </button>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { getArticleList } from '../../api/front'
+
 export default {
   data() {
     return {
@@ -46,12 +50,10 @@ export default {
       }
     }
   },
-
   methods: {
     ...mapActions({
       search: 'search',
-      getArticles: 'GetArticles',
-      timeArticles: 'timeArticles',
+      // timeArticles: 'timeArticles',
       gerMsgBoard: 'GetMsgBoard'
     }),
     // 上一页
@@ -70,46 +72,47 @@ export default {
     },
     // 跳转页
     changePage(page) {
-      let tag = ''
       this.currentPage = page
-      const timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
+      console.log(page)
+      console.log(this.pageArr)
+      // let tag = ''
+      // const timeArr = this.$route.params.time.match(/\d+\-\d+\-\d+/g)
       // utc时间0点起
-      const startTime = new Date(Date.parse(timeArr[0])).getTime()
-      // utc时间24点
-      const endTime = new Date(Date.parse(timeArr[1])).getTime() + 1000 * 60 * 60 * 24
-      let params = {}
+      // const startTime = new Date(Date.parse(timeArr[0])).getTime()
+      // // utc时间24点
+      // const endTime = new Date(Date.parse(timeArr[1])).getTime() + 1000 * 60 * 60 * 24
+      // let params = {}
       switch (this.$route.name) {
         case 'home':
-          this.getArticles({
-            publish: true,
-            page: page,
-            tag: false
+          getArticleList('', page, 10).then((res) => {
+            this.$store.commit('SET_ARTICLES_LIST', res.data)
+            this.$store.commit('PRODUCT_BG', res.data)
           })
           break
-        case 'techincal':
-          this.getArticles({
-            publish: true,
-            page: page,
-            tag: this.$route.params.articleList
-          })
-          break
-        case 'life':
-          tag = 'life'
-          this.getArticles({
-            publish: true,
-            page: page,
-            tag: tag
-          })
-          break
-        case 'timeLine':
-          params = {
-            publish: true,
-            page: page,
-            start: startTime,
-            end: endTime
-          }
-          this.timeArticles(params)
-          break
+        // case 'techincal':
+        //   this.getArticles({
+        //     publish: true,
+        //     page: page,
+        //     tag: this.$route.params.articleList
+        //   })
+        //   break
+        // case 'life':
+        //   tag = 'life'
+        //   this.getArticles({
+        //     publish: true,
+        //     page: page,
+        //     tag: tag
+        //   })
+        //   break
+        // case 'timeLine':
+        //   params = {
+        //     publish: true,
+        //     page: page,
+        //     start: startTime,
+        //     end: endTime
+        //   }
+        //   this.timeArticles(params)
+        //   break
         case 'msgboard':
           this.gerMsgBoard({ pageNum: page })
           break
