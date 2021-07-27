@@ -3,8 +3,6 @@ import Vuex from 'vuex'
 import modules from './modules'
 
 import {
-  getArticleList,
-  getArticlesCount,
   getArticle,
   getMsgBoard,
   getMsgCount,
@@ -16,11 +14,15 @@ import {
 const state = {
   currentTitle: '', // 当前页面的title
   code: 404, // 页面响应
+  articlesList: [], // 文章列表
+  allArticlesCount: 0, // 已发表的文章总数
+
+  // =======================================
   articles: {
     sum: 0, // 文章总数
     all: [], // 所有的文章
-    technical: [], // 科技文章
-    life: [], // 生活类文章
+    // technical: [], // 科技文章
+    // life: [], // 生活类文章
     search: [], // 搜索结果
     only: [], // 单个文章
     time: [], // 归档
@@ -46,37 +48,7 @@ const getters = {
 
 // actions
 const actions = {
-  // 获取文章列表
-  GetArticles({ commit }, payload) {
-    const { publish, tag, pageNum, pageSize } = payload
-    return getArticleList(publish, tag, pageNum, pageSize)
-      .then((res) => {
-        if (res.code === 200) {
-          if (!payload.tag) {
-            commit('SET_ARTICLES_ALL', res.data.list)
-          } else if (payload.tag === 'life') {
-            commit('SET_ARTICLES_LIFE', res.data.list)
-          } else {
-            commit('SET_ARTICLES_TECH', res.data.list)
-          }
-          commit('PRODUCT_BG', res.data.list)
-          commit('SET_ARTICLES_SUM', res.data.count)
-          commit('SET_PAGE_ARR', res.data.count)
-          commit('CHANGE_CODE', 200)
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  },
-  // 获取对应模块的文章总数，为分页按钮个数提供支持
-  GetArticlesCount({ commit }, payload) {
-    const { publish } = payload
-    return getArticlesCount(publish).then((res) => {
-      commit('SET_ARTICLES_SUM', res.data.count)
-      commit('SET_PAGE_ARR', res.data.count || 0)
-    })
-  },
+  // ============================================================
   // 获取留言
   GetMsgBoard({ commit }, payload) {
     const { pageNum, pageSize } = payload
@@ -131,6 +103,13 @@ const actions = {
 
 // mutations
 const mutations = {
+  SET_ARTICLES_LIST: (state, data) => {
+    state.articlesList = data
+  },
+  SET_ALL_ARTICLES_COUNT: (state, count) => {
+    state.allArticlesCount = count
+  },
+  // ===================================
   // 设置热门文章
   SET_ARTICLES_HOT(state, data) {
     state.articles.hot = data
@@ -167,7 +146,6 @@ const mutations = {
   SetTags(state, data) {
     state.tags = data
   },
-  // =========================================
   // 清理分页
   CLEAR_PAGE(state) {
     state.pageArr = []
@@ -178,7 +156,7 @@ const mutations = {
   },
   // 设置分页数据
   SET_PAGE_ARR(state, data) {
-    const pageNum = Math.ceil(data / 8)
+    const pageNum = Math.ceil(data / 10)
     const arr = []
     for (let i = 1; i < pageNum + 1; i++) {
       arr.push(i)
