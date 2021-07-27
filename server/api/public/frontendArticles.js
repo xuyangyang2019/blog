@@ -5,18 +5,15 @@ const { InvalidQueryError } = require('../../lib/error')
 module.exports = {
   // 获取文章数量
   'GET /api/articles/total': async (ctx) => {
-    const result = await ArticleService.count({ publish: true })
-    // const publish = !!ctx.query.publish
-    // let result = {}
-    // 首页请求
-    // if (!ctx.query.tag && !ctx.query.start && !ctx.query.key) {
-    //   result = await ArticleService.count({ publish: publish })
-    // }
-    // // 通过文章标签请求
-    // if (ctx.query.tag) {
-    //   const tag = ctx.query.tag
-    //   result = await ArticleService.count({ publish: publish, tag: tag })
-    // }
+    const condition = {
+      publish: true
+    }
+    // 通过文章标签请求
+    if (ctx.query.tag) {
+      condition.tag = ctx.query.tag
+    }
+    const result = await ArticleService.count(condition)
+
     // // 前台后台时间范围请求
     // if (ctx.query.start) {
     //   const start = new Date(parseInt(ctx.query.start, 10))

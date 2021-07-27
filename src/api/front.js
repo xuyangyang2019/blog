@@ -85,8 +85,8 @@ function getArticle(publish, tag, id) {
 /**
  * 获取已发表的文章总数
  */
-function getArticlesCount() {
-  return fetch.get('/api/articles/total')
+function getArticlesCount(tag, start, end, keyword) {
+  return fetch.get('/api/articles/total', { tag: tag, start: start, end: end, keyword: keyword })
 }
 
 /**
