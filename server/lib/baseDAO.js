@@ -47,32 +47,13 @@ class BaseDAO {
    * @param {Object} sort 排序条件
    */
   async findManyByPage(condition = {}, fields = {}, pageNum = 1, pageSize = 10, sort = {_id: -1}) {
-    const count = await this.model.countDocuments(condition)
     const list = await this.model
       .find(condition, fields)
-      .skip((parseInt(pageNum, 10) - 1) * 10)
       .limit(parseInt(pageSize, 10))
+      .skip((parseInt(pageNum, 10) - 1) * 10)
       .sort(sort)
       .exec()
-    return { count, list }
-  }
-
-  /**
-   * 分页查询
-   * @param {Object} condition 查询条件
-   * @param {Object} pageNum 页码，默认1
-   * @param {Object} pageSize 每页数据量，默认10
-   * @return {Array} 查询结果
-   */
-  async findByPage(condition = {}, pageNum = 1, pageSize = 10) {
-    const count = await this.model.countDocuments(condition)
-    const list = await this.model
-      .find(condition)
-      .skip((parseInt(pageNum, 10) - 1) * 10)
-      .limit(parseInt(pageSize, 10))
-      .sort({ _id: -1 })
-      .exec()
-    return { count, list }
+    return list
   }
 
   /**
