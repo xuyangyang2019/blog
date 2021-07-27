@@ -1,7 +1,7 @@
 <template>
   <div class="article-list">
     <!-- 没有文章 -->
-    <h3 v-if="articlesList.length === 0" class="none-article">还没有文章，敬请期待···</h3>
+    <h3 v-if="articleList.length === 0" class="none-article">还没有文章，敬请期待···</h3>
     <!-- 文章列表 -->
     <ul v-else>
       <li v-for="(item, index) in articleList" :key="index" class="article-item">
