@@ -5,21 +5,13 @@ module.exports = {
   // 获取留言
   'GET /api/messages/list': async (ctx) => {
     const { pageNum, pageSize } = ctx.request.query
-    const result = await MsgBoardService.findByPage({}, pageNum || 1, pageSize || 10)
-    if (!result) {
-      ctx.error = '获取列表失败'
-    } else {
-      ctx.rest(result)
-    }
+    const result = await MsgBoardService.findManyByPage({}, {}, pageNum || 1, pageSize || 10)
+    ctx.rest(result)
   },
   // 获取留言数量
   'GET /api/messages/total': async (ctx) => {
     const result = await MsgBoardService.count()
-    if (!result) {
-      ctx.error = '获取列表失败'
-    } else {
-      ctx.rest(result)
-    }
+    ctx.rest(result)
   },
   // 保存留言
   'POST /api/messages/save': async (ctx) => {

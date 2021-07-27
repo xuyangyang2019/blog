@@ -7,7 +7,7 @@ module.exports = {
   // 分页获取评论
   'GET /api/comments/list': async (ctx) => {
     const { pageNum, pageSize } = ctx.request.query
-    const result = await CommentService.findByPage({}, pageNum || 1, pageSize || 10)
+    const result = await CommentService.findManyByPage({}, {}, pageNum || 1, pageSize || 10)
     if (!result) {
       ctx.error = '获取列表失败'
     } else {
