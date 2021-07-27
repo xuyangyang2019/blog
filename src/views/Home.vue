@@ -2,18 +2,19 @@
   <div class="home">
     <Banner />
     <Loading v-if="code === 404" />
-    <h3 v-if="articles.all.length === 0 && code === 200" class="none-article">还没有文章，敬请期待···</h3>
-    <ArticleList :articleList="articles.all" />
+    <h3 v-if="articlesList.length === 0 && code === 200" class="none-article">还没有文章，敬请期待···</h3>
+    <ArticleList :articleList="articlesList" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { getArticleList, getArticlesCount } from '../api/front'
 
+import headMixin from '@/mixins/headMixin'
 import Banner from '@/components/home/Banner'
 import Loading from '@/components/base/Loading.vue'
 import ArticleList from '@/components/article/ArticleList.vue'
-import headMixin from '@/mixins/headMixin'
 
 export default {
   name: 'Home',
@@ -24,24 +25,17 @@ export default {
   },
   mixins: [headMixin],
   asyncData({ store }) {
-    // return Promise.all([
-    //   store.dispatch('GetArticles', {
-    //     publish: true,
-    //     page: 1,
-    //     cache: true
-    //   }),
-    //   store.dispatch('GetArticlesCount', {
-    //     cache: true,
-    //     publish: true
-    //   })
-    // ]).then(() => {
-    //   store.commit('CHANGE_CODE', 200)
-    // })
-
-    return store.dispatch('GetArticles', {
-      publish: true,
-      pageNum: 1,
-      pageSize: 10
+    return Promise.all([
+      getArticlesCount().then((res) => {
+        store.commit('SET_ARTICLES_SUM', res.data.count)
+        store.commit('SET_PAGE_ARR', res.data.count || 0)
+      }),
+      getArticleList().then((res) => {
+        store.commit('SET_ARTICLES_LIST', res.data)
+        store.commit('PRODUCT_BG', res.data)
+      })
+    ]).then(() => {
+      store.commit('CHANGE_CODE', 200)
     })
   },
   head() {
@@ -55,7 +49,7 @@ export default {
   computed: {
     ...mapState({
       code: 'code',
-      articles: 'articles'
+      articlesList: 'articlesList'
     })
   },
   mounted() {
