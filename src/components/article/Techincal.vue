@@ -1,7 +1,7 @@
 <template>
   <div class="technical">
     <Loading v-if="code === 404" />
-    <ArticleList :articleList="articles.technical" />
+    <ArticleList :articleList="articlesTag" />
   </div>
 </template>
 
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     ...mapState({
-      articles: 'articles',
+      articlesTag: 'articlesTag',
       code: 'code'
     })
   },

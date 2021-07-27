@@ -2,13 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
 
-import {
-  getArticle,
-  getMsgBoard,
-  getMsgCount,
-  getCommets,
-  queryPreNext
-} from '../api/front'
+import { getArticle, getMsgBoard, getMsgCount, getCommets, queryPreNext } from '../api/front'
 
 // state
 const state = {
@@ -16,6 +10,7 @@ const state = {
   code: 404, // 页面响应
   articlesList: [], // 文章列表
   allArticlesCount: 0, // 已发表的文章总数
+  articlesTag: [], // 指定标签的文章
 
   // =======================================
   articles: {
