@@ -90,13 +90,15 @@ export default {
             }, 100)
           })
           break
-        // case 'techincal':
-        //   this.getArticles({
-        //     publish: true,
-        //     page: page,
-        //     tag: this.$route.params.articleList
-        //   })
-        //   break
+        case 'techincal':
+          getArticleList(this.$route.params.tag, page, 10).then((res) => {
+            this.$store.commit('SET_ARTICLES_TAG', res.data)
+            this.$store.commit('PRODUCT_BG', res.data)
+            setTimeout(() => {
+              document.getElementsByClassName('back-to-top')[0].click()
+            }, 100)
+          })
+          break
         // case 'life':
         //   tag = 'life'
         //   this.getArticles({
