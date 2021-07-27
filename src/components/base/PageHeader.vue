@@ -57,8 +57,8 @@ export default {
       }, // 记录scroll位置
       tabs: [
         { name: 'home', render: '首页', icon: 'icon-home' },
-        { name: 'article', render: '文章', icon: 'icon-book' },
-        { name: 'life', render: '生活', icon: 'icon-images' },
+        // { name: 'article', render: '文章', icon: 'icon-book' },
+        // { name: 'life', render: '生活', icon: 'icon-images' },
         { name: 'msgboard', render: '留言', icon: 'icon-messages' }
       ] // 导航列表
     }
@@ -135,7 +135,6 @@ export default {
     },
     // 修改背景透明度 及 记录滚动的距离
     getTop() {
-      console.log('getTop')
       // html的scrollTop
       const htmlTop = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop
       // 如果导航栏遮挡了 container的内容 就把tab的背景设为透明
