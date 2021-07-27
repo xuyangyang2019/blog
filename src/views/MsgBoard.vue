@@ -34,7 +34,7 @@
 
     <div v-show="emojiShow" class="emoji-box">
       <span class="emoji-exit" @click="exitEmoji">x</span>
-      <emoji @select="selectEmoji"></emoji>
+      <Emoji @select="selectEmoji" />
     </div>
 
     <div class="leavemsg">
@@ -87,11 +87,11 @@
     </div>
 
     <transition name="fade">
-      <page v-if="pageArr.length > 1"></page>
+      <Page v-if="pageArr.length > 1" />
     </transition>
 
     <!-- 第三方登录 -->
-    <vistor-login></vistor-login>
+    <VistorLogin />
 
     <transition v-show="dialogErr.show" name="mask">
       <div v-show="dialogErr.show" class="mask" @click="dialogErr.show = false">
@@ -111,7 +111,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import { leavingMessage, replyMessage } from '../api/front'
+import { leavingMessage, replyMessage, getMsgBoard, getMsgCount } from '../api/front'
 
 import Page from '@/components/base/Page'
 import Emoji from '@/components/base/Emoji'
@@ -129,20 +129,14 @@ export default {
   },
   mixins: [headMixin],
   asyncData({ store }) {
-    return store.dispatch('GetMsgBoard', {
-      pageNum: 1,
-      pageSize: 10
-      // cache: false
-    })
-    // return Promise.all([
-    //   store.dispatch('GetLeaveWords', {
-    //     page: 1,
-    //     cache: false
-    //   }),
-    //   store.dispatch('GetMsgCount', {
-    //     cache: false
-    //   })
-    // ])
+    return Promise.all([
+      getMsgCount().then((res) => {
+        store.commit('SET_PAGE_ARR', res.data.count || 0)
+      }),
+      getMsgBoard(1, 10).then((res) => {
+        store.commit('SET_MSG_BOARD_ARR', res.data)
+      })
+    ])
   },
   data() {
     return {
