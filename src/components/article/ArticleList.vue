@@ -1,7 +1,9 @@
 <template>
   <div class="article-list">
+    <!-- 没有文章 -->
+    <h3 v-if="articlesList.length === 0" class="none-article">还没有文章，敬请期待···</h3>
     <!-- 文章列表 -->
-    <ul>
+    <ul v-else>
       <li v-for="(item, index) in articleList" :key="index" class="article-item">
         <!-- title -->
         <h2 class="article-title">
@@ -50,6 +52,7 @@ import { mapState, mapMutations } from 'vuex'
 import Page from '@/components/base/Page'
 
 export default {
+  name: 'ArticleList',
   components: {
     Page
   },
@@ -99,6 +102,12 @@ export default {
   color: #404040;
   img {
     max-width: 100%;
+  }
+  .none-article {
+    padding: 20px;
+    color: black;
+    background: #faf7f7;
+    margin-top: 10px;
   }
 }
 .article-item {

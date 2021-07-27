@@ -2,7 +2,6 @@
   <div class="home">
     <Banner />
     <Loading v-if="code === 404" />
-    <h3 v-if="articlesList.length === 0 && code === 200" class="none-article">还没有文章，敬请期待···</h3>
     <ArticleList :articleList="articlesList" />
   </div>
 </template>
@@ -60,11 +59,6 @@ export default {
 }
 </script>
 <style lang = "scss" scoped>
-.none-article {
-  padding: 20px;
-  color: black;
-  background: #faf7f7;
-  margin-top: 10px;
-}
+
 </style>
 
