@@ -18,7 +18,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { getArticleList, getMsgBoard } from '../../api/front'
+import { getArticleList, getMsgBoard, searchArticle } from '../../api/front'
 
 export default {
   data() {
@@ -52,7 +52,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      search: 'search'
       // timeArticles: 'timeArticles',
     }),
     // 上一页
@@ -121,11 +120,9 @@ export default {
           })
           break
         case 'search':
-          this.search({
-            publish: true,
-            page: page,
-            key: this.$route.params.searchKey,
-            according: 'key'
+          searchArticle(page, 10, this.$route.params.searchKey).then((res) => {
+            this.$store.commit('SET_SEARCH_RESULTS', res.data)
+            this.$store.commit('PRODUCT_BG', res.data)
           })
       }
     }
