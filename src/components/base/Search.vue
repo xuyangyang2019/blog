@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import { searchArticle, getArticlesCount } from '../../api/front'
 
 import headMixin from '@/mixins/headMixin'
@@ -49,35 +49,6 @@ export default {
       code: 'code',
       searchResults: 'searchResults'
     })
-  },
-  watch: {
-    $route(val) {
-      console.log(val)
-      // this.startSearch()
-    }
-  },
-  methods: {
-    ...mapMutations({
-      SET_ARTICLES_SEARCH: 'SET_ARTICLES_SEARCH',
-      PRODUCT_BG: 'PRODUCT_BG',
-      SET_ARTICLES_SUM: 'SET_ARTICLES_SUM',
-      SET_PAGE_ARR: 'SET_PAGE_ARR'
-    }),
-    startSearch() {
-      const keyword = this.$route.params.searchKey
-      searchArticle(1, 10, keyword).then((res) => {
-        console.log(res)
-        if (res.code === 200) {
-          // const articles = res.data.list
-          // const articlesCount = res.data.count || 0
-          // this.SET_ARTICLES_SEARCH(articles)
-          // this.PRODUCT_BG(articles)
-          // this.SET_ARTICLES_SUM(articlesCount)
-          // this.SET_PAGE_ARR(articlesCount)
-          this.code = 200
-        }
-      })
-    }
   }
 }
 </script>
