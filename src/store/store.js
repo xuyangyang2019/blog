@@ -14,6 +14,7 @@ const state = {
   tags: [], // 标签
   placeOnFile: [], // 归档的数据
   msgBoardArr: [], // 留言信息
+  searchResults: [], // 搜索结果
 
   // =======================================
   articles: {
@@ -83,6 +84,9 @@ const mutations = {
   },
   SET_ARTICLES_TAG: (state, data) => {
     state.articlesTag = data
+  },
+  SET_SEARCH_RESULTS: (state, data) => {
+    state.searchResults = data
   },
   // ===================================
   // 设置热门文章
