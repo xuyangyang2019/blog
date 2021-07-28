@@ -7,7 +7,7 @@
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex'
-import { searchArticle } from '../../api/front'
+import { searchArticle } from '../api/front'
 
 import ArticleList from '@/components/article/ArticleList'
 import Loading from '@/components/base/Loading'

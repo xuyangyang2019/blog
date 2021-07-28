@@ -77,7 +77,7 @@ function createRouter() {
     {
       path: '/placeOnFile/:time',
       name: 'placeOnFile',
-      component: () => import(/* webpackChunkName: "article" */ '../components/article/TimeLine.vue')
+      component: () => import(/* webpackChunkName: "article" */ '../views/TimeLine.vue')
     }
     // {
     //     path: "/login_github",
