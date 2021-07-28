@@ -18,7 +18,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { getArticleList } from '../../api/front'
+import { getArticleList, getMsgBoard } from '../../api/front'
 
 export default {
   data() {
@@ -52,9 +52,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      search: 'search',
+      search: 'search'
       // timeArticles: 'timeArticles',
-      gerMsgBoard: 'GetMsgBoard'
     }),
     // 上一页
     prePage() {
@@ -117,7 +116,9 @@ export default {
         //   this.timeArticles(params)
         //   break
         case 'msgboard':
-          this.gerMsgBoard({ pageNum: page })
+          getMsgBoard(page, 10).then((res) => {
+            this.$store.commit('SET_MSG_BOARD_ARR', res.data)
+          })
           break
         case 'search':
           this.search({
