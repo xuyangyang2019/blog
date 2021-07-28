@@ -12,6 +12,10 @@ module.exports = {
     if (ctx.query.tag) {
       condition.tag = ctx.query.tag
     }
+    // 前台后台关键词搜索请求
+    if (ctx.query.keyword) {
+      condition.title = { $regex: ctx.query.keyword, $options: 'i' }
+    }
     const result = await ArticleService.count(condition)
 
     // // 前台后台时间范围请求
@@ -20,13 +24,7 @@ module.exports = {
     //   const end = new Date(parseInt(ctx.query.end, 10))
     //   result = await ArticleService.count({ publish: ctx.query.publish, date: { $gte: start, $lte: end } })
     // }
-    // // 前台后台关键词搜索请求
-    // if (ctx.query.key) {
-    //   await ArticleService.count({
-    //     publish: ctx.query.publish,
-    //     title: { $regex: ctx.query.key, $options: 'i' }
-    //   })
-    // }
+
     ctx.rest(result)
   },
   // 分页查询文章列表
@@ -158,22 +156,21 @@ module.exports = {
   },
   // 前台搜索文章
   'GET /api/articles/search': async (ctx) => {
-    const { publish, keyword, startTime, endTime, pageNum, pageSize } = ctx.request.query
-    const condition = { publish: publish }
+    const { keyword, pageNum, pageSize } = ctx.request.query
+    const condition = { publish: true }
     if (keyword) {
-      condition.title = { $regex: keyword, $options: 'i' }
+      // condition.title = { $regex: keyword, $options: 'i' }
+      // condition.title = new RegExp(keyword, 'i')
+      condition.title = 'html'
     }
-    if (startTime && endTime) {
-      const start = new Date(parseInt(startTime, 10))
-      const end = new Date(parseInt(endTime, 10))
-      condition.createTime = { $gte: start, $lte: end }
-    }
+    console.log(condition)
+    // if (startTime && endTime) {
+    //   const start = new Date(parseInt(startTime, 10))
+    //   const end = new Date(parseInt(endTime, 10))
+    //   condition.createTime = { $gte: start, $lte: end }
+    // }
     const docs = await ArticleService.findManyByPage(condition, { content: 0 }, pageNum, pageSize)
-    if (docs) {
-      ctx.rest(docs)
-    } else {
-      ctx.error = '搜索文章出错！'
-    }
+    ctx.rest(docs)
   },
   // 获得上一篇文章和下一篇文章
   'GET /api/preAndNext': async (ctx) => {
