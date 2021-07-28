@@ -16,6 +16,7 @@ router.get(
     '/life',
     '/life/:id',
     '/msgBoard',
+    '/search',
     '/search/:searchKey',
     '/placeOnFile/:time',
     '/login_qq'
