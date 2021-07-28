@@ -71,7 +71,7 @@ function createRouter() {
     {
       path: '/search/:searchKey',
       name: 'search',
-      component: () => import(/* webpackChunkName: "msgboard" */ '../components/base/Search.vue') // 异步路由
+      component: () => import(/* webpackChunkName: "msgboard" */ '../views/SearchResult.vue') // 异步路由
     },
     // 时间轴
     {

@@ -9,7 +9,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { searchArticle, getArticlesCount } from '../../api/front'
+import { searchArticle, getArticlesCount } from '../api/front'
 
 import headMixin from '@/mixins/headMixin'
 import Loading from '@/components/base/Loading'
