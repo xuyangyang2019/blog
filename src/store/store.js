@@ -15,6 +15,7 @@ const state = {
   placeOnFile: [], // 归档的数据
   msgBoardArr: [], // 留言信息
   searchResults: [], // 搜索结果
+  articlesTime: [], // 归档的文章
 
   // =======================================
   articles: {
