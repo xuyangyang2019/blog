@@ -45,29 +45,17 @@ function getArticleList(tag, pageNum, pageSize = 10) {
 
 /**
  * 搜索文章
- * @param {Boolean} publish 已发表
  * @param {Number} pageNum 页码
  * @param {Number} pageSize 每页数量
  * @param {String} keyword 关键词
- * @param {Date} startTime 开始时间
- * @param {Date} endTime 结束时间
- * @param {Object} sort 排序条件
  */
-function searchArticle(publish, pageNum, pageSize, keyword, startTime, endTime, sort) {
+function searchArticle(pageNum, pageSize, keyword) {
   const parameters = {
-    publish: publish,
     pageNum: pageNum,
     pageSize: pageSize
   }
   if (keyword) {
     parameters.keyword = keyword
-  }
-  if (startTime && endTime) {
-    parameters.startTime = startTime
-    parameters.endTime = endTime
-  }
-  if (sort) {
-    parameters.sort = sort
   }
   return fetch.get('/api/articles/search', parameters, { cache: true })
 }
