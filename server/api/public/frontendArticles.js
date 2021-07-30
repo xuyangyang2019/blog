@@ -41,17 +41,14 @@ module.exports = {
   },
   // 前台搜索文章
   'GET /api/articles/search': async (ctx) => {
-    const { keyword, pageNum, pageSize } = ctx.request.query
+    const { keyword, pageNum, pageSize, startTime, endTime } = ctx.request.query
     const condition = { publish: true }
     if (keyword) {
       condition.title = { $regex: keyword, $options: 'i' }
     }
-    console.log(condition)
-    // if (startTime && endTime) {
-    //   const start = new Date(parseInt(startTime, 10))
-    //   const end = new Date(parseInt(endTime, 10))
-    //   condition.createTime = { $gte: start, $lte: end }
-    // }
+    if (startTime && endTime) {
+      condition.createTime = { $gte: startTime, $lte: endTime }
+    }
     const docs = await ArticleService.findManyByPage(condition, { content: 0 }, pageNum, pageSize)
     ctx.rest(docs)
   },
