@@ -16,15 +16,11 @@ module.exports = {
     if (ctx.query.keyword) {
       condition.title = { $regex: ctx.query.keyword, $options: 'i' }
     }
+    // 前台后台时间范围请求
+    if (ctx.query.start && ctx.query.end) {
+      condition.createTime = { $gte: ctx.query.start, $lte: ctx.query.end }
+    }
     const result = await ArticleService.count(condition)
-
-    // // 前台后台时间范围请求
-    // if (ctx.query.start) {
-    //   const start = new Date(parseInt(ctx.query.start, 10))
-    //   const end = new Date(parseInt(ctx.query.end, 10))
-    //   result = await ArticleService.count({ publish: ctx.query.publish, date: { $gte: start, $lte: end } })
-    // }
-
     ctx.rest(result)
   },
   // 分页查询文章列表
@@ -98,24 +94,20 @@ module.exports = {
     const timeArr = []
     const timeMap = {}
     const docs = await ArticleService.findMany({ publish: publish }, { createTime: 1 })
-    if (!docs) {
-      ctx.error = '查询出错'
-    } else {
-      docs.forEach((item) => {
-        const yearMonth =
+    docs.forEach((item) => {
+      const yearMonth =
           new Date(item.createTime).getFullYear() + '年' + (new Date(item.createTime).getMonth() + 1) + '月'
-        timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
-      })
-      for (const key in timeMap) {
-        if (Object.hasOwnProperty.call(timeMap, key)) {
-          timeArr.push({
-            time: key,
-            num: timeMap[key]
-          })
-        }
+      timeMap[yearMonth] = timeMap[yearMonth] ? timeMap[yearMonth] + 1 : 1
+    })
+    for (const key in timeMap) {
+      if (Object.hasOwnProperty.call(timeMap, key)) {
+        timeArr.push({
+          time: key,
+          num: timeMap[key]
+        })
       }
-      ctx.rest(timeArr)
     }
+    ctx.rest(timeArr)
   },
   // 抓取单一文章
   'GET /api/articles/item': async (ctx) => {
