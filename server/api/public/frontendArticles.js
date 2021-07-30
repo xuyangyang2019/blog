@@ -112,9 +112,25 @@ module.exports = {
     if (!id) {
       throw new InvalidQueryError()
     }
+    const result = {
+      article: {},
+      pre: {},
+      next: {}
+    }
     const doc = await ArticleService.findById({ _id: id })
     if (doc) {
-      ctx.rest(doc)
+      result.article = doc
+      // 查询上下篇文章
+      const fields = { _id: 1, title: 1, tag: 1 }
+      // pre使用倒序查询，否则只会显示第一条数据，因为他是最早的
+      const preArticle = await ArticleService.findOne({ publish: true, createTime: { $lt: doc.createTime } }, fields, { _id: -1 }, 1)
+      if (preArticle) {
+        result.pre = preArticle
+      }
+      const nextArticle = await ArticleService.findOne({ publish: true, createTime: { $gt: doc.createTime } }, fields, { _id: 1 }, 1)
+      if (nextArticle) {
+        result.next = nextArticle
+      }
       // 更新文章的点击数
       ArticleService.updateById({ _id: id }, { $inc: { pv: 1 } })
       // 查询ip 并提醒后台
@@ -125,9 +141,8 @@ module.exports = {
       //     //     content: data.data.city + "网友 在" + localTime(Date.now()) + "浏览了你的文章--" + doc[0].title
       //     // }).save()
       // })
-    } else {
-      ctx.rest('', -1, '查不到文章')
     }
+    ctx.rest(result)
   },
   // 更新文章的喜欢字段
   'PATCH /api/articles/like': async (ctx) => {
@@ -159,7 +174,23 @@ module.exports = {
     }
   },
   // 获得上一篇文章和下一篇文章
-  'GET /api/preAndNext': async (ctx) => {
+  'GET /api/articles/pre': async (ctx) => {
+    const result = {}
+    const date = ctx.query.date
+    const fields = { _id: 1, title: 1, tag: 1 }
+    // pre使用倒序查询，否则只会显示第一条数据，因为他是最早的
+    const preArticle = await ArticleService.findOne({ publish: true, date: { $lt: date } }, fields, { _id: -1 }, 1)
+    if (preArticle) {
+      result.pre = preArticle
+    }
+    const nextArticle = await ArticleService.findOne({ publish: true, date: { $gt: date } }, fields, { _id: 1 }, 1)
+    if (nextArticle) {
+      result.next = nextArticle
+    }
+    ctx.rest(result)
+  },
+  // 获得上一篇文章和下一篇文章
+  'GET /api/articles/next': async (ctx) => {
     const result = {}
     const date = ctx.query.date
     const fields = { _id: 1, title: 1, tag: 1 }
