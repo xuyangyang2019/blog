@@ -37,6 +37,7 @@ export default {
   padding: 5px 0;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
 
   .copyright {
@@ -45,16 +46,17 @@ export default {
     justify-content: center;
     align-items: center;
     font-family: HeiTi;
-
     .copyright-item {
       padding: 5px;
       display: flex;
       align-items: center;
-      /* border: solid red 1px; */
+      a {
+        color: #ccc;
+      }
+
       .bei-an-img {
         width: 20px;
         height: 20px;
-        /* margin-top: 5px; */
         margin-right: 5px;
       }
     }
