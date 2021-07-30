@@ -9,14 +9,14 @@
       <div class="container-wrap">
         <section class="contenter">
           <!-- 导航按钮 -->
-          <div v-show="$route.name !== 'home'" class="nav-location">
+          <!-- <div v-show="$route.name !== 'home'" class="nav-location">
             <span>当前位置：</span>
             <a href="javascript: void(0)" @click="backHome">首页</a>
             <div v-for="(item, index) in location" :key="index">
               ->
               <a href="javascript: void(0)" @click="back(item)">{{ item.showName }}</a>
             </div>
-          </div>
+          </div> -->
 
           <!-- 页面再这里展示 -->
           <keep-alive v-if="$route.meta.keepAlive">
