@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import modules from './modules'
 
-import { getArticle, getCommets, queryPreNext } from '../api/front'
+import { getCommets } from '../api/front'
 
 // state
 const state = {
@@ -16,7 +16,7 @@ const state = {
   msgBoardArr: [], // 留言信息
   searchResults: [], // 搜索结果
   articlesTime: [], // 归档的文章
-
+  currentArticle: {}, // 当前的文章
   // =======================================
   articles: {
     sum: 0, // 文章总数
@@ -45,28 +45,6 @@ const getters = {
 // actions
 const actions = {
   // ============================================================
-  // 精准获取文章
-  GetArticle({ commit }, payload) {
-    // life目录下路由参数只有ID，无tag参数
-    // const tag = payload.tag === undefined ? 'life' : payload.tag
-    const { publish, tag, id } = payload
-    return getArticle(publish, tag, id).then((res) => {
-      if (res.code === 200) {
-        // 页面title
-        commit('CHANGE_TITLE', res.data.title)
-        // 文章
-        commit('SET_ARTICLES_ONLY', res.data)
-        // 查询上篇文章|下篇文章
-        if (res.data && res.data.date) {
-          queryPreNext(res.data.date).then((res2) => {
-            if (res2.code === 200) {
-              commit('SET_PRE_NEXT', res2.data)
-            }
-          })
-        }
-      }
-    })
-  },
   // 获取文章评论
   GetComments({ commit }, payload) {
     const { id } = payload
@@ -89,9 +67,12 @@ const mutations = {
   SET_SEARCH_RESULTS: (state, data) => {
     state.searchResults = data
   },
-  // 设置指定时间段的文章
+  // 设置指定时间段的文章列表
   SET_ARTICLES_TIME(state, data) {
     state.articlesTime = data
+  },
+  SET_CURRENT_ARTICLE(state, data) {
+    state.currentArticle = data
   },
   // ===================================
   // 设置热门文章
