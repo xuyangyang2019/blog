@@ -89,6 +89,10 @@ const mutations = {
   SET_SEARCH_RESULTS: (state, data) => {
     state.searchResults = data
   },
+  // 设置指定时间段的文章
+  SET_ARTICLES_TIME(state, data) {
+    state.articlesTime = data
+  },
   // ===================================
   // 设置热门文章
   SET_ARTICLES_HOT(state, data) {
@@ -97,10 +101,6 @@ const mutations = {
   // 设置归档数据
   SET_PLACE_ON_FILE(state, data) {
     state.placeOnFile = data
-  },
-  // 设置指定时间段的文章
-  SET_ARTICLES_TIME(state, data) {
-    state.articles.time = data
   },
   // 设置文章总数
   SET_ARTICLES_SUM(state, data) {
