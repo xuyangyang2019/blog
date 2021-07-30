@@ -2,129 +2,122 @@
   <div class="article-show">
     <!-- 文章详情 -->
     <div class="article-show-content">
-      <div v-for="(item, index) in articles.only" :key="index" class="article-body">
-        <!-- 文章标题 -->
-        <h2 class="article-title">{{ item.title }}</h2>
-        <!-- 文章详情 -->
-        <div class="article-details">
-          <!-- 标签 -->
-          <div class="article-details-tag">
-            <span class="icon-tag-stroke i-p"></span>
-            <span v-for="(tag, tagIndex) in item.tag" :key="tagIndex" class="each-tag">{{ tag | changeLife }}</span>
+      <!-- 文章标题 -->
+      <h2 class="article-title">{{ currentArticle.title }}</h2>
+      <!-- 文章详情 -->
+      <div class="article-details">
+        <!-- 标签 -->
+        <div class="article-details-tag">
+          <span class="icon-tag-stroke i-p"></span>
+          <span v-for="(tag, tagIndex) in currentArticle.tag" :key="tagIndex" class="each-tag">
+            {{ tag | changeLife }}
+          </span>
+        </div>
+        <div class="article-details-other">
+          <!-- 发布时间 -->
+          <div class="time">
+            <span class="icon-clock i-p"></span>
+            <span>{{ currentArticle.createTime | reviseTime }} 发表</span>
           </div>
-          <div class="article-details-other">
-            <!-- 发布时间 -->
-            <div class="time">
-              <span class="icon-clock i-p"></span>
-              <span>{{ item.createTime | reviseTime }} 发表</span>
-            </div>
-            <!-- 阅读数|评论数|点赞数 -->
-            <div class="pv-c-l">
-              <span class="icon-eye i-p"></span>
-              <span>{{ item.pv }} 次阅读</span>
-              <span class="icon-commenting-o i-p"></span>
-              <span>{{ item.commentNum }} 条评论</span>
-              <span class="icon-like i-p"></span>
-              <span>{{ item.likeNum }} 个赞</span>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <!-- 文章内容 -->
-        <!-- <div v-html="item.content" class="article-body">{{ item.content }}</div> -->
-        <div class="article-body" v-html="item.content"></div>
-
-        <!-- 点赞 -->
-        <div
-          class="article-like"
-          :class="{ 'article-like-after': lovedArr.indexOf(item._id) !== -1 }"
-          @click="love(item.articleId, item._id)"
-        >
-          <span class="love-text">{{ love_t }}</span>
-        </div>
-
-        <!-- 文章出处 -->
-        <div v-if="item.original" class="article-warning">
-          <h6>本文为作者原创文章，转载请注明出处：</h6>
-          <i>
-            <a href="javascript: void(0)">http://www.xyy.ink{{ fullPath }}</a>
-          </i>
-        </div>
-        <div class="article-line"></div>
-
-        <!-- 分享栏 -->
-        <h4>分享：</h4>
-        <div class="share">
-          <!--分享到qq  -->
-          <a
-            href="javascript: void(0)"
-            class="design-bg-qq"
-            @click="share('QQ', 'http://connect.qq.com/widget/shareqq/index.html')"
-          ></a>
-          <!-- 分享到qq空间 -->
-          <a
-            href="javascript: void(0)"
-            class="design-bg-qzone"
-            @click="share('qzone', 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey')"
-          ></a>
-          <!-- 分享到新浪微博 -->
-          <a
-            href="javascript: void(0)"
-            class="design-bg-sina"
-            @click="share('sina', 'http://v.t.sina.com.cn/share/share.php')"
-          ></a>
-          <!-- 分享到微信 -->
-          <a href="javascript: void(0)" class="design-bg-weixin" @click="showQRCode"></a>
-          <!-- 分享到豆瓣 -->
-          <a
-            href="javascript: void(0)"
-            class="design-bg-douban"
-            @click="share('douban', 'http://shuo.douban.com/!service/share')"
-          ></a>
-        </div>
-
-        <div class="otherArticle"></div>
-
-        <!-- vue-qr 生成二维码 -->
-        <div v-show="qrShow" class="qrcode-box">
-          <p>
-            <span>微信扫一扫分享到朋友圈</span>
-            <span class="exit-qrcode" @click="qrShow = false">X</span>
-          </p>
-          <!-- <vue-qr v-show="qrShow" backgroundColor="#ccc" :logoSrc="qrLogo" :text="qrText" :size="200"></vue-qr> -->
-          <vue-qr
-            v-show="qrShow"
-            backgroundColor="#ccc"
-            logoSrc="/img/defaultUser.jpg"
-            :text="qrText"
-            :size="200"
-          ></vue-qr>
-        </div>
-
-        <div class="pre-next">
-          <div v-if="articles.pre_next.pre" class="pre">
-            <h6>上一篇：</h6>
-            <a href="javascript: void(0)">
-              <span @click="jumpPn(articles.pre_next.pre)">{{ articles.pre_next.pre.title }}</span>
-            </a>
-          </div>
-          <div v-if="articles.pre_next.next" class="next">
-            <h6>下一篇：</h6>
-            <a href="javascript: void(0)">
-              <span @click="jumpPn(articles.pre_next.next)">{{ articles.pre_next.next.title }}</span>
-            </a>
+          <!-- 阅读数|评论数|点赞数 -->
+          <div class="pv-c-l">
+            <span class="icon-eye i-p"></span>
+            <span>{{ currentArticle.pv }} 次阅读</span>
+            <span class="icon-commenting-o i-p"></span>
+            <span>{{ currentArticle.commentNum }} 条评论</span>
+            <span class="icon-like i-p"></span>
+            <span>{{ currentArticle.likeNum }} 个赞</span>
           </div>
         </div>
       </div>
+      <hr />
+      <!-- 文章内容 -->
+      <div class="article-body" v-html="currentArticle.content"></div>
+
+      <!-- 点赞 -->
+      <div
+        class="article-like"
+        :class="{ 'article-like-after': lovedArr.indexOf(currentArticle._id) !== -1 }"
+        @click="love(currentArticle.articleId, currentArticle._id)"
+      >
+        <span class="love-text">{{ love_t }}</span>
+      </div>
+
+      <!-- 文章出处 -->
+      <div v-if="currentArticle.original" class="article-warning">
+        <h6>本文为作者原创文章，转载请注明出处：</h6>
+        <i>
+          <a href="javascript: void(0)">http://www.xyy.ink{{ fullPath }}</a>
+        </i>
+      </div>
+      <div class="article-line"></div>
+
+      <!-- 分享栏 -->
+      <h4>分享：</h4>
+      <div class="share">
+        <!--分享到qq  -->
+        <a
+          href="javascript: void(0)"
+          class="design-bg-qq"
+          @click="share('QQ', 'http://connect.qq.com/widget/shareqq/index.html')"
+        ></a>
+        <!-- 分享到qq空间 -->
+        <a
+          href="javascript: void(0)"
+          class="design-bg-qzone"
+          @click="share('qzone', 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey')"
+        ></a>
+        <!-- 分享到新浪微博 -->
+        <a
+          href="javascript: void(0)"
+          class="design-bg-sina"
+          @click="share('sina', 'http://v.t.sina.com.cn/share/share.php')"
+        ></a>
+        <!-- 分享到微信 -->
+        <a href="javascript: void(0)" class="design-bg-weixin" @click="showQRCode"></a>
+        <!-- 分享到豆瓣 -->
+        <a
+          href="javascript: void(0)"
+          class="design-bg-douban"
+          @click="share('douban', 'http://shuo.douban.com/!service/share')"
+        ></a>
+      </div>
+
+      <div class="otherArticle"></div>
+
+      <!-- vue-qr 生成二维码 -->
+      <div v-show="qrShow" class="qrcode-box">
+        <p>
+          <span>微信扫一扫分享到朋友圈</span>
+          <span class="exit-qrcode" @click="qrShow = false">X</span>
+        </p>
+        <VueQr v-show="qrShow" backgroundColor="#ccc" logoSrc="/img/defaultUser.jpg" :text="qrText" :size="200" />
+      </div>
+
+      <div class="pre-next">
+        <div v-if="articles.pre_next.pre" class="pre">
+          <h6>上一篇：</h6>
+          <a href="javascript: void(0)">
+            <span @click="jumpPn(articles.pre_next.pre)">{{ articles.pre_next.pre.title }}</span>
+          </a>
+        </div>
+        <div v-if="articles.pre_next.next" class="next">
+          <h6>下一篇：</h6>
+          <a href="javascript: void(0)">
+            <span @click="jumpPn(articles.pre_next.next)">{{ articles.pre_next.next.title }}</span>
+          </a>
+        </div>
+      </div>
+      <!-- </div> -->
     </div>
     <!-- 评论组件 -->
-    <comment-page></comment-page>
+    <CommentPage />
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { likeArticle } from '../../api/front'
+import { getArticle, queryPreNext, likeArticle } from '../../api/front'
 
 import Prism from 'prismjs'
 import VueQr from 'vue-qr'
@@ -139,10 +132,22 @@ export default {
   },
   mixins: [headMixin],
   asyncData({ store, route }) {
-    return store.dispatch('GetArticle', {
-      publish: true,
-      tag: route.params.tag,
-      id: route.params.id
+    return getArticle(route.params.id).then((res) => {
+      console.log(res)
+      if (res.code === 200) {
+        // 页面title
+        store.commit('CHANGE_TITLE', res.data.title)
+        // 文章
+        store.commit('SET_CURRENT_ARTICLE', res.data)
+        // // 查询上篇文章|下篇文章
+        // if (res.data && res.data.date) {
+        //   queryPreNext(res.data.date).then((res2) => {
+        //     if (res2.code === 200) {
+        //       commit('SET_PRE_NEXT', res2.data)
+        //     }
+        //   })
+        // }
+      }
     })
   },
   data() {
@@ -162,11 +167,12 @@ export default {
   computed: {
     ...mapState({
       articles: 'articles',
+      currentArticle: 'currentArticle',
       currentTitle: 'currentTitle'
     }),
     // 是否点赞
     love_t() {
-      if (this.lovedArr.indexOf(this.articles.only[0]._id) !== -1) {
+      if (this.lovedArr.indexOf(this.currentArticle._id) !== -1) {
         return '已赞'
       } else {
         return '赞'
@@ -174,7 +180,7 @@ export default {
     },
     // 获取文章成功
     ifCatch() {
-      return this.articles.only
+      return this.currentArticle
     }
   },
   watch: {
@@ -292,7 +298,6 @@ export default {
 <style lang = "scss" scoped>
 .article-show-content {
   margin-top: 10px;
-  /*background: #F7EDED;*/
   background: #faf7f7;
   color: #404040;
   font-size: 14px;
@@ -300,6 +305,7 @@ export default {
   padding: 15px;
   border: 5px 5px 0 0;
   border-radius: 3px;
+  border: solid red 1px;
   hr {
     margin: 15px 0;
     height: 0;
