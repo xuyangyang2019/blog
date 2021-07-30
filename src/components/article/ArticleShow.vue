@@ -3,13 +3,13 @@
     <!-- 文章详情 -->
     <div class="article-show-content">
       <!-- 文章标题 -->
-      <h2 class="article-title">{{ currentArticle.title }}</h2>
+      <h2 class="article-title">{{ article.title }}</h2>
       <!-- 文章详情 -->
       <div class="article-details">
         <!-- 标签 -->
         <div class="article-details-tag">
           <span class="icon-tag-stroke i-p"></span>
-          <span v-for="(tag, tagIndex) in currentArticle.tag" :key="tagIndex" class="each-tag">
+          <span v-for="(tag, tagIndex) in article.tag" :key="tagIndex" class="each-tag">
             {{ tag | changeLife }}
           </span>
         </div>
@@ -17,34 +17,34 @@
           <!-- 发布时间 -->
           <div class="time">
             <span class="icon-clock i-p"></span>
-            <span>{{ currentArticle.createTime | reviseTime }} 发表</span>
+            <span>{{ article.createTime | reviseTime }} 发表</span>
           </div>
           <!-- 阅读数|评论数|点赞数 -->
           <div class="pv-c-l">
             <span class="icon-eye i-p"></span>
-            <span>{{ currentArticle.pv }} 次阅读</span>
+            <span>{{ article.pv }} 次阅读</span>
             <span class="icon-commenting-o i-p"></span>
-            <span>{{ currentArticle.commentNum }} 条评论</span>
+            <span>{{ article.commentNum }} 条评论</span>
             <span class="icon-like i-p"></span>
-            <span>{{ currentArticle.likeNum }} 个赞</span>
+            <span>{{ article.likeNum }} 个赞</span>
           </div>
         </div>
       </div>
       <hr />
       <!-- 文章内容 -->
-      <div class="article-body" v-html="currentArticle.content"></div>
+      <div class="article-body" v-html="article.content"></div>
 
       <!-- 点赞 -->
       <div
         class="article-like"
-        :class="{ 'article-like-after': lovedArr.indexOf(currentArticle._id) !== -1 }"
-        @click="love(currentArticle.articleId, currentArticle._id)"
+        :class="{ 'article-like-after': lovedArr.indexOf(article._id) !== -1 }"
+        @click="love(article.articleId, article._id)"
       >
         <span class="love-text">{{ love_t }}</span>
       </div>
 
       <!-- 文章出处 -->
-      <div v-if="currentArticle.original" class="article-warning">
+      <div v-if="article.original" class="article-warning">
         <h6>本文为作者原创文章，转载请注明出处：</h6>
         <i>
           <a href="javascript: void(0)">http://www.xyy.ink{{ fullPath }}</a>
@@ -95,16 +95,16 @@
       </div>
 
       <div class="pre-next">
-        <div v-if="articles.pre_next.pre" class="pre">
+        <div v-if="preArticle.title" class="pre">
           <h6>上一篇：</h6>
           <a href="javascript: void(0)">
-            <span @click="jumpPn(articles.pre_next.pre)">{{ articles.pre_next.pre.title }}</span>
+            <span @click="jumpPn(preArticle)">{{ preArticle.title }}</span>
           </a>
         </div>
-        <div v-if="articles.pre_next.next" class="next">
+        <div v-if="nextArticle.title" class="next">
           <h6>下一篇：</h6>
           <a href="javascript: void(0)">
-            <span @click="jumpPn(articles.pre_next.next)">{{ articles.pre_next.next.title }}</span>
+            <span @click="jumpPn(nextArticle)">{{ nextArticle.title }}</span>
           </a>
         </div>
       </div>
@@ -116,8 +116,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import { getArticle, queryPreNext, likeArticle } from '../../api/front'
+import { mapState, mapMutations, mapGetters } from 'vuex'
+import { getArticle, likeArticle } from '../../api/front'
 
 import Prism from 'prismjs'
 import VueQr from 'vue-qr'
@@ -133,20 +133,11 @@ export default {
   mixins: [headMixin],
   asyncData({ store, route }) {
     return getArticle(route.params.id).then((res) => {
-      console.log(res)
       if (res.code === 200) {
         // 页面title
-        store.commit('CHANGE_TITLE', res.data.title)
+        store.commit('CHANGE_TITLE', res.data.article.title)
         // 文章
         store.commit('SET_CURRENT_ARTICLE', res.data)
-        // // 查询上篇文章|下篇文章
-        // if (res.data && res.data.date) {
-        //   queryPreNext(res.data.date).then((res2) => {
-        //     if (res2.code === 200) {
-        //       commit('SET_PRE_NEXT', res2.data)
-        //     }
-        //   })
-        // }
       }
     })
   },
@@ -166,13 +157,16 @@ export default {
   },
   computed: {
     ...mapState({
-      articles: 'articles',
-      currentArticle: 'currentArticle',
       currentTitle: 'currentTitle'
+    }),
+    ...mapGetters({
+      article: 'article',
+      preArticle: 'preArticle',
+      nextArticle: 'nextArticle'
     }),
     // 是否点赞
     love_t() {
-      if (this.lovedArr.indexOf(this.currentArticle._id) !== -1) {
+      if (this.lovedArr.indexOf(this.article._id) !== -1) {
         return '已赞'
       } else {
         return '赞'
@@ -180,7 +174,7 @@ export default {
     },
     // 获取文章成功
     ifCatch() {
-      return this.currentArticle
+      return this.article
     }
   },
   watch: {
@@ -240,7 +234,6 @@ export default {
     },
     // 跳转页面
     jumpPn(item) {
-      console.log('跳转页面', item)
       if (item.tag[0] === 'life') {
         this.$router.push({ name: 'lifeShow', params: { id: item._id } })
       } else {
@@ -305,7 +298,6 @@ export default {
   padding: 15px;
   border: 5px 5px 0 0;
   border-radius: 3px;
-  border: solid red 1px;
   hr {
     margin: 15px 0;
     height: 0;
