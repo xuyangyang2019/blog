@@ -16,7 +16,11 @@ const state = {
   msgBoardArr: [], // 留言信息
   searchResults: [], // 搜索结果
   articlesTime: [], // 归档的文章
-  currentArticle: {}, // 当前的文章
+  currentArticle: {
+    article: {},
+    pre: {},
+    next: {}
+  }, // 当前的文章
   // =======================================
   articles: {
     sum: 0, // 文章总数
@@ -39,7 +43,9 @@ const state = {
 
 // getters
 const getters = {
-  // tabBg: state => state.tabBg,
+  article: (state) => state.currentArticle.article,
+  preArticle: (state) => state.currentArticle.pre,
+  nextArticle: (state) => state.currentArticle.next
 }
 
 // actions
