@@ -18,7 +18,8 @@ router.get(
     '/msgBoard',
     '/search',
     '/search/:searchKey',
-    '/placeOnFile/:time',
+    '/placeOnFile',
+    '/placeOnFile/*',
     '/login_qq'
   ],
   async (ctx) => {
