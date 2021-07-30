@@ -68,12 +68,10 @@ function searchArticle(pageNum, pageSize, keyword, startTime, endTime) {
 
 /**
  * 通过文章_id查询文章
- * @param {Boolean} publish 是否发表
- * @param {String} tag 标签名
  * @param {String} id 文章的内部id
  */
-function getArticle(publish, tag, id) {
-  return fetch.get('/api/articles/item', { publish: publish, tag: tag, id: id }, { cache: true })
+function getArticle(id) {
+  return fetch.get('/api/articles/item', { id: id }, { cache: true })
 }
 
 /**
