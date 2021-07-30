@@ -114,7 +114,6 @@ module.exports = {
     }
     const doc = await ArticleService.findById({ _id: id })
     if (doc) {
-      // ctx.result = doc
       ctx.rest(doc)
       // 更新文章的点击数
       ArticleService.updateById({ _id: id }, { $inc: { pv: 1 } })
@@ -127,7 +126,7 @@ module.exports = {
       //     // }).save()
       // })
     } else {
-      ctx.error = '查不到文章'
+      ctx.rest('', -1, '查不到文章')
     }
   },
   // 更新文章的喜欢字段
