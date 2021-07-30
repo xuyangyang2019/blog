@@ -48,14 +48,20 @@ function getArticleList(tag, pageNum, pageSize = 10) {
  * @param {Number} pageNum 页码
  * @param {Number} pageSize 每页数量
  * @param {String} keyword 关键词
+ * @param {Date} startTime 启始时间
+ * @param {Date} endTime 结束时间
  */
-function searchArticle(pageNum, pageSize, keyword) {
+function searchArticle(pageNum, pageSize, keyword, startTime, endTime) {
   const parameters = {
     pageNum: pageNum,
     pageSize: pageSize
   }
   if (keyword) {
     parameters.keyword = keyword
+  }
+  if (startTime && endTime) {
+    parameters.startTime = startTime
+    parameters.endTime = endTime
   }
   return fetch.get('/api/articles/search', parameters, { cache: true })
 }
