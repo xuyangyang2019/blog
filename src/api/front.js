@@ -81,14 +81,6 @@ function getArticlesCount(tag, start, end, keyword) {
   return fetch.get('/api/articles/total', { tag: tag, start: start, end: end, keyword: keyword })
 }
 
-/**
- * 查询上一篇和下一篇文章
- * @param {Date} date 当前文章的日期
- */
-function queryPreNext(date) {
-  return fetch.get('/api/preAndNext', { date: date })
-}
-
 // ===========================================================================
 
 /**
@@ -250,7 +242,6 @@ export {
   getHotArticles,
   getArticleList,
   getArticlesCount,
-  queryPreNext,
   getArticle,
   likeArticle,
   searchArticle,
