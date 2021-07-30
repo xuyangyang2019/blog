@@ -4,6 +4,41 @@ const { InvalidQueryError } = require('../../lib/error')
 const ImgUploadService = require('../../services/fileService/ImgUploadService')
 
 module.exports = {
+  // 获取文章数量
+  'GET /api/admin/articles/count': async (ctx) => {
+    const { publish, tag } = ctx.query
+    console.log(publish, tag)
+    const condition = {}
+    if (publish) {
+      condition.publish = publish
+    }
+    if (tag) {
+      condition.tag = tag
+    }
+    // // 前台后台关键词搜索请求
+    // if (ctx.query.keyword) {
+    //   condition.title = { $regex: ctx.query.keyword, $options: 'i' }
+    // }
+    // // 前台后台时间范围请求
+    // if (ctx.query.start && ctx.query.end) {
+    //   condition.createTime = { $gte: ctx.query.start, $lte: ctx.query.end }
+    // }
+    const result = await ArticleService.count(condition)
+    ctx.rest(result)
+  },
+  // 分页查询文章列表
+  'GET /api/admin/articles/list': async (ctx) => {
+    const { publish, tag, pageNum, pageSize } = ctx.request.query
+    const condition = {}
+    if (publish) {
+      condition.publish = publish
+    }
+    if (tag) {
+      condition.tag = tag
+    }
+    const result = await ArticleService.findManyByPage(condition, {}, pageNum, pageSize)
+    ctx.rest(result)
+  },
   // 添加文章
   'POST /api/article': async (ctx) => {
     const data = ctx.request.body
