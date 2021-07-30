@@ -1,6 +1,6 @@
 <template>
   <div class="timeLine">
-    <Loading v-if="articlesTime.length === 0" />
+    <Loading v-if="code === 404" />
     <ArticleList :articleList="articlesTime" />
   </div>
 </template>
@@ -25,14 +25,18 @@ export default {
     next()
   },
   asyncData({ store, route }) {
-    const timeArr = route.params.time.match(/\d+\-\d+\-\d+/g)
-    console.log(route.params.time)
-    //   // utc时间0点起
-    const startTime = new Date(Date.parse(timeArr[0])).getTime()
-    //   // utc时间24点
-    const endTime = new Date(Date.parse(timeArr[1])).getTime() + 1000 * 60 * 60 * 24
+    const timeArr = route.params.pathMatch.split('/')
+    const year = Number(timeArr[0])
+    const month = Number(timeArr[1])
+    console.log(timeArr, year, month)
+    // 本月的开始时间
+    const monthStartDate = new Date(year, month - 1, 1)
+    // 本月的结束时间
+    const monthEndDate = new Date(year, month, 0)
+    console.log(monthStartDate, monthEndDate)
+
     return Promise.all([
-      getArticlesCount('', startTime, endTime, '').then((res) => {
+      getArticlesCount('', monthStartDate, monthEndDate, '').then((res) => {
         console.log(res)
         store.commit('SET_PAGE_ARR', res.data.count || 0)
       })
