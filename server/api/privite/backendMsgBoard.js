@@ -2,6 +2,17 @@ const MsgBoardService = require('../../services').MsgBoardService
 const { InvalidQueryError } = require('../../lib/error')
 
 module.exports = {
+  // 获取留言
+  'GET /api/admin/messages/list': async (ctx) => {
+    const { pageNum, pageSize } = ctx.request.query
+    const result = await MsgBoardService.findManyByPage({}, {}, pageNum || 1, pageSize || 10)
+    ctx.rest(result)
+  },
+  // 获取留言数量
+  'GET /api/admin/messages/count': async (ctx) => {
+    const result = await MsgBoardService.count()
+    ctx.rest(result)
+  },
   // 回复留言
   'PATCH /api/replyMsgBoard': async (ctx) => {
     const { id, name, aite, imgUrl, content, date } = ctx.request.body
