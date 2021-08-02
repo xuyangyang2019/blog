@@ -2,6 +2,23 @@ const CommentService = require('../../services').CommentService
 const { InvalidQueryError } = require('../../lib/error')
 
 module.exports = {
+  // 分页获取评论
+  'GET /api/admin/comments/list': async (ctx) => {
+    const { pageNum, pageSize } = ctx.request.query
+    const result = await CommentService.findManyByPage({}, {}, pageNum || 1, pageSize || 10)
+    ctx.rest(result)
+  },
+  // 获取指定文章的评论
+  'GET /api/admin/comments/item': async (ctx) => {
+    const { id } = ctx.request.query
+    const result = await CommentService.findMany({ articleId: id })
+    ctx.rest(result)
+  },
+  // 获取评论数量
+  'GET /api/admin/comments/count': async (ctx) => {
+    const result = await CommentService.count({})
+    ctx.rest(result)
+  },
   // 回复评论
   'PATCH /api/replyComment': async (ctx) => {
     const { id, name, aite, imgUrl, content, date, like } = ctx.request.body
