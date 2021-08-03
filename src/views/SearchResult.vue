@@ -22,13 +22,11 @@ export default {
   },
   mixins: [headMixin],
   asyncData({ store, route }) {
-    // route.params.tag
     return Promise.all([
       getArticlesCount('', '', '', route.params.searchKey).then((res) => {
         store.commit('SET_PAGE_ARR', res.data.count || 0)
       }),
       searchArticle(1, 10, route.params.searchKey).then((res) => {
-        console.log(res)
         store.commit('SET_SEARCH_RESULTS', res.data)
         store.commit('PRODUCT_BG', res.data)
       })
