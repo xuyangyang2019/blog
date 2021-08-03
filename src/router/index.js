@@ -18,11 +18,6 @@ Router.prototype.replace = function replace(location) {
 
 function createRouter() {
   const routes = [
-    // {
-    //     path: "*",
-    //     name: "miss",
-    //     component: miss
-    // },
     {
       path: '/',
       redirect: '/home'
@@ -50,17 +45,6 @@ function createRouter() {
       name: 'articleShow',
       component: () => import(/* webpackChunkName: "article" */ '../components/article/ArticleShow.vue')
     },
-    // 生活
-    {
-      path: '/life',
-      name: 'life',
-      component: () => import(/* webpackChunkName: "life" */ '../views/Life.vue')
-    },
-    // {
-    //     path: "/life/:id",
-    //     name: "lifeShow",
-    //     component: articleShow
-    // },
     // 留言
     {
       path: '/msgboard',

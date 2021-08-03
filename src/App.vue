@@ -1,23 +1,12 @@
 <template>
   <div id="app">
-    <!-- 标签 -->
+    <!-- 头部导航 -->
     <PageHeader />
-
     <!-- 主要内容 -->
     <div class="main">
-      <div id="anchor"></div>
+      <!-- <div id="anchor"></div> -->
       <div class="container-wrap">
         <section class="contenter">
-          <!-- 导航按钮 -->
-          <!-- <div v-show="$route.name !== 'home'" class="nav-location">
-            <span>当前位置：</span>
-            <a href="javascript: void(0)" @click="backHome">首页</a>
-            <div v-for="(item, index) in location" :key="index">
-              ->
-              <a href="javascript: void(0)" @click="back(item)">{{ item.showName }}</a>
-            </div>
-          </div> -->
-
           <!-- 页面再这里展示 -->
           <keep-alive v-if="$route.meta.keepAlive">
             <router-view />
@@ -38,13 +27,10 @@
         </section>
       </div>
     </div>
-
     <!-- 页脚 -->
     <PageFooter />
-
     <!-- 回到top -->
     <ToTop />
-
     <!-- 背景 -->
     <StarBg />
     <div class="star-bg-my"></div>
@@ -64,11 +50,6 @@ import ArticleTags from './components/aside/ArticleTags.vue'
 import HotArticles from './components/aside/HotArticles.vue'
 import PlaceOnFile from './components/aside/PlaceOnFile.vue'
 
-// html的scrollTop
-// import { getScrollTop } from "@/utils/getScrollTop"
-// 获取指定元素到html的距离
-// import { getElementTop } from "@/utils/getElementTop"
-
 export default {
   components: {
     PageHeader,
@@ -80,12 +61,6 @@ export default {
     StarBg,
     ToTop
   },
-  data() {
-    return {
-      location: [], // 导航
-      timer: '' // 定时器
-    }
-  },
   computed: {
     ...mapState({
       currentTitle: 'currentTitle'
@@ -94,9 +69,6 @@ export default {
   watch: {
     // route改变
     $route() {
-      if (this.$route.name === 'home') {
-        this.location = []
-      }
       this.currentLocation(this.$route)
     },
     // 当articleShow组件的标题变化时，
@@ -110,8 +82,6 @@ export default {
     }
   },
   mounted() {
-    // 计算当前的面包屑导航
-    this.currentLocation(this.$route)
     // 改变窗口大小后对导航栏状态重新进行确认
     // window.addEventListener('resize', this.windowResize)
   },
@@ -128,80 +98,6 @@ export default {
     backTop() {
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
-    },
-
-    // 跳转路由
-    back(item) {
-      const name = item.pathName
-      if (name === 'techincal') {
-        this.$router.push({ name: name, params: { articleList: item.params.tag } })
-      } else if (name === 'articleShow') {
-        this.$router.push({ name: name, params: { articleList: item.params.tag, id: item.params.id } })
-      } else if (name === 'lifeShow') {
-        this.$router.push({ name: name, params: { id: item.params.id } })
-      } else {
-        this.$router.push({ name: name })
-      }
-    },
-    // 返回首页
-    backHome() {
-      this.location = []
-      this.$router.push({ name: 'home' })
-    },
-    // 当前位置的路由信息表
-    currentLocation(route) {
-      const tag = route.params.tag
-      const _tag = route.params.tag
-      switch (route.name) {
-        case 'article':
-          this.location = [{ pathName: 'article', showName: '技术文章' }]
-          break
-        case 'techincal':
-          this.location = [
-            { pathName: 'article', showName: '技术文章' },
-            { pathName: 'techincal', showName: tag, params: { tag: tag } }
-          ]
-          break
-        case 'articleShow':
-          this.location = [
-            {
-              pathName: 'article',
-              showName: '技术文章'
-            },
-            {
-              pathName: 'techincal',
-              showName: _tag,
-              params: { tag: _tag }
-            },
-            {
-              pathName: 'articleShow',
-              showName: this.currentTitle,
-              params: { tag: _tag, id: route.params.id }
-            }
-          ]
-          break
-        case 'life':
-          this.location = [{ pathName: 'life', showName: '生活' }]
-          break
-        case 'lifeShow':
-          this.location = [
-            { pathName: 'life', showName: '生活' },
-            { pathName: 'lifeShow', showName: this.currentTitle, params: { id: route.params.id } }
-          ]
-          break
-        case 'msgboard':
-          this.location = [{ pathName: 'msgboard', showName: '留言板' }]
-          break
-        case 'search':
-          this.location = [{ pathName: 'search', showName: '搜索' }]
-          break
-        case 'timeLine':
-          this.location = [{ pathName: 'timeLine', showName: '时间轴' }]
-          break
-        default:
-          // home页面没有面包屑导航
-          break
-      }
     }
   }
 }
@@ -227,8 +123,8 @@ export default {
 // 阿里的iconfont
 // @import "~@/assets/iconfont/iconfont.css";
 // font-awesome
-// @import './assets/font-awesome-4.7.0/css/font-awesome.min.css';
-@import './assets/font-awesome-4.7.0/css/font-awesome.css';
+@import './assets/font-awesome-4.7.0/css/font-awesome.min.css';
+// @import './assets/font-awesome-4.7.0/css/font-awesome.css';
 // iconmoon图标
 @import './assets/icomoon/style.css';
 // emoji雪碧图
@@ -299,9 +195,6 @@ body {
 
 //平板
 @media screen and (min-width: 768px) {
-  // #app {
-  // margin-top: 50px;
-  // }
   .container-wrap {
     max-width: 760px;
     padding: 10px 30px;
