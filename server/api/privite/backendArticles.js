@@ -39,6 +39,20 @@ module.exports = {
     const result = await ArticleService.findManyByPage(condition, {}, pageNum, pageSize)
     ctx.rest(result)
   },
+  // 后台搜索文章
+  'GET /api/admin/articles/search': async (ctx) => {
+    const { keyword, pageNum, pageSize, startTime, endTime } = ctx.request.query
+    const condition = { publish: true }
+    if (keyword) {
+      condition.title = { $regex: keyword, $options: 'i' }
+    }
+    if (startTime && endTime) {
+      condition.createTime = { $gte: startTime, $lte: endTime }
+    }
+    const { count } = await ArticleService.count(condition)
+    const docs = await ArticleService.findManyByPage(condition, { content: 0 }, pageNum, pageSize)
+    ctx.rest({ count: count, docs: docs })
+  },
   // 添加文章
   'POST /api/article': async (ctx) => {
     const data = ctx.request.body
