@@ -69,7 +69,7 @@ export default {
   watch: {
     // route改变
     $route() {
-      this.currentLocation(this.$route)
+      // this.currentLocation(this.$route)
     },
     // 当articleShow组件的标题变化时，
     currentTitle(val) {
@@ -110,23 +110,19 @@ export default {
 // @import './styles/typo.css';
 // 适应不同浏览器
 // @import './styles/normalize.css';
-
 // 公共的css
 @import './styles/common.scss';
-
 // qq表情
 // @import "./styles/qqface.scss";
 // 代码高亮
 // @import "./assets/css/prism.css";
-
 // ====== 第三方图标方案 ======
 // 阿里的iconfont
 // @import "~@/assets/iconfont/iconfont.css";
 // font-awesome
 @import './assets/font-awesome-4.7.0/css/font-awesome.min.css';
 // @import './assets/font-awesome-4.7.0/css/font-awesome.css';
-// iconmoon图标
-@import './assets/icomoon/style.css';
+@import './assets/css/article-background.css';
 // emoji雪碧图
 @import './assets/css/emoji-sprite.css';
 

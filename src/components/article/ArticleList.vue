@@ -11,12 +11,12 @@
         </h2>
         <div class="article-msg">
           <!-- 标签 -->
-          <span class="icon-tag-stroke"></span>
+          <i class="fa fa-tag" aria-hidden="true"></i>
           <span class="article-msg-tag">
             <span v-for="(tag, tagIndex) in item.tag" :key="tagIndex">{{ tag | changeLife }}</span>
           </span>
           <!-- 时间 -->
-          <span class="icon-clock"></span>
+          <i class="fa fa-clock-o" aria-hidden="true"></i>
           <span class="article-msg-time">{{ item.updateTime | reviseTime }}</span>
         </div>
         <div class="article-review">
@@ -29,13 +29,13 @@
         </div>
         <div class="view-msg">
           <!-- 浏览量 -->
-          <span class="icon-eye"></span>
+          <i class="fa fa-eye" aria-hidden="true"></i>
           <span class="pv">{{ item.pv }}</span>
           <!-- 品论数 -->
-          <span class="icon-commenting-o"></span>
+          <i class="fa fa-commenting-o" aria-hidden="true"></i>
           <span class="comments-num">{{ item.commentNum }}</span>
           <!-- 点赞数 -->
-          <span class="icon-like"></span>
+          <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
           <span class="like-num">{{ item.likeNum }}</span>
         </div>
       </li>
@@ -170,16 +170,16 @@ export default {
   margin-top: 5px;
   color: #404040;
 }
-.icon-like,
-.icon-commenting-o,
-.icon-eye {
+.fa-eye,
+.fa-commenting-o,
+.fa-thumbs-o-up {
   margin-right: 5px;
 }
-.icon-tag-stroke {
+.fa-tag {
   margin-left: 3px;
   margin-top: 2px;
 }
-.icon-clock {
+.fa-clock-o {
   margin-left: 16px;
 }
 .comments-num,
