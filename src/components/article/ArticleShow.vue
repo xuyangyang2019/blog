@@ -97,15 +97,11 @@
       <div class="pre-next">
         <div v-if="preArticle.title" class="pre">
           <h6>上一篇：</h6>
-          <a href="javascript: void(0)">
-            <span @click="jumpPn(preArticle)">{{ preArticle.title }}</span>
-          </a>
+          <a :href="computedUrl(preArticle)">{{ preArticle.title }}</a>
         </div>
         <div v-if="nextArticle.title" class="next">
           <h6>下一篇：</h6>
-          <a href="javascript: void(0)">
-            <span @click="jumpPn(nextArticle)">{{ nextArticle.title }}</span>
-          </a>
+          <a :href="computedUrl(nextArticle)">{{ nextArticle.title }}</a>
         </div>
       </div>
       <!-- </div> -->
@@ -232,14 +228,13 @@ export default {
       // 未登陆先登陆
       // ... 待实现
     },
-    // 跳转页面
-    jumpPn(item) {
-      if (item.tag[0] === 'life') {
-        this.$router.push({ name: 'lifeShow', params: { id: item._id } })
-      } else {
-        this.$router.push({ name: 'articleShow', params: { tag: item.tag[0], id: item._id } })
-      }
+    computedUrl(article) {
+      return `/article/${article.tag[0]}/${article._id}`
     },
+    // 跳转页面
+    // jumpPn(item) {
+    //   this.$router.push({ name: 'articleShow', params: { tag: item.tag[0], id: item._id } })
+    // },
     // 分享
     share(type, url) {
       const title = document.title + ' 这是一个积累web知识的个人博客'
