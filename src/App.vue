@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 import PageHeader from './components/base/PageHeader.vue'
 import PageFooter from './components/base/PageFooter.vue'
 import ToTop from './components/base/ToTop.vue'
@@ -61,24 +59,10 @@ export default {
     StarBg,
     ToTop
   },
-  computed: {
-    ...mapState({
-      currentTitle: 'currentTitle'
-    })
-  },
   watch: {
     // route改变
     $route() {
       // this.currentLocation(this.$route)
-    },
-    // 当articleShow组件的标题变化时，
-    currentTitle(val) {
-      // 刷新当前位置的文章标题，防止当前文章显示上一篇文章的标题
-      this.currentLocation(this.$route)
-      // 修改title
-      if (val) document.title = `${val} -xyy的小站`
-      // 返回顶部
-      // this.backTop()
     }
   },
   mounted() {
