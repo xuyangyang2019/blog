@@ -3,10 +3,10 @@
     <h2 class="tags-header">标签</h2>
     <ul class="tags-content">
       <li v-for="(item, index) in tags" :key="index" class="tags-item">
-        <!-- <a ref="tag" href="javascript: void(0)" @click="jumpGate(item.tag)"> -->
-        <span>{{ item.tag | changeLife }}</span>
-        <span v-if="item.num" v-text="' ' + item.num + '篇'"></span>
-        <!-- </a> -->
+        <a :href="computedTagUrl(item)">
+          <span>{{ item.tag | changeLife }}</span>
+          <span v-if="item.num" v-text="' ' + item.num + '篇'"></span>
+        </a>
       </li>
     </ul>
   </div>
@@ -38,13 +38,9 @@ export default {
   },
   methods: {
     // 跳转到标签
-    jumpGate(item) {
-      this.$store.commit('CHANGE_TITLE', item)
-      if (item === 'life') {
-        this.$router.push({ name: 'life' })
-      } else {
-        this.$router.push({ name: 'techincal', params: { tag: item } })
-      }
+    computedTagUrl(tagItem) {
+      // this.$router.push({ name: 'techincal', params: { tag: item } })
+      return `/article/${tagItem.tag}`
     }
   }
 }
