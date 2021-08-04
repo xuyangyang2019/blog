@@ -11,8 +11,6 @@ const state = {
   articlesList: [], // 文章列表
   articlesTag: [], // 指定标签的文章
   pageArr: [], // 分页
-  tags: [], // 标签
-  placeOnFile: [], // 归档的数据
   msgBoardArr: [], // 留言信息
   searchResults: [], // 搜索结果
   articlesTime: [], // 归档的文章
@@ -81,10 +79,6 @@ const mutations = {
     state.currentArticle = data
   },
   // ===================================
-  // 设置归档数据
-  SET_PLACE_ON_FILE(state, data) {
-    state.placeOnFile = data
-  },
   // 设置文章总数
   SET_ARTICLES_SUM(state, data) {
     state.articles.sum = data
@@ -104,10 +98,6 @@ const mutations = {
   SET_ARTICLES_ONLY(state, onlyArticles) {
     // state.articles.only = onlyArticles
     state.articles.only = [onlyArticles]
-  },
-  // 设置标签
-  SetTags(state, data) {
-    state.tags = data
   },
   // 清理分页
   CLEAR_PAGE(state) {
