@@ -132,18 +132,19 @@ export default {
     max-height: 100%;
   }
 }
-.article-title,
-.article-title a {
+.article-title {
   display: inline-block;
   transition: all ease 0.3s;
+  font-size: 16px;
+  font-weight: 600;
+  &:hover {
+    transform: translateX(10px);
+    a {
+      color: #d9a800;
+    }
+  }
 }
-.article-title:hover {
-  transform: translateX(10px);
-}
-.article-title:hover a {
-  color: #d9a800;
-  // text-decoration: underline
-}
+
 .article-abstract {
   margin-left: 15px;
 }
