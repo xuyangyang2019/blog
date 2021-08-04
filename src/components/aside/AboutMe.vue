@@ -4,8 +4,8 @@
       <h2>关于本站</h2>
     </div>
     <div class="about-content">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本站是一个用于知识积累与分享的个人开源博客。主要技术栈为HTML+CSS、vue全家桶、axios、express、mongodb。前端采用vue-ssr渲染，支持文章评论与分享，并设置有留言功能，源码请戳
-      <a href="https://github.com/justJokee/vue-ssr-blog" target="_blank">github</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本站是一个用于知识积累与分享的个人开源博客。主要技术栈为HTML+CSS、vue全家桶、axios、koa2、mongodb。前端采用vue-ssr渲染，支持文章评论与分享，并设置有留言功能，源码请戳
+      <a href="https://github.com/xuyangyang2019/blog" target="_blank">github</a>
     </div>
   </div>
 </template>
