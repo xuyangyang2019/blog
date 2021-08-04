@@ -3,8 +3,10 @@
     <h2 class="hot-header" @click="queryHot">推荐</h2>
     <ul class="hot-content">
       <li v-for="(item, index) in hotArticles" :key="index" class="hot-item">
-        <span>{{ index + 1 }}.</span>
-        <span :title="item.title" @click="jumpHot(item)" v-text="item.title"></span>
+        <a :href="computedUrl(item)">
+          <span>{{ index + 1 }}.</span>
+          <span :title="item.title" v-text="item.title"></span>
+        </a>
       </li>
     </ul>
   </div>
@@ -24,6 +26,7 @@ export default {
     this.queryHot()
   },
   methods: {
+    // 查询热门文章
     queryHot() {
       getHotArticles()
         .then((res) => {
@@ -37,14 +40,9 @@ export default {
           this.hotArticles = []
         })
     },
-    // 跳转到文章
-    jumpHot(item) {
-      this.$store.commit('CHANGE_TITLE', item.title)
-      if (item.tag[0] === 'life') {
-        this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
-      } else {
-        this.$router.push({ name: 'articleShow', params: { tag: item.tag[0], id: item._id } })
-      }
+    // 计算url
+    computedUrl(article) {
+      return `/article/${article.tag[0]}/${article._id}`
     }
   }
 }
