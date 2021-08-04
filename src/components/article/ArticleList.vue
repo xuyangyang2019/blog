@@ -7,7 +7,8 @@
       <li v-for="(item, index) in articleList" :key="index" class="article-item">
         <!-- title -->
         <h2 class="article-title">
-          <a href="javascript: void(0)" @click="jump(item)">{{ item.title }}</a>
+          <!-- <a href="javascript: void(0)" @click="jump(item)">{{ item.title }}</a> -->
+          <a :href="computedUrl(item)">{{ item.title }}</a>
         </h2>
         <div class="article-msg">
           <!-- 标签 -->
@@ -48,7 +49,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import Page from '@/components/base/Page'
 
 export default {
@@ -59,9 +60,6 @@ export default {
   props: {
     articleList: {
       type: Array
-    },
-    page: {
-      type: Array
     }
   },
   computed: {
@@ -71,18 +69,13 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({
-      changeTitle: 'CHANGE_TITLE'
-    }),
-    // 跳转到文章
-    jump(item) {
-      this.changeTitle(item.title)
-      if (item.tag[0] === 'life') {
-        this.$router.push({ name: 'lifeShow', params: { id: item.articleId } })
-      } else {
-        this.$router.push({ name: 'articleShow', params: { tag: item.tag[0], id: item._id } })
-      }
+    computedUrl(article) {
+      return `/article/${article.tag[0]}/${article._id}`
     }
+    // 跳转到文章
+    // jump(item) {
+    // this.$router.push({ name: 'articleShow', params: { tag: item.tag[0], id: item._id } })
+    // }
   }
 }
 </script>
@@ -114,7 +107,6 @@ export default {
   padding: 10px 10px 10px 15px;
   margin-top: 15px;
   border-radius: 3px;
-  // background: #F7EDED;
   background: #faf7f7;
   h2 {
     padding: 10px 0;
@@ -138,7 +130,7 @@ export default {
   font-size: 16px;
   font-weight: 600;
   &:hover {
-    transform: translateX(10px);
+    // transform: translateX(10px);
     a {
       color: #d9a800;
     }
