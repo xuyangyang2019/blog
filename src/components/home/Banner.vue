@@ -242,6 +242,7 @@ export default {
 .page-banner {
   height: 250px;
   position: relative;
+  margin-bottom: 15px ;
   .banner-list {
     width: 100%;
     height: 100%;

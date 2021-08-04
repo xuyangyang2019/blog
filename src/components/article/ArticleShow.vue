@@ -285,7 +285,6 @@ export default {
 
 <style lang = "scss" scoped>
 .article-show-content {
-  margin-top: 10px;
   background: #faf7f7;
   color: #404040;
   font-size: 14px;

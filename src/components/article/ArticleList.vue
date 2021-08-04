@@ -89,13 +89,11 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
+
 .article-list {
   font-size: 14px;
   line-height: 20px;
   color: #404040;
-  img {
-    max-width: 100%;
-  }
   .none-article {
     padding: 20px;
     color: black;
@@ -105,7 +103,7 @@ export default {
 }
 .article-item {
   padding: 10px 10px 10px 15px;
-  margin-top: 15px;
+  margin-bottom: 15px;
   border-radius: 3px;
   background: #faf7f7;
   h2 {
@@ -119,10 +117,6 @@ export default {
   color: #646464;
   display: flex;
   align-items: center;
-  p img {
-    max-width: 100% !important;
-    max-height: 100%;
-  }
 }
 .article-title {
   display: inline-block;
