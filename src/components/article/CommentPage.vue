@@ -149,7 +149,7 @@ export default {
     ...mapState({
       comments: 'comments',
       userInfo: 'userInfo',
-      articles: 'articles'
+      currentArticle: 'currentArticle'
     })
   },
   watch: {
@@ -274,7 +274,7 @@ export default {
         // 直接回复文章，一级评论
         this.$refs.pubButton.value = '发表中...'
         const { name, imgUrl } = this.userInfo
-        commentArticle(name, imgUrl, content, this.$route.params.id, this.articles.only[0].title).then((res) => {
+        commentArticle(name, imgUrl, content, this.$route.params.id, this.currentArticle.article.title).then((res) => {
           console.log('直接回复文章，一级评论', res)
           if (res.code === 200) {
             setTimeout(() => {
