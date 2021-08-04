@@ -3,13 +3,13 @@
 
 // initial state
 const state = {
-  users: []
+  usersInfo: []
 }
 
 // getters
 const getters = {
-  users: state => {
-    return state.users
+  usersInfo: state => {
+    return state.usersInfo
   }
 }
 
