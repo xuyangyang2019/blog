@@ -1,40 +1,42 @@
 <template>
   <div class="hot-articles">
-    <h2 class="hot-header">推荐</h2>
-    <div class="hot-content">
-      <ul>
-        <li v-for="(item, index) in articles.hot" :key="index" class="hot-item">
-          <span>{{ index + 1 }}.</span>
-          <span :title="item.title" @click="jumpHot(item)" v-text="item.title"></span>
-        </li>
-      </ul>
-    </div>
+    <h2 class="hot-header" @click="queryHot">推荐</h2>
+    <ul class="hot-content">
+      <li v-for="(item, index) in hotArticles" :key="index" class="hot-item">
+        <span>{{ index + 1 }}.</span>
+        <span :title="item.title" @click="jumpHot(item)" v-text="item.title"></span>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
 import { getHotArticles } from '../../api/front'
 
 export default {
   name: 'HotArticles',
-  computed: {
-    ...mapState({
-      articles: 'articles'
-    })
+  data() {
+    return {
+      hotArticles: []
+    }
   },
   mounted() {
-    // 页面加载完成后 获取推荐的文章
-    getHotArticles().then((res) => {
-      if (res.code === 200) {
-        this.SET_ARTICLES_HOT(res.data || [])
-      }
-    })
+    this.queryHot()
   },
   methods: {
-    ...mapMutations({
-      SET_ARTICLES_HOT: 'SET_ARTICLES_HOT'
-    }),
+    queryHot() {
+      getHotArticles()
+        .then((res) => {
+          if (res.code === 200) {
+            this.hotArticles = res.data
+          } else {
+            this.hotArticles = []
+          }
+        })
+        .catch(() => {
+          this.hotArticles = []
+        })
+    },
     // 跳转到文章
     jumpHot(item) {
       this.$store.commit('CHANGE_TITLE', item.title)
@@ -61,17 +63,15 @@ export default {
     font-size: 14px;
     color: #1a1a1a;
     background: #faf7f7;
-    ul {
-      .hot-item {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        border-bottom: 1px solid #ddd;
-        padding: 10px 0;
-        cursor: pointer;
-        &:hover {
-          color: #16a085;
-        }
+    .hot-item {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+      cursor: pointer;
+      &:hover {
+        color: #16a085;
       }
     }
   }

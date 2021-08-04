@@ -81,10 +81,6 @@ const mutations = {
     state.currentArticle = data
   },
   // ===================================
-  // 设置热门文章
-  SET_ARTICLES_HOT(state, data) {
-    state.articles.hot = data
-  },
   // 设置归档数据
   SET_PLACE_ON_FILE(state, data) {
     state.placeOnFile = data
