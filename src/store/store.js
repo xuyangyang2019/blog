@@ -19,21 +19,6 @@ const state = {
     pre: {},
     next: {}
   }, // 当前的文章
-  // =======================================
-  articles: {
-    sum: 0, // 文章总数
-    all: [], // 所有的文章
-    // technical: [], // 科技文章
-    // life: [], // 生活类文章
-    search: [], // 搜索结果
-    only: [], // 单个文章
-    time: [], // 归档
-    hot: [], // 热门文章
-    pre_next: {
-      pre: [],
-      next: []
-    }
-  },
   userInfo: { name: '', imgUrl: '', email: '' }, // 用户信息
   maskShow: false, // 展示登陆框
   comments: [] // 文章评论
@@ -79,26 +64,6 @@ const mutations = {
     state.currentArticle = data
   },
   // ===================================
-  // 设置文章总数
-  SET_ARTICLES_SUM(state, data) {
-    state.articles.sum = data
-  },
-  // 设置所有的文章
-  SET_ARTICLES_ALL(state, data) {
-    state.articles.all = data
-  },
-  // 设置生活类文章
-  SET_ARTICLES_LIFE(state, data) {
-    state.articles.life = data
-  },
-  // 设置科技文章
-  SET_ARTICLES_TECH(state, data) {
-    state.articles.technical = data
-  },
-  SET_ARTICLES_ONLY(state, onlyArticles) {
-    // state.articles.only = onlyArticles
-    state.articles.only = [onlyArticles]
-  },
   // 清理分页
   CLEAR_PAGE(state) {
     state.pageArr = []
@@ -115,10 +80,6 @@ const mutations = {
       arr.push(i)
     }
     state.pageArr = arr
-  },
-  // 设置搜索的结果
-  SET_ARTICLES_SEARCH(state, data) {
-    state.articles.search = data
   },
   // 设置文章的背景图片
   PRODUCT_BG(state, data) {
@@ -164,10 +125,6 @@ const mutations = {
   },
   CHANGE_TITLE(state, title) {
     state.currentTitle = title
-  },
-  // 设置上|下页
-  SET_PRE_NEXT(state, pn) {
-    state.articles.pre_next = pn
   },
   // 设置评论
   SET_COMMENTS(state, data) {
