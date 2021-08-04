@@ -10,7 +10,7 @@ import fetch from '../utils/fetchFront'
  * 获取热门文章
  */
 function getHotArticles() {
-  return fetch.get('/api/articles/pv', { cache: true })
+  return fetch.get('/api/articles/hot', { cache: true })
 }
 
 /**

@@ -77,13 +77,9 @@ module.exports = {
     // return next()
   },
   // 获取推荐文章
-  'GET /api/articles/pv': async (ctx) => {
+  'GET /api/articles/hot': async (ctx) => {
     const result = await ArticleService.getArticlesByPv()
-    if (!result) {
-      ctx.error = '文章不存在'
-    } else {
-      ctx.rest(result)
-    }
+    ctx.rest(result)
   },
   // 文章归档
   'GET /api/articles/categories': async (ctx) => {
