@@ -49,11 +49,6 @@ export default {
       code: 'code',
       articlesList: 'articlesList'
     })
-  },
-  mounted() {
-    // this.$nextTick(function () {
-    //   Prism.highlightAll()
-    // })
   }
 }
 </script>
