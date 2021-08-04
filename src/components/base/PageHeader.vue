@@ -13,7 +13,7 @@
           placeholder="请输入关键词"
           @keyup.enter="searchArticle"
         />
-        <span class="icon-search search-article" @click="searchArticle"></span>
+        <i class="fa fa-search" aria-hidden="true" @click="searchArticle"></i>
       </div>
 
       <!-- 小屏幕下的导航按钮 -->
@@ -203,7 +203,7 @@ export default {
       transition: all ease 0.3s;
       transform: translateZ(0px);
     }
-    .icon-search {
+    .fa-search {
       font-size: 16px;
       position: absolute;
       top: 50%;
