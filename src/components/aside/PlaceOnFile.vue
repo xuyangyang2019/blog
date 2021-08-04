@@ -1,38 +1,39 @@
 <template>
   <div class="time-line">
     <h1 class="time-line-header">归档</h1>
-    <div class="time-line-content">
-      <ul>
-        <li v-for="(item, index) in placeOnFile" :key="index" class="time-line-item">
-          <a :href="jumpTime(item.time)" target="_blank">{{ item.time }}({{ item.num }})</a>
-        </li>
-      </ul>
-    </div>
+    <ul class="time-line-content">
+      <li v-for="(item, index) in placeOnFile" :key="index" class="time-line-item">
+        <a :href="jumpTime(item.time)" target="_blank">{{ item.time }}({{ item.num }})</a>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
 import { getArticlesByTime } from '../../api/front'
 
 export default {
   name: 'PlaceOnFile',
-  computed: {
-    ...mapState({
-      placeOnFile: 'placeOnFile'
-    })
+  data() {
+    return {
+      placeOnFile: []
+    }
   },
+
   mounted() {
-    getArticlesByTime(true).then((res) => {
-      if (res.code === 200) {
-        this.SET_PLACE_ON_FILE(res.data || [])
-      }
-    })
+    getArticlesByTime(true)
+      .then((res) => {
+        if (res.code === 200) {
+          this.placeOnFile = res.data
+        } else {
+          this.placeOnFile = []
+        }
+      })
+      .catch(() => {
+        this.placeOnFile = []
+      })
   },
   methods: {
-    ...mapMutations({
-      SET_PLACE_ON_FILE: 'SET_PLACE_ON_FILE'
-    }),
     // 跳转到时间轴
     jumpTime(time) {
       const year = time.match(/\d+/g)[0]
@@ -68,17 +69,15 @@ export default {
     font-size: 14px;
     color: #1a1a1a;
     background: #faf7f7;
-    ul {
-      .time-line-item {
-        width: 120px;
-        padding: 10px 0;
-        text-align: center;
-        margin: 0 auto;
-        border-bottom: 1px solid #ddd;
-        // &:hover {
-        //   color: #16a085;
-        // }
-      }
+    .time-line-item {
+      width: 120px;
+      padding: 10px 0;
+      text-align: center;
+      margin: 0 auto;
+      border-bottom: 1px solid #ddd;
+      // &:hover {
+      //   color: #16a085;
+      // }
     }
   }
 }
