@@ -13,8 +13,6 @@ router.get(
     '/article',
     '/article/:tag',
     '/article/:tag/:id',
-    '/life',
-    '/life/:id',
     '/msgBoard',
     '/search',
     '/search/:searchKey',
