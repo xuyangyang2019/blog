@@ -149,7 +149,6 @@ httpInstance.interceptors.request.use(
     // 如果后端使用的是koa-jwt鉴权
     // const token = localStorage.getItem('validateToken')
     // token && (config.headers.Authorization = 'Bearer ' + token)
-    console.log(config)
     return config
   },
   (error) => {
