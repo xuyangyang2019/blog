@@ -44,7 +44,7 @@ module.exports = function () {
       // 异步模块文件名
       chunkFilename: '[id].js',
       // 项目中引用css，js，img等资源时候的一个基础路径
-      publicPath: isProd ? './' : '/dist/'
+      publicPath: isProd ? '/dist/' : '/dist/'
     },
     // 寻找模块时的一些缺省设置
     resolve: {
