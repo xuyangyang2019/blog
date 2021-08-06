@@ -56,7 +56,7 @@ app.use(
       if (ctx.url === '/test') {
         return '*' // 允许来自所有域名请求
       }
-      return 'http://www.xyy.life' // 只允许http://localhost:8080这个域名的请求
+      return 'http://182.92.221.114:3000' // 只允许http://localhost:8080这个域名的请求
     },
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'], // 设置获取其他自定义字段
     maxAge: 5, // 指定本次预检请求的有效期，单位为秒。
