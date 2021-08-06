@@ -49,32 +49,40 @@ if (!isProd) {
 // app.use(helmet()) // Helmet
 
 // 处理跨域
-app.use(
-  cors({
-    origin: function () {
-      // 设置允许来自指定域名请求
-      // if (ctx.url === '/test') {
-      //   return '*' // 允许来自所有域名请求
-      // }
-      // return 'http://www.xyy.life'
-      return '*' // 允许来自所有域名请求
-    },
-    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'], // 设置获取其他自定义字段
-    maxAge: 5, // 指定本次预检请求的有效期，单位为秒。
-    credentials: true, // 是否允许发送Cookie
-    allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // 设置所允许的HTTP请求方法
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept'] // 设置服务器支持的所有头信息字段
-  })
-)
-
-// //设置跨域请求
-// app.all('*', function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
-//   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-//   res.header("X-Powered-By", ' 3.2.1')
-//   res.header("Content-Type", "application/json;charset=utf-8");
-//   next();
+// 全部允许跨域
+app.use(cors())
+// 指定单个域名跨域
+// app.use(
+//   cors({
+//     origin: function () {
+//       return 'http://www.xyy.life'
+//     },
+//     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'], // 设置获取其他自定义字段
+//     maxAge: 5, // 指定本次预检请求的有效期，单位为秒。
+//     credentials: true, // 是否允许发送Cookie
+//     allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // 设置所允许的HTTP请求方法
+//     allowHeaders: ['Content-Type', 'Authorization', 'Accept'] // 设置服务器支持的所有头信息字段
+//   })
+// )
+// 设置多个域名可跨域
+// app.use(
+//   cors({
+//     origin: function (ctx) {
+//       // 设置允许来自指定域名请求
+//       const whiteList = ['http://weipxiu.com', 'http://localhost:8081'] // 可跨域白名单
+//       const url = ctx.header.referer.substr(0, ctx.header.referer.length - 1)
+//       if (whiteList.includes(url)) {
+//         return url // 注意，这里域名末尾不能带/，否则不成功，所以在之前我把/通过substr干掉了
+//       }
+//       return 'http://localhost::3000' // 默认允许本地请求3000端口可跨域
+//     },
+//     maxAge: 5, // 指定本次预检请求的有效期，单位为秒。
+//     credentials: true, // 是否允许发送Cookie
+//     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 设置所允许的HTTP请求方法
+//     allowHeaders: ['Content-Type', 'Authorization', 'Accept'], // 设置服务器支持的所有头信息字段
+//     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'] // 设置获取其他自定义字段
+//   })
+// )
 
 // View模板渲染
 // app.use(views(config.viewsDir))
