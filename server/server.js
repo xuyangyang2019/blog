@@ -51,12 +51,13 @@ if (!isProd) {
 // 处理跨域
 app.use(
   cors({
-    origin: function (ctx) {
+    origin: function () {
       // 设置允许来自指定域名请求
-      if (ctx.url === '/test') {
-        return '*' // 允许来自所有域名请求
-      }
-      return 'http://www.xyy.life' // 只允许http://localhost:8080这个域名的请求
+      // if (ctx.url === '/test') {
+      //   return '*' // 允许来自所有域名请求
+      // }
+      // return 'http://www.xyy.life'
+      return '*' // 允许来自所有域名请求
     },
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'], // 设置获取其他自定义字段
     maxAge: 5, // 指定本次预检请求的有效期，单位为秒。
@@ -65,6 +66,15 @@ app.use(
     allowHeaders: ['Content-Type', 'Authorization', 'Accept'] // 设置服务器支持的所有头信息字段
   })
 )
+
+// //设置跨域请求
+// app.all('*', function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+//   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+//   res.header("X-Powered-By", ' 3.2.1')
+//   res.header("Content-Type", "application/json;charset=utf-8");
+//   next();
 
 // View模板渲染
 // app.use(views(config.viewsDir))
