@@ -121,7 +121,7 @@ const httpInstance = axios.create({
   // baseURL: "http://localhost:8080", // 请求的域名，基本地址
   timeout: 10000, // 请求的超时时长，单位毫秒
   method: 'get,post,put,patch,delete', // 请求方法
-  withCredentials: true, // 跨域
+  // withCredentials: true, // 当前请求为跨域类型时是否在请求中协带cookie，后端必须也要配置 才能true
   params: {}, // 请求参数拼接在URL上
   data: {} // 请求参数放在请求体里
 })
