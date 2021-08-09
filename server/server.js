@@ -43,7 +43,7 @@ app.use(koaBody()) // 解析post请求
 if (!isProd) {
   // 原生的实现方式
   app.use(KoaStatic(resolve('public'), { index: false, maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
-  app.use(KoaStatic(resolve('dist-admin'), { index: false, maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
+  // app.use(KoaStatic(resolve('dist-admin'), { index: false, maxAge: 30 * 24 * 60 * 60 * 1000, gzip: true }))
 }
 
 // app.use(helmet()) // Helmet
