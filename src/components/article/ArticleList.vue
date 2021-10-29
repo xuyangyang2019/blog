@@ -18,7 +18,8 @@
           </span>
           <!-- 时间 -->
           <i class="fa fa-clock-o" aria-hidden="true"></i>
-          <span class="article-msg-time">{{ item.updateTime | reviseTime }}</span>
+          <!-- <span class="article-msg-time">{{ item.updateTime | reviseTime }}</span> -->
+          <span class="article-msg-time">{{ item.createTime | reviseTime }}</span>
         </div>
         <div class="article-review">
           <!-- 图片 -->
