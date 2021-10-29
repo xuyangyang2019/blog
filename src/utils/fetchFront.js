@@ -98,7 +98,7 @@ axios.defaults.timeout = 10000 // 请求超时时间
 
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = 'http://192.168.0.111:3000'
+  axios.defaults.baseURL = 'http://localhost:3000'
 } else if (process.env.NODE_ENV === 'production') {
   // PM2部署的时候改成服务器地址
   // axios.defaults.baseURL = 'http://182.92.221.114:3000'
@@ -175,7 +175,7 @@ httpInstance.interceptors.response.use(
       errorHandle(error.response.status, error.data ? error.data : error)
     } else {
       // console.log('响应拦截器-请求失败', error)
-      console.log('请求超时或断网', error)
+      console.log('请求超时或断网', error.message)
       // Message({
       //   type: 'error',
       //   message: `请求超时或断网:${error}`,
